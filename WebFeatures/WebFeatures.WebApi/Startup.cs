@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.QueryFiltering.Exceptions;
 using WebFeatures.WebApi.Configuration;
@@ -60,23 +60,23 @@ namespace WebFeatures.WebApi
                 errorApp.Run(context =>
                 {
                     context.Response.StatusCode = 500;
-                    context.Response.ContentType = "text/html";
+                    context.Response.ContentType = MediaTypeNames.Text.Html;
 
                     var responseBody = "Внутренняя ошибка сервера";
-
                     var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
 
                     if (exceptionHandlerPathFeature?.Error is ValidationException validationEx)
                     {
-                        context.Response.ContentType = "application/json";
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        context.Response.StatusCode = 400;
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
 
                         responseBody = JsonConvert.SerializeObject(validationEx.Fail);
                     }
 
                     if (exceptionHandlerPathFeature?.Error is FilteringException filteringEx)
                     {
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        context.Response.StatusCode = 400;
+                        context.Response.ContentType = MediaTypeNames.Text.Html;
 
                         responseBody = filteringEx.Message;
                     }

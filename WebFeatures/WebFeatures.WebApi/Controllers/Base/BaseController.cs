@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Mime;
 using WebFeatures.Application.Infrastructure.Pipeline.Mediators;
 
 namespace WebFeatures.WebApi.Controllers.Base
@@ -9,7 +10,7 @@ namespace WebFeatures.WebApi.Controllers.Base
     /// Базовый класс для контроллеров
     /// </summary>
     [Route("api/v1/[controller]")]
-    [Produces("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
     [Authorize]
     public abstract class BaseController : Controller
     {
