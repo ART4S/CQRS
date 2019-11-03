@@ -6,7 +6,7 @@ using WebFeatures.Specifications;
 namespace WebFeatures.Domian.Entities.Model
 {
     [Description("Пост")]
-    public class Post : BaseEntity, IUpdatable
+    public class Post : BaseEntity<int>, IUpdatable
     {
         public int BlogId { get; set; }
         public virtual Blog Blog { get; set; }

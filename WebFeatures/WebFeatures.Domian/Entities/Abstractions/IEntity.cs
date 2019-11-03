@@ -1,13 +1,15 @@
-﻿namespace WebFeatures.Domian.Entities.Abstractions
+﻿using System;
+
+namespace WebFeatures.Domian.Entities.Abstractions
 {
     /// <summary>
     /// Сущность
     /// </summary>
-    public interface IEntity
+    public interface IEntity<TId> where TId : struct, IEquatable<TId>
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
-        int Id { get; set; }
+        TId Id { get; set; }
     }
 }

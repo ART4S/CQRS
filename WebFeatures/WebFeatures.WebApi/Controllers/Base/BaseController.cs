@@ -12,7 +12,7 @@ namespace WebFeatures.WebApi.Controllers.Base
     [Route("api/v1/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     [Authorize]
-    public abstract class BaseController : Controller
+    public abstract class BaseController : ControllerBase
     {
         /// <summary>
         /// Посредник для отправки запроса подходящим обработчикам

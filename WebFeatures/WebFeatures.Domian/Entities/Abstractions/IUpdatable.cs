@@ -3,7 +3,7 @@
 namespace WebFeatures.Domian.Entities.Abstractions
 {
     /// <summary>
-    /// Обновляемая сущность
+    /// Обновляемая
     /// </summary>
     public interface IUpdatable
     {

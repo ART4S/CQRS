@@ -22,7 +22,7 @@ namespace WebFeatures.WebApi.Controllers
         [AllowAnonymous]
         public IActionResult Login([FromBody, Required] LoginCommand command)
         {
-            var claims = Mediator.Send(command);
+            var claims = Mediator.SendCommand(command);
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -12,4 +12,10 @@
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational">
+      <HintPath>C:\Users\Admin\.nuget\packages\microsoft.entityframeworkcore.relational\3.0.0\lib\netstandard2.1\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

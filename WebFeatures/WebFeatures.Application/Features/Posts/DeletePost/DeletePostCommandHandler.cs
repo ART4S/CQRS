@@ -1,6 +1,6 @@
 ﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Posts.DeletePost
@@ -16,7 +16,7 @@ namespace WebFeatures.Application.Features.Posts.DeletePost
 
         public Unit Handle(DeletePostCommand input)
         {
-            _context.Remove<Post>(input.Id);
+            _context.Remove<Post, int>(input.Id);
             return Unit.Value;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Posts.CreatePost
@@ -20,7 +20,7 @@ namespace WebFeatures.Application.Features.Posts.CreatePost
         public Unit Handle(CreatePostCommand input)
         {
             var post = _mapper.Map<Post>(input);
-            _context.Add(post);
+            _context.Add<Post, int>(post);
 
             return Unit.Value;
         }

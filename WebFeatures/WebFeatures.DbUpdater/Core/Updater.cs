@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.DataContext;
 
 namespace WebFeatures.DbUpdater.Core

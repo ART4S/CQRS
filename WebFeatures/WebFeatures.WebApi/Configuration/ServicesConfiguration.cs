@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Pipeline.Concerns;
 using WebFeatures.Application.Infrastructure.Pipeline.Mediators;
-using WebFeatures.Application.Interfaces;
-using WebFeatures.Common.Extensions;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.DataContext.Sql;
 
 namespace WebFeatures.WebApi.Configuration
@@ -34,7 +32,7 @@ namespace WebFeatures.WebApi.Configuration
 
             services.Scan(scan =>
             {
-                var assemblyToScan = AppDomain.CurrentDomain.GetAssembly("WebFeatures.Application");
+                var assemblyToScan = typeof(IHandler<,>).Assembly;
 
                 scan.FromAssemblies(assemblyToScan)
                     .AddClasses(x => x.AssignableTo(typeof(ICommandHandler<,>)))
@@ -98,9 +96,9 @@ namespace WebFeatures.WebApi.Configuration
         {
             services.Scan(scan =>
             {
-                var assembly = AppDomain.CurrentDomain.GetAssembly("WebFeatures.Application");
+                var assemblyToScan = typeof(IHandler<,>).Assembly;
 
-                scan.FromAssemblies(assembly)
+                scan.FromAssemblies(assemblyToScan)
                     .AddClasses(x => x.AssignableTo(typeof(IValidator<>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime();
@@ -110,11 +108,11 @@ namespace WebFeatures.WebApi.Configuration
         /// <summary>
         /// Добавить профили automapper
         /// </summary>
-        public static void AddAutomapper(this IServiceCollection services)
+        public static void AddMapperProfiles(this IServiceCollection services)
         {
             var config = new MapperConfiguration(opt =>
             {
-                var profiles = AppDomain.CurrentDomain.GetAssembly("WebFeatures.Application")
+                var profiles = typeof(IHandler<,>).Assembly
                     .GetTypes()
                     .Where(x => x.IsSubclassOf(typeof(Profile)));
 

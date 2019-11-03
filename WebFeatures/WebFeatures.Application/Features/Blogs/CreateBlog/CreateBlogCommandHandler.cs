@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Blogs.CreateBlog
@@ -20,7 +20,7 @@ namespace WebFeatures.Application.Features.Blogs.CreateBlog
         public Unit Handle(CreateBlogCommand input)
         {
             var blog = _mapper.Map<Blog>(input);
-            _context.Add(blog);
+            _context.Add<Blog, int>(blog);
 
             return Unit.Value;
         }

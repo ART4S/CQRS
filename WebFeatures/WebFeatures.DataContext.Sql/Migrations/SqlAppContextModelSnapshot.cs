@@ -146,7 +146,7 @@ namespace WebFeatures.DataContext.Sql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("WebFeatures.Domian.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("WebFeatures.Domian.Entities.Model.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<int>("ContactDetailsId")
                                 .ValueGeneratedOnAdd()

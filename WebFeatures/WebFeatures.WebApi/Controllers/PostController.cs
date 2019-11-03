@@ -23,7 +23,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet]
         public IActionResult Get(QueryFilter filter)
         {
-            var posts = Mediator.Send(new GetPostInfosQuery()).ApplyFilter(filter);
+            var posts = Mediator.SendQuery(new GetPostInfosQuery()).ApplyFilter(filter);
             return Ok(posts);
         }
 
@@ -34,7 +34,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            var post = Mediator.Send(new GetPostByIdQuery() { Id = id });
+            var post = Mediator.SendQuery(new GetPostByIdQuery() { Id = id });
             return Ok(post);
         }
 
@@ -44,7 +44,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody, Required] CreatePostCommand command)
         {
-            Mediator.Send(command);
+            Mediator.SendCommand(command);
             return Ok();
         }
 
@@ -54,7 +54,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPut]
         public IActionResult Update([FromBody, Required] UpdatePostCommand command)
         {
-            Mediator.Send(command);
+            Mediator.SendCommand(command);
             return Ok();
         }
 
@@ -65,7 +65,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            Mediator.Send(new DeletePostCommand() { Id = id });
+            Mediator.SendCommand(new DeletePostCommand() { Id = id });
             return Ok();
         }
     }

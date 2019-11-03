@@ -5,7 +5,7 @@ using WebFeatures.Domian.Entities.Abstractions;
 namespace WebFeatures.Domian.Entities.Model
 {
     [Description("Пользователь")]
-    public class User : BaseEntity
+    public class User : BaseEntity<int>
     {
         public User()
         {

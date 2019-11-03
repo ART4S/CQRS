@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.DataContext.Sql;
 using WebFeatures.DbUpdater.Core;
 

@@ -1,5 +1,5 @@
 ﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Concerns
 {

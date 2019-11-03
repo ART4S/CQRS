@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using WebFeatures.Domian.Entities.Abstractions;
-using WebFeatures.Domian.ValueObjects;
+using WebFeatures.Domian.Entities.Model.ValueObjects;
 
 namespace WebFeatures.Domian.Entities.Model
 {
@@ -8,7 +8,7 @@ namespace WebFeatures.Domian.Entities.Model
     /// Контактная информация пользователя
     /// </summary>
     [Description("Контактная информация")]
-    public class ContactDetails : BaseEntity
+    public class ContactDetails : BaseEntity<int>
     {
         public int UserId { get; set; }
         public virtual User User { get; set; }

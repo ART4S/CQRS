@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Posts.GetPostById
@@ -18,7 +18,7 @@ namespace WebFeatures.Application.Features.Posts.GetPostById
 
         public PostEditDto Handle(GetPostByIdQuery input)
         {
-            var post = _context.GetById<Post>(input.Id);
+            var post = _context.GetById<Post, int>(input.Id);
             return _mapper.Map<PostEditDto>(post);
         }
     }

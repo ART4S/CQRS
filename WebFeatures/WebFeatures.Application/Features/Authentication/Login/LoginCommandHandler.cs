@@ -6,6 +6,7 @@ using WebFeatures.Application.Infrastructure.Exceptions;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Validation;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Authentication.Login

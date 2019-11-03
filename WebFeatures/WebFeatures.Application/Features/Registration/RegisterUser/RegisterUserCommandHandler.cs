@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Registration.RegisterUser
@@ -25,7 +25,7 @@ namespace WebFeatures.Application.Features.Registration.RegisterUser
             var user = _mapper.Map<User>(input);
             user.PasswordHash = _protector.Protect(input.Password);
 
-            _context.Add(user);
+            _context.Add<User, int>(user);
 
             return Unit.Value;
         }

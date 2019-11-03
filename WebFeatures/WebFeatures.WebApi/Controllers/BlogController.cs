@@ -20,7 +20,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet]
         public IActionResult Get(QueryFilter filter)
         {
-            var blogs = Mediator.Send(new GetBlogInfosQuery()).ApplyFilter(filter);
+            var blogs = Mediator.SendQuery(new GetBlogInfosQuery()).ApplyFilter(filter);
             return Ok(blogs);
         }
 
@@ -30,7 +30,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody, Required] CreateBlogCommand command)
         {
-            Mediator.Send(command);
+            Mediator.SendCommand(command);
             return Ok();
         }
 
@@ -41,7 +41,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            Mediator.Send(new DeleteBlogCommand() { Id = id });
+            Mediator.SendCommand(new DeleteBlogCommand() { Id = id });
             return Ok();
         }
     }

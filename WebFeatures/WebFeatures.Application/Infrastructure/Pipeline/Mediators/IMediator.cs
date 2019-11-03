@@ -8,19 +8,19 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
     public interface IMediator
     {
         /// <summary>
-        /// Передать запрос обработчику команд
-        /// </summary>
-        /// <typeparam name="TOut">Результат выполнения команды</typeparam>
-        /// <param name="command">Команда</param>
-        /// <returns></returns>
-        TOut Send<TOut>(ICommand<TOut> command);
-
-        /// <summary>
         /// Передать запрос обработчику запросов
         /// </summary>
         /// <typeparam name="TOut">Результат выполнения запроса</typeparam>
         /// <param name="query">Запрос</param>
         /// <returns></returns>
-        TOut Send<TOut>(IQuery<TOut> query);
+        TOut SendQuery<TOut>(IQuery<TOut> query);
+
+        /// <summary>
+        /// Передать запрос обработчику команд
+        /// </summary>
+        /// <typeparam name="TOut">Результат выполнения команды</typeparam>
+        /// <param name="command">Команда</param>
+        /// <returns></returns>
+        TOut SendCommand<TOut>(ICommand<TOut> command);
     }
 }

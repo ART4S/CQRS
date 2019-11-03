@@ -13,6 +13,7 @@ using WebFeatures.WebApi.Configuration;
 using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
+[assembly: ApiController]
 namespace WebFeatures.WebApi
 {
     /// <summary>
@@ -39,7 +40,7 @@ namespace WebFeatures.WebApi
             services.AddAppContext();
             services.AddPipeline();
             services.AddValidators();
-            services.AddAutomapper();
+            services.AddMapperProfiles();
             services.AddDataProtection();
 
             services.AddControllers();

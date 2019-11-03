@@ -10,7 +10,7 @@ using WebFeatures.DataContext.Sql;
 namespace WebFeatures.DataContext.Sql.Migrations
 {
     [DbContext(typeof(SqlAppContext))]
-    [Migration("20191020122128_Initial")]
+    [Migration("20191103191659_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,7 +148,7 @@ namespace WebFeatures.DataContext.Sql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("WebFeatures.Domian.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("WebFeatures.Domian.Entities.Model.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<int>("ContactDetailsId")
                                 .ValueGeneratedOnAdd()

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using WebFeatures.Domian.Infrastructure;
 
-namespace WebFeatures.Domian.ValueObjects
+namespace WebFeatures.Domian.Entities.Model.ValueObjects
 {
     [Description("Адрес")]
     public class Address : ValueObject
@@ -13,10 +13,7 @@ namespace WebFeatures.Domian.ValueObjects
         public string Country { get; private set; }
         public string ZipCode { get; private set; }
 
-        private Address()
-        {
-            // For EF
-        }
+        private Address() { } // For EF
 
         public Address(string street, string city, string state, string country, string zipCode)
         {

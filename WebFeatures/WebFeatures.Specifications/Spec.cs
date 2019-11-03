@@ -8,7 +8,7 @@ namespace WebFeatures.Specifications
     {
         public Expression<Func<T, bool>> Expression { get; }
 
-        public Func<T, bool> Func => _spec ?? (_spec = Expression.Compile());
+        public Func<T, bool> Func => _spec ??= Expression.Compile();
         private Func<T, bool> _spec;
 
         public Spec(Expression<Func<T, bool>> expression)

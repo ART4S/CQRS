@@ -12,7 +12,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
             _serviceProvider = serviceProvider;
         }
 
-        public TOut Send<TOut>(ICommand<TOut> command)
+        public TOut SendCommand<TOut>(ICommand<TOut> command)
         {
             var handlerType = typeof(ICommandHandler<,>).MakeGenericType(command.GetType(), typeof(TOut));
             dynamic handler = _serviceProvider.GetService(handlerType);
@@ -21,7 +21,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
             return handler.Handle(input);
         }
 
-        public TOut Send<TOut>(IQuery<TOut> query)
+        public TOut SendQuery<TOut>(IQuery<TOut> query)
         {
             var handlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TOut));
             dynamic handler = _serviceProvider.GetService(handlerType);

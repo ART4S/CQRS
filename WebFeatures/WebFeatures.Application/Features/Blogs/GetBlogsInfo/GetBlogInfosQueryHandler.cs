@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo

@@ -1,4 +1,4 @@
-﻿using WebFeatures.Application.Interfaces;
+﻿using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Common.Time;
 using WebFeatures.Domian.Entities.Model;
 
@@ -10,17 +10,17 @@ namespace WebFeatures.DataContext
         {
             var user = new User()
             {
-                Name = "admin", 
+                Name = "admin",
                 PasswordHash = string.Empty
             };
-            context.Add(user);
+            context.Add<User, int>(user);
 
             var blog = new Blog()
             {
                 Author = user,
                 Title = "Admin blog"
             };
-            context.Add(blog);
+            context.Add<Blog, int>(blog);
 
             var post = new Post()
             {
@@ -29,7 +29,7 @@ namespace WebFeatures.DataContext
                 Content = "Hello, world!",
                 CreatedAt = DateTimeProvider.Instance.Now
             };
-            context.Add(post);
+            context.Add<Post, int>(post);
 
             context.SaveChanges();
         }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using WebFeatures.Application.Infrastructure.Validation;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Blogs.CreateBlog
@@ -13,8 +13,8 @@ namespace WebFeatures.Application.Features.Blogs.CreateBlog
                 .NotEmpty().WithMessage(ValidationErrorMessages.NotEmpty);
 
             RuleFor(x => x.AuthorId)
-                .Must(context.Exists<User>)
-                .WithMessage(ValidationErrorMessages.NotExistsInDb(typeof(User)));
+                .Must(context.Exists<User, int>)
+                .WithMessage(ValidationErrorMessages.NotExistsInDatabase(typeof(User)));
         }
     }
 }
