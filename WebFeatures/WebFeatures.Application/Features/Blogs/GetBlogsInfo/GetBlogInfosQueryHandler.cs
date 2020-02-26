@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces.Data;
@@ -10,20 +9,20 @@ namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo
 {
     public class GetBlogInfosQueryHandler : IQueryHandler<GetBlogInfosQuery, IQueryable<BlogInfoDto>>
     {
-        private readonly IAppContext _context;
+        private readonly IRepository<Blog, int> _blogRepo;
         private readonly IMapper _mapper;
 
-        public GetBlogInfosQueryHandler(IAppContext context, IMapper mapper)
+        public GetBlogInfosQueryHandler(
+            IRepository<Blog, int> blogRepo, 
+            IMapper mapper)
         {
-            _context = context;
+            _blogRepo = blogRepo;
             _mapper = mapper;
         }
 
         public IQueryable<BlogInfoDto> Handle(GetBlogInfosQuery input)
         {
-            var blogs = _context
-                .Set<Blog>()
-                .AsNoTracking()
+            var blogs = _blogRepo.GetAllAsQuery()
                 .ProjectTo<BlogInfoDto>(_mapper.ConfigurationProvider);
 
             return blogs;

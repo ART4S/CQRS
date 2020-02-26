@@ -14,7 +14,7 @@ namespace WebFeatures.Application.Features.Blogs.CreateBlog
 
             RuleFor(x => x.AuthorId)
                 .Must(context.Exists<User, int>)
-                .WithMessage(ValidationErrorMessages.NotExistsInDatabase(typeof(User)));
+                .WithMessage(ValidationErrorMessages.MissingInDataBase(typeof(User)));
         }
     }
 }

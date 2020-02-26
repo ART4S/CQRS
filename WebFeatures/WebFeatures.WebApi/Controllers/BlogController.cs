@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebFeatures.Application.Features.Blogs.CreateBlog;
 using WebFeatures.Application.Features.Blogs.DeleteBlog;
 using WebFeatures.Application.Features.Blogs.GetBlogsInfo;
+using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
-using WebFeatures.QueryFiltering.Utils;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -12,6 +13,7 @@ namespace WebFeatures.WebApi.Controllers
     /// <summary>
     /// Блоги
     /// </summary>
+    [Authorize]
     public class BlogController : BaseController
     {
         /// <summary>

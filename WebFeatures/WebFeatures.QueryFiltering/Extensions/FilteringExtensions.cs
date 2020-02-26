@@ -5,7 +5,7 @@ using WebFeatures.QueryFiltering.Exceptions;
 using WebFeatures.QueryFiltering.Filters;
 using WebFeatures.QueryFiltering.Results;
 
-namespace WebFeatures.QueryFiltering.Utils
+namespace WebFeatures.QueryFiltering.Extensions
 {
     public static class FilteringExtensions
     {

@@ -1,6 +1,6 @@
 ﻿namespace WebFeatures.Application.Interfaces.Security
 {
-    public interface IRegistrationService
+    public interface IAuthService
     {
     }
 }

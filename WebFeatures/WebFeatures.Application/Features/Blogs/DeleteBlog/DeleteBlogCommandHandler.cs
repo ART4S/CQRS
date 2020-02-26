@@ -7,16 +7,18 @@ namespace WebFeatures.Application.Features.Blogs.DeleteBlog
 {
     public class DeleteBlogCommandHandler : ICommandHandler<DeleteBlogCommand, Unit>
     {
-        private readonly IAppContext _context;
+        private readonly IRepository<Blog, int> _blogRepo;
 
-        public DeleteBlogCommandHandler(IAppContext context)
+        public DeleteBlogCommandHandler(IRepository<Blog, int> blogRepo)
         {
-            _context = context;
+            _blogRepo = blogRepo;
         }
 
         public Unit Handle(DeleteBlogCommand input)
         {
-            _context.Remove<Blog, int>(input.Id);
+            _blogRepo.Remove(input.Id);
+            _blogRepo.SaveChanges();
+
             return Unit.Value;
         }
     }

@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Features.Posts.GetPostById
         {
             RuleFor(x => x.Id)
                 .Must(context.Exists<Post, int>)
-                .WithMessage(ValidationErrorMessages.NotExistsInDatabase(typeof(Post)));
+                .WithMessage(ValidationErrorMessages.MissingInDataBase(typeof(Post)));
         }
     }
 }

@@ -5,9 +5,9 @@ namespace WebFeatures.WebApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            await CreateWebHostBuilder(args).Build().RunAsync();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) 

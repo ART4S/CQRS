@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using WebFeatures.Application.Features.Authentication.Login;
+using WebFeatures.Application.Interfaces.Data;
+using WebFeatures.Domian.Entities.Model;
 using WebFeatures.WebApi.Controllers.Base;
+using WebFeatures.WebApi.ViewModels;
 
 namespace WebFeatures.WebApi.Controllers
 {
@@ -15,12 +16,16 @@ namespace WebFeatures.WebApi.Controllers
     /// </summary>
     public class AuthController : BaseController
     {
+        public AuthController(IAuthService authService)
+        {
+            _userRepo = userRepo;
+        }
+
         /// <summary>
         /// Войти в систему
         /// </summary>
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public IActionResult Login([FromBody, Required] LoginCommand command)
+        [HttpPost("[action]")]
+        public IActionResult Login([FromBody, Required] LoginViewModel loginVm)
         {
             var claims = Mediator.SendCommand(command);
 
@@ -43,7 +48,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <summary>
         /// Выйти из системы
         /// </summary>
-        [HttpPost("logout")]
+        [HttpPost("[action]")]     
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();

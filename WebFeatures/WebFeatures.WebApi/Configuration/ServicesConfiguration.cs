@@ -16,14 +16,6 @@ namespace WebFeatures.WebApi.Configuration
     static class ServicesConfiguration
     {
         /// <summary>
-        /// Добавить контекст данных
-        /// </summary>
-        public static void AddAppContext(this IServiceCollection services)
-        {
-            services.AddDbContext<IAppContext, SqlAppContext>();
-        }
-
-        /// <summary>
         /// Добавить обработчики запросов
         /// </summary>
         public static void AddPipeline(this IServiceCollection services)

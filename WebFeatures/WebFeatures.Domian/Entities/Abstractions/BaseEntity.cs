@@ -1,12 +1,6 @@
-﻿using System;
-
-namespace WebFeatures.Domian.Entities.Abstractions
+﻿namespace WebFeatures.Domian.Entities.Abstractions
 {
-    /// <summary>
-    /// Базовый класс сущности
-    /// </summary>
-    public abstract class BaseEntity<TId> : IEntity<TId> 
-        where TId : struct, IEquatable<TId>
+    public abstract class BaseEntity<TId> where TId : struct
     {
         public TId Id { get; set; }
     }

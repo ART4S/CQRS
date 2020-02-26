@@ -5,8 +5,8 @@ using WebFeatures.Application.Features.Posts.DeletePost;
 using WebFeatures.Application.Features.Posts.GetPostById;
 using WebFeatures.Application.Features.Posts.GetPostsInfo;
 using WebFeatures.Application.Features.Posts.UpdatePost;
+using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
-using WebFeatures.QueryFiltering.Utils;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers

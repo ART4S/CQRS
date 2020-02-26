@@ -8,19 +8,23 @@ namespace WebFeatures.Application.Features.Blogs.CreateBlog
 {
     public class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand, Unit>
     {
-        private readonly IAppContext _context;
+        private readonly IRepository<Blog, int> _blogRepo;
         private readonly IMapper _mapper;
 
-        public CreateBlogCommandHandler(IAppContext context, IMapper mapper)
+        public CreateBlogCommandHandler(
+            IRepository<Blog, int> blogRepo, 
+            IMapper mapper)
         {
-            _context = context;
+            _blogRepo = blogRepo;
             _mapper = mapper;
         }
 
         public Unit Handle(CreateBlogCommand input)
         {
             var blog = _mapper.Map<Blog>(input);
-            _context.Add<Blog, int>(blog);
+
+            _blogRepo.Add(blog);
+            _blogRepo.SaveChanges();
 
             return Unit.Value;
         }

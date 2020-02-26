@@ -9,9 +9,9 @@ namespace WebFeatures.WebApi.Controllers.Base
     /// <summary>
     /// Базовый класс для контроллеров
     /// </summary>
-    [Route("api/v1/[controller]")]
+    [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
-    [Authorize]
+    [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {
         /// <summary>

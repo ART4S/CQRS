@@ -7,11 +7,11 @@ namespace WebFeatures.Application.Features.Blogs.DeleteBlog
 {
     public class DeleteBlogCommandValidator : AbstractValidator<DeleteBlogCommand>
     {
-        public DeleteBlogCommandValidator(IAppContext context)
+        public DeleteBlogCommandValidator(IRepository<Blog, int> blogRepo)
         {
             RuleFor(x => x.Id)
-                .Must(context.Exists<Blog, int>)
-                .WithMessage(ValidationErrorMessages.NotExistsInDatabase(typeof(Blog)));
+                .Must(blogRepo.Exists)
+                .WithMessage(ValidationErrorMessages.MissingInDataBase(typeof(Blog)));
         }
     }
 }

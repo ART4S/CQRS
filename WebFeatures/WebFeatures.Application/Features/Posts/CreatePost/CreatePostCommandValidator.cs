@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Features.Posts.CreatePost
         {
             RuleFor(x => x.BlogId)
                 .Must(context.Exists<Blog, int>)
-                .WithMessage(b => ValidationErrorMessages.NotExistsInDatabase(typeof(Blog)));
+                .WithMessage(b => ValidationErrorMessages.MissingInDataBase(typeof(Blog)));
         }
     }
 }
