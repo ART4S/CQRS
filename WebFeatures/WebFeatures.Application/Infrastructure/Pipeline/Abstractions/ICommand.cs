@@ -3,8 +3,8 @@
     /// <summary>
     /// Команда
     /// </summary>
-    /// <typeparam name="TOut">Результат выполнения команды</typeparam>
-    public interface ICommand<TOut>
+    /// <typeparam name="TResponse">Результат выполнения команды</typeparam>
+    public interface ICommand<TResponse>
     {
     }
 }

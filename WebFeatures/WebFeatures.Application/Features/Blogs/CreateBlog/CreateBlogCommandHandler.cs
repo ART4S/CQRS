@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces.Data;
+using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Blogs.CreateBlog
@@ -19,9 +20,9 @@ namespace WebFeatures.Application.Features.Blogs.CreateBlog
             _mapper = mapper;
         }
 
-        public Unit Handle(CreateBlogCommand input)
+        public Unit Handle(CreateBlogCommand request)
         {
-            var blog = _mapper.Map<Blog>(input);
+            var blog = _mapper.Map<Blog>(request);
 
             _blogRepo.Add(blog);
             _blogRepo.SaveChanges();

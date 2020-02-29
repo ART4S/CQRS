@@ -8,7 +8,7 @@ namespace WebFeatures.Application.Features.Registration.RegisterUser
         public string Name { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public string ContactDetailsEmail { get; set; }
-        public string ContactDetailsPhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

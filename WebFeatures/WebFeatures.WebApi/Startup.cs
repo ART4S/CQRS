@@ -6,15 +6,14 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Mime;
-using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Pipeline.Concerns;
 using WebFeatures.Application.Infrastructure.Pipeline.Mediators;
 using WebFeatures.QueryFiltering.Exceptions;
-using WebFeatures.WebApi.Configuration;
-using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
+using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
 
 namespace WebFeatures.WebApi
 {
@@ -39,16 +38,14 @@ namespace WebFeatures.WebApi
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IAppContext, SqlAppContext>();
-
             services.AddScoped<IMediator, Mediator>();
 
             AddCommands(services);
             AddQueries(services);
             AddValidators(services);
             AddMapperProfiles(services);
+            AddSecurity(services);
 
-            services.AddDataProtection();
             services.AddControllers();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -72,7 +69,9 @@ namespace WebFeatures.WebApi
                     if (exceptionHandlerPathFeature?.Error is ValidationException validationEx)
                     {
                         context.Response.StatusCode = 400;
-                        responseBody = validationEx.Message;
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
+
+                        responseBody = JsonConvert.SerializeObject(validationEx.Errors);
                     }
 
                     if (exceptionHandlerPathFeature?.Error is FilteringException filteringEx)
@@ -81,8 +80,7 @@ namespace WebFeatures.WebApi
                         responseBody = filteringEx.Message;
                     }
 
-                    context.Response.WriteAsync(responseBody);
-                    return Task.CompletedTask;
+                    return context.Response.WriteAsync(responseBody);
                 });
             });
 
@@ -104,20 +102,15 @@ namespace WebFeatures.WebApi
             });
         }
 
-
         private static void AddCommands(IServiceCollection services)
         {
             services.Scan(scan =>
             {
-                scan.FromAssemblies(typeof(IHandler<,>).Assembly)
+                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
                     .AddClasses(x => x.AssignableTo(typeof(ICommandHandler<,>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime();
             });
-
-            services.Decorate(
-                typeof(ICommandHandler<,>),
-                typeof(SaveChangesHandlerDecorator<,>));
 
             services.Decorate(
                 typeof(ICommandHandler<,>),
@@ -136,7 +129,7 @@ namespace WebFeatures.WebApi
         {
             services.Scan(scan =>
             {
-                scan.FromAssemblies(typeof(IHandler<,>).Assembly)
+                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
                     .AddClasses(x => x.AssignableTo(typeof(IQueryHandler<,>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime();
@@ -159,7 +152,7 @@ namespace WebFeatures.WebApi
         {
             services.Scan(scan =>
             {
-                scan.FromAssemblies(typeof(IHandler<,>).Assembly)
+                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
                     .AddClasses(x => x.AssignableTo(typeof(IValidator<>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime();
@@ -170,7 +163,7 @@ namespace WebFeatures.WebApi
         {
             var config = new MapperConfiguration(opt =>
             {
-                var profiles = typeof(IHandler<,>).Assembly
+                var profiles = typeof(IRequestHandler<,>).Assembly
                     .GetTypes()
                     .Where(x => x.IsSubclassOf(typeof(Profile)));
 
@@ -183,6 +176,11 @@ namespace WebFeatures.WebApi
             config.AssertConfigurationIsValid();
 
             services.AddSingleton(provider => config.CreateMapper());
+        }
+
+        private static void AddSecurity(IServiceCollection services)
+        {
+            services.AddDataProtection();
         }
     }
 }

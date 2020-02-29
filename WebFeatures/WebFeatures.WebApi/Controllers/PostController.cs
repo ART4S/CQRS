@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using WebFeatures.Application.Features.Posts.CreatePost;
 using WebFeatures.Application.Features.Posts.DeletePost;
 using WebFeatures.Application.Features.Posts.GetPostById;
-using WebFeatures.Application.Features.Posts.GetPostsInfo;
+using WebFeatures.Application.Features.Posts.GetPosts;
 using WebFeatures.Application.Features.Posts.UpdatePost;
 using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
@@ -23,7 +23,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet]
         public IActionResult Get(QueryFilter filter)
         {
-            var posts = Mediator.SendQuery(new GetPostInfosQuery()).ApplyFilter(filter);
+            var posts = Mediator.SendQuery(new GetPostsQuery()).ApplyFilter(filter);
             return Ok(posts);
         }
 

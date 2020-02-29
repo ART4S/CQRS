@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using WebFeatures.Domian.Entities.Model;
 
-namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo
+namespace WebFeatures.Application.Features.Blogs.GetBlogs
 {
-    public class GetBlogInfosQueryProfile : Profile
+    public class GetBlogsQueryProfile : Profile
     {
-        public GetBlogInfosQueryProfile()
+        public GetBlogsQueryProfile()
         {
             CreateMap<Blog, BlogInfoDto>(MemberList.Destination);
         }

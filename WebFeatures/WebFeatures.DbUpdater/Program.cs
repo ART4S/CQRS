@@ -2,9 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using WebFeatures.Application.Interfaces.Data;
-using WebFeatures.DataContext.Sql;
-using WebFeatures.DbUpdater.Core;
+using WebFeatures.DataContext;
 
 namespace WebFeatures.DbUpdater
 {
@@ -19,29 +17,17 @@ namespace WebFeatures.DbUpdater
         {
             var services = new ServiceCollection();
 
-            var configuration = BuildConfiguration();
-            services.AddSingleton(configuration);
-
-            services.AddLogging(x => x.AddConsole());
-
-            services.AddDbContext<IAppContext, SqlAppContext>();
-
-            services.AddOptions();
-            services.Configure<UpdaterOptions>(configuration.GetSection(nameof(UpdaterOptions)));
-
-            services.AddSingleton<Updater>();
-
-            return services.BuildServiceProvider();
-        }
-
-        private static IConfiguration BuildConfiguration()
-        {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            return configuration;
+            services.AddSingleton(configuration);
+            services.AddLogging(x => x.AddConsole());
+            services.AddDbContext<AppContext>();
+            services.AddSingleton<Updater>();
+
+            return services.BuildServiceProvider();
         }
     }
 }

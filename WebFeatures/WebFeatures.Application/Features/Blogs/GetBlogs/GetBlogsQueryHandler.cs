@@ -1,18 +1,19 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces.Data;
+using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities.Model;
 
-namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo
+namespace WebFeatures.Application.Features.Blogs.GetBlogs
 {
-    public class GetBlogInfosQueryHandler : IQueryHandler<GetBlogInfosQuery, IQueryable<BlogInfoDto>>
+    public class GetBlogsQueryHandler : IQueryHandler<GetBlogsQuery, IQueryable<BlogInfoDto>>
     {
         private readonly IRepository<Blog, int> _blogRepo;
         private readonly IMapper _mapper;
 
-        public GetBlogInfosQueryHandler(
+        public GetBlogsQueryHandler(
             IRepository<Blog, int> blogRepo, 
             IMapper mapper)
         {
@@ -20,9 +21,9 @@ namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo
             _mapper = mapper;
         }
 
-        public IQueryable<BlogInfoDto> Handle(GetBlogInfosQuery input)
+        public IQueryable<BlogInfoDto> Handle(GetBlogsQuery request)
         {
-            var blogs = _blogRepo.GetAllAsQuery()
+            var blogs = _blogRepo.GetAll()
                 .ProjectTo<BlogInfoDto>(_mapper.ConfigurationProvider);
 
             return blogs;

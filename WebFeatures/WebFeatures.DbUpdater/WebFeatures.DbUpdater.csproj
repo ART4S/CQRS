@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebFeatures.DataContext.Sql\WebFeatures.DataContext.Sql.csproj" />
     <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
   </ItemGroup>
 

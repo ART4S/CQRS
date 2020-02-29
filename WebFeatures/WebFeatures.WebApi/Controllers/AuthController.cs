@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using WebFeatures.Application.Interfaces.Data;
-using WebFeatures.Domian.Entities.Model;
+using WebFeatures.Application.Features.Auth.Login;
 using WebFeatures.WebApi.Controllers.Base;
-using WebFeatures.WebApi.ViewModels;
 
 namespace WebFeatures.WebApi.Controllers
 {
@@ -16,16 +14,11 @@ namespace WebFeatures.WebApi.Controllers
     /// </summary>
     public class AuthController : BaseController
     {
-        public AuthController(IAuthService authService)
-        {
-            _userRepo = userRepo;
-        }
-
         /// <summary>
         /// Войти в систему
         /// </summary>
         [HttpPost("[action]")]
-        public IActionResult Login([FromBody, Required] LoginViewModel loginVm)
+        public IActionResult Login([FromBody, Required] LoginCommand command)
         {
             var claims = Mediator.SendCommand(command);
 

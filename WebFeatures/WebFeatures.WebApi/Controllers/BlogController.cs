@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebFeatures.Application.Features.Blogs.CreateBlog;
 using WebFeatures.Application.Features.Blogs.DeleteBlog;
-using WebFeatures.Application.Features.Blogs.GetBlogsInfo;
+using WebFeatures.Application.Features.Blogs.GetBlogs;
 using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
 using WebFeatures.WebApi.Controllers.Base;
@@ -22,7 +22,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet]
         public IActionResult Get(QueryFilter filter)
         {
-            var blogs = Mediator.SendQuery(new GetBlogInfosQuery()).ApplyFilter(filter);
+            var blogs = Mediator.SendQuery(new GetBlogsQuery()).ApplyFilter(filter);
             return Ok(blogs);
         }
 

@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using WebFeatures.Domian.Entities.Abstractions;
 
-namespace WebFeatures.Application.Interfaces.Data
+namespace WebFeatures.Application.Interfaces.DataAccess
 {
-    public interface IRepository<TEntity, TId> 
+    public interface IRepository<TEntity, in TId> 
         where TEntity : BaseEntity<TId> 
         where TId : struct
     {
-        IEnumerable<TEntity> GetAll();
+        IQueryable<TEntity> GetAll();
 
-        IQueryable<TEntity> GetAllAsQuery();
+        TEntity GetById(TId id);
 
         bool Exists(TId id);
 

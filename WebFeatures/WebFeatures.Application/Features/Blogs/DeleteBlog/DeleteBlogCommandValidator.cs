@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using WebFeatures.Application.Infrastructure.Validation;
-using WebFeatures.Application.Interfaces.Data;
+using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Blogs.DeleteBlog

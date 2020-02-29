@@ -10,17 +10,17 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
         /// <summary>
         /// Передать запрос обработчику запросов
         /// </summary>
-        /// <typeparam name="TOut">Результат выполнения запроса</typeparam>
+        /// <typeparam name="TResponse">Результат выполнения запроса</typeparam>
         /// <param name="query">Запрос</param>
         /// <returns></returns>
-        TOut SendQuery<TOut>(IQuery<TOut> query);
+        TResponse SendQuery<TResponse>(IQuery<TResponse> query);
 
         /// <summary>
         /// Передать запрос обработчику команд
         /// </summary>
-        /// <typeparam name="TOut">Результат выполнения команды</typeparam>
+        /// <typeparam name="TResponse">Результат выполнения команды</typeparam>
         /// <param name="command">Команда</param>
         /// <returns></returns>
-        TOut SendCommand<TOut>(ICommand<TOut> command);
+        TResponse SendCommand<TResponse>(ICommand<TResponse> command);
     }
 }

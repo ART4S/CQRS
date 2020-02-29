@@ -1,17 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using WebFeatures.Application.Interfaces.Data;
 using WebFeatures.Common.Time;
 using WebFeatures.Domian.Entities.Abstractions;
 using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.DataContext
 {
-    public abstract class AppContext : DbContext, IAppContext
+    public class AppContext : DbContext
     {
-        protected AppContext(DbContextOptions options) : base(options)
+        private readonly IDateTime _dateTime;
+
+        public AppContext(
+            DbContextOptions options, 
+            IDateTime dateTime) : base(options)
         {
+            _dateTime = dateTime;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,23 +27,11 @@ namespace WebFeatures.DataContext
 
         public DbSet<Post> Posts { get; set; }
 
-        public DbSet<ContactDetails> ContactDetailses { get; set; }
-
-        public T GetById<T, TId>(TId id) where T : class, IEntity<TId>, new() where TId : struct, IEquatable<TId>
-            => Find<T>(new T() { Id = id });
-
-        public void Add<T, TId>(T entity) where T : class, IEntity<TId>, new() where TId : struct, IEquatable<TId>
-            => Set<T>().Add(entity);
-
-        public void Remove<T, TId>(TId id) where T : class, IEntity<TId>, new() where TId : struct, IEquatable<TId>
-            => Remove(new T() { Id = id });
-
-        public bool Exists<T, TId>(TId id) where T : class, IEntity<TId>, new() where TId : struct, IEquatable<TId>
-            => Set<T>().AsNoTracking().Any(x => x.Id.Equals(id));
+        public DbSet<ContactDetails> ContactDetailes { get; set; }
 
         public override int SaveChanges()
         {
-            var now = DateTimeProvider.Instance.Now;
+            var now = _dateTime.Now;
 
             foreach (var entry in ChangeTracker.Entries())
             {

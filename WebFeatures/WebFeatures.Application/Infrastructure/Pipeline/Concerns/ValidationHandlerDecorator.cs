@@ -2,37 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Infrastructure.Results;
-using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
+using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Concerns
 {
     /// <summary>
     /// Валидация входных данных запроса
     /// </summary>
-    public class ValidationHandlerDecorator<TIn, TOut> : HandlerDecoratorBase<TIn, TOut>
+    public class ValidationHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
-        private readonly IEnumerable<IValidator<TIn>> _validators;
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-        public ValidationHandlerDecorator(IHandler<TIn, TOut> decoratee, IEnumerable<IValidator<TIn>> validators) : base(decoratee)
+        public ValidationHandlerDecorator(
+            IRequestHandler<TRequest, TResponse> decoratee, 
+            IEnumerable<IValidator<TRequest>> validators) : base(decoratee)
         {
             _validators = validators;
         }
 
-        public override TOut Handle(TIn input)
+        public override TResponse Handle(TRequest request)
         {
             var errors = _validators
-                .Select(x => x.Validate(input))
+                .Select(x => x.Validate(request))
                 .Where(x => !x.IsValid)
                 .SelectMany(x => x.Errors)
                 .ToList();
 
             if (errors.Count != 0)
             {
-                throw new ValidationException(new Fail(errors));
+                throw new ValidationException(errors);
             }
 
-            return Decoratee.Handle(input);
+            return Decoratee.Handle(request);
         }
     }
 }

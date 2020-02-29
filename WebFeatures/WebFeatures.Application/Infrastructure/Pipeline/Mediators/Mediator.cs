@@ -12,22 +12,28 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
             _serviceProvider = serviceProvider;
         }
 
-        public TOut SendCommand<TOut>(ICommand<TOut> command)
+        public TResponse SendCommand<TResponse>(ICommand<TResponse> command)
         {
-            var handlerType = typeof(ICommandHandler<,>).MakeGenericType(command.GetType(), typeof(TOut));
-            dynamic handler = _serviceProvider.GetService(handlerType);
-            dynamic input = command;
+            var handlerType = typeof(ICommandHandler<,>).MakeGenericType(
+                command.GetType(), 
+                typeof(TResponse));
 
-            return handler.Handle(input);
+            dynamic handler = _serviceProvider.GetService(handlerType);
+            dynamic request = command;
+
+            return handler.Handle(request);
         }
 
-        public TOut SendQuery<TOut>(IQuery<TOut> query)
+        public TResponse SendQuery<TResponse>(IQuery<TResponse> query)
         {
-            var handlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TOut));
-            dynamic handler = _serviceProvider.GetService(handlerType);
-            dynamic input = query;
+            var handlerType = typeof(IQueryHandler<,>).MakeGenericType(
+                query.GetType(), 
+                typeof(TResponse));
 
-            return handler.Handle(input);
+            dynamic handler = _serviceProvider.GetService(handlerType);
+            dynamic request = query;
+
+            return handler.Handle(request);
         }
     }
 }

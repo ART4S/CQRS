@@ -7,16 +7,11 @@ namespace WebFeatures.Domian.Entities.Model
     [Description("Блог")]
     public class Blog : BaseEntity<int>
     {
-        public Blog()
-        {
-            Posts = new HashSet<Post>();
-        }
-
         public int AuthorId { get; set; }
-        public virtual User Author { get; set; }
+        public User Author { get; set; }
 
         public string Title { get; set; }
 
-        public virtual ICollection<Post> Posts { get; }
+        public ICollection<Post> Posts { get; } = new HashSet<Post>();
     }
 }

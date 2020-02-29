@@ -1,25 +1,27 @@
-﻿using Microsoft.Extensions.Logging;
-using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
+﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
+using WebFeatures.Application.Interfaces.Logging;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Concerns
 {
     /// <summary>
     /// Логирование запросов
     /// </summary>
-    public class LoggingHandlerDecorator<TIn, TOut> : HandlerDecoratorBase<TIn, TOut>
+    public class LoggingHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
-        private readonly ILogger<TIn> _logger;
+        private readonly ILogger<TRequest> _logger;
 
-        public LoggingHandlerDecorator(IHandler<TIn, TOut> decorated, ILogger<TIn> logger) : base(decorated)
+        public LoggingHandlerDecorator(
+            IRequestHandler<TRequest, TResponse> decoratee,
+            ILogger<TRequest> logger) : base(decoratee)
         {
             _logger = logger;
         }
 
-        public override TOut Handle(TIn input)
+        public override TResponse Handle(TRequest request)
         {
-            var result = Decoratee.Handle(input);
-            _logger.LogInformation($"{Decoratee.GetType().Name} : {input.ToString()} => {result.ToString()}");
-            return result;
+            var response = Decoratee.Handle(request);
+            _logger.LogInformation($"{Decoratee.GetType().Name} : {request.ToString()} => {response.ToString()}");
+            return response;
         }
     }
 }

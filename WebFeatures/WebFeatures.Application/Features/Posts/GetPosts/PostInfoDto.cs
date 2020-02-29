@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebFeatures.Application.Features.Posts.GetPostsInfo
+namespace WebFeatures.Application.Features.Posts.GetPosts
 {
     public class PostInfoDto
     {

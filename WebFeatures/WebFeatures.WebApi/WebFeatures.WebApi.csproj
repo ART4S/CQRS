@@ -12,13 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
-    <ProjectReference Include="..\WebFeatures.DataContext.Sql\WebFeatures.DataContext.Sql.csproj" />
     <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
     <ProjectReference Include="..\WebFeatures.QueryFiltering\WebFeatures.QueryFiltering.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configuration\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,33 +1,23 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.DataProtection;
+﻿using System;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces.Data;
-using WebFeatures.Domian.Entities.Model;
+using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Security;
 
 namespace WebFeatures.Application.Features.Registration.RegisterUser
 {
     public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Unit>
     {
-        private readonly IDataProtector _protector;
-        private readonly IAppContext _context;
-        private readonly IMapper _mapper;
+        private readonly IRegistrationService _registrationService;
 
-        public RegisterUserCommandHandler(IDataProtectionProvider protectionProvider, IAppContext context, IMapper mapper)
+        public RegisterUserCommandHandler(IRegistrationService registrationService)
         {
-            _protector = protectionProvider.CreateProtector("UserPassword");
-            _context = context;
-            _mapper = mapper;
+            _registrationService = registrationService;
         }
 
-        public Unit Handle(RegisterUserCommand input)
+        public Unit Handle(RegisterUserCommand request)
         {
-            var user = _mapper.Map<User>(input);
-            user.PasswordHash = _protector.Protect(input.Password);
-
-            _context.Add<User, int>(user);
-
-            return Unit.Value;
+            throw new NotImplementedException();
         }
     }
 }

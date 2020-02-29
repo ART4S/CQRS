@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.Application.Features.Blogs.GetBlogsInfo
+﻿namespace WebFeatures.Application.Features.Blogs.GetBlogs
 {
     public class BlogInfoDto
     {

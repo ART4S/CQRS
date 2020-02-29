@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using WebFeatures.Domian.Entities.Model;
 
-namespace WebFeatures.Application.Features.Posts.GetPostsInfo
+namespace WebFeatures.Application.Features.Posts.GetPosts
 {
-    public class GetPostInfosQueryProfile : Profile
+    public class GetPostsQueryProfile : Profile
     {
-        public GetPostInfosQueryProfile()
+        public GetPostsQueryProfile()
         {
             CreateMap<Post, PostInfoDto>(MemberList.Destination);
         }

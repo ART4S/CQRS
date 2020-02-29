@@ -1,23 +1,18 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using WebFeatures.Application.Interfaces.Data;
-using WebFeatures.Domian.Entities.Model;
+using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Security;
 
 namespace WebFeatures.Application.Features.Registration.RegisterUser
 {
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
-        public RegisterUserCommandValidator(IAppContext context)
+        public RegisterUserCommandValidator(IAuthService authService)
         {
             RuleFor(x => x.Name)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MinimumLength(3).WithMessage("Имя должно состоять минимум из 3-х символов")
                 .MaximumLength(15).WithMessage("Имя должно состоять максимум из 15-и символов")
-                .Matches(@"^[A-Za-z0-9#?!@$%^&*-]+$").WithMessage("Имя может содержать буквы, цифры и следующие символы:'#?!@$%^&*-'")
-                .Must(n => context.Set<User>()
-                    .AsNoTracking()
-                    .All(x => x.Name != n)).WithMessage("Пользователь с данным именем уже зарегестрирован");
+                .Matches(@"^[A-Za-z0-9#?!@$%^&*-]+$").WithMessage("Имя может содержать буквы, цифры и следующие символы:'#?!@$%^&*-'");
 
             RuleFor(x => x.Password)
                 .MinimumLength(8).WithMessage("Пароль должен состоять минимум из 8 символов")
@@ -29,12 +24,10 @@ namespace WebFeatures.Application.Features.Registration.RegisterUser
             RuleFor(x => x.ConfirmPassword)
                 .Equal(x => x.Password).WithMessage("Подтверждение пароля не совпадает");
 
-            RuleFor(x => x.ContactDetailsEmail)
+            RuleFor(x => x.Email)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .EmailAddress().WithMessage("Некорректный e-mail")
-                .Must(e => context.Set<User>()
-                    .AsNoTracking()
-                    .All(x => x.ContactDetails.Email != e)).WithMessage("Пользователь с данным e-mail уже зарегистрирован");
+                .Must(authService.LoginExists).WithMessage("Пользователь с данным e-mail уже зарегистрирован");
         }
     }
 }

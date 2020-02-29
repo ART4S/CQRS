@@ -11,12 +11,12 @@ namespace WebFeatures.Domian.Entities.Model
     public class ContactDetails : BaseEntity<int>
     {
         public int UserId { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
 
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
 
-        public virtual Address Address { get; set; }
+        public Address Address { get; set; }
     }
 }

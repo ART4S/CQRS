@@ -3,8 +3,8 @@
     /// <summary>
     /// Запрос
     /// </summary>
-    /// <typeparam name="TOut">Результат выполнения запроса</typeparam>
-    public interface IQuery<TOut>
+    /// <typeparam name="TResponse">Результат выполнения запроса</typeparam>
+    public interface IQuery<TResponse>
     {
     }
 }
