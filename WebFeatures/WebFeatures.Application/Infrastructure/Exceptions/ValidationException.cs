@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentValidation.Results;
 
-namespace WebFeatures.Application.Exceptions
+namespace WebFeatures.Application.Infrastructure.Exceptions
 {
     public class ValidationException : Exception
     {

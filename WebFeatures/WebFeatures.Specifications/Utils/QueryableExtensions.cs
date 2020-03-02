@@ -10,7 +10,7 @@ namespace WebFeatures.Specifications.Utils
             Expression<Func<T, TProp>> propGetter,
             Expression<Func<TProp, bool>> propCondition)
         {
-            var expr = propGetter.Combine(propCondition);
+            var expr = ExpressionPredicates.Combine(propGetter, propCondition);
             return sourceQueryable.Where(expr);
         }
     }

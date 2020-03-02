@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using System.Linq;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities.Model;
 

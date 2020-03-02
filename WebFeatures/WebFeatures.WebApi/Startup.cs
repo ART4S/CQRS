@@ -1,19 +1,15 @@
-﻿using AutoMapper;
-using FluentValidation;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Linq;
 using System.Net.Mime;
-using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Infrastructure.Pipeline.Concerns;
-using WebFeatures.Application.Infrastructure.Pipeline.Mediators;
+using WebFeatures.Application;
+using WebFeatures.Infrastructure;
 using WebFeatures.QueryFiltering.Exceptions;
-using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
+using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
 
 namespace WebFeatures.WebApi
 {
@@ -38,14 +34,8 @@ namespace WebFeatures.WebApi
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IMediator, Mediator>();
-
-            AddCommands(services);
-            AddQueries(services);
-            AddValidators(services);
-            AddMapperProfiles(services);
-            AddSecurity(services);
-
+            services.AddApplicationServices();
+            services.AddInfrastructureServices(Configuration);
             services.AddControllers();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -60,24 +50,26 @@ namespace WebFeatures.WebApi
             {
                 errorApp.Run(context =>
                 {
-                    context.Response.StatusCode = 500;
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     context.Response.ContentType = MediaTypeNames.Text.Plain;
 
                     var responseBody = "Внутренняя ошибка сервера";
-                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                    var feature = context.Features.Get<IExceptionHandlerPathFeature>();
 
-                    if (exceptionHandlerPathFeature?.Error is ValidationException validationEx)
+                    if (feature?.Error is ValidationException validation)
                     {
-                        context.Response.StatusCode = 400;
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                        responseBody = JsonConvert.SerializeObject(validationEx.Errors);
+                        responseBody = JsonConvert.SerializeObject(validation.Errors);
                     }
 
-                    if (exceptionHandlerPathFeature?.Error is FilteringException filteringEx)
+                    if (feature?.Error is FilteringException filtering)
                     {
-                        context.Response.StatusCode = 400;
-                        responseBody = filteringEx.Message;
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        context.Response.ContentType = MediaTypeNames.Text.Plain;
+
+                        responseBody = filtering.Message;
                     }
 
                     return context.Response.WriteAsync(responseBody);
@@ -87,7 +79,6 @@ namespace WebFeatures.WebApi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
@@ -100,87 +91,6 @@ namespace WebFeatures.WebApi
             {
                 endpoints.MapControllers();
             });
-        }
-
-        private static void AddCommands(IServiceCollection services)
-        {
-            services.Scan(scan =>
-            {
-                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
-                    .AddClasses(x => x.AssignableTo(typeof(ICommandHandler<,>)))
-                    .AsImplementedInterfaces()
-                    .WithScopedLifetime();
-            });
-
-            services.Decorate(
-                typeof(ICommandHandler<,>),
-                typeof(ValidationHandlerDecorator<,>));
-
-            services.Decorate(
-                typeof(ICommandHandler<,>),
-                typeof(LoggingHandlerDecorator<,>));
-
-            services.Decorate(
-                typeof(ICommandHandler<,>),
-                typeof(PerformanceHandlerDecorator<,>));
-        }
-
-        private static void AddQueries(IServiceCollection services)
-        {
-            services.Scan(scan =>
-            {
-                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
-                    .AddClasses(x => x.AssignableTo(typeof(IQueryHandler<,>)))
-                    .AsImplementedInterfaces()
-                    .WithScopedLifetime();
-            });
-
-            services.Decorate(
-                typeof(IQueryHandler<,>),
-                typeof(ValidationHandlerDecorator<,>));
-
-            services.Decorate(
-                typeof(IQueryHandler<,>),
-                typeof(LoggingHandlerDecorator<,>));
-
-            services.Decorate(
-                typeof(IQueryHandler<,>),
-                typeof(PerformanceHandlerDecorator<,>));
-        }
-
-        private static void AddValidators(IServiceCollection services)
-        {
-            services.Scan(scan =>
-            {
-                scan.FromAssemblies(typeof(IRequestHandler<,>).Assembly)
-                    .AddClasses(x => x.AssignableTo(typeof(IValidator<>)))
-                    .AsImplementedInterfaces()
-                    .WithScopedLifetime();
-            });
-        }
-
-        private static void AddMapperProfiles(IServiceCollection services)
-        {
-            var config = new MapperConfiguration(opt =>
-            {
-                var profiles = typeof(IRequestHandler<,>).Assembly
-                    .GetTypes()
-                    .Where(x => x.IsSubclassOf(typeof(Profile)));
-
-                foreach (var profile in profiles)
-                {
-                    opt.AddProfile(profile);
-                }
-            });
-
-            config.AssertConfigurationIsValid();
-
-            services.AddSingleton(provider => config.CreateMapper());
-        }
-
-        private static void AddSecurity(IServiceCollection services)
-        {
-            services.AddDataProtection();
         }
     }
 }

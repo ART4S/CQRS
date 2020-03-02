@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using WebFeatures.Application.Features.Blogs.CreateBlog;
 using WebFeatures.Application.Features.Blogs.DeleteBlog;
 using WebFeatures.Application.Features.Blogs.GetBlogs;
+using WebFeatures.Domian.Entities.Model;
 using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
 using WebFeatures.WebApi.Controllers.Base;
+using WebFeatures.WebApi.Filters;
 
 namespace WebFeatures.WebApi.Controllers
 {
@@ -41,6 +43,7 @@ namespace WebFeatures.WebApi.Controllers
         /// </summary>
         /// <param name="id">Id блога</param>
         [HttpDelete("{id:int}")]
+        [ExistsInDatabase(typeof(Blog))]
         public IActionResult Delete(int id)
         {
             Mediator.SendCommand(new DeleteBlogCommand() { Id = id });

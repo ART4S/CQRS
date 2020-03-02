@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
+    <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
   </ItemGroup>
 
 </Project>

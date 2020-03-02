@@ -1,5 +1,5 @@
 ﻿using System;
-using WebFeatures.Common.Time;
+using WebFeatures.Common;
 
 namespace WebFeatures.Infrastructure.Common
 {

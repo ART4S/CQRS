@@ -2,7 +2,7 @@
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces.Logging;
 
-namespace WebFeatures.Application.Infrastructure.Pipeline.Concerns
+namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
     /// <summary>
     /// Логирование долгих запросов

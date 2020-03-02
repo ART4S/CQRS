@@ -1,6 +1,4 @@
-﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-
-namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
+﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
     /// Посредник для отправки запросов подходящим обработчикам
@@ -8,7 +6,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
     public interface IMediator
     {
         /// <summary>
-        /// Передать запрос обработчику запросов
+        /// Направить запрос подходящему обработчику запросов
         /// </summary>
         /// <typeparam name="TResponse">Результат выполнения запроса</typeparam>
         /// <param name="query">Запрос</param>
@@ -16,7 +14,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
         TResponse SendQuery<TResponse>(IQuery<TResponse> query);
 
         /// <summary>
-        /// Передать запрос обработчику команд
+        /// Передать команду подходящему обработчику команд
         /// </summary>
         /// <typeparam name="TResponse">Результат выполнения команды</typeparam>
         /// <param name="command">Команда</param>

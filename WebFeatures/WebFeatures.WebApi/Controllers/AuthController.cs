@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using WebFeatures.Application.Features.Auth.Login;
 using WebFeatures.WebApi.Controllers.Base;
 
@@ -18,9 +19,16 @@ namespace WebFeatures.WebApi.Controllers
         /// Войти в систему
         /// </summary>
         [HttpPost("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Login([FromBody, Required] LoginCommand command)
         {
-            var claims = Mediator.SendCommand(command);
+            var user = Mediator.SendCommand(command);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -41,7 +49,8 @@ namespace WebFeatures.WebApi.Controllers
         /// <summary>
         /// Выйти из системы
         /// </summary>
-        [HttpPost("[action]")]     
+        [HttpPost("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();

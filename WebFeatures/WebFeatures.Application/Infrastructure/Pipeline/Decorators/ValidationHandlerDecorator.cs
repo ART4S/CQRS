@@ -1,10 +1,10 @@
-﻿using FluentValidation;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
+using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
 
-namespace WebFeatures.Application.Infrastructure.Pipeline.Concerns
+namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
     /// <summary>
     /// Валидация входных данных запроса

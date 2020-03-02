@@ -5,7 +5,7 @@ using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Domian.Entities.Abstractions;
 
-namespace WebFeatures.Repositories
+namespace WebFeatures.Infrastructure.DataAccess
 {
     public class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
         where TEntity : BaseEntity<TId>, new()

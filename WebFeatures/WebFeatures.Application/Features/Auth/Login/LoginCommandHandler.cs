@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Security.Claims;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces;
 using WebFeatures.Application.Interfaces.Security;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {
-    public class LoginCommandHandler : ICommandHandler<LoginCommand, Claim[]>
+    public class LoginCommandHandler : ICommandHandler<LoginCommand, UserDto>
     {
-        private readonly IAuthService _authService;
+        private readonly IUserManager _userManager;
 
-        public LoginCommandHandler(IAuthService authService)
+        public LoginCommandHandler(IUserManager userManager)
         {
-            _authService = authService;
+            _userManager = userManager;
         }
 
-        public Claim[] Handle(LoginCommand request)
+        public UserDto Handle(LoginCommand request)
         {
             throw new NotImplementedException();
         }

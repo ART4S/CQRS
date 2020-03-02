@@ -7,7 +7,7 @@ namespace WebFeatures.Specifications.Utils
 {
     internal static class ExpressionPredicates
     {
-        public static Expression<Func<T, bool>> Combine<T, TProp>(this Expression<Func<T, TProp>> left, Expression<Func<TProp, bool>> right)
+        public static Expression<Func<T, bool>> Combine<T, TProp>(Expression<Func<T, TProp>> left, Expression<Func<TProp, bool>> right)
         {
             var body = new ExpressionReplacerVisitor(right.Parameters[0], left.Body).Visit(right.Body);
             return Expression.Lambda<Func<T, bool>>(body, left.Parameters[0]);

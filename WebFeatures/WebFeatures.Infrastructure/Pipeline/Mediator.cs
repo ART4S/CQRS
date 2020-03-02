@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 
-namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
+namespace WebFeatures.Infrastructure.Pipeline
 {
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ConcurrentDictionary<Type, Type> _handlersCache = new ConcurrentDictionary<Type, Type>();
 
         public Mediator(IServiceProvider serviceProvider)
         {
@@ -14,9 +16,9 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
 
         public TResponse SendCommand<TResponse>(ICommand<TResponse> command)
         {
-            var handlerType = typeof(ICommandHandler<,>).MakeGenericType(
+            var handlerType = _handlersCache.GetOrAdd(
                 command.GetType(), 
-                typeof(TResponse));
+                x => typeof(ICommandHandler<,>).MakeGenericType(command.GetType(), typeof(TResponse)));
 
             dynamic handler = _serviceProvider.GetService(handlerType);
             dynamic request = command;
@@ -26,9 +28,9 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Mediators
 
         public TResponse SendQuery<TResponse>(IQuery<TResponse> query)
         {
-            var handlerType = typeof(IQueryHandler<,>).MakeGenericType(
-                query.GetType(), 
-                typeof(TResponse));
+            var handlerType = _handlersCache.GetOrAdd(
+                query.GetType(),
+                x => typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResponse)));
 
             dynamic handler = _serviceProvider.GetService(handlerType);
             dynamic request = query;

@@ -1,19 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebFeatures.Application.Features.Posts.CreatePost;
 using WebFeatures.Application.Features.Posts.DeletePost;
 using WebFeatures.Application.Features.Posts.GetPostById;
 using WebFeatures.Application.Features.Posts.GetPosts;
 using WebFeatures.Application.Features.Posts.UpdatePost;
+using WebFeatures.Domian.Entities.Model;
 using WebFeatures.QueryFiltering.Extensions;
 using WebFeatures.QueryFiltering.Filters;
 using WebFeatures.WebApi.Controllers.Base;
+using WebFeatures.WebApi.Filters;
 
 namespace WebFeatures.WebApi.Controllers
 {
     /// <summary>
     /// Посты
     /// </summary>
+    [ExistsInDatabase(typeof(Post))]
+    [Authorize]
     public class PostController : BaseController
     {
         /// <summary>
@@ -51,8 +56,8 @@ namespace WebFeatures.WebApi.Controllers
         /// <summary>
         /// Редактировать пост
         /// </summary>
-        [HttpPut]
-        public IActionResult Update([FromBody, Required] UpdatePostCommand command)
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, [FromBody, Required] UpdatePostCommand command)
         {
             Mediator.SendCommand(command);
             return Ok();

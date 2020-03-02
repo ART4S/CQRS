@@ -1,8 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
+using WebFeatures.Application.Infrastructure.Mappings;
+using WebFeatures.Domian.Entities.Model;
 
 namespace WebFeatures.Application.Features.Posts.GetPosts
 {
-    public class PostInfoDto
+    public class PostInfoDto : IHasMappings
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -11,5 +14,10 @@ namespace WebFeatures.Application.Features.Posts.GetPosts
         public string BlogAuthorName { get; set; }
         public string BlogTitle { get; set; }
         public string Title { get; set; }
+
+        public void ApplyMappings(Profile profile)
+        {
+            profile.CreateMap<Post, PostInfoDto>(MemberList.Destination);
+        }
     }
 }
