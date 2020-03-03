@@ -3,7 +3,7 @@ using System.Linq;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
-using WebFeatures.Domian.Entities.Abstractions;
+using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
@@ -11,10 +11,10 @@ namespace WebFeatures.Infrastructure.DataAccess
         where TEntity : BaseEntity<TId>, new()
         where TId : struct
     {
-        protected AppContext Context;
+        protected WebFeaturesDbContext Context;
         protected readonly IDateTime DateTime;
 
-        public BaseRepository(AppContext context, IDateTime dateTime)
+        public BaseRepository(WebFeaturesDbContext context, IDateTime dateTime)
         {
             Context = context;
             DateTime = dateTime;

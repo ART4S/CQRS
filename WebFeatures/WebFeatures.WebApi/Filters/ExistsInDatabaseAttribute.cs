@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using WebFeatures.Application.Interfaces.DataAccess;
-using WebFeatures.Domian.Entities.Abstractions;
+using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.WebApi.Filters
 {
@@ -13,13 +13,14 @@ namespace WebFeatures.WebApi.Filters
         public ExistsInDatabaseAttribute(Type entityType)
         {
             if (entityType.BaseType == null ||
-                entityType.BaseType == typeof(object) ||
                 !entityType.BaseType.IsGenericType ||
                 entityType.BaseType.GetGenericTypeDefinition() != typeof(BaseEntity<>))
-                throw new ArgumentException(nameof(entityType));
+            {
+                throw new ArgumentException($"Type: {entityType.FullName} must be inherited from {typeof(BaseEntity<>).FullName}");
+            }
 
             _repoType = typeof(IRepository<,>).MakeGenericType(
-                entityType,
+                entityType, 
                 entityType.BaseType.GetGenericArguments()[0]);
         }
 

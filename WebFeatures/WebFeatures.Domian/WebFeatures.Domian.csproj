@@ -9,4 +9,8 @@
     <ProjectReference Include="..\WebFeatures.Specifications\WebFeatures.Specifications.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>

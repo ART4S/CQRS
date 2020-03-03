@@ -1,4 +1,5 @@
 ﻿using LinqToQuerystring;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WebFeatures.QueryFiltering.Exceptions;
@@ -13,18 +14,18 @@ namespace WebFeatures.QueryFiltering.Extensions
         {
             try
             {
-                var queryString = filter.BuildQueryString();
-                var records = sourceQueryable.LinqToQuerystring(queryString).ToList();
+                string queryString = BuildQueryString(filter);
+                ICollection records = sourceQueryable.LinqToQuerystring(queryString).ToList();
 
                 return new FilteringResult(records);
             }
             catch
             {
-                throw new FilteringException("Ошибка во время фильтрации результата");
+                throw new FilteringException("Error occurred while filtering result");
             }
         }
 
-        private static string BuildQueryString(this QueryFilter filter)
+        private static string BuildQueryString(QueryFilter filter)
         {
             if (filter == null) return string.Empty;
 

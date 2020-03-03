@@ -14,4 +14,8 @@
     <ProjectReference Include="..\WebFeatures.Domian\WebFeatures.Domian.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+  </ItemGroup>
+
 </Project>

@@ -1,86 +1,61 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using System.Net.Mime;
-using WebFeatures.Application;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 using WebFeatures.Infrastructure;
-using WebFeatures.QueryFiltering.Exceptions;
-using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
+using WebFeatures.WebApi.Middlewares;
 
 namespace WebFeatures.WebApi
 {
-    /// <summary>
-    /// Конфигуратор приложения
-    /// </summary>
     public class Startup
     {
-        /// <inheritdoc />
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
-        /// <summary>
-        /// Настройки приложения
-        /// </summary>
         public IConfiguration Configuration { get; }
 
-        /// <summary>
-        /// Конфигурация сервисов приложения
-        /// </summary>
+        public IWebHostEnvironment Environment { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationServices();
-            services.AddInfrastructureServices(Configuration);
+            //services.AddApplicationServices();
+            services.AddInfrastructureServices(Configuration, Environment);
             services.AddControllers();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
-            services.AddSwaggerDocument();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
+
+                string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+
+                c.IncludeXmlComments(xmlFilePath, true);
+            });
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseExceptionHandler(errorApp =>
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                errorApp.Run(context =>
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    context.Response.ContentType = MediaTypeNames.Text.Plain;
-
-                    var responseBody = "Внутренняя ошибка сервера";
-                    var feature = context.Features.Get<IExceptionHandlerPathFeature>();
-
-                    if (feature?.Error is ValidationException validation)
-                    {
-                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                        context.Response.ContentType = MediaTypeNames.Application.Json;
-
-                        responseBody = JsonConvert.SerializeObject(validation.Errors);
-                    }
-
-                    if (feature?.Error is FilteringException filtering)
-                    {
-                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                        context.Response.ContentType = MediaTypeNames.Text.Plain;
-
-                        responseBody = filtering.Message;
-                    }
-
-                    return context.Response.WriteAsync(responseBody);
-                });
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
+
+            app.UseMiddleware<AppExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
 
             app.UseRouting();
 

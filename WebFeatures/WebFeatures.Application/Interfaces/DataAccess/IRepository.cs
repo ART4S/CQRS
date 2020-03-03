@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using WebFeatures.Domian.Entities.Abstractions;
+using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Application.Interfaces.DataAccess
 {

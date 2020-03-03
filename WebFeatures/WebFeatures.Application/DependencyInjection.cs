@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using WebFeatures.Application.Infrastructure.Mappings;
