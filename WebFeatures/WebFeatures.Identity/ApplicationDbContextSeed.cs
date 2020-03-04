@@ -27,7 +27,7 @@ namespace WebFeatures.Identity
                 Email = "user@gmail.com",
                 EmailConfirmed = true
             };
-            await userManager.CreateAsync(user, AuthorizationConstants.DefaultPassword);
+            await userManager.CreateAsync(user, "12345");
             user = await userManager.FindByIdAsync(user.Id);
             await userManager.AddToRoleAsync(user, AuthorizationConstants.Roles.Users);
 
@@ -37,7 +37,7 @@ namespace WebFeatures.Identity
                 Email = "admin@gmail.com",
                 EmailConfirmed = true
             };
-            await userManager.CreateAsync(admin, AuthorizationConstants.DefaultPassword);
+            await userManager.CreateAsync(admin, "12345");
             admin = await userManager.FindByIdAsync(admin.Id);
             await userManager.AddToRoleAsync(admin, AuthorizationConstants.Roles.Administrators);
         }

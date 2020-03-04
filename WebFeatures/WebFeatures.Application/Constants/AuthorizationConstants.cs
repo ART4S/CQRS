@@ -7,7 +7,5 @@
             public const string Administrators = "Administrators";
             public const string Users = "Users";
         }
-
-        public const string DefaultPassword = "12345";
     }
 }
