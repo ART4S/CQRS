@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Identity.Model;
 
 namespace WebFeatures.WebApi.Areas.Identity.Pages.Account
@@ -20,12 +20,11 @@ namespace WebFeatures.WebApi.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly Microsoft.Extensions.Logging.ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager,
-            ILogger<ExternalLoginModel> logger,
+            UserManager<ApplicationUser> userManager, Microsoft.Extensions.Logging.ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;

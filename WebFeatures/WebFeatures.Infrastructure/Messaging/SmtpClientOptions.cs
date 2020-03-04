@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.Infrastructure.Security
+﻿namespace WebFeatures.Infrastructure.Messaging
 {
     public class SmtpClientOptions
     {

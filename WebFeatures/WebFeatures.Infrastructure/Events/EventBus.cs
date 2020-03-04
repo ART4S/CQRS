@@ -16,17 +16,17 @@ namespace WebFeatures.Infrastructure.Events
             _serviceProvider = serviceProvider;
         }
 
-        public void Publish<TNotification>(TNotification notification) where TNotification : IEventMessage
+        public void Publish<TEventMessage>(TEventMessage message) where TEventMessage : IEventMessage
         {
             Type handlerType = HandlersCache.GetOrAdd(
-                typeof(TNotification),
+                typeof(TEventMessage),
                 t => typeof(IEventMessageHandler<>).MakeGenericType(t));
 
             IEnumerable<dynamic> handlers = _serviceProvider.GetServices(handlerType);
 
             foreach (var handler in handlers)
             {
-                handler.Handle(notification);
+                handler.Handle(message);
             }
         }
     }

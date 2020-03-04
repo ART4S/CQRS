@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Logging
 {
-    public class LoggerFacade<T> : Application.Interfaces.Logging.ILogger<T>
+    public class LoggerFacade<T> : Application.Interfaces.ILogger<T>
     {
         private readonly ILogger<T> _innerLogger;
 

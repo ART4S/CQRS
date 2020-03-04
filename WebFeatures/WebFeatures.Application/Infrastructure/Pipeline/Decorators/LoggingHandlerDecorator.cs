@@ -1,5 +1,5 @@
 ﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces.Logging;
+using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {

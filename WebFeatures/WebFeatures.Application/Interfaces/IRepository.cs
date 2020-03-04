@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using WebFeatures.Domian.Model.Abstractions;
 
-namespace WebFeatures.Application.Interfaces.DataAccess
+namespace WebFeatures.Application.Interfaces
 {
     public interface IRepository<TEntity, in TId> 
         where TEntity : BaseEntity<TId> 

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Identity.Model;
 
 namespace WebFeatures.WebApi.Areas.Identity.Pages.Account

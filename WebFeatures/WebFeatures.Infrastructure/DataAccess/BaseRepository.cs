@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using WebFeatures.Application.Interfaces.DataAccess;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Domian.Model.Abstractions;

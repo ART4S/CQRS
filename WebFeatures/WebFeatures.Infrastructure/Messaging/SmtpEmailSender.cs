@@ -1,10 +1,10 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Threading.Tasks;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Application.Interfaces;
 
-namespace WebFeatures.Infrastructure.Security
+namespace WebFeatures.Infrastructure.Messaging
 {
     public class SmtpEmailSender : IEmailSender
     {

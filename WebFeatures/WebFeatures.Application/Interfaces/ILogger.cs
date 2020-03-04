@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.Application.Interfaces.Logging
+﻿namespace WebFeatures.Application.Interfaces
 {
     public interface ILogger<T>
     {

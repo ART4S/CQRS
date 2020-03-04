@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using WebFeatures.Application.Interfaces.DataAccess;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.WebApi.Filters

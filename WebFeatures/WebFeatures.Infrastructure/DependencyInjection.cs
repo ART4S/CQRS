@@ -7,9 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using WebFeatures.Application.Interfaces.DataAccess;
-using WebFeatures.Application.Interfaces.Logging;
-using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Identity;
@@ -18,8 +16,8 @@ using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Logging;
+using WebFeatures.Infrastructure.Messaging;
 using WebFeatures.Infrastructure.Pipeline;
-using WebFeatures.Infrastructure.Security;
 
 namespace WebFeatures.Infrastructure
 {

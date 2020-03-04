@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.Logging;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Identity;
 using WebFeatures.Identity.Model;
 
