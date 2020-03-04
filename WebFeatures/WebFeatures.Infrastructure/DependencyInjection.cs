@@ -8,6 +8,7 @@ using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Logging;
+using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Identity;
@@ -17,6 +18,7 @@ using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Pipeline;
+using WebFeatures.Infrastructure.Security;
 
 namespace WebFeatures.Infrastructure
 {
@@ -28,10 +30,14 @@ namespace WebFeatures.Infrastructure
             IWebHostEnvironment environment)
         {
             services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
-            services.AddSingleton<IMediator, Mediator>();
-            services.AddSingleton<IEventBus, EventBus>();
-            services.AddSingleton<IDateTime, MachineDateTime>();
-            services.AddSingleton(typeof(ILogger<>), typeof(LoggerFacade<>));
+            services.AddScoped<IMediator, Mediator>();
+            services.AddScoped<IEventBus, EventBus>();
+            services.AddScoped<IDateTime, MachineDateTime>();
+            services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+            services.AddOptions<SmtpClientOptions>();
+            services.Configure<SmtpClientOptions>(configuration.GetSection("EmailClient"));
 
             if (environment.IsDevelopment())
             {
@@ -48,7 +54,18 @@ namespace WebFeatures.Infrastructure
 
             if (environment.IsProduction())
             {
-                // TODO: setup production db
+                //services.AddIdentity<ApplicationUser, ApplicationRole>(
+                //        options =>
+                //        {
+                //            options.User.RequireUniqueEmail = true;
+
+                //            options.Lockout.MaxFailedAccessAttempts = 10;
+                //            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+
+                //            options.SignIn.RequireConfirmedEmail = true;
+                //        })
+                //    .AddEntityFrameworkStores<ApplicationDbContext>()
+                //    .AddDefaultTokenProviders();
             }
         }
     }

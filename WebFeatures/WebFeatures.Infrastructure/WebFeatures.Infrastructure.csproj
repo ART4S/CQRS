@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
   </ItemGroup>
 
@@ -12,10 +13,6 @@
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
     <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
     <ProjectReference Include="..\WebFeatures.Identity\WebFeatures.Identity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Security\" />
   </ItemGroup>
 
 </Project>

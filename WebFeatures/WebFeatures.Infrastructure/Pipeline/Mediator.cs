@@ -7,7 +7,7 @@ namespace WebFeatures.Infrastructure.Pipeline
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ConcurrentDictionary<Type, Type> _handlersCache = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> HandlersCache = new ConcurrentDictionary<Type, Type>();
 
         public Mediator(IServiceProvider serviceProvider)
         {
@@ -16,7 +16,7 @@ namespace WebFeatures.Infrastructure.Pipeline
 
         public TResponse SendCommand<TResponse>(ICommand<TResponse> command)
         {
-            var handlerType = _handlersCache.GetOrAdd(
+            var handlerType = HandlersCache.GetOrAdd(
                 command.GetType(), 
                 x => typeof(ICommandHandler<,>).MakeGenericType(command.GetType(), typeof(TResponse)));
 
@@ -28,7 +28,7 @@ namespace WebFeatures.Infrastructure.Pipeline
 
         public TResponse SendQuery<TResponse>(IQuery<TResponse> query)
         {
-            var handlerType = _handlersCache.GetOrAdd(
+            var handlerType = HandlersCache.GetOrAdd(
                 query.GetType(),
                 x => typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResponse)));
 

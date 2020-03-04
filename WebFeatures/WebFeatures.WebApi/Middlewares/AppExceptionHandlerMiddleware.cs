@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Exceptions;
@@ -16,33 +17,42 @@ namespace WebFeatures.WebApi.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
                 await _next(context);
             }
-            catch (ValidationException validation)
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(ex, context);
+            }
+        }
+
+        private async Task HandleExceptionAsync(Exception exception, HttpContext context)
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = MediaTypeNames.Text.Plain;
+
+            string responseBody = "Unknown error";
+
+            if (exception is ValidationException validation)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(validation.Errors));
+                responseBody = JsonConvert.SerializeObject(validation.Errors);
             }
-            catch (FilteringException filtering)
+
+            if (exception is FilteringException filtering)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = MediaTypeNames.Text.Plain;
 
-                await context.Response.WriteAsync(filtering.Message);
+                responseBody = filtering.Message;
             }
-            catch
-            {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                context.Response.ContentType = MediaTypeNames.Text.Plain;
 
-                await context.Response.WriteAsync("Unknown error");
-            }
+            await context.Response.WriteAsync(responseBody);
         }
     }
 }

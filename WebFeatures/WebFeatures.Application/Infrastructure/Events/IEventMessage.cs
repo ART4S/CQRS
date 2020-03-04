@@ -1,6 +1,6 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Events
 {
-    public interface INotification
+    public interface IEventMessage
     {
     }
 }

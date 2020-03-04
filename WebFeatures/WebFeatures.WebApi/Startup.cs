@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +27,9 @@ namespace WebFeatures.WebApi
         {
             //services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration, Environment);
-            services.AddControllers();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+            services.AddControllers();
+            services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {
@@ -52,8 +50,6 @@ namespace WebFeatures.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
-            app.UseMiddleware<AppExceptionHandlerMiddleware>();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -62,9 +58,12 @@ namespace WebFeatures.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<AppExceptionHandlerMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -9,18 +9,18 @@ namespace WebFeatures.Infrastructure.Events
     public class EventBus : IEventBus
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ConcurrentDictionary<Type, Type> _handlersCache = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> HandlersCache = new ConcurrentDictionary<Type, Type>();
 
         public EventBus(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public void Publish<TNotification>(TNotification notification) where TNotification : INotification
+        public void Publish<TNotification>(TNotification notification) where TNotification : IEventMessage
         {
-            Type handlerType = _handlersCache.GetOrAdd(
+            Type handlerType = HandlersCache.GetOrAdd(
                 typeof(TNotification),
-                t => typeof(INotificationHandler<>).MakeGenericType(t));
+                t => typeof(IEventMessageHandler<>).MakeGenericType(t));
 
             IEnumerable<dynamic> handlers = _serviceProvider.GetServices(handlerType);
 

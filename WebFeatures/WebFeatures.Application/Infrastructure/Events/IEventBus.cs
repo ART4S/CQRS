@@ -2,6 +2,6 @@
 {
     public interface IEventBus
     {
-        void Publish<TNotification>(TNotification notification) where TNotification : INotification;
+        void Publish<TEventMessage>(TEventMessage message) where TEventMessage : IEventMessage;
     }
 }
