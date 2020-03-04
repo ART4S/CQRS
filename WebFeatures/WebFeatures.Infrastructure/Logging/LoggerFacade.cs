@@ -20,5 +20,10 @@ namespace WebFeatures.Infrastructure.Logging
         {
             _innerLogger.LogWarning(message, args);
         }
+
+        public void LogError(string message, params object[] args)
+        {
+            _innerLogger.LogError(message, args);
+        }
     }
 }

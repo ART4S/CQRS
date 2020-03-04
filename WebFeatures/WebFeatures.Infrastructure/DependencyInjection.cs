@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,10 +35,10 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IEventBus, EventBus>();
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
-            services.AddScoped<IEmailSender, SmtpEmailSender>();
 
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
             services.AddOptions<SmtpClientOptions>();
-            services.Configure<SmtpClientOptions>(configuration.GetSection("EmailClient"));
+            services.Configure<SmtpClientOptions>(configuration.GetSection("SmtpClient"));
 
             if (environment.IsDevelopment())
             {
@@ -47,7 +48,23 @@ namespace WebFeatures.Infrastructure
                 services.AddDbContext<ApplicationDbContext>(
                     options => options.UseInMemoryDatabase("DevDb"));
 
-                services.AddIdentity<ApplicationUser, ApplicationRole>()
+                services.AddIdentity<ApplicationUser, ApplicationRole>(
+                        options =>
+                        {
+                            options.SignIn.RequireConfirmedAccount = false;
+                            options.SignIn.RequireConfirmedEmail = false;
+                            options.SignIn.RequireConfirmedPhoneNumber = false;
+
+                            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
+
+                            options.Password.RequiredLength = 5;
+                            options.Password.RequireDigit = false;
+                            options.Password.RequireLowercase = false;
+                            options.Password.RequireNonAlphanumeric = false;
+                            options.Password.RequireUppercase = false;
+
+                            options.User.RequireUniqueEmail = true;
+                        })
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
             }
