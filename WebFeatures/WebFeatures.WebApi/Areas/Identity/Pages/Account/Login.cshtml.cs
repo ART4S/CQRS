@@ -64,8 +64,6 @@ namespace WebFeatures.WebApi.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -80,7 +78,7 @@ namespace WebFeatures.WebApi.Areas.Identity.Pages.Account
             var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(returnUrl ?? Url.Content("~/"));
             }
 
             if (result.RequiresTwoFactor)

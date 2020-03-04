@@ -25,11 +25,11 @@ namespace WebFeatures.WebApi.Middlewares
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(ex, context);
+                await HandleException(ex, context);
             }
         }
 
-        private async Task HandleExceptionAsync(Exception exception, HttpContext context)
+        private Task HandleException(Exception exception, HttpContext context)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = MediaTypeNames.Text.Plain;
@@ -52,7 +52,7 @@ namespace WebFeatures.WebApi.Middlewares
                 responseBody = filtering.Message;
             }
 
-            await context.Response.WriteAsync(responseBody);
+            return context.Response.WriteAsync(responseBody);
         }
     }
 }

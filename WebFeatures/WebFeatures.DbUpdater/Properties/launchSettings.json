@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "DbUpdater": {
-      "commandName": "Project",
-      "commandLineArgs": "f"
-    }
-  }
-}
