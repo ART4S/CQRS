@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
@@ -7,9 +8,7 @@ using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
-    public class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
-        where TEntity : BaseEntity<TId>, new()
-        where TId : struct
+    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity, new()
     {
         protected WebFeaturesDbContext Context;
         protected readonly IDateTime DateTime;
@@ -25,12 +24,12 @@ namespace WebFeatures.Infrastructure.DataAccess
             return Context.Set<TEntity>();
         }
 
-        public virtual TEntity GetById(TId id)
+        public virtual TEntity GetById(Guid id)
         {
             return Context.Find<TEntity>(id);
         }
 
-        public virtual bool Exists(TId id)
+        public virtual bool Exists(Guid id)
         {
             return Context.Find<TEntity>(id) != null;
         }
@@ -40,7 +39,7 @@ namespace WebFeatures.Infrastructure.DataAccess
             Context.Set<TEntity>().Add(entity);
         }
 
-        public virtual void Remove(TId id)
+        public virtual void Remove(Guid id)
         {
             var entity = new TEntity {Id = id};
             Context.Remove(entity);

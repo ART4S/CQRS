@@ -1,7 +1,9 @@
-﻿namespace WebFeatures.Domian.Model.Abstractions
+﻿using System;
+
+namespace WebFeatures.Domian.Model.Abstractions
 {
-    public abstract class BaseEntity<TId> where TId : struct
+    public abstract class BaseEntity
     {
-        public TId Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

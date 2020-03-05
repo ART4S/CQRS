@@ -1,21 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Application.Interfaces
 {
-    public interface IRepository<TEntity, in TId> 
-        where TEntity : BaseEntity<TId> 
-        where TId : struct
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         IQueryable<TEntity> GetAll();
 
-        TEntity GetById(TId id);
+        TEntity GetById(Guid id);
 
-        bool Exists(TId id);
+        bool Exists(Guid id);
 
         void Add(TEntity entity);
 
-        void Remove(TId id);
+        void Remove(Guid id);
 
         void SaveChanges();
     }

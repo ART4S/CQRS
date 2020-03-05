@@ -28,7 +28,7 @@ namespace WebFeatures.Infrastructure
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IEventBus, EventBus>();
             services.AddScoped<IDateTime, MachineDateTime>();
