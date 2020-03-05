@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 
 namespace WebFeatures.Infrastructure.Pipeline
@@ -14,7 +15,7 @@ namespace WebFeatures.Infrastructure.Pipeline
             _serviceProvider = serviceProvider;
         }
 
-        public TResponse SendCommand<TResponse>(ICommand<TResponse> command)
+        public Task<TResponse> SendCommandAsync<TResponse>(ICommand<TResponse> command)
         {
             var handlerType = HandlersCache.GetOrAdd(
                 command.GetType(), 
@@ -23,10 +24,10 @@ namespace WebFeatures.Infrastructure.Pipeline
             dynamic handler = _serviceProvider.GetService(handlerType);
             dynamic request = command;
 
-            return handler.Handle(request);
+            return handler.HandleAsync(request);
         }
 
-        public TResponse SendQuery<TResponse>(IQuery<TResponse> query)
+        public Task<TResponse> SendQueryAsync<TResponse>(IQuery<TResponse> query)
         {
             var handlerType = HandlersCache.GetOrAdd(
                 query.GetType(),
@@ -35,7 +36,7 @@ namespace WebFeatures.Infrastructure.Pipeline
             dynamic handler = _serviceProvider.GetService(handlerType);
             dynamic request = query;
 
-            return handler.Handle(request);
+            return handler.HandleAsync(request);
         }
     }
 }

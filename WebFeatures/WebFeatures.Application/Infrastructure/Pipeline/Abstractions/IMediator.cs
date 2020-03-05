@@ -1,24 +1,26 @@
-﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
+﻿using System.Threading.Tasks;
+
+namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Посредник для отправки запросов подходящим обработчикам
+    /// Mediator for sending request to apropriate handlers
     /// </summary>
     public interface IMediator
     {
         /// <summary>
-        /// Направить запрос подходящему обработчику запросов
+        /// Send query to apropriate query handler
         /// </summary>
-        /// <typeparam name="TResponse">Результат выполнения запроса</typeparam>
-        /// <param name="query">Запрос</param>
+        /// <typeparam name="TResponse">Query handling result</typeparam>
+        /// <param name="query">Input query</param>
         /// <returns></returns>
-        TResponse SendQuery<TResponse>(IQuery<TResponse> query);
+        Task<TResponse> SendQueryAsync<TResponse>(IQuery<TResponse> query);
 
         /// <summary>
-        /// Передать команду подходящему обработчику команд
+        /// Send command to apropriate command handler
         /// </summary>
-        /// <typeparam name="TResponse">Результат выполнения команды</typeparam>
-        /// <param name="command">Команда</param>
+        /// <typeparam name="TResponse">Command handlging result</typeparam>
+        /// <param name="command">Input command</param>
         /// <returns></returns>
-        TResponse SendCommand<TResponse>(ICommand<TResponse> command);
+        Task<TResponse> SendCommandAsync<TResponse>(ICommand<TResponse> command);
     }
 }

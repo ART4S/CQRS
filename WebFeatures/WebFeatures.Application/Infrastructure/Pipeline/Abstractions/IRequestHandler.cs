@@ -1,16 +1,18 @@
-﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
+﻿using System.Threading.Tasks;
+
+namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Обработчик запросов
+    /// Request handling
     /// </summary>
-    /// <typeparam name="TRequest">Тип входного параметра</typeparam>
-    /// <typeparam name="TResponse">Тип результата</typeparam>
-    public interface IRequestHandler<in TRequest, out TResponse>
+    /// <typeparam name="TRequest">Request</typeparam>
+    /// <typeparam name="TResponse">Request handling result</typeparam>
+    public interface IRequestHandler<in TRequest, TResponse>
     {
         /// <summary>
-        /// Метод обработки
+        /// Handle request
         /// </summary>
-        /// <param name="request">Входной параметр</param>
-        TResponse Handle(TRequest request);
+        /// <param name="request">Input request</param>
+        Task<TResponse> HandleAsync(TRequest request);
     }
 }

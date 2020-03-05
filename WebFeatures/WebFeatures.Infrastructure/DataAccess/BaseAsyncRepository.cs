@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
@@ -8,12 +9,12 @@ using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
-    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity, new()
+    public class BaseAsyncRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : BaseEntity, new()
     {
         protected WebFeaturesDbContext Context;
         protected readonly IDateTime DateTime;
 
-        public BaseRepository(WebFeaturesDbContext context, IDateTime dateTime)
+        public BaseAsyncRepository(WebFeaturesDbContext context, IDateTime dateTime)
         {
             Context = context;
             DateTime = dateTime;
@@ -24,28 +25,30 @@ namespace WebFeatures.Infrastructure.DataAccess
             return Context.Set<TEntity>();
         }
 
-        public virtual TEntity GetById(Guid id)
+        public virtual async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return Context.Find<TEntity>(id);
+            return await Context.Set<TEntity>().FindAsync();
         }
 
-        public virtual bool Exists(Guid id)
+        public virtual async Task<bool> ExistsAsync(Guid id)
         {
-            return Context.Find<TEntity>(id) != null;
+            return await Context.Set<TEntity>().FindAsync(id) != null;
         }
 
-        public virtual void Add(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
-            Context.Set<TEntity>().Add(entity);
+            await Context.Set<TEntity>().AddAsync(entity);
         }
 
-        public virtual void Remove(Guid id)
+        public virtual Task RemoveAsync(Guid id)
         {
-            var entity = new TEntity {Id = id};
-            Context.Remove(entity);
+            var entity = new TEntity(){Id = id};
+            Context.Set<TEntity>().Remove(entity);
+
+            return Task.CompletedTask;
         }
 
-        public virtual void SaveChanges()
+        public virtual async Task SaveChangesAsync()
         {
             var now = DateTime.Now;
 
@@ -63,7 +66,7 @@ namespace WebFeatures.Infrastructure.DataAccess
                 }
             }
 
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
     }
 }

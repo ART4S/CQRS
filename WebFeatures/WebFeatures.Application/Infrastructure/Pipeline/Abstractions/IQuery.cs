@@ -1,9 +1,9 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Запрос
+    /// Query
     /// </summary>
-    /// <typeparam name="TResponse">Результат выполнения запроса</typeparam>
+    /// <typeparam name="TResponse">Query handling result</typeparam>
     public interface IQuery<TResponse>
     {
     }

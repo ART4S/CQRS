@@ -1,34 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.WebApi.Filters
 {
-    public class ExistsInDatabaseFilter<TEntity> : IActionFilter 
+    public class ExistsInDatabaseFilter<TEntity> : IAsyncActionFilter
         where TEntity : BaseEntity
     {
-        private readonly IRepository<TEntity> _repo;
+        private readonly IAsyncRepository<TEntity> _repo;
 
-        public ExistsInDatabaseFilter(IRepository<TEntity> repo)
+        public ExistsInDatabaseFilter(IAsyncRepository<TEntity> repo)
         {
             _repo = repo;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (context.ActionArguments.TryGetValue("id", out var id) && id is Guid idGuid)
             {
-                if (!_repo.Exists(idGuid))
+                if (!await _repo.ExistsAsync(idGuid))
                 {
                     context.Result = new NotFoundObjectResult(idGuid);
+                    return;
                 }
             }
+
+            await next();
         }
 
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-        }
+        public Task OnActionExecutedAsync(ActionExecutedContext context) => Task.CompletedTask;
     }
 }

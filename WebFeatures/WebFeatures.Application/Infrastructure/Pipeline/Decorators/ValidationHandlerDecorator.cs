@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using FluentValidation;
+using System.Collections.Generic;
 using System.Linq;
-using FluentValidation;
+using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
     /// <summary>
-    /// Валидация входных данных запроса
+    /// Request data validation
     /// </summary>
     public class ValidationHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
@@ -20,7 +21,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
             _validators = validators;
         }
 
-        public override TResponse Handle(TRequest request)
+        public override Task<TResponse> HandleAsync(TRequest request)
         {
             var errors = _validators
                 .Select(x => x.Validate(request))
@@ -33,7 +34,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
                 throw new ValidationException(errors);
             }
 
-            return Decoratee.Handle(request);
+            return Decoratee.HandleAsync(request);
         }
     }
 }

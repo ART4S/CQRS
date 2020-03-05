@@ -1,12 +1,12 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Обработчик команды
+    /// Command handling
     /// </summary>
-    /// <typeparam name="TCommand">Команда</typeparam>
-    /// <typeparam name="TResult">Результат выполнения команды</typeparam>
-    public interface ICommandHandler<in TCommand, out TResult> : IRequestHandler<TCommand, TResult>
-        where TCommand : ICommand<TResult>
+    /// <typeparam name="TCommand">Command</typeparam>
+    /// <typeparam name="TResponse">Command handling result</typeparam>
+    public interface ICommandHandler<in TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
+        where TCommand : ICommand<TResponse>
     {
     }
 }

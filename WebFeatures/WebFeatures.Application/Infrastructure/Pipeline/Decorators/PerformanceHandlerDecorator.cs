@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
     /// <summary>
-    /// Логирование долгих запросов
+    /// Long running request logging
     /// </summary>
     public class PerformanceHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
@@ -19,10 +20,10 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
             _logger = logger;
         }
 
-        public override TResponse Handle(TRequest request)
+        public override async Task<TResponse> HandleAsync(TRequest request)
         {
             _timer.Start();
-            var result = Decoratee.Handle(request);
+            var result = await Decoratee.HandleAsync(request);
             _timer.Stop();
 
             if (_timer.ElapsedMilliseconds > 500)

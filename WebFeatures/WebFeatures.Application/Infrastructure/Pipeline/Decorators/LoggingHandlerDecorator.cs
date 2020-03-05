@@ -1,10 +1,11 @@
-﻿using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
+﻿using System.Threading.Tasks;
+using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
     /// <summary>
-    /// Логирование запросов
+    /// Request logging
     /// </summary>
     public class LoggingHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
@@ -17,9 +18,9 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
             _logger = logger;
         }
 
-        public override TResponse Handle(TRequest request)
+        public override async Task<TResponse> HandleAsync(TRequest request)
         {
-            var response = Decoratee.Handle(request);
+            var response = await Decoratee.HandleAsync(request);
             _logger.LogInformation($"{Decoratee.GetType().Name} : {request.ToString()} => {response.ToString()}");
             return response;
         }

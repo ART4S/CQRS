@@ -1,7 +1,9 @@
-﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
+﻿using System.Threading.Tasks;
+
+namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Декоратор для обработчика
+    /// Request handling decorator
     /// </summary>
     public abstract class RequestHandlerDecoratorBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
     {
@@ -12,6 +14,6 @@
             Decoratee = decoratee;
         }
 
-        public abstract TResponse Handle(TRequest request);
+        public abstract Task<TResponse> HandleAsync(TRequest request);
     }
 }

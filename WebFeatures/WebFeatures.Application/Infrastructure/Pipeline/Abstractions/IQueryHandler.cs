@@ -1,12 +1,12 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Обработчик запроса
+    /// Query handling
     /// </summary>
-    /// <typeparam name="TQuery">Запрос</typeparam>
-    /// <typeparam name="TResult">Результат выполнения запроса</typeparam>
-    public interface IQueryHandler<in TQuery, out TResult> : IRequestHandler<TQuery, TResult>
-        where TQuery : IQuery<TResult>
+    /// <typeparam name="TQuery">Query</typeparam>
+    /// <typeparam name="TResponse">Query handling result</typeparam>
+    public interface IQueryHandler<in TQuery, TResponse> : IRequestHandler<TQuery, TResponse>
+        where TQuery : IQuery<TResponse>
     {
     }
 }

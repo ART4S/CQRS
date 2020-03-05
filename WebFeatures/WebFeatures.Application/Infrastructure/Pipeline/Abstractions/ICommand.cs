@@ -1,9 +1,9 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
 {
     /// <summary>
-    /// Команда
+    /// Command
     /// </summary>
-    /// <typeparam name="TResponse">Результат выполнения команды</typeparam>
+    /// <typeparam name="TResponse">Command handling result</typeparam>
     public interface ICommand<TResponse>
     {
     }
