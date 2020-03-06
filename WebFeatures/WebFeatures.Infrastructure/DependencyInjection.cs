@@ -69,6 +69,20 @@ namespace WebFeatures.Infrastructure
 
             if (environment.IsProduction())
             {
+                //services.AddDbContext<WebFeaturesDbContext>(
+                //    options =>
+                //    {
+                //        options.UseSqlServer(
+                //            configuration.GetConnectionString("Sql"), 
+                //            sqlOptions =>
+                //            {
+                //                sqlOptions.EnableRetryOnFailure(
+                //                    maxRetryCount: 5,
+                //                    maxRetryDelay: TimeSpan.FromSeconds(30), 
+                //                    errorNumbersToAdd: null);
+                //            });
+                //    });
+
                 //services.AddIdentity<ApplicationUser, ApplicationRole>(
                 //        options =>
                 //        {

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Exceptions;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.QueryFiltering.Exceptions;
 
 namespace WebFeatures.WebApi.Middlewares
@@ -31,25 +33,39 @@ namespace WebFeatures.WebApi.Middlewares
 
         private Task HandleException(Exception exception, HttpContext context)
         {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Response.ContentType = MediaTypeNames.Text.Plain;
+            string responseBody;
 
-            string responseBody = "Unknown error";
-
-            if (exception is ValidationException validation)
+            switch (exception)
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                context.Response.ContentType = MediaTypeNames.Application.Json;
+                case ValidationException validation:
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    context.Response.ContentType = MediaTypeNames.Application.Json;
+                    responseBody = JsonConvert.SerializeObject(validation.Errors);
 
-                responseBody = JsonConvert.SerializeObject(validation.Errors);
-            }
+                    break;
+                }
 
-            if (exception is FilteringException filtering)
-            {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                context.Response.ContentType = MediaTypeNames.Text.Plain;
+                case FilteringException filtering:
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    context.Response.ContentType = MediaTypeNames.Text.Plain;
+                    responseBody = filtering.Message;
 
-                responseBody = filtering.Message;
+                    break;
+                }
+
+                default:
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = MediaTypeNames.Text.Plain;
+                    responseBody = "Unknown error";
+
+                    var logger = context.RequestServices.GetService<ILogger<AppExceptionHandlerMiddleware>>();
+                    logger.LogError(exception.Message, exception);
+
+                    break;
+                }
             }
 
             return context.Response.WriteAsync(responseBody);
