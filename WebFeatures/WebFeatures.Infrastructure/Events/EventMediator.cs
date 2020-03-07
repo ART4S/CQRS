@@ -6,27 +6,28 @@ using WebFeatures.Application.Infrastructure.Events;
 
 namespace WebFeatures.Infrastructure.Events
 {
-    public class EventBus : IEventBus
+    public class EventMediator : IEventMediator
     {
         private readonly IServiceProvider _serviceProvider;
         private static readonly ConcurrentDictionary<Type, Type> HandlersCache = new ConcurrentDictionary<Type, Type>();
 
-        public EventBus(IServiceProvider serviceProvider)
+        public EventMediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public void Publish<TEventMessage>(TEventMessage message) where TEventMessage : IEventMessage
+        public void Publish<TEvent>(TEvent eve) where TEvent : IEvent
         {
             Type handlerType = HandlersCache.GetOrAdd(
-                typeof(TEventMessage),
-                t => typeof(IEventMessageHandler<>).MakeGenericType(t));
+                typeof(TEvent),
+                t => typeof(IEventHandler<>).MakeGenericType(t));
 
             IEnumerable<dynamic> handlers = _serviceProvider.GetServices(handlerType);
 
+            // TODO: use hangfire ???
             foreach (var handler in handlers)
             {
-                handler.Handle(message);
+                handler.Handle(eve);
             }
         }
     }

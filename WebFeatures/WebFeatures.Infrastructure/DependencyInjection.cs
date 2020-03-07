@@ -30,7 +30,7 @@ namespace WebFeatures.Infrastructure
         {
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseAsyncRepository<>));
             services.AddScoped<IMediator, Mediator>();
-            services.AddScoped<IEventBus, EventBus>();
+            services.AddScoped<IEventMediator, EventMediator>();
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
 
