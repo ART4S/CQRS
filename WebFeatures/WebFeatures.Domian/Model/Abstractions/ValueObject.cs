@@ -9,10 +9,8 @@ namespace WebFeatures.Domian.Model.Abstractions
 
         public override bool Equals(object other)
         {
-            if (other == null || other.GetType() != GetType())
-            {
-                return false;
-            }
+            if (other == null) return false;
+            if (other.GetType() != GetType()) return false;
 
             using var thisEnumerator = GetAtomicValues().GetEnumerator();
             using var otherEnumerator = ((ValueObject) other).GetAtomicValues().GetEnumerator();

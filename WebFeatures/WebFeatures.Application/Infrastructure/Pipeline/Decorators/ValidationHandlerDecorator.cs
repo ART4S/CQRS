@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebFeatures.Application.Infrastructure.Exceptions;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
-using ValidationException = WebFeatures.Application.Infrastructure.Exceptions.ValidationException;
 
 namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 {
@@ -31,7 +31,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 
             if (errors.Count != 0)
             {
-                throw new ValidationException(errors);
+                throw new ModelValidationException(errors);
             }
 
             return Decoratee.HandleAsync(request);

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,14 +8,14 @@ using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
-using WebFeatures.Identity;
-using WebFeatures.Identity.Model;
 using WebFeatures.Infrastructure.Common;
+using WebFeatures.Infrastructure.CurrentUser;
 using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Messaging;
 using WebFeatures.Infrastructure.Pipeline;
+using WebFeatures.Infrastructure.Security;
 
 namespace WebFeatures.Infrastructure
 {
@@ -34,37 +32,20 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             services.AddScoped<IEmailSender, SmtpEmailSender>();
             services.AddOptions<SmtpClientOptions>();
             services.Configure<SmtpClientOptions>(configuration.GetSection("SmtpClient"));
+
+            services.AddDataProtection();
+            services.AddScoped<IPasswordEncoder, PasswordEncoder>();
 
             if (environment.IsDevelopment())
             {
                 services.AddDbContext<WebFeaturesDbContext>(
                     options => options.UseInMemoryDatabase("DevDb"));
-
-                services.AddDbContext<ApplicationDbContext>(
-                    options => options.UseInMemoryDatabase("DevDb"));
-
-                services.AddIdentity<ApplicationUser, ApplicationRole>(
-                        options =>
-                        {
-                            options.SignIn.RequireConfirmedAccount = false;
-                            options.SignIn.RequireConfirmedEmail = false;
-                            options.SignIn.RequireConfirmedPhoneNumber = false;
-
-                            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
-
-                            options.Password.RequiredLength = 5;
-                            options.Password.RequireDigit = false;
-                            options.Password.RequireLowercase = false;
-                            options.Password.RequireNonAlphanumeric = false;
-                            options.Password.RequireUppercase = false;
-
-                            options.User.RequireUniqueEmail = true;
-                        })
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
             }
 
             if (environment.IsProduction())
@@ -82,19 +63,6 @@ namespace WebFeatures.Infrastructure
                 //                    errorNumbersToAdd: null);
                 //            });
                 //    });
-
-                //services.AddIdentity<ApplicationUser, ApplicationRole>(
-                //        options =>
-                //        {
-                //            options.User.RequireUniqueEmail = true;
-
-                //            options.Lockout.MaxFailedAccessAttempts = 10;
-                //            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-
-                //            options.SignIn.RequireConfirmedEmail = true;
-                //        })
-                //    .AddEntityFrameworkStores<ApplicationDbContext>()
-                //    .AddDefaultTokenProviders();
             }
         }
     }

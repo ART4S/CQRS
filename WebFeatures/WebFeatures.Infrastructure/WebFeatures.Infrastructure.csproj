@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
     <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
-    <ProjectReference Include="..\WebFeatures.Identity\WebFeatures.Identity.csproj" />
   </ItemGroup>
 
 </Project>

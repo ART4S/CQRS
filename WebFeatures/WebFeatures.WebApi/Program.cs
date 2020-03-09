@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Identity;
-using WebFeatures.Identity.Model;
+using WebFeatures.DataContext;
 
 namespace WebFeatures.WebApi
 {
@@ -31,10 +29,8 @@ namespace WebFeatures.WebApi
 
             try
             {
-                var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetService<RoleManager<ApplicationRole>>();
-
-                await ApplicationDbContextSeed.Seed(userManager, roleManager);
+                var context = scope.ServiceProvider.GetService<WebFeaturesDbContext>();
+                await context.SeedAsync();
             }
             catch (Exception e)
             {

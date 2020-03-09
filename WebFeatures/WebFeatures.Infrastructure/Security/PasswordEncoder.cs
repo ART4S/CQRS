@@ -1,0 +1,25 @@
+﻿using Microsoft.AspNetCore.DataProtection;
+using WebFeatures.Application.Interfaces;
+
+namespace WebFeatures.Infrastructure.Security
+{
+    public class PasswordEncoder : IPasswordEncoder
+    {
+        private readonly IDataProtector _protector;
+
+        public PasswordEncoder(IDataProtectionProvider protectionProvider)
+        {
+            _protector = protectionProvider.CreateProtector(nameof(PasswordEncoder));
+        }
+
+        public string EncodePassword(string password)
+        {
+           return _protector.Protect(password);
+        }
+
+        public string DecodePassword(string password)
+        {
+            return _protector.Unprotect(password);
+        }
+    }
+}

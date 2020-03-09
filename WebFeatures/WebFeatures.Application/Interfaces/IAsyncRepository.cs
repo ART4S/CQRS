@@ -7,6 +7,11 @@ namespace WebFeatures.Application.Interfaces
 {
     public interface IAsyncRepository<TEntity> where TEntity : BaseEntity
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>Leaky abstraction...But who cares ¯\_(ツ)_/¯</remarks>
+        /// <returns></returns>
         IQueryable<TEntity> GetAll();
 
         Task<TEntity> GetByIdAsync(Guid id);

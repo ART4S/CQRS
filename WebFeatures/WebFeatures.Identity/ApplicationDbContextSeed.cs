@@ -24,7 +24,7 @@ namespace WebFeatures.Identity
             var user = new ApplicationUser()
             {
                 UserName = "user", 
-                Email = "user@gmail.com"
+                Email = "user@mail.com"
             };
             await userManager.CreateAsync(user, "12345");
             user = await userManager.FindByIdAsync(user.Id);
@@ -33,7 +33,7 @@ namespace WebFeatures.Identity
             var admin = new ApplicationUser()
             {
                 UserName = "admin",
-                Email = "admin@gmail.com"
+                Email = "admin@mail.com"
             };
             await userManager.CreateAsync(admin, "12345");
             admin = await userManager.FindByIdAsync(admin.Id);

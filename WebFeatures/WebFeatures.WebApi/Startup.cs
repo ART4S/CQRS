@@ -40,6 +40,8 @@ namespace WebFeatures.WebApi
 
                 c.IncludeXmlComments(xmlFilePath, true);
             });
+
+            services.AddDataProtection();
         }
 
         public void Configure(IApplicationBuilder app)
