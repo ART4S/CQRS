@@ -5,11 +5,12 @@ using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Domian.Model
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, ISoftDelete
     {
         public string Name { get; set; }
         public string Email { get; }
         public string PasswordHash { get; }
+        public bool IsDeleted { get; set; }
 
         public User(string name, string email, string passwordHash)
         {

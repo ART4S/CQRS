@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.DataContext;
@@ -14,7 +16,7 @@ namespace WebFeatures.WebApi
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            await SeedData(host);
+            await SetupDbContext(host);
 
             await host.RunAsync();
         }
@@ -23,14 +25,27 @@ namespace WebFeatures.WebApi
             => WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
 
-        private static async Task SeedData(IWebHost host)
+        private static async Task SetupDbContext(IWebHost host)
         {
             using var scope = host.Services.CreateScope();
 
             try
             {
                 var context = scope.ServiceProvider.GetService<WebFeaturesDbContext>();
-                await context.SeedAsync();
+
+                if (context.Database.IsInMemory())
+                {
+                    await context.SeedAsync();
+                }
+                else
+                {
+                    await context.Database.EnsureCreatedAsync();
+
+                    if ((await context.Database.GetPendingMigrationsAsync()).Any())
+                    {
+                        await context.Database.MigrateAsync();
+                    }
+                }
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WebFeatures.DataContext
 {
@@ -6,7 +7,7 @@ namespace WebFeatures.DataContext
     {
         public static async Task SeedAsync(this WebFeaturesDbContext context)
         {
-            // TODO
+            throw new NotImplementedException();
         }
     }
 }

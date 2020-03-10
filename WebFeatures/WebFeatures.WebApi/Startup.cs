@@ -29,7 +29,6 @@ namespace WebFeatures.WebApi
             services.AddInfrastructureServices(Configuration, Environment);
 
             services.AddControllers();
-            services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {
@@ -40,8 +39,6 @@ namespace WebFeatures.WebApi
 
                 c.IncludeXmlComments(xmlFilePath, true);
             });
-
-            services.AddDataProtection();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -65,7 +62,6 @@ namespace WebFeatures.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapRazorPages();
             });
         }
     }

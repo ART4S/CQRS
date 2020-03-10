@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,14 +54,14 @@ namespace WebFeatures.Infrastructure
                 //services.AddDbContext<WebFeaturesDbContext>(
                 //    options =>
                 //    {
-                //        options.UseSqlServer(
-                //            configuration.GetConnectionString("Sql"), 
+                //        options.UseNpgsql(
+                //            configuration.GetConnectionString("Postgre"),
                 //            sqlOptions =>
                 //            {
                 //                sqlOptions.EnableRetryOnFailure(
                 //                    maxRetryCount: 5,
-                //                    maxRetryDelay: TimeSpan.FromSeconds(30), 
-                //                    errorNumbersToAdd: null);
+                //                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                //                    errorCodesToAdd: null);
                 //            });
                 //    });
             }

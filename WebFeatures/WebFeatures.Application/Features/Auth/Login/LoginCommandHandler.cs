@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Infrastructure.Exceptions;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
