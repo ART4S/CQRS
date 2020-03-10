@@ -18,19 +18,19 @@ namespace WebFeatures.Domian.Model
             PasswordHash = passwordHash;
         }
 
-        public IReadOnlyCollection<Role> Roles => _userRoles.Select(x => x.Role).ToImmutableList();
-        private HashSet<UserRoleRelation> _userRoles { get; } = new HashSet<UserRoleRelation>();
+        public IReadOnlyCollection<Role> Roles => UserRoles.Select(x => x.Role).ToImmutableList();
+        private HashSet<UserRoleRelation> UserRoles { get; } = new HashSet<UserRoleRelation>();
 
         public void AssignRole(Role role)
         {
             var rel = new UserRoleRelation(this, role);
-            _userRoles.Add(rel);
+            UserRoles.Add(rel);
         }
 
         public void RemoveRole(Role role)
         {
             var rel = new UserRoleRelation(this, role);
-            _userRoles.Remove(rel);
+            UserRoles.Remove(rel);
         }
     }
 }

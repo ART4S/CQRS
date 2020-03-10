@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using WebFeatures.Domian.Model;
 
 namespace WebFeatures.DataContext
@@ -11,7 +13,42 @@ namespace WebFeatures.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebFeaturesDbContext).Assembly);
+
+            SetUtcConverters(modelBuilder);
+        }
+
+        private void SetUtcConverters(ModelBuilder modelBuilder)
+        {
+            var utcConverter = new ValueConverter<DateTime, DateTime>(
+                to => to,
+                from => DateTime.SpecifyKind(from, DateTimeKind.Utc));
+
+            var nullableUtcConverter = new ValueConverter<DateTime?, DateTime?>(
+                to => to,
+                from => from != default
+                    ? DateTime.SpecifyKind(from.Value, DateTimeKind.Utc)
+                    : default);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.Name.EndsWith("Utc"))
+                    {
+                        if (property.ClrType == typeof(DateTime))
+                        {
+                            property.SetValueConverter(utcConverter);
+                        }
+
+                        if (property.ClrType == typeof(DateTime?))
+                        {
+                            property.SetValueConverter(nullableUtcConverter);
+                        }
+                    }
+                }
+            }
         }
 
         public DbSet<User> Users { get; set; }
