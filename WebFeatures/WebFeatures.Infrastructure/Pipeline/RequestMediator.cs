@@ -5,12 +5,12 @@ using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 
 namespace WebFeatures.Infrastructure.Pipeline
 {
-    public class Mediator : IMediator
+    public class RequestMediator : IRequestMediator
     {
         private readonly IServiceProvider _serviceProvider;
         private static readonly ConcurrentDictionary<Type, Type> HandlersCache = new ConcurrentDictionary<Type, Type>();
 
-        public Mediator(IServiceProvider serviceProvider)
+        public RequestMediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

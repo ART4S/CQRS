@@ -9,7 +9,7 @@ using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
-    public class BaseAsyncRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : BaseEntity, new()
+    public class BaseAsyncRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : BaseEntity
     {
         protected WebFeaturesDbContext Context;
         protected readonly IDateTime DateTime;
@@ -40,12 +40,13 @@ namespace WebFeatures.Infrastructure.DataAccess
             await Context.Set<TEntity>().AddAsync(entity);
         }
 
-        public virtual Task RemoveAsync(Guid id)
+        public virtual async Task RemoveAsync(Guid id)
         {
-            var entity = new TEntity(){Id = id};
-            Context.Set<TEntity>().Remove(entity);
+            var entity = await Context.Set<TEntity>().FindAsync(id);
+            if (entity == null) 
+                return;
 
-            return Task.CompletedTask;
+            Context.Set<TEntity>().Remove(entity);
         }
 
         public virtual async Task SaveChangesAsync()

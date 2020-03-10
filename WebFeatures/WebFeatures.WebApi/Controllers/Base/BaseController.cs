@@ -10,7 +10,7 @@ namespace WebFeatures.WebApi.Controllers.Base
     [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-        private IMediator _mediator;
+        protected IRequestMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IRequestMediator>();
+        private IRequestMediator _mediator;
     }
 }

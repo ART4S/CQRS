@@ -27,7 +27,7 @@ namespace WebFeatures.Infrastructure
             IWebHostEnvironment environment)
         {
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseAsyncRepository<>));
-            services.AddScoped<IMediator, Mediator>();
+            services.AddScoped<IRequestMediator, RequestMediator>();
             services.AddScoped<IEventMediator, EventMediator>();
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));

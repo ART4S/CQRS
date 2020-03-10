@@ -24,7 +24,6 @@ namespace WebFeatures.Infrastructure.Events
 
             IEnumerable<dynamic> handlers = _serviceProvider.GetServices(handlerType);
 
-            // TODO: use hangfire ???
             foreach (var handler in handlers)
             {
                 handler.Handle(eve);

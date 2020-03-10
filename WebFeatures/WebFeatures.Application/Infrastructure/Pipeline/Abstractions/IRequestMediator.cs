@@ -5,7 +5,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
     /// <summary>
     /// Mediator for sending request to apropriate handlers
     /// </summary>
-    public interface IMediator
+    public interface IRequestMediator
     {
         /// <summary>
         /// Send query to apropriate query handler
