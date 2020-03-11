@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 using WebFeatures.Domian.Model;
 
 namespace WebFeatures.DataContext.Configurations
@@ -17,20 +16,6 @@ namespace WebFeatures.DataContext.Configurations
 
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.BasketItems));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-            builder.OwnsMany(
-                x => x.BasketItems,
-                x =>
-                {
-                    x.WithOwner().HasForeignKey("OwnerId");
-                    x.Property<Guid>("Id");
-                    x.HasKey("Id");
-
-                    x.HasOne(y => y.Product)
-                        .WithMany()
-                        .HasForeignKey(y => y.ProductId)
-                        .IsRequired(false);
-                });
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Domian.Model
 {
-    public class BasketItem : ValueObject
+    public class BasketItem : BaseEntity
     {
         public Guid BasketId { get; }
         public Basket Basket { get; }
@@ -26,10 +25,5 @@ namespace WebFeatures.Domian.Model
         }
 
         private BasketItem() { } // For EF
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return ProductId;
-        }
     }
 }
