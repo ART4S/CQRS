@@ -10,7 +10,7 @@ namespace WebFeatures.Domian.Model
         public Guid CountryId { get; }
         public Country Country { get; }
 
-        public City(Country country, string name)
+        public City(string name, Country country)
         {
             Name = name;
 

@@ -32,6 +32,7 @@ namespace WebFeatures.Application.Features.Auth.Login
         {
             var user = await _userRepo.GetAll()
                 .AsNoTracking()
+                .Include(x => x.UserRoles).ThenInclude(x => x.Role)
                 .SingleAsync(x => x.Email == request.Email);
 
             var password = _passwordEncoder.DecodePassword(user.PasswordHash);

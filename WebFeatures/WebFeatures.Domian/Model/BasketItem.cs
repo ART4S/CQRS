@@ -11,7 +11,7 @@ namespace WebFeatures.Domian.Model
         public Guid ProductId { get; }
         public Product Product { get; }
 
-        public int Quantity { get; set; }
+        public int Quantity { get; private set; }
 
         public BasketItem(Basket basket, Product product)
         {
@@ -25,5 +25,13 @@ namespace WebFeatures.Domian.Model
         }
 
         private BasketItem() { } // For EF
+
+        public void AddQuantity(int quantity)
+        {
+            Quantity += quantity;
+
+            if (Quantity < 1)
+                throw new Exception($"BasketItemId: {Id}. Quantity shouldn't be less than 1");
+        }
     }
 }

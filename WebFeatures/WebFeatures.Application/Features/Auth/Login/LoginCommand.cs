@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 
 namespace WebFeatures.Application.Features.Auth.Login
@@ -13,7 +12,6 @@ namespace WebFeatures.Application.Features.Auth.Login
         {
             public Validator()
             {
-                throw new NotImplementedException();
             }
         }
     }

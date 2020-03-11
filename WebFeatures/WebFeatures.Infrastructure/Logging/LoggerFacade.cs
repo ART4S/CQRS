@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace WebFeatures.Infrastructure.Logging
 {
@@ -11,19 +12,19 @@ namespace WebFeatures.Infrastructure.Logging
             _innerLogger = loggerFactory.CreateLogger<T>();
         }
 
-        public void LogInformation(string message, params object[] args)
+        public void LogInformation(string message)
         {
-            _innerLogger.LogInformation(message, args);
+            _innerLogger.LogInformation(message);
         }
 
-        public void LogWarning(string message, params object[] args)
+        public void LogWarning(string message)
         {
-            _innerLogger.LogWarning(message, args);
+            _innerLogger.LogWarning(message);
         }
 
-        public void LogError(string message, params object[] args)
+        public void LogError(string message, Exception exception)
         {
-            _innerLogger.LogError(message, args);
+            _innerLogger.LogError(message, exception);
         }
     }
 }

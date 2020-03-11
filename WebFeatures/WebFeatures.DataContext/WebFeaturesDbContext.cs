@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
-using System.Reflection;
+using System.Linq.Expressions;
 using WebFeatures.Domian.Model;
 using WebFeatures.Domian.Model.Abstractions;
 
@@ -59,35 +59,23 @@ namespace WebFeatures.DataContext
             {
                 if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
                 {
-                    var setFilterMethod = typeof(WebFeaturesDbContext)
-                        .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Instance)
-                        .MakeGenericMethod(entityType.ClrType);
-
-                    setFilterMethod.Invoke(this, new object[] { modelBuilder });
-
-                    //var lambda = BuildSoftDeleteLambda(entityType.ClrType);
-                    //entityType.SetQueryFilter(lambda);
+                    var lambda = BuildSoftDeleteLambda(entityType.ClrType);
+                    entityType.SetQueryFilter(lambda);
                 }
             }
         }
 
-        private void SetSoftDeleteFilter<TEntity>(ModelBuilder modelBuilder)
-            where TEntity : class, ISoftDelete
+        private LambdaExpression BuildSoftDeleteLambda(Type type)
         {
-            modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.IsDeleted);
+            var parameter = Expression.Parameter(type, "x");
+
+            var body = Expression.Not(
+                expression: Expression.Property(
+                    expression: parameter,
+                    propertyName: nameof(ISoftDelete.IsDeleted)));
+
+            return Expression.Lambda(body, new[] { parameter });
         }
-
-        //private LambdaExpression BuildSoftDeleteLambda(Type type)
-        //{
-        //    var parameter = Expression.Parameter(type, "x");
-
-        //    var body = Expression.Not(
-        //        expression: Expression.Property(
-        //            expression: parameter,
-        //            propertyName: nameof(ISoftDelete.IsDeleted)));
-
-        //    return Expression.Lambda(body, new[] { parameter });
-        //}
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -98,5 +86,6 @@ namespace WebFeatures.DataContext
         public DbSet<Product> Products { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

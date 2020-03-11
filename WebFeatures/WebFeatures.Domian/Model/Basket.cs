@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebFeatures.Domian.Exceptions;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Domian.Model
@@ -29,7 +28,7 @@ namespace WebFeatures.Domian.Model
             var existingItem = _basketItems.SingleOrDefault(x => x.ProductId == product.Id);
             if (existingItem != null)
             {
-                existingItem.Quantity++;
+                existingItem.AddQuantity(1);
                 return;
             }
 
@@ -43,7 +42,7 @@ namespace WebFeatures.Domian.Model
             foreach (var item in _basketItems)
             {
                 if (item.Product.Price == null)
-                    throw new BasketException(Id, "One or more products doesn't have a price");
+                    throw new Exception($"Basket: {Id}. One or more products doesn't have a price");
 
                 total += item.Product.Price.Value * item.Quantity;
             }

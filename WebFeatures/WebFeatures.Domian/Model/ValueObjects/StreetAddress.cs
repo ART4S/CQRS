@@ -9,11 +9,11 @@ namespace WebFeatures.Domian.Model.ValueObjects
         public Guid CityId { get; }
         public City City { get; }
 
-        public string Name { get; }
+        public string StreetName { get; }
 
         public StreetAddress(string name, City city)
         {
-            Name = name;
+            StreetName = name;
 
             CityId = city.Id;
             City = city;
@@ -23,7 +23,7 @@ namespace WebFeatures.Domian.Model.ValueObjects
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Name;
+            yield return StreetName;
             yield return CityId;
         }
     }

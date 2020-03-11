@@ -8,9 +8,6 @@ namespace WebFeatures.DataContext.Configurations
     {
         public void Configure(EntityTypeBuilder<BasketItem> builder)
         {
-            builder.HasOne(x => x.Product)
-                .WithOne().IsRequired(false)
-                .HasForeignKey<BasketItem>(x => x.ProductId).IsRequired();
         }
     }
 }

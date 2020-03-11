@@ -6,7 +6,7 @@ using WebFeatures.Domian.Model;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
-    public class RegisterUserCommandHandler : ICommandHandler<RegisterCustomerCommand, Unit>
+    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Unit>
     {
         private readonly IAsyncRepository<User> _userRepo;
         private readonly IPasswordEncoder _passwordEncoder;
@@ -22,7 +22,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
             _logger = logger;
         }
 
-        public async Task<Unit> HandleAsync(RegisterCustomerCommand request)
+        public async Task<Unit> HandleAsync(RegisterUserCommand request)
         {
             string passwordHash = _passwordEncoder.EncodePassword(request.Password);
             var user = new User(request.Name, request.Email, passwordHash);

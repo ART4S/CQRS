@@ -23,14 +23,14 @@ namespace WebFeatures.WebApi.Controllers
             _dateTime = dateTime;
         }
 
-        [HttpPost("[action]"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterCustomer([FromBody, Required] RegisterCustomerCommand command)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RegisterUser([FromBody, Required] RegisterUserCommand command)
         {
             await Mediator.SendCommandAsync(command);
             return Ok();
         }
 
-        [HttpPost("[action]"), ValidateAntiForgeryToken]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody, Required] LoginCommand command)
         {
             var user = await Mediator.SendCommandAsync(command);
