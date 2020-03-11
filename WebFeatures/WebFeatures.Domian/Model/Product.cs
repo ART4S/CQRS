@@ -6,6 +6,7 @@ namespace WebFeatures.Domian.Model
     public class Product : BaseEntity, IUpdatable
     {
         public string Name { get; set; }
+        public decimal? Price { get; set; }
         public string Description { get; set; }
 
         public Guid ManufacturerId { get; }
@@ -22,5 +23,7 @@ namespace WebFeatures.Domian.Model
             ManufacturerId = manufacturer.Id;
             Manufacturer = manufacturer;
         }
+
+        private Product() { } // For EF
     }
 }

@@ -1,4 +1,6 @@
-﻿using WebFeatures.Domian.Model.Abstractions;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using WebFeatures.Domian.Model.Abstractions;
 using WebFeatures.Domian.Model.ValueObjects;
 
 namespace WebFeatures.Domian.Model
@@ -8,10 +10,15 @@ namespace WebFeatures.Domian.Model
         public string Name { get; set; }
         public StreetAddress StreetAddress { get; }
 
+        public IReadOnlyCollection<Product> Products => _products.ToImmutableList();
+        private readonly HashSet<Product> _products = new HashSet<Product>();
+
         public Manufacturer(string name, StreetAddress address)
         {
             Name = name;
             StreetAddress = address;
         }
+
+        private Manufacturer() { } // For EF
     }
 }

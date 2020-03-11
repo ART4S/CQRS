@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Infrastructure.Exceptions;
 using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
@@ -34,7 +34,7 @@ namespace WebFeatures.Application.Features.Auth.Login
                 .AsNoTracking()
                 .SingleAsync(x => x.Email == request.Email);
 
-            var password = _passwordEncoder.DecodePassword(user.Email);
+            var password = _passwordEncoder.DecodePassword(user.PasswordHash);
             if (password != request.Password)
                 throw new StatusCodeException("Wrong login or password");
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
 
@@ -25,7 +27,7 @@ namespace WebFeatures.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddApplicationServices();
+            services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration, Environment);
 
             services.AddControllers();
@@ -39,6 +41,9 @@ namespace WebFeatures.WebApi
 
                 c.IncludeXmlComments(xmlFilePath, true);
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
         }
 
         public void Configure(IApplicationBuilder app)

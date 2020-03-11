@@ -12,5 +12,7 @@ namespace WebFeatures.Domian.Model
             Name = name;
             Continent = continent;
         }
+
+        private Country() { } // For EF
     }
 }

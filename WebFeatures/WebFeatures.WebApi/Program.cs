@@ -21,7 +21,7 @@ namespace WebFeatures.WebApi
             await host.RunAsync();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) 
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
             => WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
 
@@ -35,7 +35,7 @@ namespace WebFeatures.WebApi
 
                 if (context.Database.IsInMemory())
                 {
-                    await context.SeedAsync();
+                    await context.SeedAsync(scope.ServiceProvider);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace WebFeatures.WebApi
             catch (Exception e)
             {
                 var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
-                logger.LogError($"Error while seeding data: {e.Message}");
+                logger.LogError($"Error while setting context: {e.Message}", e);
             }
         }
     }

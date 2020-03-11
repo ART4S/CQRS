@@ -46,6 +46,12 @@ namespace WebFeatures.Infrastructure.DataAccess
             if (entity == null) 
                 return;
 
+            if (entity is ISoftDelete soft)
+            {
+                soft.IsDeleted = true;
+                return;
+            }
+
             Context.Set<TEntity>().Remove(entity);
         }
 

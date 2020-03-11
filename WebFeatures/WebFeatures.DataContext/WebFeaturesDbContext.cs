@@ -63,7 +63,7 @@ namespace WebFeatures.DataContext
                         .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Instance)
                         .MakeGenericMethod(entityType.ClrType);
 
-                    setFilterMethod.Invoke(null, new object[] {entityType.ClrType});
+                    setFilterMethod.Invoke(this, new object[] { modelBuilder });
 
                     //var lambda = BuildSoftDeleteLambda(entityType.ClrType);
                     //entityType.SetQueryFilter(lambda);
@@ -96,5 +96,7 @@ namespace WebFeatures.DataContext
         public DbSet<Country> Countries { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace WebFeatures.Application
         public static void AddApplicationServices(this IServiceCollection services)
         {
             AddCommands(services);
-            AddQueries(services);
+            //AddQueries(services);
             AddValidators(services);
             AddMappings(services);
         }

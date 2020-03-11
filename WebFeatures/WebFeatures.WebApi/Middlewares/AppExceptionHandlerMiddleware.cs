@@ -38,43 +38,43 @@ namespace WebFeatures.WebApi.Middlewares
             switch (exception)
             {
                 case ModelValidationException validation:
-                {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    context.Response.ContentType = MediaTypeNames.Application.Json;
-                    responseBody = JsonConvert.SerializeObject(validation.Errors);
+                    {
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
+                        responseBody = JsonConvert.SerializeObject(validation.Errors);
 
-                    break;
-                }
+                        break;
+                    }
 
                 case FilteringException filtering:
-                {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    context.Response.ContentType = MediaTypeNames.Text.Plain;
-                    responseBody = filtering.Message;
+                    {
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        context.Response.ContentType = MediaTypeNames.Text.Plain;
+                        responseBody = filtering.Message;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case StatusCodeException status:
-                {
-                    context.Response.StatusCode = status.StatusCode;
-                    context.Response.ContentType = MediaTypeNames.Text.Plain;
-                    responseBody = status.Message;
+                    {
+                        context.Response.StatusCode = status.StatusCode;
+                        context.Response.ContentType = MediaTypeNames.Text.Plain;
+                        responseBody = status.Message;
 
-                    break;
-                }
+                        break;
+                    }
 
                 default:
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    context.Response.ContentType = MediaTypeNames.Text.Plain;
-                    responseBody = "Unknown error";
+                    {
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        context.Response.ContentType = MediaTypeNames.Text.Plain;
+                        responseBody = "Something went wrong";
 
-                    var logger = context.RequestServices.GetService<ILogger<AppExceptionHandlerMiddleware>>();
-                    logger.LogError(exception.Message, exception);
+                        var logger = context.RequestServices.GetService<ILogger<AppExceptionHandlerMiddleware>>();
+                        logger.LogError(exception.Message, exception);
 
-                    break;
-                }
+                        break;
+                    }
             }
 
             return context.Response.WriteAsync(responseBody);

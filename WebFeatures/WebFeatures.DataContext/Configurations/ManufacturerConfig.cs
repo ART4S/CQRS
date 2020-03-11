@@ -8,7 +8,12 @@ namespace WebFeatures.DataContext.Configurations
     {
         public void Configure(EntityTypeBuilder<Manufacturer> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(x => x.Name).IsRequired();
+            builder.OwnsOne(x => x.StreetAddress, x =>
+            {
+                x.WithOwner();
+                x.HasOne(y => y.City);
+            });
         }
     }
 }

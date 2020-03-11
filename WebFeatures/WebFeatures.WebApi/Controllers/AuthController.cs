@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -35,21 +34,27 @@ namespace WebFeatures.WebApi.Controllers
         public async Task<IActionResult> Login([FromBody, Required] LoginCommand command)
         {
             var user = await Mediator.SendCommandAsync(command);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
             claims.AddRange(user.Roles.Select(x => new Claim(ClaimTypes.Role, x)));
 
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties()
+            {
+                IsPersistent = true,
+                ExpiresUtc = _dateTime.Now.AddMinutes(20)
+            };
+
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(
-                    new ClaimsIdentity(claims)), 
-                    new AuthenticationProperties()
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = _dateTime.Now + TimeSpan.FromMinutes(20)
-                    });
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
 
             return Ok();
         }

@@ -19,6 +19,8 @@ namespace WebFeatures.Domian.Model
             Role = role;
         }
 
+        private UserRoleRelation() { } // For EF
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;

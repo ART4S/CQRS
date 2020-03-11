@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,7 @@ namespace WebFeatures.Infrastructure
     public static class DependencyInjection
     {
         public static void AddInfrastructureServices(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {

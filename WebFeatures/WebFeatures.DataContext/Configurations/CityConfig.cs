@@ -8,7 +8,11 @@ namespace WebFeatures.DataContext.Configurations
     {
         public void Configure(EntityTypeBuilder<City> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(x => x.Name).IsRequired();
+
+            builder.HasOne(x => x.Country)
+                .WithMany()
+                .HasForeignKey(x => x.CountryId);
         }
     }
 }

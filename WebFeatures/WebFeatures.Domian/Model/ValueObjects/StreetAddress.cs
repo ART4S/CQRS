@@ -19,6 +19,8 @@ namespace WebFeatures.Domian.Model.ValueObjects
             City = city;
         }
 
+        private StreetAddress() { } // For EF
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Name;

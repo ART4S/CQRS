@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using WebFeatures.Domian.Model.Abstractions;
 
 namespace WebFeatures.Domian.Model
@@ -19,19 +18,21 @@ namespace WebFeatures.Domian.Model
             PasswordHash = passwordHash;
         }
 
-        public IReadOnlyCollection<Role> Roles => UserRoles.Select(x => x.Role).ToImmutableList();
-        private HashSet<UserRoleRelation> UserRoles { get; } = new HashSet<UserRoleRelation>();
+        private User() { } // For EF
+
+        public IReadOnlyCollection<UserRoleRelation> UserRoles => _userRoles.ToImmutableList();
+        private HashSet<UserRoleRelation> _userRoles { get; } = new HashSet<UserRoleRelation>();
 
         public void AssignRole(Role role)
         {
             var rel = new UserRoleRelation(this, role);
-            UserRoles.Add(rel);
+            _userRoles.Add(rel);
         }
 
         public void RemoveRole(Role role)
         {
             var rel = new UserRoleRelation(this, role);
-            UserRoles.Remove(rel);
+            _userRoles.Remove(rel);
         }
     }
 }

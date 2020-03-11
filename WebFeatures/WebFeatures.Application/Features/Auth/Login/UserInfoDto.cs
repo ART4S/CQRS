@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using System.Linq;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Model;
@@ -12,8 +13,8 @@ namespace WebFeatures.Application.Features.Auth.Login
 
         public void ApplyMappings(Profile profile)
         {
-            profile.CreateMap<User, UserInfoDto>(MemberList.Destination)
-                .ForMember(x => Roles, y => y.MapFrom(z => z.Roles.Select(x => x.Name)));
+            //profile.CreateMap<User, UserInfoDto>(MemberList.Destination)
+            //    .ForPath(x => Roles, y => y.MapFrom(z => z.Roles.Select(x => x.Name)));
         }
     }
 }

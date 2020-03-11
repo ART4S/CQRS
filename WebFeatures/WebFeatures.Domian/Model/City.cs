@@ -17,5 +17,7 @@ namespace WebFeatures.Domian.Model
             CountryId = country.Id;
             Country = country;
         }
+
+        private City() { } // For EF
     }
 }

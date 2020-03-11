@@ -12,5 +12,7 @@ namespace WebFeatures.Domian.Model
             Name = name;
             Description = description;
         }
+
+        private Role() { } // For EF
     }
 }
