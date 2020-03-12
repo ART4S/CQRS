@@ -11,7 +11,6 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
     public class PerformanceHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
     {
         private readonly ILogger<TRequest> _logger;
-        private readonly Stopwatch _timer = new Stopwatch();
 
         public PerformanceHandlerDecorator(
             IRequestHandler<TRequest, TResponse> decoratee,
@@ -22,16 +21,18 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
 
         public override async Task<TResponse> HandleAsync(TRequest request)
         {
-            _timer.Start();
-            var result = await Decoratee.HandleAsync(request);
-            _timer.Stop();
+            var sw = new Stopwatch();
 
-            if (_timer.ElapsedMilliseconds > 500)
+            sw.Start();
+            var response = await Decoratee.HandleAsync(request);
+            sw.Stop();
+
+            if (sw.ElapsedMilliseconds > 500)
             {
-                _logger.LogWarning($"Долгий запрос: {typeof(TRequest).Name} = {_timer.ElapsedMilliseconds} milliseconds");
+                _logger.LogWarning($"Long running request: {typeof(TRequest).Name} = {sw.ElapsedMilliseconds} ms");
             }
 
-            return result;
+            return response;
         }
     }
 }

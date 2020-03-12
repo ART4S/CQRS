@@ -7,7 +7,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Abstractions
     /// </summary>
     /// <typeparam name="TRequest">Request</typeparam>
     /// <typeparam name="TResponse">Request handling result</typeparam>
-    public interface IRequestHandler<in TRequest, TResponse> 
+    public interface IRequestHandler<TRequest, TResponse>
     {
         /// <summary>
         /// Handle request

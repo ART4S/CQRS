@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TCommand">Command</typeparam>
     /// <typeparam name="TResponse">Command handling result</typeparam>
-    public interface ICommandHandler<in TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
+    public interface ICommandHandler<TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
         where TCommand : ICommand<TResponse>
     {
     }

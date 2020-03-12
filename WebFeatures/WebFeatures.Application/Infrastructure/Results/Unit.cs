@@ -1,7 +1,7 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Results
 {
     /// <summary>
-    /// Void
+    /// void
     /// </summary>
     /// <remarks>For commands</remarks>
     public struct Unit

@@ -15,16 +15,15 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
         public ValidationHandlerDecorator(
-            IRequestHandler<TRequest, TResponse> decoratee, 
+            IRequestHandler<TRequest, TResponse> decoratee,
             IEnumerable<IValidator<TRequest>> validators) : base(decoratee)
         {
             _validators = validators;
         }
 
-        public override Task<TResponse> HandleAsync(TRequest request)
+        public override async Task<TResponse> HandleAsync(TRequest request)
         {
-            var errors = _validators
-                .Select(x => x.Validate(request))
+            var errors = (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request))))
                 .Where(x => !x.IsValid)
                 .SelectMany(x => x.Errors)
                 .ToList();
@@ -34,7 +33,7 @@ namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
                 throw new ModelValidationException(errors);
             }
 
-            return Decoratee.HandleAsync(request);
+            return await Decoratee.HandleAsync(request);
         }
     }
 }
