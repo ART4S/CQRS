@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.RequestHandling;
+using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {

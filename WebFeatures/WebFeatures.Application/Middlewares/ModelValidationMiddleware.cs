@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.RequestHandling;
+using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {

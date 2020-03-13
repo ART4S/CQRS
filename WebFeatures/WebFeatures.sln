@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Specifications"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure", "WebFeatures.Infrastructure\WebFeatures.Infrastructure.csproj", "{2334110F-1FA4-4A50-8D65-F6D499DB12FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFeatures.RequestHandling", "WebFeatures.RequestHandling\WebFeatures.RequestHandling.csproj", "{9AAC9D5F-DA43-488F-A5CD-2A3D92C5DA5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Requests", "WebFeatures.RequestHandling\WebFeatures.Requests.csproj", "{9AAC9D5F-DA43-488F-A5CD-2A3D92C5DA5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

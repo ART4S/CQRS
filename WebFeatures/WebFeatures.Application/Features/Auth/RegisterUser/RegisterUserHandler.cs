@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Model;
-using WebFeatures.RequestHandling;
+using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {

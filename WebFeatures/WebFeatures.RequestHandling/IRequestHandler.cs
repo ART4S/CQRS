@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebFeatures.RequestHandling
+namespace WebFeatures.Requests
 {
     public interface IRequestHandler<in TRequest, TResponse>
     {

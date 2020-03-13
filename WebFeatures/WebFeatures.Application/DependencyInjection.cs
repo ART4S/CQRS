@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Middlewares;
-using WebFeatures.RequestHandling;
+using WebFeatures.Requests;
 
 namespace WebFeatures.Application
 {
@@ -19,7 +19,7 @@ namespace WebFeatures.Application
 
         private static void AddRequests(IServiceCollection services)
         {
-            services.AddRequestHandling(Assembly.GetExecutingAssembly());
+            services.AddRequests(Assembly.GetExecutingAssembly());
 
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(LoggingMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ModelValidationMiddleware<,>));

@@ -6,7 +6,7 @@ using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Model;
-using WebFeatures.RequestHandling;
+using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {

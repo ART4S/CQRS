@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebFeatures.RequestHandling
+namespace WebFeatures.Requests
 {
     public interface IRequestMiddleware<TRequest, TResponse>
     {

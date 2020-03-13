@@ -3,11 +3,11 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebFeatures.RequestHandling
+namespace WebFeatures.Requests
 {
     public static class DependencyInjection
     {
-        public static void AddRequestHandling(this IServiceCollection services, Assembly assemblyToScan)
+        public static void AddRequests(this IServiceCollection services, Assembly assemblyToScan)
         {
             services.AddScoped<IRequestMediator, RequestMediator>();
 

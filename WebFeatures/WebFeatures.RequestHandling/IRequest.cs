@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.RequestHandling
+﻿namespace WebFeatures.Requests
 {
     public interface IRequest<TResponse> { }
     public interface IQuery<TResult> : IRequest<TResult> { }
