@@ -20,8 +20,7 @@ namespace WebFeatures.Domian.Model.ValueObjects
         }
 
         private StreetAddress() { } // For EF
-
-        protected override IEnumerable<object> GetAtomicValues()
+        protected override IEnumerable<object> GetComparisionValues()
         {
             yield return StreetName;
             yield return CityId;

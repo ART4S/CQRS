@@ -5,37 +5,21 @@ namespace WebFeatures.Domian.Model.Abstractions
 {
     public abstract class ValueObject
     {
-        protected abstract IEnumerable<object> GetAtomicValues();
+        protected abstract IEnumerable<object> GetComparisionValues();
 
         public override bool Equals(object other)
         {
             if (other == null) return false;
             if (other.GetType() != GetType()) return false;
+            if (ReferenceEquals(other, this)) return true;
 
-            using var thisEnumerator = GetAtomicValues().GetEnumerator();
-            using var otherEnumerator = ((ValueObject) other).GetAtomicValues().GetEnumerator();
-
-            while (thisEnumerator.MoveNext() && otherEnumerator.MoveNext())
-            {
-                if (!(thisEnumerator.Current is null) && !thisEnumerator.Current.Equals(otherEnumerator.Current))
-                {
-                    return false;
-                }
-
-                if (!(otherEnumerator.Current is null) && !otherEnumerator.Current.Equals(thisEnumerator.Current))
-                {
-                    return false;
-                }
-            }
-
-            return !thisEnumerator.MoveNext() && !thisEnumerator.MoveNext();
+            return ((ValueObject)other).GetComparisionValues().SequenceEqual(GetComparisionValues());
         }
 
         public override int GetHashCode()
         {
-            return GetAtomicValues()
-                .Select(x => x == null ? 0 : x.GetHashCode())
-                .Aggregate((hash, current) => hash ^ current);
+            return GetComparisionValues()
+                .Aggregate(0, (hash, current) => hash ^ (current == null ? 0 : current.GetHashCode()));
         }
     }
 }
