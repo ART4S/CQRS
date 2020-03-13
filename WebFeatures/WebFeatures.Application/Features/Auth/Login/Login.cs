@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
-using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
+using WebFeatures.RequestHandling;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {
-    public class LoginCommand : ICommand<UserInfoDto>
+    public class Login : ICommand<UserInfoDto>
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public class Validator : AbstractValidator<LoginCommand>
+        public class Validator : AbstractValidator<Login>
         {
             public Validator()
             {

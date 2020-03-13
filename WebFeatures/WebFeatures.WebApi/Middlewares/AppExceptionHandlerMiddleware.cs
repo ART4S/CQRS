@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Exceptions;
+using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.QueryFiltering.Exceptions;
 

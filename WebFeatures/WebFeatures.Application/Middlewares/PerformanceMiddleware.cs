@@ -1,30 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.RequestHandling;
 
-namespace WebFeatures.Application.Infrastructure.Pipeline.Decorators
+namespace WebFeatures.Application.Middlewares
 {
     /// <summary>
     /// Long running request logging
     /// </summary>
-    public class PerformanceHandlerDecorator<TRequest, TResponse> : RequestHandlerDecoratorBase<TRequest, TResponse>
+    internal class PerformanceMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
     {
         private readonly ILogger<TRequest> _logger;
 
-        public PerformanceHandlerDecorator(
-            IRequestHandler<TRequest, TResponse> decoratee,
-            ILogger<TRequest> logger) : base(decoratee)
+        public PerformanceMiddleware(ILogger<TRequest> logger)
         {
             _logger = logger;
         }
 
-        public override async Task<TResponse> HandleAsync(TRequest request)
+        public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
         {
             var sw = new Stopwatch();
 
             sw.Start();
-            var response = await Decoratee.HandleAsync(request);
+            var response = await next(request);
             sw.Stop();
 
             if (sw.ElapsedMilliseconds > 500)

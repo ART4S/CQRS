@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebFeatures.Application.Infrastructure.Exceptions
+namespace WebFeatures.Application.Exceptions
 {
     public class StatusCodeException : Exception
     {

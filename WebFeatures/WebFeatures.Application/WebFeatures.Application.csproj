@@ -8,11 +8,11 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Scrutor" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Domian\WebFeatures.Domian.csproj" />
+    <ProjectReference Include="..\WebFeatures.RequestHandling\WebFeatures.RequestHandling.csproj" />
   </ItemGroup>
 
 </Project>

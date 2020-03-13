@@ -1,28 +1,29 @@
-﻿using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Pipeline.Abstractions;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Model;
+using WebFeatures.RequestHandling;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
-    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Unit>
+    public class RegisterUserHandler : IRequestHandler<RegisterUser, Unit>
     {
         private readonly IAsyncRepository<User> _userRepo;
         private readonly IPasswordEncoder _passwordEncoder;
-        private readonly ILogger<RegisterUserCommandHandler> _logger;
+        private readonly ILogger<RegisterUserHandler> _logger;
 
-        public RegisterUserCommandHandler(
+        public RegisterUserHandler(
             IAsyncRepository<User> userRepo,
             IPasswordEncoder passwordEncoder,
-            ILogger<RegisterUserCommandHandler> logger)
+            ILogger<RegisterUserHandler> logger)
         {
             _userRepo = userRepo;
             _passwordEncoder = passwordEncoder;
             _logger = logger;
         }
 
-        public async Task<Unit> HandleAsync(RegisterUserCommand request)
+        public async Task<Unit> HandleAsync(RegisterUser request, CancellationToken cancellationToken)
         {
             string passwordHash = _passwordEncoder.EncodePassword(request.Password);
             var user = new User(request.Name, request.Email, passwordHash);

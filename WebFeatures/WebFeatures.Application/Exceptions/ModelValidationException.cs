@@ -1,8 +1,8 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FluentValidation.Results;
 
-namespace WebFeatures.Application.Infrastructure.Exceptions
+namespace WebFeatures.Application.Exceptions
 {
     public class ModelValidationException : Exception
     {

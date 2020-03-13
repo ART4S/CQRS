@@ -24,16 +24,16 @@ namespace WebFeatures.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> RegisterUser([FromBody, Required] RegisterUserCommand command)
+        public async Task<IActionResult> RegisterUser([FromBody, Required] RegisterUser command)
         {
-            await Mediator.SendCommandAsync(command);
+            await Mediator.SendAsync(command);
             return Ok();
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody, Required] LoginCommand command)
+        public async Task<IActionResult> Login([FromBody, Required] Login command)
         {
-            var user = await Mediator.SendCommandAsync(command);
+            var user = await Mediator.SendAsync(command);
 
             var claims = new List<Claim>
             {

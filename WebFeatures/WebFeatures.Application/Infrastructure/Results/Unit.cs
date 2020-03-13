@@ -1,9 +1,9 @@
 ﻿namespace WebFeatures.Application.Infrastructure.Results
 {
     /// <summary>
-    /// void
+    /// Void imitation
     /// </summary>
-    /// <remarks>For commands</remarks>
+    /// <remarks>Simple return type for commands</remarks>
     public struct Unit
     {
         public static readonly Unit Value = new Unit();
