@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFeatures.Requests
 {
@@ -19,11 +19,8 @@ namespace WebFeatures.Requests
         }
 
         public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
-            => GetPipeline(request).HandleAsync(request, _services, cancellationToken);
-
-        private Pipeline<TResponse> GetPipeline<TResponse>(IRequest<TResponse> request)
         {
-            return (Pipeline<TResponse>)_pipelinesCache.GetOrAdd(
+            var pipeline = (Pipeline<TResponse>)_pipelinesCache.GetOrAdd(
                 request.GetType(),
                 t =>
                 {
@@ -44,7 +41,10 @@ namespace WebFeatures.Requests
 
                     return Activator.CreateInstance(pipelineType);
                 });
+
+            return pipeline.HandleAsync(request, _services, cancellationToken);
         }
+
 
         private abstract class Pipeline<TResponse>
         {
@@ -82,9 +82,9 @@ namespace WebFeatures.Requests
 
         private class CommandPipeline<TRequest, TResponse> : RequestPipeline<TRequest, TResponse>
         {
-            protected override IEnumerable<IRequestMiddleware<TRequest, TResponse>> GetMiddlewares(IServiceProvider sp)
-                => base.GetMiddlewares(sp)
-                    .Concat(sp.GetServices<ICommandMiddleware<TRequest, TResponse>>());
+            protected override IEnumerable<IRequestMiddleware<TRequest, TResponse>> GetMiddlewares(IServiceProvider services)
+                => base.GetMiddlewares(services)
+                    .Concat(services.GetServices<ICommandMiddleware<TRequest, TResponse>>());
         }
     }
 }

@@ -17,9 +17,7 @@ namespace WebFeatures.Specifications
         }
 
         public bool IsSatisfy(T obj)
-        {
-            return Func(obj);
-        }
+            => Func(obj);
 
         public static implicit operator Specification<T>(Expression<Func<T, bool>> expression)
             => new Specification<T>(expression);

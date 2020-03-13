@@ -3,18 +3,18 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace WebFeatures.Requests
+namespace WebFeatures.Events
 {
     public static class DependencyInjection
     {
-        public static void AddRequests(this IServiceCollection services, Assembly assemblyToScan)
+        public static void AddEvents(this IServiceCollection services, Assembly assemblyToScan)
         {
-            services.AddTransient<IRequestMediator, RequestMediator>();
+            services.AddTransient<IEventMediator, EventMediator>();
 
-            foreach (var type in assemblyToScan.GetExportedTypes())
+            foreach (Type type in assemblyToScan.GetExportedTypes())
             {
                 Type interfaceType = type.GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>));
 
                 if (interfaceType != null)
                 {

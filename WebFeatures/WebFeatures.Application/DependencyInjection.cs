@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Middlewares;
+using WebFeatures.Events;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application
@@ -13,6 +14,7 @@ namespace WebFeatures.Application
         public static void AddApplicationServices(this IServiceCollection services)
         {
             AddRequests(services);
+            AddEvents(services);
             AddValidators(services);
             AddMappings(services);
         }
@@ -26,9 +28,14 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
         }
 
+        private static void AddEvents(IServiceCollection services)
+        {
+            services.AddEvents(Assembly.GetExecutingAssembly());
+        }
+
         private static void AddValidators(IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(Assembly.GetCallingAssembly(), ServiceLifetime.Scoped);
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), ServiceLifetime.Scoped);
         }
 
         private static void AddMappings(IServiceCollection services)

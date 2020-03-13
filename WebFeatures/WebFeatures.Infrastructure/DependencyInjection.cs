@@ -3,14 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.CurrentUser;
 using WebFeatures.Infrastructure.DataAccess;
-using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Messaging;
 using WebFeatures.Infrastructure.Security;
@@ -25,7 +23,6 @@ namespace WebFeatures.Infrastructure
             IWebHostEnvironment environment)
         {
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseAsyncRepository<>));
-            services.AddScoped<IEventMediator, EventMediator>();
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
 
