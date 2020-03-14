@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WebFeatures.Domian.Model.Abstractions
+namespace WebFeatures.Domian.Common
 {
     public abstract class ValueObject
     {

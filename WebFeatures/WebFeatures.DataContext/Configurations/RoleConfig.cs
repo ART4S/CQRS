@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {
@@ -8,7 +8,7 @@ namespace WebFeatures.DataContext.Configurations
     {
         public void Configure(EntityTypeBuilder<Manufacturer> builder)
         {
-            builder.Property(x => x.Name).IsRequired();
+            builder.Property(x => x.OrganizationName).IsRequired();
             builder.OwnsOne(x => x.StreetAddress, x =>
             {
                 x.WithOwner();

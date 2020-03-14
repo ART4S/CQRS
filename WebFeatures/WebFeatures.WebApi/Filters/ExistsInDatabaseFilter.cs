@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
 
 namespace WebFeatures.WebApi.Filters
 {

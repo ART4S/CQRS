@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebFeatures.Domian.Model.Abstractions
+namespace WebFeatures.Domian.Common
 {
     public interface IUpdatable
     {

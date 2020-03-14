@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
+using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Domian.Model.ValueObjects
+namespace WebFeatures.Domian.ValueObjects
 {
     public class StreetAddress : ValueObject
     {
@@ -11,15 +12,19 @@ namespace WebFeatures.Domian.Model.ValueObjects
 
         public string StreetName { get; }
 
-        public StreetAddress(string name, City city)
+        public string PostalCode { get; }
+
+        public StreetAddress(string streetName, string postalCode, City city)
         {
-            StreetName = name;
+            StreetName = streetName;
+            PostalCode = postalCode;
 
             CityId = city.Id;
             City = city;
         }
 
         private StreetAddress() { } // For EF
+
         protected override IEnumerable<object> GetComparisionValues()
         {
             yield return StreetName;

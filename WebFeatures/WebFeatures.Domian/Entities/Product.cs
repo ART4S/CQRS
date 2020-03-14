@@ -1,7 +1,7 @@
 ﻿using System;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Domian.Model
+namespace WebFeatures.Domian.Entities
 {
     public class Product : BaseEntity, IUpdatable
     {
@@ -13,16 +13,28 @@ namespace WebFeatures.Domian.Model
         public Guid ManufacturerId { get; }
         public Manufacturer Manufacturer { get; }
 
+        public Guid? CategoryId { get; }
+        public Category Category { get; }
+
+        public Guid BrandId { get; }
+        public Brand Brand { get; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public Product(string name, string description, Manufacturer manufacturer)
+        public Product(string name, string description, Manufacturer manufacturer, Category category, Brand brand)
         {
             Name = name;
             Description = description;
 
             ManufacturerId = manufacturer.Id;
             Manufacturer = manufacturer;
+
+            CategoryId = category.Id;
+            Category = category;
+
+            BrandId = brand.Id;
+            Brand = brand;
         }
 
         private Product() { } // For EF

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
-using System.Linq.Expressions;
-using WebFeatures.Domian.Model;
-using WebFeatures.Domian.Model.Abstractions;
+using System.Reflection;
+using WebFeatures.Domian.Common;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext
 {
@@ -17,13 +17,13 @@ namespace WebFeatures.DataContext
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebFeaturesDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            SetUtcConverters(modelBuilder);
+            SetupUtcConverters(modelBuilder);
             SetupSoftDelete(modelBuilder);
         }
 
-        private void SetUtcConverters(ModelBuilder modelBuilder)
+        private void SetupUtcConverters(ModelBuilder modelBuilder)
         {
             var utcConverter = new ValueConverter<DateTime, DateTime>(
                 to => to,
@@ -59,33 +59,47 @@ namespace WebFeatures.DataContext
             {
                 if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
                 {
-                    var lambda = BuildSoftDeleteLambda(entityType.ClrType);
-                    entityType.SetQueryFilter(lambda);
+                    typeof(WebFeaturesDbContext)
+                        .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Instance)
+                        .MakeGenericMethod(entityType.ClrType)
+                        .Invoke(this, new object[] { modelBuilder });
+
+                    //var lambda = BuildSoftDeleteLambda(entityType.ClrType);
+                    //entityType.SetQueryFilter(lambda);
                 }
             }
         }
 
-        private LambdaExpression BuildSoftDeleteLambda(Type type)
+        private void SetSoftDeleteFilter<T>(ModelBuilder modelBuilder) where T : class, ISoftDelete
         {
-            var parameter = Expression.Parameter(type, "x");
-
-            var body = Expression.Not(
-                expression: Expression.Property(
-                    expression: parameter,
-                    propertyName: nameof(ISoftDelete.IsDeleted)));
-
-            return Expression.Lambda(body, new[] { parameter });
+            modelBuilder.Entity<T>().HasQueryFilter(x => !x.IsDeleted);
         }
+
+        //private LambdaExpression BuildSoftDeleteLambda(Type type)
+        //{
+        //    var parameter = Expression.Parameter(type, "x");
+
+        //    var body = Expression.Not(
+        //        expression: Expression.Property(
+        //            expression: parameter,
+        //            propertyName: nameof(ISoftDelete.IsDeleted)));
+
+        //    return Expression.Lambda(body, new[] { parameter });
+        //}
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRoleRelation> UserRoleRelations { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Shipper> Shippers { get; set; }
     }
 }

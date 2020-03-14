@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
@@ -31,7 +31,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
             await _userRepo.AddAsync(user);
             await _userRepo.SaveChangesAsync();
 
-            _logger.LogInformation($"{user.Name} registered. Id: {user.Id}");
+            _logger.LogInformation($"User {user.Name} registered with id: {user.Id}");
 
             return Unit.Value;
         }

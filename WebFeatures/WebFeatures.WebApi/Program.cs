@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,11 +34,7 @@ namespace WebFeatures.WebApi
             {
                 var context = scope.ServiceProvider.GetService<WebFeaturesDbContext>();
 
-                if (context.Database.IsInMemory())
-                {
-                    await context.SeedAsync(scope.ServiceProvider);
-                }
-                else
+                if (!context.Database.IsInMemory())
                 {
                     await context.Database.EnsureCreatedAsync();
 
@@ -45,6 +42,12 @@ namespace WebFeatures.WebApi
                     {
                         await context.Database.MigrateAsync();
                     }
+                }
+
+                var env = scope.ServiceProvider.GetService<IWebHostEnvironment>();
+                if (env.IsDevelopment())
+                {
+                    await context.SeedAsync(scope.ServiceProvider);
                 }
             }
             catch (Exception e)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {
@@ -10,6 +10,10 @@ namespace WebFeatures.DataContext.Configurations
         {
             var navigation = builder.Metadata.FindNavigation(nameof(Basket.BasketItems));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            builder.HasOne(x => x.User)
+                .WithOne().IsRequired(false)
+                .HasForeignKey<Basket>(x => x.Id).IsRequired();
         }
     }
 }

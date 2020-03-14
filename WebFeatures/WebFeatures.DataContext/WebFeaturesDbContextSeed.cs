@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Constants;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext
 {

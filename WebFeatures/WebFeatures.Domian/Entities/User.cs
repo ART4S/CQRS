@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Domian.Model
+namespace WebFeatures.Domian.Entities
 {
     public class User : BaseEntity
     {
@@ -20,18 +19,22 @@ namespace WebFeatures.Domian.Model
 
         private User() { } // For EF
 
-        public IReadOnlyCollection<UserRoleRelation> UserRoles => _userRoles.ToImmutableList();
-        private readonly HashSet<UserRoleRelation> _userRoles = new HashSet<UserRoleRelation>();
+        public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
+        private readonly List<UserRole> _userRoles = new List<UserRole>();
 
         public void AssignRole(Role role)
         {
-            var rel = new UserRoleRelation(this, role);
-            _userRoles.Add(rel);
+            var rel = new UserRole(this, role);
+
+            if (!_userRoles.Any(x => x.UserId == Id && x.RoleId == role.Id))
+            {
+                _userRoles.Add(rel);
+            }
         }
 
         public void RemoveRole(Role role)
         {
-            var rel = new UserRoleRelation(this, role);
+            var rel = new UserRole(this, role);
             _userRoles.Remove(rel);
         }
     }

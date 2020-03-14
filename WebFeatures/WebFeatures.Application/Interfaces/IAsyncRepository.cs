@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Application.Interfaces
 {

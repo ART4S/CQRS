@@ -4,9 +4,9 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {
-    public class BasketItemConfig : IEntityTypeConfiguration<BasketItem>
+    public class BrandConfig : IEntityTypeConfiguration<Brand>
     {
-        public void Configure(EntityTypeBuilder<BasketItem> builder)
+        public void Configure(EntityTypeBuilder<Brand> builder)
         {
         }
     }

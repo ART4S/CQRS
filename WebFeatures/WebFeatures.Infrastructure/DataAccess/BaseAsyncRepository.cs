@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
-using WebFeatures.Domian.Model.Abstractions;
+using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
@@ -43,7 +43,7 @@ namespace WebFeatures.Infrastructure.DataAccess
         public virtual async Task RemoveAsync(Guid id)
         {
             var entity = await Context.Set<TEntity>().FindAsync(id);
-            if (entity == null) 
+            if (entity == null)
                 return;
 
             if (entity is ISoftDelete soft)

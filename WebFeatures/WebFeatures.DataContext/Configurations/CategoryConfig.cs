@@ -4,10 +4,11 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {
-    public class BasketItemConfig : IEntityTypeConfiguration<BasketItem>
+    public class CategoryConfig : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<BasketItem> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
+            builder.Property(x => x.Name).IsRequired();
         }
     }
 }

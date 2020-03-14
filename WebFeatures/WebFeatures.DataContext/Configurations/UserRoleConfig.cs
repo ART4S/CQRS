@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext.Configurations
 {
-    public class UserRoleRelationConfig : IEntityTypeConfiguration<UserRoleRelation>
+    public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
     {
-        public void Configure(EntityTypeBuilder<UserRoleRelation> builder)
+        public void Configure(EntityTypeBuilder<UserRole> builder)
         {
             builder.HasKey(x => new { x.UserId, x.RoleId });
 

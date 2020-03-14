@@ -1,6 +1,6 @@
-﻿using WebFeatures.Domian.Model.Abstractions;
+﻿using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Domian.Model
+namespace WebFeatures.Domian.Entities
 {
     public class Country : BaseEntity
     {

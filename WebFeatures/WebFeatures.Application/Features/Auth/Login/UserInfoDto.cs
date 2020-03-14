@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Linq;
 using WebFeatures.Application.Infrastructure.Mappings;
-using WebFeatures.Domian.Model;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {
