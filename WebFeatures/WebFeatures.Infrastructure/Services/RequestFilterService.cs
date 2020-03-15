@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Web;
 using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Infrastructure.Services
@@ -10,8 +10,7 @@ namespace WebFeatures.Infrastructure.Services
 
         public RequestFilterService(IHttpContextAccessor contextAccessor)
         {
-            Filter = contextAccessor.HttpContext.Request.QueryString.Value;
-            throw new NotImplementedException("Replace space symbols");
+            Filter = HttpUtility.UrlDecode(contextAccessor.HttpContext.Request.QueryString.Value);
         }
     }
 }

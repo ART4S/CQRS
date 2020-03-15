@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebFeatures.Filters\WebFeatures.QueryFilters.csproj" />
+    <ProjectReference Include="..\WebFeatures.QueryFilters\WebFeatures.QueryFilters.csproj" />
   </ItemGroup>
 
 </Project>

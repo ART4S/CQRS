@@ -29,7 +29,7 @@ namespace WebFeatures.QueryFilters.Visitors
         {
             foreach (var child in context.children)
             {
-                _sourceQueryable = child.Accept(this);
+                _sourceQueryable = child.Accept(this) ?? _sourceQueryable;
             }
 
             return _sourceQueryable;

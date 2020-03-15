@@ -21,7 +21,8 @@ namespace WebFeatures.Application.Middlewares
         public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
         {
             var response = await next(request);
-            if (!(response is IQueryable queryable))
+
+            if (string.IsNullOrWhiteSpace(_filterService.Filter) || !(response is IQueryable queryable))
                 return response;
 
             try

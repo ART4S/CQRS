@@ -39,18 +39,18 @@ namespace WebFeatures.QueryFilters.Visitors
             var propExpressions = properties.ToDictionary(x => x, x => new PropertyNode(x, _parameter).CreateExpression());
 
             var body = Expression.MemberInit(
-                Expression.New(dynamicType.GetConstructors().Single()), 
+                Expression.New(dynamicType.GetConstructors().Single()),
                 dynamicType.GetFields().Select(f => Expression.Bind(f, propExpressions[f.Name])));
 
             var lambda = ReflectionCache.Lambda.MakeGenericMethod(
                 typeof(Func<,>).MakeGenericType(_parameter.Type, dynamicType));
 
-            var expression = lambda.Invoke(null, new object[] {body, new ParameterExpression[] {_parameter}});
+            var expression = lambda.Invoke(null, new object[] { body, new ParameterExpression[] { _parameter } });
 
             var select = ReflectionCache.Select
                 .MakeGenericMethod(_parameter.Type, dynamicType);
 
-            return select.Invoke(null, new [] {_sourceQueryable, expression });
+            return select.Invoke(null, new[] { _sourceQueryable, expression });
         }
     }
 }
