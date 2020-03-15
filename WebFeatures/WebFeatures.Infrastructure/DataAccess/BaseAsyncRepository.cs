@@ -9,7 +9,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
-    public class BaseAsyncRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : BaseEntity
+    internal class BaseAsyncRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : BaseEntity
     {
         protected WebFeaturesDbContext Context;
         protected readonly IDateTime DateTime;

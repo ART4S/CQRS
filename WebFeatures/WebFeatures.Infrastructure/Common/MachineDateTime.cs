@@ -3,7 +3,7 @@ using WebFeatures.Common;
 
 namespace WebFeatures.Infrastructure.Common
 {
-    public class MachineDateTime : IDateTime
+    internal class MachineDateTime : IDateTime
     {
         public DateTime Now => DateTime.Now;
     }

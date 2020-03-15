@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,11 +8,11 @@ using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
-using WebFeatures.Infrastructure.CurrentUser;
 using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Messaging;
 using WebFeatures.Infrastructure.Security;
+using WebFeatures.Infrastructure.Services;
 
 namespace WebFeatures.Infrastructure
 {
@@ -26,8 +27,9 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
 
-            services.AddHttpContextAccessor();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IRequestFilterService, RequestFilterService>();
 
             services.AddScoped<IEmailSender, SmtpEmailSender>();
             services.AddOptions<SmtpClientOptions>();
@@ -39,7 +41,7 @@ namespace WebFeatures.Infrastructure
             if (environment.IsDevelopment())
             {
                 services.AddDbContext<WebFeaturesDbContext>(
-                    options => options.UseInMemoryDatabase("DevDb"));
+                    options => options.UseInMemoryDatabase("Development"));
             }
 
             if (environment.IsProduction())

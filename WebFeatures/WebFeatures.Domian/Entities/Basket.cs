@@ -42,7 +42,7 @@ namespace WebFeatures.Domian.Entities
             foreach (var item in _basketItems)
             {
                 if (item.Product.Price == null)
-                    throw new Exception($"Basket: {Id}. One or more products doesn't have a price");
+                    throw new Exception($"Basket: {Id}. One or more products don't have a price");
 
                 total += item.Product.Price.Value * item.Quantity;
             }

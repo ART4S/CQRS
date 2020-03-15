@@ -5,6 +5,6 @@ namespace WebFeatures.Requests
 {
     public interface IRequestHandler<in TRequest, TResponse>
     {
-        Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
+        Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken);
     }
 }

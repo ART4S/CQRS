@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Domian\WebFeatures.Domian.csproj" />
     <ProjectReference Include="..\WebFeatures.Events\WebFeatures.Events.csproj" />
+    <ProjectReference Include="..\WebFeatures.Filters\WebFeatures.QueryFilters.csproj" />
     <ProjectReference Include="..\WebFeatures.Requests\WebFeatures.Requests.csproj" />
   </ItemGroup>
 

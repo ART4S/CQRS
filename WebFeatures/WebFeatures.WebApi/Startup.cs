@@ -62,7 +62,7 @@ namespace WebFeatures.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<AppExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

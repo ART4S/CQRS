@@ -3,7 +3,7 @@ using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Infrastructure.Security
 {
-    public class PasswordEncoder : IPasswordEncoder
+    internal class PasswordEncoder : IPasswordEncoder
     {
         private readonly IDataProtector _protector;
 
@@ -14,7 +14,7 @@ namespace WebFeatures.Infrastructure.Security
 
         public string EncodePassword(string password)
         {
-           return _protector.Protect(password);
+            return _protector.Protect(password);
         }
 
         public string DecodePassword(string password)

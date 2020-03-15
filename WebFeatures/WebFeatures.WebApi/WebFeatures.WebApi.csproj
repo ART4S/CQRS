@@ -27,7 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
     <ProjectReference Include="..\WebFeatures.Infrastructure\WebFeatures.Infrastructure.csproj" />
-    <ProjectReference Include="..\WebFeatures.QueryFiltering\WebFeatures.QueryFiltering.csproj" />
     <ProjectReference Include="..\WebFeatures.Requests\WebFeatures.Requests.csproj" />
   </ItemGroup>
 

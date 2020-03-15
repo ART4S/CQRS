@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Infrastructure.Messaging
 {
-    public class SmtpEmailSender : IEmailSender
+    internal class SmtpEmailSender : IEmailSender
     {
         private readonly SmtpClientOptions _options;
 
