@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using System.Linq;
+﻿using System.Linq;
+using AutoMapper;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Application.Features.Auth.Login
+namespace WebFeatures.Application.Features.Auth
 {
     public class UserInfoDto : IHasMappings
     {

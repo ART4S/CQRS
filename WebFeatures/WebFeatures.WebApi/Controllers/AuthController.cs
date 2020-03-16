@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using WebFeatures.Application.Features.Auth;
 using WebFeatures.Application.Features.Auth.Login;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Common;
@@ -26,7 +27,10 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> RegisterUser([FromBody, Required] RegisterUser command)
         {
-            await Mediator.SendAsync(command);
+            var user = await Mediator.SendAsync(command);
+
+            await LoginUser(user);
+
             return Ok();
         }
 
@@ -35,6 +39,13 @@ namespace WebFeatures.WebApi.Controllers
         {
             var user = await Mediator.SendAsync(command);
 
+            await LoginUser(user);
+
+            return Ok();
+        }
+
+        private Task LoginUser(UserInfoDto user)
+        {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -51,12 +62,10 @@ namespace WebFeatures.WebApi.Controllers
                 ExpiresUtc = _dateTime.Now.AddMinutes(20)
             };
 
-            await HttpContext.SignInAsync(
+            return HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
-
-            return Ok();
         }
 
         [HttpPost("[action]"), Authorize]

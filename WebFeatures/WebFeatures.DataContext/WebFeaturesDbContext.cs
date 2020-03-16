@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Common;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
 
@@ -11,8 +12,11 @@ namespace WebFeatures.DataContext
 {
     public class WebFeaturesDbContext : DbContext, IWebFeaturesDbContext
     {
-        public WebFeaturesDbContext(DbContextOptions<WebFeaturesDbContext> options) : base(options)
+        private readonly IDateTime _dateTime;
+
+        public WebFeaturesDbContext(DbContextOptions<WebFeaturesDbContext> options, IDateTime dateTime) : base(options)
         {
+            _dateTime = dateTime;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -106,7 +110,7 @@ namespace WebFeatures.DataContext
 
         public Task<int> SaveChangesAsync()
         {
-            var now = DateTime.Now;
+            var now = _dateTime.Now;
 
             foreach (var entry in ChangeTracker.Entries<IUpdatable>())
             {
