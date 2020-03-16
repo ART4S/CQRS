@@ -7,7 +7,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
-    public class RegisterUserHandler : IRequestHandler<RegisterUser, Unit>
+    public class RegisterUserHandler : IRequestHandler<RegisterUser, Empty>
     {
         private readonly IAsyncRepository<User> _userRepo;
         private readonly IPasswordEncoder _passwordEncoder;
@@ -23,7 +23,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
             _logger = logger;
         }
 
-        public async Task<Unit> HandleAsync(RegisterUser request, CancellationToken cancellationToken)
+        public async Task<Empty> HandleAsync(RegisterUser request, CancellationToken cancellationToken)
         {
             string passwordHash = _passwordEncoder.EncodePassword(request.Password);
             var user = new User(request.Name, request.Email, passwordHash);
@@ -33,7 +33,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
 
             _logger.LogInformation($"User {user.Name} registered with id: {user.Id}");
 
-            return Unit.Value;
+            return Empty.Value;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace WebFeatures.QueryFilters.Infrastructure
 
         private static string GetTypeName(IDictionary<string, Type> properties)
         {
-            return $"[{string.Join(", ", properties.OrderBy(x => x.Value).ThenBy(x => x.Key).Select(x => $"{x.Key}: {x.Value}"))}]";
+            return $"[{string.Join(", ", properties.OrderBy(x => x.Value.FullName).ThenBy(x => x.Key).Select(x => $"{x.Key}: {x.Value.FullName}"))}]";
         }
     }
 }

@@ -12,16 +12,16 @@ using WebFeatures.QueryFilters.Nodes.Operators;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class FilterExpressionVisitor : QueryFilteringBaseVisitor<BaseNode>
+    internal class WhereExpressionVisitor : QueryFiltersBaseVisitor<BaseNode>
     {
         private readonly ParameterExpression _parameter;
 
-        public FilterExpressionVisitor(ParameterExpression parameter)
+        public WhereExpressionVisitor(ParameterExpression parameter)
         {
             _parameter = parameter;
         }
 
-        public override BaseNode VisitFilterExpression(QueryFilteringParser.FilterExpressionContext context)
+        public override BaseNode VisitWhereExpression(QueryFiltersParser.WhereExpressionContext context)
         {
             BaseNode resultNode = context.children[0].Accept(this);
 
@@ -34,15 +34,15 @@ namespace WebFeatures.QueryFilters.Visitors
 
                 switch (aggregateNode.Symbol.Type)
                 {
-                    case QueryFilteringLexer.AND:
+                    case QueryFiltersLexer.AND:
                         resultNode = new AndNode(left, right);
                         continue;
-                    case QueryFilteringLexer.OR:
+                    case QueryFiltersLexer.OR:
                         resultNode = new OrNode(left, right);
                         continue;
                     default:
                         throw new ParseRuleException(
-                            nameof(FilterExpressionVisitor),
+                            nameof(WhereExpressionVisitor),
                             $"Unknown predicate type: '{aggregateNode.Symbol.Type}'");
                 }
             }
@@ -50,11 +50,11 @@ namespace WebFeatures.QueryFilters.Visitors
             return resultNode;
         }
 
-        public override BaseNode VisitFilterAtom(QueryFilteringParser.FilterAtomContext context)
+        public override BaseNode VisitWhereAtom(QueryFiltersParser.WhereAtomContext context)
         {
             var resultNode = context.boolExpr?.Accept(this) ??
-                             context.filterExpr?.Accept(this) ??
-                             throw new ParseRuleException(nameof(FilterExpressionVisitor));
+                             context.whereExpr?.Accept(this) ??
+                             throw new ParseRuleException(nameof(WhereExpressionVisitor));
 
             if (context.not != null)
             {
@@ -64,7 +64,7 @@ namespace WebFeatures.QueryFilters.Visitors
             return resultNode;
         }
 
-        public override BaseNode VisitAtom(QueryFilteringParser.AtomContext context)
+        public override BaseNode VisitAtom(QueryFiltersParser.AtomContext context)
         {
             foreach (var child in context.children)
             {
@@ -75,88 +75,88 @@ namespace WebFeatures.QueryFilters.Visitors
                 }
             }
 
-            throw new ParseRuleException(nameof(FilterExpressionVisitor));
+            throw new ParseRuleException(nameof(WhereExpressionVisitor));
         }
 
-        public override BaseNode VisitBoolExpression(QueryFilteringParser.BoolExpressionContext context)
+        public override BaseNode VisitBoolExpression(QueryFiltersParser.BoolExpressionContext context)
         {
             var left = context.left.Accept(this);
             var right = context.right.Accept(this);
 
             switch (context.operation.Type)
             {
-                case QueryFilteringLexer.EQUALS:
+                case QueryFiltersLexer.EQUALS:
                     return new EqualsNode(left, right);
-                case QueryFilteringLexer.NOTEQUALS:
+                case QueryFiltersLexer.NOTEQUALS:
                     return new NotEqualsNode(left, right);
-                case QueryFilteringLexer.GREATERTHAN:
+                case QueryFiltersLexer.GREATERTHAN:
                     return new GreaterThanNode(left, right);
-                case QueryFilteringLexer.GREATERTHANOREQUAL:
+                case QueryFiltersLexer.GREATERTHANOREQUAL:
                     return new GreaterThanOrEqualNode(left, right);
-                case QueryFilteringLexer.LESSTHAN:
+                case QueryFiltersLexer.LESSTHAN:
                     return new LessThanNode(left, right);
-                case QueryFilteringLexer.LESSTHANOREQUAL:
+                case QueryFiltersLexer.LESSTHANOREQUAL:
                     return new LessThanOrEqualNode(left, right);
                 default:
                     throw new ParseRuleException(
-                        nameof(FilterExpressionVisitor),
+                        nameof(WhereExpressionVisitor),
                         $"Unknown operation type: '{context.operation.Type}'");
             }
         }
 
-        public override BaseNode VisitProperty(QueryFilteringParser.PropertyContext context)
+        public override BaseNode VisitProperty(QueryFiltersParser.PropertyContext context)
         {
             return new PropertyNode(context.value.Text, _parameter);
         }
 
-        public override BaseNode VisitConstant(QueryFilteringParser.ConstantContext context)
+        public override BaseNode VisitConstant(QueryFiltersParser.ConstantContext context)
         {
             switch (context.value.Type)
             {
-                case QueryFilteringLexer.INT:
+                case QueryFiltersLexer.INT:
                     return new IntNode(context.value.Text);
-                case QueryFilteringLexer.LONG:
+                case QueryFiltersLexer.LONG:
                     return new LongNode(context.value.Text);
-                case QueryFilteringLexer.DOUBLE:
+                case QueryFiltersLexer.DOUBLE:
                     return new DoubleNode(context.value.Text);
-                case QueryFilteringLexer.FLOAT:
+                case QueryFiltersLexer.FLOAT:
                     return new FloatNode(context.value.Text);
-                case QueryFilteringLexer.DECIMAL:
+                case QueryFiltersLexer.DECIMAL:
                     return new DecimalNode(context.value.Text);
-                case QueryFilteringLexer.BOOL:
+                case QueryFiltersLexer.BOOL:
                     return new BoolNode(context.value.Text);
-                case QueryFilteringLexer.GUID:
+                case QueryFiltersLexer.GUID:
                     return new GuidNode(context.value.Text);
-                case QueryFilteringLexer.NULL:
+                case QueryFiltersLexer.NULL:
                     return new NullNode();
-                case QueryFilteringLexer.STRING:
+                case QueryFiltersLexer.STRING:
                     return new StringNode(context.value.Text);
-                case QueryFilteringLexer.DATETIME:
+                case QueryFiltersLexer.DATETIME:
                     return new DateTimeNode(context.value.Text);
                 default:
                     throw new ParseRuleException(
-                        nameof(FilterExpressionVisitor),
+                        nameof(WhereExpressionVisitor),
                         $"Unknown data type: '{context.value.Type}'");
             }
         }
 
-        public override BaseNode VisitFunction(QueryFilteringParser.FunctionContext context)
+        public override BaseNode VisitFunction(QueryFiltersParser.FunctionContext context)
         {
             var parameters = context.atom().Select(x => x.Accept(this)).ToArray();
 
             switch (context.value.Type)
             {
-                case QueryFilteringParser.TOUPPER:
+                case QueryFiltersParser.TOUPPER:
                     return new ToUpperNode(parameters);
-                case QueryFilteringParser.TOLOWER:
+                case QueryFiltersParser.TOLOWER:
                     return new ToLowerNode(parameters);
-                case QueryFilteringParser.STARTSWITH:
+                case QueryFiltersParser.STARTSWITH:
                     return new StartsWithNode(parameters);
-                case QueryFilteringParser.ENDSWITH:
+                case QueryFiltersParser.ENDSWITH:
                     return new EndsWithNode(parameters);
                 default:
                     throw new ParseRuleException(
-                        nameof(FilterExpressionVisitor),
+                        nameof(WhereExpressionVisitor),
                         $"Unknown function type: '{context.value.Type}'");
             }
         }

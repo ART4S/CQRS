@@ -7,7 +7,7 @@ using WebFeatures.QueryFilters.Nodes;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class SelectVisitor : QueryFilteringBaseVisitor<object>
+    internal class SelectVisitor : QueryFiltersBaseVisitor<object>
     {
         private readonly object _sourceQueryable;
         private readonly ParameterExpression _parameter;
@@ -18,12 +18,12 @@ namespace WebFeatures.QueryFilters.Visitors
             _parameter = parameter;
         }
 
-        public override object VisitSelect(QueryFilteringParser.SelectContext context)
+        public override object VisitSelect(QueryFiltersParser.SelectContext context)
         {
             return context.expression.Accept(this);
         }
 
-        public override object VisitSelectExpression(QueryFilteringParser.SelectExpressionContext context)
+        public override object VisitSelectExpression(QueryFiltersParser.SelectExpressionContext context)
         {
             var properties = context.PROPERTYACCESS()
                 .Select(x => x.Symbol.Text)

@@ -4,7 +4,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
-    public class RegisterUser : ICommand<Unit>
+    public class RegisterUser : ICommand<Empty>
     {
         public string Name { get; set; }
         public string Email { get; set; }

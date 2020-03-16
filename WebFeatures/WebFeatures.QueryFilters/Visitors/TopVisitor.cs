@@ -4,7 +4,7 @@ using WebFeatures.QueryFilters.Infrastructure;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class TopVisitor : QueryFilteringBaseVisitor<object>
+    internal class TopVisitor : QueryFiltersBaseVisitor<object>
     {
         private readonly object _sourceQueryable;
         private readonly ParameterExpression _parameter;
@@ -15,7 +15,7 @@ namespace WebFeatures.QueryFilters.Visitors
             _parameter = parameter;
         }
 
-        public override object VisitTop(QueryFilteringParser.TopContext context)
+        public override object VisitTop(QueryFiltersParser.TopContext context)
         {
             var take = ReflectionCache.Take
                 .MakeGenericMethod(_parameter.Type);

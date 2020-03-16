@@ -15,9 +15,9 @@ namespace WebFeatures.QueryFilters.Nodes
 
         public override Expression CreateExpression()
         {
-            return Value.Split(".").Aggregate<string, MemberExpression>(null, 
-                (current, propertyName) => current == null ? 
-                    Expression.Property(_parameter, propertyName) : 
+            return Value.Split("/").Aggregate<string, MemberExpression>(null,
+                (current, propertyName) => current == null ?
+                    Expression.Property(_parameter, propertyName) :
                     Expression.Property(current, propertyName));
         }
     }

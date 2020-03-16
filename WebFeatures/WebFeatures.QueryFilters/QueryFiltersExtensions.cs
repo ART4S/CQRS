@@ -20,9 +20,9 @@ namespace WebFeatures.QueryFilters
             if (sourceQueryable == null) throw new ArgumentNullException(nameof(sourceQueryable));
             if (query == null) throw new ArgumentNullException(nameof(query));
 
-            var parser = new QueryFilteringParser(
+            var parser = new QueryFiltersParser(
                 new CommonTokenStream(
-                    new QueryFilteringLexer(
+                    new QueryFiltersLexer(
                         new AntlrInputStream(query))));
 
             var visitor = new QueryVisitor(sourceQueryable);

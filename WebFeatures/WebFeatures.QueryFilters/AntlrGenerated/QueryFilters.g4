@@ -1,4 +1,4 @@
-grammar QueryFiltering;
+grammar QueryFilters;
 
 options
 {
@@ -6,11 +6,11 @@ options
 }
 
 query
-    :   ('?'? queryParameter ('&' queryParameter)*)?
+    :   ('?'? queryFunction ('&' queryFunction)*)?
     ;
 
-queryParameter
-    :   top|skip|orderBy|select|filter
+queryFunction
+    :   top|skip|orderBy|select|where
     ;
 
 top
@@ -41,16 +41,16 @@ selectExpression
     :   PROPERTYACCESS (',' PROPERTYACCESS)*
     ;
 
-filter
-    :   '$filter=' expression=filterExpression
+where
+    :   '$where=' expression=whereExpression
     ;
 
-filterExpression	
-    :   filterAtom ((OR|AND) filterAtom)*
+whereExpression	
+    :   whereAtom ((OR|AND) whereAtom)*
     ;
 
-filterAtom
-    :   not=NOT? (boolExpr=boolExpression | '(' filterExpr=filterExpression ')')
+whereAtom
+    :   not=NOT? (boolExpr=boolExpression | '(' whereExpr=whereExpression ')')
     ;
 
 boolExpression
@@ -175,7 +175,7 @@ STRING
     ;
 
 PROPERTYACCESS
-    :   (PROPERTY ('.' PROPERTY)*)
+    :   PROPERTY ('/' PROPERTY)*
     ;
 
 WHITESPACE 
@@ -195,7 +195,7 @@ fragment HEX
     ;
 
 fragment PROPERTY
-    :   LETTER (LETTER|NUMBER|'_')*
+    :   LETTER (LETTER|NUMBER)*
     ;
 
 fragment NUMBER

@@ -5,20 +5,20 @@ using WebFeatures.QueryFilters.Infrastructure;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class FilterVisitor : QueryFilteringBaseVisitor<object>
+    internal class WhereVisitor : QueryFiltersBaseVisitor<object>
     {
         private readonly object _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
-        public FilterVisitor(object sourceQueryable, ParameterExpression parameter)
+        public WhereVisitor(object sourceQueryable, ParameterExpression parameter)
         {
             _sourceQueryable = sourceQueryable;
             _parameter = parameter;
         }
 
-        public override object VisitFilter(QueryFilteringParser.FilterContext context)
+        public override object VisitWhere(QueryFiltersParser.WhereContext context)
         {
-            var visitor = new FilterExpressionVisitor(_parameter);
+            var visitor = new WhereExpressionVisitor(_parameter);
             var tree = context.expression.Accept(visitor);
 
             var lambda = ReflectionCache.Lambda

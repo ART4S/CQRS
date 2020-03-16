@@ -9,11 +9,11 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
-    public class QueryFilteringMiddleware<TRequest, TResponse> : IQueryMiddleware<TRequest, TResponse>
+    public class QueryFiltersMiddleware<TRequest, TResponse> : IQueryMiddleware<TRequest, TResponse>
     {
         private readonly IRequestFilterService _filterService;
 
-        public QueryFilteringMiddleware(IRequestFilterService filterService)
+        public QueryFiltersMiddleware(IRequestFilterService filterService)
         {
             _filterService = filterService;
         }

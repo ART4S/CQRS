@@ -6,7 +6,7 @@ using WebFeatures.QueryFilters.Nodes;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class OrderByVisitor : QueryFilteringBaseVisitor<object>
+    internal class OrderByVisitor : QueryFiltersBaseVisitor<object>
     {
         private object _sourceQueryable;
         private readonly ParameterExpression _parameter;
@@ -17,12 +17,12 @@ namespace WebFeatures.QueryFilters.Visitors
             _parameter = parameter;
         }
 
-        public override object VisitOrderBy(QueryFilteringParser.OrderByContext context)
+        public override object VisitOrderBy(QueryFiltersParser.OrderByContext context)
         {
             return context.expression.Accept(this);
         }
 
-        public override object VisitOrderByExpression(QueryFilteringParser.OrderByExpressionContext context)
+        public override object VisitOrderByExpression(QueryFiltersParser.OrderByExpressionContext context)
         {
             foreach (var atom in context.orderByAtom())
             {
@@ -32,7 +32,7 @@ namespace WebFeatures.QueryFilters.Visitors
             return _sourceQueryable;
         }
 
-        public override object VisitOrderByAtom(QueryFilteringParser.OrderByAtomContext context)
+        public override object VisitOrderByAtom(QueryFiltersParser.OrderByAtomContext context)
         {
             var property = new PropertyNode(context.propertyName.Text, _parameter).CreateExpression();
 
@@ -40,8 +40,8 @@ namespace WebFeatures.QueryFilters.Visitors
                 typeof(Func<,>).MakeGenericType(_parameter.Type, property.Type));
 
             var expression = lambda.Invoke(null, new object[] { property, new ParameterExpression[] { _parameter } });
-            
-            var orderBy = (context.sortType == null || context.sortType.Type == QueryFilteringLexer.ASC ?
+
+            var orderBy = (context.sortType == null || context.sortType.Type == QueryFiltersLexer.ASC ?
                     context.isFirstSort ? ReflectionCache.OrderBy : ReflectionCache.ThenBy :
                     context.isFirstSort ? ReflectionCache.OrderByDescending : ReflectionCache.ThenByDescending)
                 .MakeGenericMethod(_parameter.Type, property.Type);

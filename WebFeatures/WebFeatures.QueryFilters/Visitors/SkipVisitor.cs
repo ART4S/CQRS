@@ -4,7 +4,7 @@ using WebFeatures.QueryFilters.Infrastructure;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class SkipVisitor : QueryFilteringBaseVisitor<object>
+    internal class SkipVisitor : QueryFiltersBaseVisitor<object>
     {
         private readonly object _sourceQueryable;
         private readonly ParameterExpression _parameter;
@@ -15,7 +15,7 @@ namespace WebFeatures.QueryFilters.Visitors
             _parameter = parameter;
         }
 
-        public override object VisitSkip(QueryFilteringParser.SkipContext context)
+        public override object VisitSkip(QueryFiltersParser.SkipContext context)
         {
             var skip = ReflectionCache.Skip
                 .MakeGenericMethod(_parameter.Type);
