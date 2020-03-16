@@ -27,7 +27,9 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ModelValidationMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
 
-            services.AddScoped(typeof(IQueryMiddleware<,>), typeof(QueryFiltersMiddleware<,>));
+            services.AddScoped(typeof(ICommandMiddleware<,>), typeof(SaveChangesMiddleware<,>));
+
+            services.AddScoped(typeof(IQueryMiddleware<,>), typeof(QueryFilteringMiddleware<,>));
         }
 
         private static void AddEvents(IServiceCollection services)

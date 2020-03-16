@@ -12,18 +12,18 @@ namespace WebFeatures.Application.Features.Auth.Login
 {
     public class LoginHandler : IRequestHandler<Login, UserInfoDto>
     {
-        private readonly IAsyncRepository<User> _userRepo;
+        private readonly IWebFeaturesDbContext _db;
         private readonly IPasswordEncoder _passwordEncoder;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public LoginHandler(
-            IAsyncRepository<User> userRepo,
+            IWebFeaturesDbContext db,
             IPasswordEncoder passwordEncoder,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)
         {
-            _userRepo = userRepo;
+            _db = db;
             _passwordEncoder = passwordEncoder;
             _logger = logger;
             _mapper = mapper;
@@ -31,7 +31,7 @@ namespace WebFeatures.Application.Features.Auth.Login
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            var user = await _userRepo.GetAll()
+            var user = await _db.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles).ThenInclude(x => x.Role)
                 .SingleAsync(x => x.Email == request.Email, cancellationToken);

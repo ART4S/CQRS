@@ -13,8 +13,8 @@ namespace WebFeatures.Domian.Entities
         public Guid ManufacturerId { get; }
         public Manufacturer Manufacturer { get; }
 
-        public Guid? CategoryId { get; }
-        public Category Category { get; }
+        public Guid? CategoryId { get; private set; }
+        public Category Category { get; private set; }
 
         public Guid BrandId { get; }
         public Brand Brand { get; }
@@ -22,7 +22,7 @@ namespace WebFeatures.Domian.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public Product(string name, string description, Manufacturer manufacturer, Category category, Brand brand)
+        public Product(string name, string description, Manufacturer manufacturer, Brand brand)
         {
             Name = name;
             Description = description;
@@ -30,11 +30,14 @@ namespace WebFeatures.Domian.Entities
             ManufacturerId = manufacturer.Id;
             Manufacturer = manufacturer;
 
-            CategoryId = category.Id;
-            Category = category;
-
             BrandId = brand.Id;
             Brand = brand;
+        }
+
+        public void SetCategory(Category category)
+        {
+            CategoryId = category.Id;
+            Category = category;
         }
 
         private Product() { } // For EF

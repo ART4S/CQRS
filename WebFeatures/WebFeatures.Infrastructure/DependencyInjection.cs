@@ -8,7 +8,6 @@ using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
-using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Messaging;
 using WebFeatures.Infrastructure.Security;
@@ -23,7 +22,6 @@ namespace WebFeatures.Infrastructure
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseAsyncRepository<>));
             services.AddScoped<IDateTime, MachineDateTime>();
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
 
@@ -37,6 +35,8 @@ namespace WebFeatures.Infrastructure
 
             services.AddDataProtection();
             services.AddScoped<IPasswordEncoder, PasswordEncoder>();
+
+            services.AddScoped<IWebFeaturesDbContext, WebFeaturesDbContext>();
 
             if (environment.IsDevelopment())
             {

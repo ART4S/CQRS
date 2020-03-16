@@ -42,7 +42,7 @@ namespace WebFeatures.DataContext
 
         private static async Task SeedProducts(WebFeaturesDbContext context)
         {
-            var p = new Product("Product 1", "", new Manufacturer("Manufacturer 1", new StreetAddress("StreetAddress", "1", new City("City 1", new Country("Country 1", "")))), new Category("T-Shirts"), new Brand("Calvin Klein"));
+            var p = new Product("Product 1", "", new Manufacturer("Manufacturer 1", new StreetAddress("StreetAddress", "1", new City("City 1", new Country("Country 1", "")))), new Brand("Calvin Klein"));
             await context.AddAsync(p);
         }
     }

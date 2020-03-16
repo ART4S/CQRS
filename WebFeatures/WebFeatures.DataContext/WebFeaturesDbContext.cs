@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.DataContext
 {
-    public class WebFeaturesDbContext : DbContext
+    public class WebFeaturesDbContext : DbContext, IWebFeaturesDbContext
     {
         public WebFeaturesDbContext(DbContextOptions<WebFeaturesDbContext> options) : base(options)
         {
@@ -101,5 +103,35 @@ namespace WebFeatures.DataContext
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
+
+        public Task<int> SaveChangesAsync()
+        {
+            var now = DateTime.Now;
+
+            foreach (var entry in ChangeTracker.Entries<IUpdatable>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedAt = now;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedAt = now;
+                        break;
+                }
+            }
+
+            foreach (var entry in ChangeTracker.Entries<ISoftDelete>())
+            {
+                if (entry.State == EntityState.Deleted)
+                {
+                    entry.Entity.IsDeleted = true;
+                    entry.State = EntityState.Modified;
+                }
+            }
+
+            return base.SaveChangesAsync();
+        }
     }
 }
