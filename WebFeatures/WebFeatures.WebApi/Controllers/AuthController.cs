@@ -29,49 +29,46 @@ namespace WebFeatures.WebApi.Controllers
         {
             var user = await Mediator.SendAsync(command);
 
-            await LoginUser(user);
+            await SignInUser(user);
 
             return Ok();
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody, Required] Login command)
+        public async Task<IActionResult> Login([FromBody, Required] Login command,)
         {
             var user = await Mediator.SendAsync(command);
 
-            await LoginUser(user);
+            await SignInUser(user);
 
             return Ok();
         }
 
-        private Task LoginUser(UserInfoDto user)
+        private Task SignInUser(UserInfoDto user)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
-            claims.AddRange(user.Roles.Select(x => new Claim(ClaimTypes.Role, x)));
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            var roleClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
+            claims.AddRange(roleClaims);
 
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
             var authProperties = new AuthenticationProperties()
             {
                 IsPersistent = true,
                 ExpiresUtc = _dateTime.Now.AddMinutes(20)
             };
 
-            return HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+            return HttpContext.SignInAsync(principal, authProperties);
         }
 
         [HttpPost("[action]"), Authorize]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync();
             return Ok();
         }
     }
