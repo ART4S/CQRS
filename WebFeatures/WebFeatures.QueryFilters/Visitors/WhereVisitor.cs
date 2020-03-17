@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using WebFeatures.QueryFilters.AntlrGenerated;
-using WebFeatures.QueryFilters.Infrastructure;
+using WebFeatures.QueryFilters.Helpers;
 
 namespace WebFeatures.QueryFilters.Visitors
 {

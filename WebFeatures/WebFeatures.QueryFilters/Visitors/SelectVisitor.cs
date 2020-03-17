@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using AgileObjects.ReadableExpressions;
 using WebFeatures.QueryFilters.AntlrGenerated;
-using WebFeatures.QueryFilters.Infrastructure;
+using WebFeatures.QueryFilters.Helpers;
 using WebFeatures.QueryFilters.Nodes;
 
 namespace WebFeatures.QueryFilters.Visitors

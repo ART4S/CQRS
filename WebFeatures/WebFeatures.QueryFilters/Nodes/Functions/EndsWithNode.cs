@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Linq.Expressions;
-using WebFeatures.QueryFilters.Infrastructure;
+using WebFeatures.QueryFilters.Helpers;
 using WebFeatures.QueryFilters.Nodes.Base;
 
 namespace WebFeatures.QueryFilters.Nodes.Functions

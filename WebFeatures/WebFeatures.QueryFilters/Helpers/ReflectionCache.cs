@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace WebFeatures.QueryFilters.Infrastructure
+namespace WebFeatures.QueryFilters.Helpers
 {
     internal static class ReflectionCache
     {
