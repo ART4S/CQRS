@@ -35,7 +35,7 @@ namespace WebFeatures.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody, Required] Login command,)
+        public async Task<IActionResult> Login([FromBody, Required] Login command)
         {
             var user = await Mediator.SendAsync(command);
 
@@ -65,7 +65,8 @@ namespace WebFeatures.WebApi.Controllers
             return HttpContext.SignInAsync(principal, authProperties);
         }
 
-        [HttpPost("[action]"), Authorize]
+        [Authorize]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using AgileObjects.ReadableExpressions;
 using WebFeatures.QueryFilters.AntlrGenerated;
 using WebFeatures.QueryFilters.Infrastructure;
 using WebFeatures.QueryFilters.Nodes;
@@ -29,26 +32,30 @@ namespace WebFeatures.QueryFilters.Visitors
                 .Select(x => x.Symbol.Text)
                 .ToHashSet();
 
-            var typeProperties = _parameter.Type
+            Type dictType = typeof(Dictionary<string, object>);
+            MethodInfo addMethod = dictType.GetMethod("Add");
+
+            ElementInit[] elementInitProperties = _parameter.Type
                 .GetCashedProperties()
                 .Where(p => properties.Contains(p.Name))
-                .ToDictionary(p => p.Name, p => p.PropertyType);
+                .Select(p => Expression.ElementInit(
+                    addMethod,
+                    Expression.Constant(p.Name),
+                    Expression.Convert(
+                        new PropertyNode(p.Name, _parameter).CreateExpression(),
+                        typeof(object))))
+                .ToArray();
 
-            var dynamicType = DynamicTypeBuilder.CreateDynamicType(typeProperties);
+            ListInitExpression body = Expression.ListInit(
+                Expression.New(dictType), elementInitProperties);
 
-            var propExpressions = properties.ToDictionary(x => x, x => new PropertyNode(x, _parameter).CreateExpression());
+            MethodInfo lambda = ReflectionCache.Lambda.MakeGenericMethod(
+                typeof(Func<,>).MakeGenericType(_parameter.Type, dictType));
 
-            var body = Expression.MemberInit(
-                Expression.New(dynamicType.GetConstructors().Single()),
-                dynamicType.GetFields().Select(f => Expression.Bind(f, propExpressions[f.Name])));
+            object expression = lambda.Invoke(null, new object[] { body, new ParameterExpression[] { _parameter } });
 
-            var lambda = ReflectionCache.Lambda.MakeGenericMethod(
-                typeof(Func<,>).MakeGenericType(_parameter.Type, dynamicType));
-
-            var expression = lambda.Invoke(null, new object[] { body, new ParameterExpression[] { _parameter } });
-
-            var select = ReflectionCache.Select
-                .MakeGenericMethod(_parameter.Type, dynamicType);
+            MethodInfo select = ReflectionCache.Select
+                .MakeGenericMethod(_parameter.Type, dictType);
 
             return select.Invoke(null, new[] { _sourceQueryable, expression });
         }

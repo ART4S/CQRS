@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using AgileObjects.ReadableExpressions;
 using WebFeatures.QueryFilters.Tests.Model;
 using Xunit;
 
@@ -484,34 +483,28 @@ namespace WebFeatures.QueryFilters.Tests
         #region Select
 
         [Fact]
-        public void Select_OnePropertyFromElement_ReturnsElementWithOneProperty()
+        public void Select_OnePropertyFromElement_ReturnsDictionaryCollectionWithOneElementWithOneProperty()
         {
-            IQueryable testObjects = new[]
+            var testObjects = new[]
             {
-                new TestObject(){IntValue = 1, DoubleValue = 1},
-            }.AsQueryable();
+                new TestObject(){StringValue = "test", IntValue = 1},
+            };
 
-            var actual = testObjects.ApplyQuery("$select=IntValue");
+            var actual = ((IQueryable)testObjects.AsQueryable())
+                .ApplyQuery("$select=StringValue")
+                .Cast<Dictionary<string, object>>()
+                .SelectMany(x => x.ToList())
+                .ToList();
 
-            Assert.True(actual.ElementType != typeof(TestObject));
-            Assert.True(actual.ElementType.GetFields().Length == 1);
-            Assert.True(actual.ElementType.GetFields().First().Name == nameof(TestObject.IntValue));
-        }
+            var expected = testObjects.Select(x =>
+                new Dictionary<string, object>()
+                {
+                    { nameof(x.StringValue), x.StringValue }
+                })
+                .SelectMany(x => x.ToList())
+                .ToList();
 
-        [Fact]
-        public void Select_TwoPropertiesFromElement_ReturnsElementWithTwoProperties()
-        {
-            IQueryable testObjects = new[]
-            {
-                new TestObject(){IntValue = 1, NullableIntValue = null, LongValue = 1},
-            }.AsQueryable();
-
-            var actual = testObjects.ApplyQuery("$select=IntValue, NullableIntValue");
-
-            Assert.True(actual.ElementType != typeof(TestObject));
-            Assert.True(actual.ElementType.GetFields().Length == 2);
-            Assert.Contains(nameof(TestObject.IntValue), actual.ElementType.GetFields().Select(x => x.Name));
-            Assert.Contains(nameof(TestObject.NullableIntValue), actual.ElementType.GetFields().Select(x => x.Name));
+            Assert.True(expected.SequenceEqual(actual));
         }
 
         #endregion
