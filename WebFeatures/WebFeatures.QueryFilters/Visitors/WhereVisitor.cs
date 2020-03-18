@@ -1,36 +1,39 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using WebFeatures.QueryFilters.AntlrGenerated;
 using WebFeatures.QueryFilters.Helpers;
+using WebFeatures.QueryFilters.Nodes.Base;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class WhereVisitor : QueryFiltersBaseVisitor<object>
+    internal class WhereVisitor : QueryFiltersBaseVisitor<IQueryable>
     {
-        private readonly object _sourceQueryable;
+        private readonly IQueryable _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
-        public WhereVisitor(object sourceQueryable, ParameterExpression parameter)
+        public WhereVisitor(IQueryable sourceQueryable, ParameterExpression parameter)
         {
             _sourceQueryable = sourceQueryable;
             _parameter = parameter;
         }
 
-        public override object VisitWhere(QueryFiltersParser.WhereContext context)
+        public override IQueryable VisitWhere(QueryFiltersParser.WhereContext context)
         {
             var visitor = new WhereExpressionVisitor(_parameter);
-            var tree = context.expression.Accept(visitor);
+            BaseNode whereExpressionNode = context.expression.Accept(visitor);
 
-            var lambda = ReflectionCache.Lambda
+            MethodInfo lambda = ReflectionCache.Lambda
                 .MakeGenericMethod(typeof(Func<,>)
                     .MakeGenericType(_parameter.Type, typeof(bool)));
 
-            var expression = lambda.Invoke(null, new object[] { tree.CreateExpression(), new ParameterExpression[] { _parameter } });
+            object expression = lambda.Invoke(null, new object[] { whereExpressionNode.CreateExpression(), new ParameterExpression[] { _parameter } });
 
-            var where = ReflectionCache.Where
+            MethodInfo where = ReflectionCache.Where
                 .MakeGenericMethod(_parameter.Type);
 
-            return where.Invoke(null, new[] { _sourceQueryable, expression });
+            return (IQueryable)where.Invoke(null, new object[] { _sourceQueryable, expression });
         }
     }
 }

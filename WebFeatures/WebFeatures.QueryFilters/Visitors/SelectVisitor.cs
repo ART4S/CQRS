@@ -9,23 +9,23 @@ using WebFeatures.QueryFilters.Nodes;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class SelectVisitor : QueryFiltersBaseVisitor<object>
+    internal class SelectVisitor : QueryFiltersBaseVisitor<IQueryable>
     {
-        private readonly object _sourceQueryable;
+        private readonly IQueryable _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
-        public SelectVisitor(object sourceQueryable, ParameterExpression parameter)
+        public SelectVisitor(IQueryable sourceQueryable, ParameterExpression parameter)
         {
             _sourceQueryable = sourceQueryable;
             _parameter = parameter;
         }
 
-        public override object VisitSelect(QueryFiltersParser.SelectContext context)
+        public override IQueryable VisitSelect(QueryFiltersParser.SelectContext context)
         {
             return context.expression.Accept(this);
         }
 
-        public override object VisitSelectExpression(QueryFiltersParser.SelectExpressionContext context)
+        public override IQueryable VisitSelectExpression(QueryFiltersParser.SelectExpressionContext context)
         {
             var properties = context.PROPERTYACCESS()
                 .Select(x => x.Symbol.Text)
@@ -56,7 +56,7 @@ namespace WebFeatures.QueryFilters.Visitors
             MethodInfo select = ReflectionCache.Select
                 .MakeGenericMethod(_parameter.Type, dictType);
 
-            return select.Invoke(null, new[] { _sourceQueryable, expression });
+            return (IQueryable)select.Invoke(null, new[] { _sourceQueryable, expression });
         }
     }
 }

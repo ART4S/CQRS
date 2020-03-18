@@ -1,28 +1,30 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using WebFeatures.QueryFilters.AntlrGenerated;
 using WebFeatures.QueryFilters.Helpers;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class TopVisitor : QueryFiltersBaseVisitor<object>
+    internal class TopVisitor : QueryFiltersBaseVisitor<IQueryable>
     {
-        private readonly object _sourceQueryable;
+        private readonly IQueryable _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
-        public TopVisitor(object sourceQueryable, ParameterExpression parameter)
+        public TopVisitor(IQueryable sourceQueryable, ParameterExpression parameter)
         {
             _sourceQueryable = sourceQueryable;
             _parameter = parameter;
         }
 
-        public override object VisitTop(QueryFiltersParser.TopContext context)
+        public override IQueryable VisitTop(QueryFiltersParser.TopContext context)
         {
-            var take = ReflectionCache.Take
+            MethodInfo take = ReflectionCache.Take
                 .MakeGenericMethod(_parameter.Type);
 
-            var count = int.Parse(context.count.Text);
+            int count = int.Parse(context.count.Text);
 
-            return take.Invoke(null, new[] { _sourceQueryable, count });
+            return (IQueryable)take.Invoke(null, new object[] { _sourceQueryable, count });
         }
     }
 }

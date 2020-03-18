@@ -1,28 +1,30 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using WebFeatures.QueryFilters.AntlrGenerated;
 using WebFeatures.QueryFilters.Helpers;
 using WebFeatures.QueryFilters.Nodes;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class OrderByVisitor : QueryFiltersBaseVisitor<object>
+    internal class OrderByVisitor : QueryFiltersBaseVisitor<IQueryable>
     {
-        private object _sourceQueryable;
+        private IQueryable _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
-        public OrderByVisitor(object sourceQueryable, ParameterExpression parameter)
+        public OrderByVisitor(IQueryable sourceQueryable, ParameterExpression parameter)
         {
             _sourceQueryable = sourceQueryable;
             _parameter = parameter;
         }
 
-        public override object VisitOrderBy(QueryFiltersParser.OrderByContext context)
+        public override IQueryable VisitOrderBy(QueryFiltersParser.OrderByContext context)
         {
             return context.expression.Accept(this);
         }
 
-        public override object VisitOrderByExpression(QueryFiltersParser.OrderByExpressionContext context)
+        public override IQueryable VisitOrderByExpression(QueryFiltersParser.OrderByExpressionContext context)
         {
             foreach (var atom in context.orderByAtom())
             {
@@ -32,21 +34,25 @@ namespace WebFeatures.QueryFilters.Visitors
             return _sourceQueryable;
         }
 
-        public override object VisitOrderByAtom(QueryFiltersParser.OrderByAtomContext context)
+        public override IQueryable VisitOrderByAtom(QueryFiltersParser.OrderByAtomContext context)
         {
-            var property = new PropertyNode(context.propertyName.Text, _parameter).CreateExpression();
+            Expression propertyExpression = new PropertyNode(context.propertyName.Text, _parameter).CreateExpression();
 
-            var lambda = ReflectionCache.Lambda.MakeGenericMethod(
-                typeof(Func<,>).MakeGenericType(_parameter.Type, property.Type));
+            MethodInfo lambda = ReflectionCache.Lambda.MakeGenericMethod(
+                typeof(Func<,>).MakeGenericType(_parameter.Type, propertyExpression.Type));
 
-            var expression = lambda.Invoke(null, new object[] { property, new ParameterExpression[] { _parameter } });
+            object expression = lambda.Invoke(null, new object[] { propertyExpression, new ParameterExpression[] { _parameter } });
 
-            var orderBy = (context.sortType == null || context.sortType.Type == QueryFiltersLexer.ASC ?
-                    context.isFirstSort ? ReflectionCache.OrderBy : ReflectionCache.ThenBy :
-                    context.isFirstSort ? ReflectionCache.OrderByDescending : ReflectionCache.ThenByDescending)
-                .MakeGenericMethod(_parameter.Type, property.Type);
+            MethodInfo orderBy = (context.sortType == null || context.sortType.Type == QueryFiltersLexer.ASC
+                    ? context.isFirstSort
+                        ? ReflectionCache.OrderBy
+                        : ReflectionCache.ThenBy
+                    : context.isFirstSort
+                        ? ReflectionCache.OrderByDescending
+                        : ReflectionCache.ThenByDescending)
+                .MakeGenericMethod(_parameter.Type, propertyExpression.Type);
 
-            return orderBy.Invoke(null, new[] { _sourceQueryable, expression });
+            return (IQueryable)orderBy.Invoke(null, new[] { _sourceQueryable, expression });
         }
     }
 }

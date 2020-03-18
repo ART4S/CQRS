@@ -1,9 +1,10 @@
 ﻿using Antlr4.Runtime;
-using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using WebFeatures.QueryFilters.AntlrGenerated;
 using WebFeatures.QueryFilters.Visitors;
+
+#nullable enable
 
 [assembly: InternalsVisibleTo("WebFeatures.QueryFilters.Tests")]
 namespace WebFeatures.QueryFilters
@@ -17,9 +18,6 @@ namespace WebFeatures.QueryFilters
 
         public static IQueryable ApplyQuery(this IQueryable sourceQueryable, string query)
         {
-            if (sourceQueryable == null) throw new ArgumentNullException(nameof(sourceQueryable));
-            if (query == null) throw new ArgumentNullException(nameof(query));
-
             var parser = new QueryFiltersParser(
                 new CommonTokenStream(
                     new QueryFiltersLexer(
@@ -28,7 +26,7 @@ namespace WebFeatures.QueryFilters
             var visitor = new QueryVisitor(sourceQueryable);
             var resultQueryable = parser.query().Accept(visitor);
 
-            return (IQueryable)resultQueryable;
+            return resultQueryable;
         }
     }
 }

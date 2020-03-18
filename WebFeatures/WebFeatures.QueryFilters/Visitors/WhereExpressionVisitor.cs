@@ -27,8 +27,8 @@ namespace WebFeatures.QueryFilters.Visitors
 
             for (int i = 1; i < context.children.Count; i += 2)
             {
-                var left = resultNode;
-                var right = context.children[i + 1].Accept(this);
+                BaseNode left = resultNode;
+                BaseNode right = context.children[i + 1].Accept(this);
 
                 var aggregateNode = (ITerminalNode)context.children[i];
 
@@ -52,9 +52,9 @@ namespace WebFeatures.QueryFilters.Visitors
 
         public override BaseNode VisitWhereAtom(QueryFiltersParser.WhereAtomContext context)
         {
-            var resultNode = context.boolExpr?.Accept(this) ??
-                             context.whereExpr?.Accept(this) ??
-                             throw new ParseRuleException(nameof(WhereExpressionVisitor));
+            BaseNode resultNode = context.boolExpr?.Accept(this) ??
+                                  context.whereExpr?.Accept(this) ??
+                                  throw new ParseRuleException(nameof(WhereExpressionVisitor));
 
             if (context.not != null)
             {
@@ -66,9 +66,9 @@ namespace WebFeatures.QueryFilters.Visitors
 
         public override BaseNode VisitAtom(QueryFiltersParser.AtomContext context)
         {
-            foreach (var child in context.children)
+            foreach (IParseTree child in context.children)
             {
-                var node = child.Accept(this);
+                BaseNode node = child.Accept(this);
                 if (node != null)
                 {
                     return node;
@@ -80,8 +80,8 @@ namespace WebFeatures.QueryFilters.Visitors
 
         public override BaseNode VisitBoolExpression(QueryFiltersParser.BoolExpressionContext context)
         {
-            var left = context.left.Accept(this);
-            var right = context.right.Accept(this);
+            BaseNode left = context.left.Accept(this);
+            BaseNode right = context.right.Accept(this);
 
             switch (context.operation.Type)
             {
@@ -142,7 +142,7 @@ namespace WebFeatures.QueryFilters.Visitors
 
         public override BaseNode VisitFunction(QueryFiltersParser.FunctionContext context)
         {
-            var parameters = context.atom().Select(x => x.Accept(this)).ToArray();
+            BaseNode[] parameters = context.atom().Select(x => x.Accept(this)).ToArray();
 
             switch (context.value.Type)
             {

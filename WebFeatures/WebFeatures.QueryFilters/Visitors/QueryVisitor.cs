@@ -4,9 +4,9 @@ using WebFeatures.QueryFilters.AntlrGenerated;
 
 namespace WebFeatures.QueryFilters.Visitors
 {
-    internal class QueryVisitor : QueryFiltersBaseVisitor<object>
+    internal class QueryVisitor : QueryFiltersBaseVisitor<IQueryable>
     {
-        private object _sourceQueryable;
+        private IQueryable _sourceQueryable;
         private readonly ParameterExpression _parameter;
 
         public QueryVisitor(IQueryable sourceQueryable)
@@ -15,7 +15,7 @@ namespace WebFeatures.QueryFilters.Visitors
             _parameter = Expression.Parameter(sourceQueryable.ElementType);
         }
 
-        public override object VisitQuery(QueryFiltersParser.QueryContext context)
+        public override IQueryable VisitQuery(QueryFiltersParser.QueryContext context)
         {
             foreach (var function in context.queryFunction())
             {
@@ -25,7 +25,7 @@ namespace WebFeatures.QueryFilters.Visitors
             return _sourceQueryable;
         }
 
-        public override object VisitQueryFunction(QueryFiltersParser.QueryFunctionContext context)
+        public override IQueryable VisitQueryFunction(QueryFiltersParser.QueryFunctionContext context)
         {
             foreach (var child in context.children)
             {
@@ -35,31 +35,31 @@ namespace WebFeatures.QueryFilters.Visitors
             return _sourceQueryable;
         }
 
-        public override object VisitTop(QueryFiltersParser.TopContext context)
+        public override IQueryable VisitTop(QueryFiltersParser.TopContext context)
         {
             var visitor = new TopVisitor(_sourceQueryable, _parameter);
             return context.Accept(visitor);
         }
 
-        public override object VisitSkip(QueryFiltersParser.SkipContext context)
+        public override IQueryable VisitSkip(QueryFiltersParser.SkipContext context)
         {
             var visitor = new SkipVisitor(_sourceQueryable, _parameter);
             return context.Accept(visitor);
         }
 
-        public override object VisitWhere(QueryFiltersParser.WhereContext context)
+        public override IQueryable VisitWhere(QueryFiltersParser.WhereContext context)
         {
             var visitor = new WhereVisitor(_sourceQueryable, _parameter);
             return context.Accept(visitor);
         }
 
-        public override object VisitOrderBy(QueryFiltersParser.OrderByContext context)
+        public override IQueryable VisitOrderBy(QueryFiltersParser.OrderByContext context)
         {
             var visitor = new OrderByVisitor(_sourceQueryable, _parameter);
             return context.Accept(visitor);
         }
 
-        public override object VisitSelect(QueryFiltersParser.SelectContext context)
+        public override IQueryable VisitSelect(QueryFiltersParser.SelectContext context)
         {
             var visitor = new SelectVisitor(_sourceQueryable, _parameter);
             return context.Accept(visitor);
