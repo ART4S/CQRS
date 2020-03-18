@@ -493,7 +493,7 @@ namespace WebFeatures.QueryFilters.Tests
             var actual = ((IQueryable)testObjects.AsQueryable())
                 .ApplyQuery("$select=StringValue")
                 .Cast<Dictionary<string, object>>()
-                .SelectMany(x => x.ToList())
+                .SelectMany(x => x)
                 .ToList();
 
             var expected = testObjects.Select(x =>
@@ -501,7 +501,7 @@ namespace WebFeatures.QueryFilters.Tests
                 {
                     { nameof(x.StringValue), x.StringValue }
                 })
-                .SelectMany(x => x.ToList())
+                .SelectMany(x => x)
                 .ToList();
 
             Assert.True(expected.SequenceEqual(actual));

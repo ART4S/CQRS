@@ -29,9 +29,9 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IRequestFilterService, RequestFilterService>();
 
-            services.AddScoped<IEmailSender, SmtpEmailSender>();
-            services.AddOptions<SmtpClientOptions>();
+            services.AddOptions();
             services.Configure<SmtpClientOptions>(configuration.GetSection("SmtpClient"));
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
 
             services.AddDataProtection();
             services.AddScoped<IPasswordEncoder, PasswordEncoder>();
@@ -42,23 +42,6 @@ namespace WebFeatures.Infrastructure
             {
                 services.AddDbContext<WebFeaturesDbContext>(
                     options => options.UseInMemoryDatabase("Development"));
-            }
-
-            if (environment.IsProduction())
-            {
-                //services.AddDbContext<WebFeaturesDbContext>(
-                //    options =>
-                //    {
-                //        options.UseNpgsql(
-                //            configuration.GetConnectionString("Postgre"),
-                //            sqlOptions =>
-                //            {
-                //                sqlOptions.EnableRetryOnFailure(
-                //                    maxRetryCount: 5,
-                //                    maxRetryDelay: TimeSpan.FromSeconds(30),
-                //                    errorCodesToAdd: null);
-                //            });
-                //    });
             }
         }
     }

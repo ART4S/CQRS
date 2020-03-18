@@ -69,9 +69,6 @@ namespace WebFeatures.DataContext
                         .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Instance)
                         .MakeGenericMethod(entityType.ClrType)
                         .Invoke(this, new object[] { modelBuilder });
-
-                    //var lambda = BuildSoftDeleteLambda(entityType.ClrType);
-                    //entityType.SetQueryFilter(lambda);
                 }
             }
         }
@@ -80,18 +77,6 @@ namespace WebFeatures.DataContext
         {
             modelBuilder.Entity<T>().HasQueryFilter(x => !x.IsDeleted);
         }
-
-        //private LambdaExpression BuildSoftDeleteLambda(Type type)
-        //{
-        //    var parameter = Expression.Parameter(type, "x");
-
-        //    var body = Expression.Not(
-        //        expression: Expression.Property(
-        //            expression: parameter,
-        //            propertyName: nameof(ISoftDelete.IsDeleted)));
-
-        //    return Expression.Lambda(body, new[] { parameter });
-        //}
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
