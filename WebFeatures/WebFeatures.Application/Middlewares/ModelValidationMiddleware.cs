@@ -13,6 +13,7 @@ namespace WebFeatures.Application.Middlewares
     /// Request data validation
     /// </summary>
     internal class ModelValidationMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
+        where TRequest : ICommand<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 

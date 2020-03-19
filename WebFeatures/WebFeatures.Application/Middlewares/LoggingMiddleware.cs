@@ -10,6 +10,7 @@ namespace WebFeatures.Application.Middlewares
     /// Request logging
     /// </summary>
     internal class LoggingMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         private readonly ILogger<TRequest> _logger;
 

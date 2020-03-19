@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +27,7 @@ namespace WebFeatures.WebApi
 
         public IWebHostEnvironment Environment { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration, Environment);
@@ -44,6 +46,16 @@ namespace WebFeatures.WebApi
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+
+            return CreateProvider(services);
+        }
+
+        private IServiceProvider CreateProvider(IServiceCollection services)
+        {
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            return new AutofacServiceProvider(builder.Build());
         }
 
         public void Configure(IApplicationBuilder app)

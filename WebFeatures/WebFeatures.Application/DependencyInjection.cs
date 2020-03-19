@@ -23,13 +23,16 @@ namespace WebFeatures.Application
         {
             services.AddRequests(Assembly.GetExecutingAssembly());
 
+            // Common pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(LoggingMiddleware<,>));
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ModelValidationMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
 
-            services.AddScoped(typeof(ICommandMiddleware<,>), typeof(SaveChangesMiddleware<,>));
+            // Commands pipeline
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ModelValidationMiddleware<,>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
 
-            services.AddScoped(typeof(IQueryMiddleware<,>), typeof(QueryFilteringMiddleware<,>));
+            // Queries pipeline
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(QueryFilteringMiddleware<>));
         }
 
         private static void AddEvents(IServiceCollection services)

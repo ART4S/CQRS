@@ -6,11 +6,16 @@ namespace WebFeatures.Infrastructure.Services
 {
     internal class RequestFilterService : IRequestFilterService
     {
-        public string Filter { get; }
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public RequestFilterService(IHttpContextAccessor contextAccessor)
         {
-            Filter = HttpUtility.UrlDecode(contextAccessor.HttpContext.Request.QueryString.Value);
+            _contextAccessor = contextAccessor;
+        }
+
+        public string GetFilter()
+        {
+            return HttpUtility.UrlDecode(_contextAccessor.HttpContext.Request.QueryString.Value);
         }
     }
 }

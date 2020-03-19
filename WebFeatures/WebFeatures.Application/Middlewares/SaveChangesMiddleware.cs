@@ -6,7 +6,8 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
-    public class SaveChangesMiddleware<TRequest, TResponse> : ICommandMiddleware<TRequest, TResponse>
+    public class SaveChangesMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
+        where TRequest : ICommand<TResponse>
     {
         private readonly IWebFeaturesDbContext _db;
 

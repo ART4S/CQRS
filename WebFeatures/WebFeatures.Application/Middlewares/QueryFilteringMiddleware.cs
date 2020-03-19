@@ -9,7 +9,8 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
-    public class QueryFilteringMiddleware<TRequest, TResponse> : IQueryMiddleware<TRequest, TResponse>
+    public class QueryFilteringMiddleware<TRequest> : IRequestMiddleware<TRequest, IQueryable>
+        where TRequest : IQuery<IQueryable>
     {
         private readonly IRequestFilterService _filterService;
 
@@ -18,16 +19,11 @@ namespace WebFeatures.Application.Middlewares
             _filterService = filterService;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<IQueryable> HandleAsync(TRequest request, Func<TRequest, Task<IQueryable>> next, CancellationToken cancellationToken)
         {
-            var response = await next(request);
-
-            if (string.IsNullOrWhiteSpace(_filterService.Filter) || !(response is IQueryable queryable))
-                return response;
-
             try
             {
-                return (TResponse)queryable.ApplyQuery(_filterService.Filter);
+                return (await next(request)).ApplyQuery(_filterService.GetFilter());
             }
             catch
             {

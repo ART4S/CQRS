@@ -2,6 +2,6 @@
 {
     public interface IRequestFilterService
     {
-        string Filter { get; }
+        string GetFilter();
     }
 }
