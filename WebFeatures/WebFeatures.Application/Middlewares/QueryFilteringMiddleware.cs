@@ -27,7 +27,7 @@ namespace WebFeatures.Application.Middlewares
             }
             catch
             {
-                throw new StatusCodeException("Error while applying filter to response");
+                throw new UserInformationException("Error while applying filter to response");
             }
         }
     }

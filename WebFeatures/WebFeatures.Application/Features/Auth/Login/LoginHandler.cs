@@ -37,7 +37,7 @@ namespace WebFeatures.Application.Features.Auth.Login
 
             var password = _passwordEncoder.DecodePassword(user.PasswordHash);
             if (password != request.Password)
-                throw new StatusCodeException("Wrong login or password");
+                throw new UserInformationException("Wrong login or password");
 
             _logger.LogInformation($"{user.Email} logged in");
 

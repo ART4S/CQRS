@@ -45,11 +45,11 @@ namespace WebFeatures.WebApi.Middlewares
                         break;
                     }
 
-                case StatusCodeException status:
+                case UserInformationException user:
                     {
-                        context.Response.StatusCode = status.StatusCode;
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = status.Message;
+                        responseBody = user.Information;
 
                         break;
                     }
