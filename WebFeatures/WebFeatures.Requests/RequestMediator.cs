@@ -21,9 +21,9 @@ namespace WebFeatures.Requests
         {
             var pipeline = (Pipeline<TResponse>)PipelinesCashe.GetOrAdd(
                 request.GetType(),
-                t =>
+                _ =>
                 {
-                    Type pipelineType = typeof(PipelineImpl<,>).MakeGenericType(t, typeof(TResponse));
+                    Type pipelineType = typeof(PipelineImpl<,>).MakeGenericType(request.GetType(), typeof(TResponse));
                     return Activator.CreateInstance(pipelineType);
                 });
 

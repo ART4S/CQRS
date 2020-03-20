@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Interfaces
@@ -20,6 +22,8 @@ namespace WebFeatures.Application.Interfaces
         DbSet<Order> Orders { get; set; }
         DbSet<OrderItem> OrderItems { get; set; }
         DbSet<Shipper> Shippers { get; set; }
+
+        Task<IDbContextTransaction> BeginTransaction();
 
         Task<int> SaveChangesAsync();
     }

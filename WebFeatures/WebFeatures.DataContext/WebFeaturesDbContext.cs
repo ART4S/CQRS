@@ -1,22 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Events;
+using WebFeatures.Events;
 
 namespace WebFeatures.DataContext
 {
     public class WebFeaturesDbContext : DbContext, IWebFeaturesDbContext
     {
         private readonly IDateTime _dateTime;
+        private readonly IEventMediator _eventMediator;
 
-        public WebFeaturesDbContext(DbContextOptions<WebFeaturesDbContext> options, IDateTime dateTime) : base(options)
+        public WebFeaturesDbContext(
+            DbContextOptions<WebFeaturesDbContext> options,
+            IDateTime dateTime,
+            IEventMediator eventMediator) : base(options)
         {
             _dateTime = dateTime;
+            _eventMediator = eventMediator;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +38,8 @@ namespace WebFeatures.DataContext
 
             SetupUtcConverters(modelBuilder);
             SetupSoftDelete(modelBuilder);
+
+            modelBuilder.Ignore<DomianEvent>();
         }
 
         private void SetupUtcConverters(ModelBuilder modelBuilder)
@@ -93,11 +106,16 @@ namespace WebFeatures.DataContext
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
 
-        public Task<int> SaveChangesAsync()
+        public Task<IDbContextTransaction> BeginTransaction()
+        {
+            return Database.BeginTransactionAsync();
+        }
+
+        public async Task<int> SaveChangesAsync()
         {
             var now = _dateTime.Now;
 
-            foreach (var entry in ChangeTracker.Entries<IUpdatable>())
+            foreach (EntityEntry<IUpdatable> entry in ChangeTracker.Entries<IUpdatable>())
             {
                 switch (entry.State)
                 {
@@ -111,7 +129,7 @@ namespace WebFeatures.DataContext
                 }
             }
 
-            foreach (var entry in ChangeTracker.Entries<ISoftDelete>())
+            foreach (EntityEntry<ISoftDelete> entry in ChangeTracker.Entries<ISoftDelete>())
             {
                 if (entry.State == EntityState.Deleted)
                 {
@@ -120,7 +138,15 @@ namespace WebFeatures.DataContext
                 }
             }
 
-            return base.SaveChangesAsync();
+            int result = await base.SaveChangesAsync();
+
+            IEnumerable<Task> events = ChangeTracker.Entries<BaseEntity>()
+                .SelectMany(x => x.Entity.EventsList)
+                .Select(x => _eventMediator.PublishAsync(x));
+
+            await Task.WhenAll(events);
+
+            return result;
         }
     }
 }
