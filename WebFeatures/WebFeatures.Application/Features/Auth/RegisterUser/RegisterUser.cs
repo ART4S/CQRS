@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using WebFeatures.Requests;
+using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
 {

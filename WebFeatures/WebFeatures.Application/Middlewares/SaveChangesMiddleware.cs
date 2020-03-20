@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Requests;
 
@@ -13,9 +14,9 @@ namespace WebFeatures.Application.Middlewares
 
         public SaveChangesMiddleware(IWebFeaturesDbContext db) => _db = db;
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
         {
-            var response = await next(request);
+            TResponse response = await next();
             await _db.SaveChangesAsync();
             return response;
         }

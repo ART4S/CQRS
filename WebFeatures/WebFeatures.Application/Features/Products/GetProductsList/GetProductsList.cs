@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using WebFeatures.Requests;
+using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductsList
 {

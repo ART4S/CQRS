@@ -20,12 +20,12 @@ namespace WebFeatures.Application.Middlewares
             _logger = logger;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             var sw = new Stopwatch();
 
             sw.Start();
-            var response = await next(request);
+            TResponse response = await next();
             sw.Stop();
 
             if (sw.ElapsedMilliseconds > 500)

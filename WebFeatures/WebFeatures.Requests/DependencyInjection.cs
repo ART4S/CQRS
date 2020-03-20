@@ -9,7 +9,7 @@ namespace WebFeatures.Requests
     {
         public static void AddRequests(this IServiceCollection services, Assembly assemblyToScan)
         {
-            services.AddTransient<IRequestMediator, RequestMediator>();
+            services.AddScoped<IRequestMediator, RequestMediator>();
 
             foreach (var type in assemblyToScan.GetExportedTypes())
             {

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
 using WebFeatures.Application.Exceptions;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
@@ -22,19 +24,20 @@ namespace WebFeatures.Application.Middlewares
             _validators = validators;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<TRequest, Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
         {
-            var errors = (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request, cancellationToken))))
+            ValidationFailure[] errors =
+                (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request, cancellationToken))))
                 .Where(x => !x.IsValid)
                 .SelectMany(x => x.Errors)
-                .ToList();
+                .ToArray();
 
-            if (errors.Count != 0)
+            if (errors.Length != 0)
             {
                 throw new ModelValidationException(errors);
             }
 
-            return await next(request);
+            return await next();
         }
     }
 }
