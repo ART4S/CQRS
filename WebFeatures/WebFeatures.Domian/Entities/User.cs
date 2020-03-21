@@ -31,11 +31,5 @@ namespace WebFeatures.Domian.Entities
                 _userRoles.Add(rel);
             }
         }
-
-        public void RemoveRole(Role role)
-        {
-            var rel = new UserRole(this, role);
-            _userRoles.Remove(rel);
-        }
     }
 }

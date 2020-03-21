@@ -2,5 +2,5 @@
 
 namespace WebFeatures.Application.Infrastructure.Requests
 {
-    public interface IQuery<TResult> : IRequest<TResult> { }
+    internal interface IQuery<TResult> : IRequest<TResult> { }
 }

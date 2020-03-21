@@ -4,11 +4,11 @@ using FluentValidation.Results;
 
 namespace WebFeatures.Application.Exceptions
 {
-    public class ModelValidationException : Exception
+    public class ValidationException : Exception
     {
         public Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
 
-        public ModelValidationException(IEnumerable<ValidationFailure> failures)
+        public ValidationException(IEnumerable<ValidationFailure> failures)
         {
             foreach (var failure in failures)
             {

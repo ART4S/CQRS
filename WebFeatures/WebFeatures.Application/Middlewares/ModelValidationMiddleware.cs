@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Requests;
+using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
 
 namespace WebFeatures.Application.Middlewares
 {
@@ -34,7 +34,7 @@ namespace WebFeatures.Application.Middlewares
 
             if (errors.Length != 0)
             {
-                throw new ModelValidationException(errors);
+                throw new ValidationException(errors);
             }
 
             return await next();

@@ -42,8 +42,7 @@ namespace WebFeatures.Events
         {
             var handlers = services.GetServices<IEventHandler<TEvent>>();
 
-            return Task.WhenAll(
-                handlers.Select(x => x.HandleAsync((TEvent)eve)));
+            return Task.WhenAll(handlers.Select(x => x.HandleAsync((TEvent)eve)));
         }
     }
 }

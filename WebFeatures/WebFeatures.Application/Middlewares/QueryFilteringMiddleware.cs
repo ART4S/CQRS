@@ -10,7 +10,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
-    public class QueryFilteringMiddleware<TRequest> : IRequestMiddleware<TRequest, IQueryable>
+    internal class QueryFilteringMiddleware<TRequest> : IRequestMiddleware<TRequest, IQueryable>
         where TRequest : IQuery<IQueryable>
     {
         private readonly IRequestFilterService _filterService;
@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Middlewares
             }
             catch
             {
-                throw new UserInformationException("Error while applying filter to response");
+                throw new UserInfoException("Error while applying filter to response");
             }
         }
     }

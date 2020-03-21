@@ -9,7 +9,12 @@ namespace WebFeatures.Domian.Common
     {
         public Guid Id { get; set; }
 
-        public IReadOnlyCollection<DomianEvent> EventsList => Events.ToImmutableList();
-        protected readonly HashSet<DomianEvent> Events = new HashSet<DomianEvent>();
+        public IReadOnlyCollection<IDomianEvent> Events => _events.ToImmutableList();
+        private readonly HashSet<IDomianEvent> _events = new HashSet<IDomianEvent>();
+
+        protected void AddEvent(IDomianEvent eve)
+        {
+            _events.Add(eve);
+        }
     }
 }

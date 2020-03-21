@@ -25,7 +25,7 @@ namespace WebFeatures.Domian.Entities
         {
             if (product == null) throw new ArgumentNullException(nameof(product));
 
-            var existingItem = _basketItems.SingleOrDefault(x => x.ProductId == product.Id);
+            BasketItem existingItem = _basketItems.SingleOrDefault(x => x.ProductId == product.Id);
             if (existingItem != null)
             {
                 existingItem.AddQuantity(1);
@@ -39,7 +39,7 @@ namespace WebFeatures.Domian.Entities
         {
             decimal total = 0;
 
-            foreach (var item in _basketItems)
+            foreach (BasketItem item in _basketItems)
             {
                 if (item.Product.Price == null)
                     throw new Exception($"Basket: {Id}. One or more products don't have a price");

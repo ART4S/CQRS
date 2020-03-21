@@ -36,7 +36,7 @@ namespace WebFeatures.WebApi.Middlewares
 
             switch (exception)
             {
-                case ModelValidationException validation:
+                case ValidationException validation:
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
@@ -45,11 +45,11 @@ namespace WebFeatures.WebApi.Middlewares
                         break;
                     }
 
-                case UserInformationException user:
+                case UserInfoException user:
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = user.Information;
+                        responseBody = user.Info;
 
                         break;
                     }

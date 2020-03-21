@@ -39,7 +39,7 @@ namespace WebFeatures.DataContext
             SetupUtcConverters(modelBuilder);
             SetupSoftDelete(modelBuilder);
 
-            modelBuilder.Ignore<DomianEvent>();
+            modelBuilder.Ignore<IDomianEvent>();
         }
 
         private void SetupUtcConverters(ModelBuilder modelBuilder)
@@ -78,15 +78,16 @@ namespace WebFeatures.DataContext
             {
                 if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
                 {
-                    typeof(WebFeaturesDbContext)
-                        .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Instance)
-                        .MakeGenericMethod(entityType.ClrType)
-                        .Invoke(this, new object[] { modelBuilder });
+                    MethodInfo setFilter = typeof(WebFeaturesDbContext)
+                        .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Static)
+                        .MakeGenericMethod(entityType.ClrType);
+
+                    setFilter.Invoke(null, new object[] { modelBuilder });
                 }
             }
         }
 
-        private void SetSoftDeleteFilter<T>(ModelBuilder modelBuilder) where T : class, ISoftDelete
+        private static void SetSoftDeleteFilter<T>(ModelBuilder modelBuilder) where T : class, ISoftDelete
         {
             modelBuilder.Entity<T>().HasQueryFilter(x => !x.IsDeleted);
         }
@@ -141,7 +142,7 @@ namespace WebFeatures.DataContext
             int result = await base.SaveChangesAsync();
 
             IEnumerable<Task> events = ChangeTracker.Entries<BaseEntity>()
-                .SelectMany(x => x.Entity.EventsList)
+                .SelectMany(x => x.Entity.Events)
                 .Select(x => _eventMediator.PublishAsync(x));
 
             await Task.WhenAll(events);

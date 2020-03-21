@@ -2,5 +2,5 @@
 
 namespace WebFeatures.Domian.Events
 {
-    public abstract class DomianEvent : IEvent { }
+    public interface IDomianEvent : IEvent { }
 }

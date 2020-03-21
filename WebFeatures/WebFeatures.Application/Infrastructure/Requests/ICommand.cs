@@ -2,5 +2,5 @@
 
 namespace WebFeatures.Application.Infrastructure.Requests
 {
-    public interface ICommand<TResult> : IRequest<TResult> { }
+    internal interface ICommand<TResult> : IRequest<TResult> { }
 }
