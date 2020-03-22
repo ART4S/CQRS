@@ -10,13 +10,10 @@ namespace WebFeatures.Domian.Entities
         public Guid RoleId { get; }
         public Role Role { get; }
 
-        public UserRole(User user, Role role)
+        public UserRole(Guid userId, Guid roleId)
         {
-            UserId = user.Id;
-            User = user;
-
-            RoleId = role.Id;
-            Role = role;
+            UserId = userId;
+            RoleId = roleId;
         }
 
         private UserRole() { } // For EF

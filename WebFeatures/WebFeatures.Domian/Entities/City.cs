@@ -10,12 +10,10 @@ namespace WebFeatures.Domian.Entities
         public Guid CountryId { get; }
         public Country Country { get; }
 
-        public City(string name, Country country)
+        public City(string name, Guid countryId)
         {
             Name = name;
-
-            CountryId = country.Id;
-            Country = country;
+            CountryId = countryId;
         }
 
         private City() { } // For EF

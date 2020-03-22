@@ -1,4 +1,4 @@
-﻿using QueryFiltering;
+﻿using LinqToQuerystring;
 using System;
 using System.Linq;
 using System.Threading;
@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Middlewares
             }
             catch
             {
-                throw new UserInfoException("Error while applying filter to response");
+                throw new ApplicationValidationException("Error while applying filter to response");
             }
         }
     }

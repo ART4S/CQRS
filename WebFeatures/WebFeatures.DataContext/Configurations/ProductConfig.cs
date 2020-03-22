@@ -23,6 +23,11 @@ namespace WebFeatures.DataContext.Configurations
             builder.HasOne(x => x.Brand)
                 .WithMany()
                 .HasForeignKey(x => x.BrandId);
+
+            builder.HasOne(x => x.Picture)
+                .WithOne()
+                .HasForeignKey<Product>(x => x.PictureId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

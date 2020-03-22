@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Domian.Exceptions;
 
 namespace WebFeatures.WebApi.Middlewares
 {
@@ -36,7 +37,7 @@ namespace WebFeatures.WebApi.Middlewares
 
             switch (exception)
             {
-                case ValidationException validation:
+                case RequestValidationException validation:
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
@@ -45,11 +46,20 @@ namespace WebFeatures.WebApi.Middlewares
                         break;
                     }
 
-                case UserInfoException user:
+                case DomianValidationException domian:
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = user.Info;
+                        responseBody = JsonConvert.SerializeObject(domian.Message);
+
+                        break;
+                    }
+
+                case ApplicationValidationException application:
+                    {
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        context.Response.ContentType = MediaTypeNames.Text.Plain;
+                        responseBody = application.Message;
 
                         break;
                     }

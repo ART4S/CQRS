@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using WebFeatures.Domian.Events;
 
 namespace WebFeatures.Domian.Common
@@ -9,8 +8,8 @@ namespace WebFeatures.Domian.Common
     {
         public Guid Id { get; set; }
 
-        public IReadOnlyCollection<IDomianEvent> Events => _events.ToImmutableList();
-        private readonly HashSet<IDomianEvent> _events = new HashSet<IDomianEvent>();
+        public IReadOnlyCollection<IDomianEvent> Events => _events.AsReadOnly();
+        private readonly List<IDomianEvent> _events = new List<IDomianEvent>();
 
         protected void AddEvent(IDomianEvent eve)
         {

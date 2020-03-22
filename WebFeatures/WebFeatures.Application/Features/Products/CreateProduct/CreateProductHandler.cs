@@ -15,16 +15,11 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            Manufacturer manufacturer = await _db.Manufacturers.FindAsync(request.ManufacturerId);
-            Brand brand = await _db.Brands.FindAsync(request.BrandId);
-
-            Product product = new Product(request.Name, request.Description, manufacturer, brand);
-
-            if (request.CategoryId.HasValue)
+            Product product = new Product(request.Name, request.Description, request.ManufacturerId, request.BrandId)
             {
-                Category category = await _db.Categories.FindAsync(request.CategoryId);
-                product.SetCategory(category);
-            }
+                CategoryId = request.CategoryId,
+                //Picture = new Picture(request.Picture)
+            };
 
             await _db.Products.AddAsync(product, cancellationToken);
 

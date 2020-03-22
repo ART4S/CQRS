@@ -7,19 +7,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Requests;
-using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
+using RequestValidationException = WebFeatures.Application.Exceptions.RequestValidationException;
 
 namespace WebFeatures.Application.Middlewares
 {
     /// <summary>
     /// Request data validation
     /// </summary>
-    internal class ModelValidationMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
+    internal class ValidationMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-        public ModelValidationMiddleware(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationMiddleware(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }
@@ -34,7 +34,7 @@ namespace WebFeatures.Application.Middlewares
 
             if (errors.Length != 0)
             {
-                throw new ValidationException(errors);
+                throw new RequestValidationException(errors);
             }
 
             return await next();

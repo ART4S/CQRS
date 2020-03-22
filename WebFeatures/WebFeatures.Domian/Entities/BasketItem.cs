@@ -1,5 +1,6 @@
 ﻿using System;
 using WebFeatures.Domian.Common;
+using WebFeatures.Domian.Exceptions;
 
 namespace WebFeatures.Domian.Entities
 {
@@ -13,14 +14,10 @@ namespace WebFeatures.Domian.Entities
 
         public int Quantity { get; private set; }
 
-        public BasketItem(Basket basket, Product product)
+        public BasketItem(Guid basketId, Guid productId)
         {
-            BasketId = basket.Id;
-            Basket = basket;
-
-            ProductId = product.Id;
-            Product = product;
-
+            BasketId = basketId;
+            ProductId = productId;
             Quantity = 1;
         }
 
@@ -31,7 +28,7 @@ namespace WebFeatures.Domian.Entities
             Quantity += quantity;
 
             if (Quantity < 1)
-                throw new Exception($"BasketItemId: {Id}. Quantity shouldn't be less than 1");
+                throw new DomianValidationException($"BasketItemId: {Id}. Quantity shouldn't be less than 1");
         }
     }
 }

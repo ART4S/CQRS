@@ -13,14 +13,10 @@ namespace WebFeatures.Domian.Entities
 
         public int Quantity { get; }
 
-        public OrderItem(Order order, Product product, int quantity)
+        public OrderItem(Guid orderId, Guid productId, int quantity)
         {
-            OrderId = order.Id;
-            Order = order;
-
-            ProductId = product.Id;
-            Product = product;
-
+            OrderId = orderId;
+            ProductId = productId;
             Quantity = quantity;
         }
 

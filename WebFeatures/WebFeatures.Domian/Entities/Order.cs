@@ -19,14 +19,10 @@ namespace WebFeatures.Domian.Entities
         public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
         private readonly List<OrderItem> _items = new List<OrderItem>();
 
-        public Order(User user, Shipper shipper, List<OrderItem> items)
+        public Order(Guid userId, Guid shipperId, List<OrderItem> items)
         {
-            UserId = user.Id;
-            User = user;
-
-            ShipperId = shipper.Id;
-            Shipper = shipper;
-
+            UserId = userId;
+            ShipperId = shipperId;
             _items = items;
         }
 

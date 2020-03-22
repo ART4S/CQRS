@@ -9,18 +9,14 @@ namespace WebFeatures.Domian.ValueObjects
     {
         public Guid CityId { get; }
         public City City { get; }
-
         public string StreetName { get; }
-
         public string PostalCode { get; }
 
-        public StreetAddress(string streetName, string postalCode, City city)
+        public StreetAddress(string streetName, string postalCode, Guid cityId)
         {
             StreetName = streetName;
             PostalCode = postalCode;
-
-            CityId = city.Id;
-            City = city;
+            CityId = cityId;
         }
 
         private StreetAddress() { } // For EF
@@ -29,6 +25,7 @@ namespace WebFeatures.Domian.ValueObjects
         {
             yield return StreetName;
             yield return CityId;
+            yield return PostalCode;
         }
     }
 }

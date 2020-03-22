@@ -24,7 +24,11 @@ namespace WebFeatures.WebApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
             => WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseKestrel(options =>
+                {
+                    options.Limits.MaxRequestBodySize = 10 * 1024 * 1024; // 10 MB
+                });
 
         private static async Task SetupDbContext(IWebHost host)
         {

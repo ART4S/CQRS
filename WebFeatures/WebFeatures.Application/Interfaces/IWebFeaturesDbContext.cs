@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Interfaces

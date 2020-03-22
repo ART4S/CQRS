@@ -38,8 +38,6 @@ namespace WebFeatures.DataContext
 
             SetupUtcConverters(modelBuilder);
             SetupSoftDelete(modelBuilder);
-
-            modelBuilder.Ignore<IDomianEvent>();
         }
 
         private void SetupUtcConverters(ModelBuilder modelBuilder)
