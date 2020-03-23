@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
-    internal class QueryFilteringMiddleware<TRequest> : IRequestMiddleware<TRequest, IQueryable>
-        where TRequest : IQuery<IQueryable>
+    internal class QueryFilteringMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
+        where TResponse : IQueryable
     {
         private readonly IRequestFilterService _filterService;
 
@@ -20,11 +19,11 @@ namespace WebFeatures.Application.Middlewares
             _filterService = filterService;
         }
 
-        public async Task<IQueryable> HandleAsync(TRequest request, Func<Task<IQueryable>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             try
             {
-                return (await next()).ApplyQuery(_filterService.GetFilter());
+                return (TResponse)(await next()).ApplyQuery(_filterService.GetFilter());
             }
             catch
             {

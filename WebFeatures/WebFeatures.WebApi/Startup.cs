@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
-using AutoMapper;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;

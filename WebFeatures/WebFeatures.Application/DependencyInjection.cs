@@ -32,7 +32,7 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
 
             // Queries pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(QueryFilteringMiddleware<>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(QueryFilteringMiddleware<,>));
         }
 
         private static void AddEvents(IServiceCollection services)

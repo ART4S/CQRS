@@ -25,7 +25,7 @@ namespace WebFeatures.Application.Middlewares
             await _db.SaveChangesAsync();
             return response;
 
-            // TODO: uncomment when real database will be turned on
+            // TODO: uncomment when real database be turned on
 
             //await using IDbContextTransaction transaction = await _db.BeginTransaction();
 

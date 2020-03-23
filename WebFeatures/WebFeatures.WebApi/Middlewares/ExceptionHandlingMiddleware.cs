@@ -50,7 +50,7 @@ namespace WebFeatures.WebApi.Middlewares
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = JsonConvert.SerializeObject(domian.Message);
+                        responseBody = domian.Message;
 
                         break;
                     }

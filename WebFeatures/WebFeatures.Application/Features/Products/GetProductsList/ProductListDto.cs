@@ -13,7 +13,8 @@ namespace WebFeatures.Application.Features.Products.GetProductsList
         public void ApplyMappings(Profile profile)
         {
             profile.CreateMap<Product, ProductListDto>(MemberList.Destination)
-                .ForMember(s => s.Picture, opt => opt.MapFrom(d => d.Picture.Content));
+                .ForMember(s => s.Picture, opt => opt.MapFrom(
+                    d => d.PictureId.HasValue ? d.Picture.Content : default));
         }
     }
 }

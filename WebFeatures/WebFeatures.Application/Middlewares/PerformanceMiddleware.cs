@@ -11,7 +11,6 @@ namespace WebFeatures.Application.Middlewares
     /// Long running request logging
     /// </summary>
     internal class PerformanceMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
     {
         private readonly ILogger<TRequest> _logger;
 
