@@ -25,23 +25,19 @@ namespace WebFeatures.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> RegisterUser([FromBody, Required] RegisterUser command)
+        public async Task RegisterUser([FromBody, Required] RegisterUser command)
         {
-            var user = await Mediator.SendAsync(command);
+            UserInfoDto user = await Mediator.SendAsync(command);
 
             await SignInUser(user);
-
-            return Ok();
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody, Required] Login command)
+        public async Task Login([FromBody, Required] Login command)
         {
-            var user = await Mediator.SendAsync(command);
+            UserInfoDto user = await Mediator.SendAsync(command);
 
             await SignInUser(user);
-
-            return Ok();
         }
 
         private Task SignInUser(UserInfoDto user)
@@ -67,10 +63,9 @@ namespace WebFeatures.WebApi.Controllers
 
         [Authorize]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Logout()
+        public Task Logout()
         {
-            await HttpContext.SignOutAsync();
-            return Ok();
+            return HttpContext.SignOutAsync();
         }
     }
 }

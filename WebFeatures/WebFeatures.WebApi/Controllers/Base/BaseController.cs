@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mime;
-using Microsoft.AspNetCore.Http;
 using WebFeatures.Requests;
 
 namespace WebFeatures.WebApi.Controllers.Base
@@ -13,8 +13,5 @@ namespace WebFeatures.WebApi.Controllers.Base
     {
         protected IRequestMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IRequestMediator>();
         private IRequestMediator _mediator;
-
-        protected IActionResult Created(object value)
-            => StatusCode(StatusCodes.Status201Created, value);
     }
 }
