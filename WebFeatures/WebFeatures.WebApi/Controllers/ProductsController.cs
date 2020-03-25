@@ -23,7 +23,7 @@ namespace WebFeatures.WebApi.Controllers
         public async Task<IActionResult> CreateProduct([FromForm] CreateProduct request, [FromForm] IFormFile picture)
         {
             Guid productId;
-            using (Stream stream = picture?.OpenReadStream())
+            await using (Stream stream = picture?.OpenReadStream())
             {
                 request.Picture = stream;
                 productId = await Mediator.SendAsync(request);
@@ -36,7 +36,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> EditProduct([FromForm] EditProduct request, [FromForm] IFormFile picture)
         {
-            using (Stream stream = picture?.OpenReadStream())
+            await using (Stream stream = picture?.OpenReadStream())
             {
                 request.Picture = stream;
                 await Mediator.SendAsync(request);
