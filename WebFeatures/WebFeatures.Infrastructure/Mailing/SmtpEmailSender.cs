@@ -4,7 +4,7 @@ using MimeKit;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
 
-namespace WebFeatures.Infrastructure.Messaging
+namespace WebFeatures.Infrastructure.Mailing
 {
     internal class SmtpEmailSender : IEmailSender
     {

@@ -11,7 +11,6 @@ using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.Events;
 using WebFeatures.Events;
 
 namespace WebFeatures.DataContext
@@ -104,6 +103,7 @@ namespace WebFeatures.DataContext
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
+        public DbSet<File> Files { get; set; }
 
         public Task<IDbContextTransaction> BeginTransaction()
         {

@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.Infrastructure.Messaging
+﻿namespace WebFeatures.Infrastructure.Mailing
 {
     internal class SmtpClientOptions
     {

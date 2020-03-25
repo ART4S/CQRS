@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
@@ -15,10 +16,21 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            Product product = new Product(request.Name, request.Description, request.ManufacturerId, request.BrandId)
+            Picture picture;
+            using (var ms = new MemoryStream())
             {
-                CategoryId = request.CategoryId,
-                //Picture = new Picture(request.Picture)
+                request.Picture.CopyTo(ms);
+                picture = new Picture(ms.ToArray());
+            }
+
+            var product = new Product(
+                request.Product.Name, 
+                request.Product.Description, 
+                request.Product.ManufacturerId, 
+                request.Product.BrandId)
+            {
+                CategoryId = request.Product.CategoryId,
+                Picture = picture
             };
 
             await _db.Products.AddAsync(product, cancellationToken);
