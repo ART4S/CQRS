@@ -2,15 +2,15 @@
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Picture : BaseEntity
+    public class File : BaseEntity
     {
         public byte[] Content { get; }
 
-        public Picture(byte[] content)
+        public File(byte[] content)
         {
             Content = content;
         }
 
-        private Picture() { } // For EF
+        private File() { } // For EF
     }
 }

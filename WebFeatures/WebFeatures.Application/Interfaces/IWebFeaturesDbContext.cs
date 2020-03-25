@@ -21,6 +21,7 @@ namespace WebFeatures.Application.Interfaces
         DbSet<Order> Orders { get; set; }
         DbSet<OrderItem> OrderItems { get; set; }
         DbSet<Shipper> Shippers { get; set; }
+        DbSet<File> Files { get; set; }
 
         Task<IDbContextTransaction> BeginTransaction();
 

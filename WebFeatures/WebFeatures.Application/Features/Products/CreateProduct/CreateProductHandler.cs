@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Helpers;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
@@ -15,11 +16,20 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            Product product = new Product(request.Name, request.Description, request.ManufacturerId, request.BrandId)
+
+            var product = new Product(
+                request.Name, 
+                request.Description, 
+                request.ManufacturerId, 
+                request.BrandId)
             {
-                CategoryId = request.CategoryId,
-                //Picture = new Picture(request.Picture)
+                CategoryId = request.CategoryId
             };
+
+            if (request.Picture != null)
+            {
+                product.Picture = new File(request.Picture.ReadBytes());
+            }
 
             await _db.Products.AddAsync(product, cancellationToken);
 

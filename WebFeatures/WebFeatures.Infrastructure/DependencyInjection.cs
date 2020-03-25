@@ -9,7 +9,7 @@ using WebFeatures.Common;
 using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.Logging;
-using WebFeatures.Infrastructure.Messaging;
+using WebFeatures.Infrastructure.Mailing;
 using WebFeatures.Infrastructure.Security;
 using WebFeatures.Infrastructure.Services;
 
