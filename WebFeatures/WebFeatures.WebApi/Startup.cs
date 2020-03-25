@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -32,7 +33,13 @@ namespace WebFeatures.WebApi
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration, Environment);
 
-            services.AddControllers()
+            services.AddControllers(opt =>
+                {
+                    opt.ModelMetadataDetailsProviders.Add(
+                        new SuppressChildValidationMetadataProvider(typeof(byte[])));
+                    opt.ModelMetadataDetailsProviders.Add(
+                        new SuppressChildValidationMetadataProvider(typeof(Stream)));
+                })
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>

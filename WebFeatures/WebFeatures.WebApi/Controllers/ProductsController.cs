@@ -20,16 +20,13 @@ namespace WebFeatures.WebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateProduct([FromForm] ProductEditDto product, [FromForm] IFormFile picture)
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProduct request, [FromForm] IFormFile picture)
         {
             Guid productId;
-            using (Stream stream = picture.OpenReadStream())
+            using (Stream stream = picture?.OpenReadStream())
             {
-                productId = await Mediator.SendAsync(new CreateProduct() 
-                { 
-                    Product = product, 
-                    Picture = stream
-                });
+                request.Picture = stream;
+                productId = await Mediator.SendAsync(request);
             }
 
             return Created(productId);
@@ -37,9 +34,14 @@ namespace WebFeatures.WebApi.Controllers
 
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> EditProduct([FromRoute] Guid id, [FromBody] ProductEditDto product)
+        public async Task<IActionResult> EditProduct([FromForm] EditProduct request, [FromForm] IFormFile picture)
         {
-            await Mediator.SendAsync(new EditProduct(){ Id = id, Product = product});
+            using (Stream stream = picture?.OpenReadStream())
+            {
+                request.Picture = stream;
+                await Mediator.SendAsync(request);
+            }
+
             return NoContent();
         }
     }
