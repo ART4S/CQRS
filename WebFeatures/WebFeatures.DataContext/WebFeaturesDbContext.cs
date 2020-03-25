@@ -11,6 +11,7 @@ using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Events;
 using WebFeatures.Events;
 
 namespace WebFeatures.DataContext
@@ -35,8 +36,8 @@ namespace WebFeatures.DataContext
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            SetupUtcConverters(modelBuilder);
             SetupSoftDelete(modelBuilder);
+            //SetupUtcConverters(modelBuilder);
         }
 
         private void SetupUtcConverters(ModelBuilder modelBuilder)
@@ -139,7 +140,7 @@ namespace WebFeatures.DataContext
 
             int result = await base.SaveChangesAsync();
 
-            IEnumerable<Task> events = ChangeTracker.Entries<BaseEntity>()
+            IEnumerable<Task> events = ChangeTracker.Entries<IHasDomianEvents>()
                 .SelectMany(x => x.Entity.Events)
                 .Select(x => _eventMediator.PublishAsync(x));
 

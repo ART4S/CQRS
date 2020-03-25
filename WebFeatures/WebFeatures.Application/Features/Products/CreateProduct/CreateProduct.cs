@@ -21,14 +21,12 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
             public Validator(IWebFeaturesDbContext db)
             {
                 RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Price).Must(x => x == null || x.Value >= 0);
                 RuleFor(x => x.Description).NotEmpty();
-
                 RuleFor(x => x.ManufacturerId)
                     .MustAsync(async (x, token) => await db.Manufacturers.FindAsync(x) != null);
-
                 RuleFor(x => x.CategoryId)
-                    .MustAsync(async (x, token) => !x.HasValue || await db.Categories.FindAsync(x) != null);
-
+                    .MustAsync(async (x, token) => x == null || await db.Categories.FindAsync(x) != null);
                 RuleFor(x => x.BrandId)
                     .MustAsync(async (x, token) => await db.Brands.FindAsync(x) != null);
             }

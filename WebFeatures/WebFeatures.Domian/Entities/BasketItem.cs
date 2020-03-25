@@ -6,11 +6,11 @@ namespace WebFeatures.Domian.Entities
 {
     public class BasketItem : BaseEntity
     {
-        public Guid BasketId { get; }
-        public Basket Basket { get; }
+        public Guid BasketId { get; set; }
+        public Basket Basket { get; set; }
 
-        public Guid ProductId { get; }
-        public Product Product { get; }
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
 
         public int Quantity { get; private set; }
 

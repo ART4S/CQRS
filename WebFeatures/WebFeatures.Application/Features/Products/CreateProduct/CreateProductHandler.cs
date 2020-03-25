@@ -16,7 +16,6 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-
             var product = new Product(
                 request.Name, 
                 request.Description, 
