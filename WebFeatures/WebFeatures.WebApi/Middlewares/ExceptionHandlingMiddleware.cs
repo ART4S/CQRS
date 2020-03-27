@@ -27,11 +27,11 @@ namespace WebFeatures.WebApi.Middlewares
             }
             catch (Exception ex)
             {
-                await HandleException(ex, context);
+                await HandleExceptionAsync(ex, context);
             }
         }
 
-        private Task HandleException(Exception exception, HttpContext context)
+        private Task HandleExceptionAsync(Exception exception, HttpContext context)
         {
             string responseBody;
 

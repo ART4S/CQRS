@@ -23,7 +23,9 @@ namespace WebFeatures.Application.Features.Products.GetProductsList
 
         public Task<IQueryable<ProductListDto>> HandleAsync(GetProductsList request, CancellationToken cancellationToken)
         {
-            IQueryable<ProductListDto> products = _db.Products.ProjectTo<ProductListDto>(_mapper.ConfigurationProvider);
+            IQueryable<ProductListDto> products = _db.Products
+                .ProjectTo<ProductListDto>(_mapper.ConfigurationProvider);
+
             return Task.FromResult(products);
         }
     }

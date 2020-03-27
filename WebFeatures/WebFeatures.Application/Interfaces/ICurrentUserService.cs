@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebFeatures.Application.Interfaces
 {
     public interface ICurrentUserService
     {
         bool IsAuthenticated { get; }
-        string UserId { get; }
+        Guid UserId { get; }
         IEnumerable<string> Roles { get; }
     }
 }

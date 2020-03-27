@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +6,7 @@ using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProductById;
 using WebFeatures.Application.Features.Products.GetProductsList;
+using WebFeatures.Application.Features.Products.GetReviews;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -14,26 +14,23 @@ namespace WebFeatures.WebApi.Controllers
     public class ProductsController : BaseController
     {
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(ProductInfoDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
-            => Ok(await Mediator.SendAsync(new GetProductById() { Id = id }));
+        public Task<ProductInfoDto> Get([FromRoute] Guid id)
+            => Mediator.SendAsync(new GetProductById() { Id = id });
 
         [HttpGet("list")]
-        [ProducesResponseType(typeof(IQueryable<ProductListDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProductsList()
-            => Ok(await Mediator.SendAsync(new GetProductsList()));
+        public Task<IQueryable<ProductListDto>> GetProductsList()
+            => Mediator.SendAsync(new GetProductsList());
+
+        [HttpGet("{id:guid}/reviews")]
+        public Task<IQueryable<ReviewInfoDto>> GetReviews([FromRoute] Guid id)
+            => Mediator.SendAsync(new GetReviews() { ProductId = id });
 
         [HttpPost]
-        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateProduct([FromForm] CreateProduct request)
-            => Created(await Mediator.SendAsync(request));
+        public Task<Guid> CreateProduct([FromForm] CreateProduct request)
+            => Mediator.SendAsync(request);
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> EditProduct([FromForm] EditProduct request)
-        {
-            await Mediator.SendAsync(request);
-            return NoContent();
-        }
+        public Task EditProduct([FromForm] EditProduct request)
+            => Mediator.SendAsync(request);
     }
 }

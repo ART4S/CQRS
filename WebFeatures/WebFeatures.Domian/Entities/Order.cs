@@ -4,7 +4,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Order : BaseEntity, IUpdatable, ISoftDelete
+    public class Order : BaseEntity
     {
         public Guid UserId { get; }
         public User User { get; }

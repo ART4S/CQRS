@@ -13,7 +13,7 @@ namespace WebFeatures.Application.Features.Auth
         public void ApplyMappings(Profile profile)
         {
             profile.CreateMap<User, UserInfoDto>(MemberList.Destination)
-                .ForMember(x => x.Roles, y => y.Ignore())
+                .ForMember(s => s.Roles, o => o.Ignore())
                 .AfterMap((s, d) =>
                 {
                     d.Roles = s.UserRoles.Select(x => x.Role.Name).ToArray();

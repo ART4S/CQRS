@@ -4,7 +4,7 @@ using WebFeatures.Domian.Exceptions;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Product : BaseEntity, IUpdatable
+    public class Product : BaseEntity
     {
         public string Name { get; set; }
         public decimal? Price { get; private set; }
@@ -21,9 +21,6 @@ namespace WebFeatures.Domian.Entities
 
         public Guid BrandId { get; set; }
         public Brand Brand { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
 
         public Product(string name, string description, Guid manufacturerId, Guid brandId)
         {
