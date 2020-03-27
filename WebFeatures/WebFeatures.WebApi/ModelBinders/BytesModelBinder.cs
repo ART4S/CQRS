@@ -28,22 +28,18 @@ namespace WebFeatures.WebApi.ModelBinders
                 throw new ArgumentNullException(nameof(bindingContext));
             }
 
-            string modeName = bindingContext.IsTopLevelObject
-                ? bindingContext.BinderModelName ?? bindingContext.FieldName
-                : bindingContext.ModelName;
+            string modeName = bindingContext.ModelName;
 
             var res = await TryGetFirstNotEmptyFileAsync(bindingContext.HttpContext.Request, modeName);
             if (!res.Success)
                 return;
-
-            bindingContext.ModelState.SetModelValue(modeName, null, null);
 
             byte[] bytes = await ReadBytesAsync(res.File);
 
             bindingContext.Result = ModelBindingResult.Success(bytes);
         }
 
-        private async Task<(bool Success, IFormFile File)> TryGetFirstNotEmptyFileAsync(HttpRequest request, string fileName)
+        private async Task<(bool Success, IFormFile File)> TryGetFirstNotEmptyFileAsync(HttpRequest request, string modelName)
         {
             if (!request.HasFormContentType)
                 return (false, null);
@@ -52,15 +48,8 @@ namespace WebFeatures.WebApi.ModelBinders
 
             foreach (IFormFile file in form.Files)
             {
-                if (file.Length == 0 && string.IsNullOrEmpty(file.FileName))
-                {
-                    continue;
-                }
-
-                if (file.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase))
-                {
+                if (file.Length > 0 && string.Equals(file.Name, modelName, StringComparison.OrdinalIgnoreCase))
                     return (true, file);
-                }
             }
 
             return (false, null);
