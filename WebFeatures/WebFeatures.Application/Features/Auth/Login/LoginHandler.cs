@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.Login
@@ -30,12 +31,12 @@ namespace WebFeatures.Application.Features.Auth.Login
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            var user = await _db.Users
+            User user = await _db.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles).ThenInclude(x => x.Role)
                 .SingleAsync(x => x.Email == request.Email, cancellationToken);
 
-            var password = _passwordEncoder.DecodePassword(user.PasswordHash);
+            string password = _passwordEncoder.DecodePassword(user.PasswordHash);
             if (password != request.Password)
                 throw new ApplicationValidationException("Wrong login or password");
 

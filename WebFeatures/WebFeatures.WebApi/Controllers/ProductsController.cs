@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Features.Products.EditProduct;
+using WebFeatures.Application.Features.Products.GetProductById;
 using WebFeatures.Application.Features.Products.GetProductsList;
 using WebFeatures.WebApi.Controllers.Base;
 
@@ -12,6 +13,11 @@ namespace WebFeatures.WebApi.Controllers
 {
     public class ProductsController : BaseController
     {
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(ProductInfoDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+            => Ok(await Mediator.SendAsync(new GetProductById() { Id = id }));
+
         [HttpGet("list")]
         [ProducesResponseType(typeof(IQueryable<ProductListDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductsList()
