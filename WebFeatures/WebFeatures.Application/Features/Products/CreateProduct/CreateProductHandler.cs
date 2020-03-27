@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Helpers;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
@@ -27,7 +26,7 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
             if (request.Picture != null)
             {
-                product.Picture = new File(request.Picture.ReadBytes());
+                product.Picture = new File(request.Picture);
             }
 
             await _db.Products.AddAsync(product, cancellationToken);

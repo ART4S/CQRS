@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
@@ -20,28 +19,14 @@ namespace WebFeatures.WebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateProduct([FromForm] CreateProduct request, [FromForm] IFormFile picture)
-        {
-            Guid productId;
-            await using (Stream stream = picture?.OpenReadStream())
-            {
-                request.Picture = stream;
-                productId = await Mediator.SendAsync(request);
-            }
-
-            return Created(productId);
-        }
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProduct request)
+            => Created(await Mediator.SendAsync(request));
 
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> EditProduct([FromForm] EditProduct request, [FromForm] IFormFile picture)
+        public async Task<IActionResult> EditProduct([FromForm] EditProduct request)
         {
-            await using (Stream stream = picture?.OpenReadStream())
-            {
-                request.Picture = stream;
-                await Mediator.SendAsync(request);
-            }
-
+            await Mediator.SendAsync(request);
             return NoContent();
         }
     }

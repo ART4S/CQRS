@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using System;
-using System.IO;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
@@ -17,7 +16,7 @@ namespace WebFeatures.Application.Features.Products.EditProduct
         public Guid? CategoryId { get; set; }
         public Guid BrandId { get; set; }
         public Guid? PictureId { get; set; }
-        public Stream Picture { get; set; }
+        public byte[] Picture { get; set; }
 
         public class Validator : AbstractValidator<EditProduct>
         {

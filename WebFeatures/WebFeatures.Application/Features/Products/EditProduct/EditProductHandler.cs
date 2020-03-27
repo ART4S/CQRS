@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Helpers;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Entities;
@@ -31,7 +30,7 @@ namespace WebFeatures.Application.Features.Products.EditProduct
 
             if (request.Picture != null)
             {
-                product.Picture = new File(request.Picture.ReadBytes());
+                product.Picture = new File(request.Picture);
             }
 
             return Empty.Value;

@@ -12,6 +12,7 @@ using System.Reflection;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
+using WebFeatures.WebApi.ModelBinders;
 
 namespace WebFeatures.WebApi
 {
@@ -32,7 +33,11 @@ namespace WebFeatures.WebApi
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration, Environment);
 
-            services.AddControllers()
+            services.AddControllers(
+                opt => 
+                {
+                    opt.ModelBinderProviders.Insert(0, new BytesModelBinderProvider());
+                })
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>
