@@ -34,7 +34,10 @@ namespace WebFeatures.Application.Features.Auth.Login
             User user = await _db.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles).ThenInclude(x => x.Role)
-                .SingleAsync(x => x.Email == request.Email, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+
+            if (user == null)
+                throw new ApplicationValidationException("Wrong login or password");
 
             string password = _passwordEncoder.DecodePassword(user.PasswordHash);
             if (password != request.Password)

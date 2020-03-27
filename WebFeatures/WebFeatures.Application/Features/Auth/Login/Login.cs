@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using WebFeatures.Application.Infrastructure.Requests;
+﻿using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {
@@ -7,12 +6,5 @@ namespace WebFeatures.Application.Features.Auth.Login
     {
         public string Email { get; set; }
         public string Password { get; set; }
-
-        public class Validator : AbstractValidator<Login>
-        {
-            public Validator()
-            {
-            }
-        }
     }
 }
