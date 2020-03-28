@@ -1,6 +1,7 @@
 ﻿using System;
 using WebFeatures.Common;
 using WebFeatures.Domian.Common;
+using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Domian.Entities
 {
@@ -10,32 +11,24 @@ namespace WebFeatures.Domian.Entities
         public User User { get; set; }
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
-        public string Header { get; private set; }
-        public string Body { get; private set; }
+        public string Title { get; }
+        public string Comment { get; }
+        public DateTime CreatedAt { get; }
+        public UserRating? Rating { get; }
 
-        public Review(Guid userId, Guid productId, string header, string body)
+        public Review(Guid userId, Guid productId, string title, string comment, DateTime createdAt, UserRating? rating)
         {
-            Guard.NotNullOrWhitespace(header, nameof(header));
-            Guard.NotNullOrWhitespace(body, nameof(body));
+            Guard.NotNullOrWhitespace(title, nameof(title));
+            Guard.NotNullOrWhitespace(comment, nameof(comment));
 
             UserId = userId;
             ProductId = productId;
-            Header = header;
-            Body = body;
+            Title = title;
+            Comment = comment;
+            CreatedAt = createdAt;
+            Rating = rating;
         }
 
         private Review() { } // For EF
-
-        public void SetHeader(string header)
-        {
-            Guard.NotNullOrWhitespace(header, nameof(header));
-            Header = header;
-        }
-
-        public void SetBody(string body)
-        {
-            Guard.NotNullOrWhitespace(body, nameof(body));
-            Body = body;
-        }
     }
 }

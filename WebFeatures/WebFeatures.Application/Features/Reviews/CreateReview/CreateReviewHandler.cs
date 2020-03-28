@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -13,9 +14,17 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
     {
         private readonly IWebFeaturesDbContext _db;
         private readonly ICurrentUserService _user;
+        private readonly IDateTime _dateTime;
 
-        public CreateReviewHandler(IWebFeaturesDbContext db, ICurrentUserService user)
-            => (_db, _user) = (db, user);
+        public CreateReviewHandler(
+            IWebFeaturesDbContext db,
+            ICurrentUserService user,
+            IDateTime dateTime)
+        {
+            _db = db;
+            _user = user;
+            _dateTime = dateTime;
+        }
 
         public async Task<Guid> HandleAsync(CreateReview request, CancellationToken cancellationToken)
         {
@@ -28,8 +37,10 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
             var review = new Review(
                 _user.UserId,
                 request.ProductId,
-                request.Header,
-                request.Body);
+                request.Title,
+                request.Comment,
+                _dateTime.Now,
+                request.Rating);
 
             await _db.Reviews.AddAsync(review, cancellationToken);
 
