@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
+using AutoMapper;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Application.Features.Products.GetProductById
+namespace WebFeatures.Application.Features.Products.GetProduct
 {
     public class ProductInfoDto : IHasMappings
     {

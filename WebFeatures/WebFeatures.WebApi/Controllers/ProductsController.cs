@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Features.Products.EditProduct;
-using WebFeatures.Application.Features.Products.GetProductById;
+using WebFeatures.Application.Features.Products.GetProduct;
 using WebFeatures.Application.Features.Products.GetProductComments;
 using WebFeatures.Application.Features.Products.GetProductsList;
 using WebFeatures.Application.Features.Products.GetRatingsSummary;
@@ -17,7 +17,7 @@ namespace WebFeatures.WebApi.Controllers
     {
         [HttpGet("{id:guid}")]
         public Task<ProductInfoDto> Get([FromRoute] Guid id)
-            => Mediator.SendAsync(new GetProductById() { Id = id });
+            => Mediator.SendAsync(new GetProduct() { Id = id });
 
         [HttpGet("list")]
         public Task<IQueryable<ProductListDto>> GetProductsList()

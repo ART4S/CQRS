@@ -3,13 +3,13 @@ using System;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
 
-namespace WebFeatures.Application.Features.Products.GetProductById
+namespace WebFeatures.Application.Features.Products.GetProduct
 {
-    public class GetProductById : IQuery<ProductInfoDto>
+    public class GetProduct : IQuery<ProductInfoDto>
     {
         public Guid Id { get; set; }
 
-        public class Validator : AbstractValidator<GetProductById>
+        public class Validator : AbstractValidator<GetProduct>
         {
             public Validator(IWebFeaturesDbContext db)
             {
