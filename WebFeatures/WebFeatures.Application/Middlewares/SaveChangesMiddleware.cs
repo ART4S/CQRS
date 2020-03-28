@@ -24,38 +24,6 @@ namespace WebFeatures.Application.Middlewares
             TResponse response = await next();
             await _db.SaveChangesAsync();
             return response;
-
-            // TODO: uncomment when real database be turned on
-
-            //await using IDbContextTransaction transaction = await _db.BeginTransaction();
-
-            //TResponse response = await next();
-
-            //int retryCount = 0;
-
-            //while (true)
-            //{
-            //    try
-            //    {
-            //        await _db.SaveChangesAsync();
-
-            //        await transaction.CommitAsync(cancellationToken);
-
-            //        return response;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        await transaction.RollbackAsync(cancellationToken);
-
-            //        retryCount++;
-
-            //        if (retryCount == 5)
-            //        {
-            //            _logger.LogError("Error while performing database transaction", ex);
-            //            throw;
-            //        }
-            //    }
-            //}
         }
     }
 }

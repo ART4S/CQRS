@@ -25,11 +25,11 @@ namespace WebFeatures.Application.Features.Products.GetRatingsSummary
 
             var summary = new RatingsSummaryDto();
 
-            int total = 0;
+            int totalRating = 0;
 
             foreach (UserRating rating in ratings)
             {
-                total += (int)rating;
+                totalRating += (int)rating;
 
                 summary.ReviewsCount++;
 
@@ -55,7 +55,7 @@ namespace WebFeatures.Application.Features.Products.GetRatingsSummary
                 }
             }
 
-            summary.RatingAverage = total / summary.ReviewsCount;
+            summary.AverageRating = (UserRating)(int)Math.Truncate((decimal)(totalRating / summary.ReviewsCount));
 
             return summary;
         }

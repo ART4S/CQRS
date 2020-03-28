@@ -1,8 +1,10 @@
-﻿namespace WebFeatures.Application.Features.Products.GetRatingsSummary
+﻿using WebFeatures.Domian.Enums;
+
+namespace WebFeatures.Application.Features.Products.GetRatingsSummary
 {
     public class RatingsSummaryDto
     {
-        public double RatingAverage { get; set; }
+        public UserRating AverageRating { get; set; }
         public int ReviewsCount { get; set; }
         public int OneStarsCount { get; set; }
         public int TwoStarsCount { get; set; }
