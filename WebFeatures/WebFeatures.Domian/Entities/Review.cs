@@ -14,9 +14,9 @@ namespace WebFeatures.Domian.Entities
         public string Title { get; }
         public string Comment { get; }
         public DateTime CreatedAt { get; }
-        public UserRating? Rating { get; }
+        public UserRating Rating { get; }
 
-        public Review(Guid userId, Guid productId, string title, string comment, DateTime createdAt, UserRating? rating)
+        public Review(Guid userId, Guid productId, string title, string comment, DateTime createdAt, UserRating rating)
         {
             Guard.NotNullOrWhitespace(title, nameof(title));
             Guard.NotNullOrWhitespace(comment, nameof(comment));

@@ -2,15 +2,10 @@
 {
     public enum UserRating
     {
-        HalfStar,
-        OneStar,
-        OneAndHalfStar,
+        OneStar = 1,
         TwoStars,
-        TwoAndHalfStars,
         ThreeStars,
-        ThreeAndHalfStars,
         FourStars,
-        FourAndHalfStars,
         FiveStars
     }
 }

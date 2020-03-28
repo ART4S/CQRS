@@ -7,6 +7,7 @@ using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProductById;
 using WebFeatures.Application.Features.Products.GetProductsList;
 using WebFeatures.Application.Features.Products.GetReviews;
+using WebFeatures.Application.Features.Products.GetReviewsSummary;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -24,6 +25,10 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet("{id:guid}/reviews")]
         public Task<IQueryable<ReviewInfoDto>> GetReviews([FromRoute] Guid id)
             => Mediator.SendAsync(new GetReviews() { ProductId = id });
+
+        [HttpGet("{id:guid}/reviews/summary")]
+        public Task<ReviewsSummaryDto> GetReviewsSummary([FromRoute] Guid id)
+            => Mediator.SendAsync(new GetReviewsSummary() { ProductId = id });
 
         [HttpPost]
         public Task<Guid> CreateProduct([FromForm] CreateProduct request)

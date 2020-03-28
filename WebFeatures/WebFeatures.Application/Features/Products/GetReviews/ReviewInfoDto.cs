@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Features.Products.GetReviews
     {
         public string Title { get; set; }
         public string Comment { get; set; }
-        public UserRating? Rating { get; }
+        public UserRating Rating { get; }
         public DateTime CreatedAt { get; }
         public string UserName { get; set; }
 

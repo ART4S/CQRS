@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
         public Guid ProductId { get; set; }
         public string Title { get; set; }
         public string Comment { get; set; }
-        public UserRating? Rating { get; set; }
+        public UserRating Rating { get; set; }
 
         public class Validator : AbstractValidator<CreateReview>
         {
