@@ -6,15 +6,15 @@ using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
-namespace WebFeatures.Application.Features.Reviews.CreateReview
+namespace WebFeatures.Application.Features.Comments.CreateComment
 {
-    public class CreateReviewHandler : IRequestHandler<CreateReview, Empty>
+    public class CreateCommentHandler : IRequestHandler<CreateComment, Empty>
     {
         private readonly IWebFeaturesDbContext _db;
         private readonly ICurrentUserService _currentUser;
         private readonly IDateTime _dateTime;
 
-        public CreateReviewHandler(
+        public CreateCommentHandler(
             IWebFeaturesDbContext db,
             ICurrentUserService currentUser,
             IDateTime dateTime)
@@ -24,17 +24,16 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
             _dateTime = dateTime;
         }
 
-        public async Task<Empty> HandleAsync(CreateReview request, CancellationToken cancellationToken)
+        public async Task<Empty> HandleAsync(CreateComment request, CancellationToken cancellationToken)
         {
-            var review = new Review(
-                _currentUser.UserId,
+            var comment = new UserComment(
                 request.ProductId,
-                request.Title,
-                request.Comment,
+                _currentUser.UserId,
+                request.Body,
                 _dateTime.Now,
-                request.Rating);
+                request.ParentCommentId);
 
-            await _db.Reviews.AddAsync(review, cancellationToken);
+            await _db.UserComments.AddAsync(comment, cancellationToken);
 
             return Empty.Value;
         }

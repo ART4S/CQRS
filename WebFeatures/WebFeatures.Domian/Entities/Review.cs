@@ -7,8 +7,8 @@ namespace WebFeatures.Domian.Entities
 {
     public class Review : BaseEntity
     {
-        public Guid UserId { get; set; }
-        public User User { get; set; }
+        public Guid AuthorId { get; set; }
+        public User Author { get; set; }
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
         public string Title { get; }
@@ -16,12 +16,12 @@ namespace WebFeatures.Domian.Entities
         public DateTime CreatedAt { get; }
         public UserRating Rating { get; }
 
-        public Review(Guid userId, Guid productId, string title, string comment, DateTime createdAt, UserRating rating)
+        public Review(Guid authorId, Guid productId, string title, string comment, DateTime createdAt, UserRating rating)
         {
             Guard.NotNullOrWhitespace(title, nameof(title));
             Guard.NotNullOrWhitespace(comment, nameof(comment));
 
-            UserId = userId;
+            AuthorId = authorId;
             ProductId = productId;
             Title = title;
             Comment = comment;

@@ -13,7 +13,8 @@ namespace WebFeatures.Application.Features.Products.GetProductById
         {
             public Validator(IWebFeaturesDbContext db)
             {
-                RuleFor(x => x.Id).MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);
+                RuleFor(x => x.Id)
+                    .MustAsync(async (x, t) => await db.Products.FindAsync(x) != null);
             }
         }
     }

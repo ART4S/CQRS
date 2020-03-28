@@ -44,6 +44,7 @@ namespace WebFeatures.DataContext
         public DbSet<Shipper> Shippers { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<UserComment> UserComments { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {

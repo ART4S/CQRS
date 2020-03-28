@@ -14,7 +14,7 @@ namespace WebFeatures.Application.Features.Products.GetRatingsSummary
             public Validator(IWebFeaturesDbContext db)
             {
                 RuleFor(x => x.ProductId)
-                    .MustAsync(async (id, token) => await db.Products.FindAsync(id) != null);
+                    .MustAsync(async (x, t) => await db.Products.FindAsync(x) != null);
             }
         }
     }

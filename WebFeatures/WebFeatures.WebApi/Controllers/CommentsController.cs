@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Reviews.CreateReview;
+using WebFeatures.Application.Features.Comments.CreateComment;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
 {
-    public class ReviewsController : BaseController
+    public class CommentsController : BaseController
     {
         [HttpPost]
-        public Task CreateReview(CreateReview request)
+        public Task CreateComment(CreateComment request)
             => Mediator.SendAsync(request);
     }
 }

@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
-    public class CreateReview : ICommand<Guid>
+    public class CreateReview : ICommand<Empty>
     {
         public Guid ProductId { get; set; }
         public string Title { get; set; }
@@ -22,7 +23,7 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
                     .MustAsync(async (productId, token) => await db.Products.FindAsync(productId) != null);
 
                 RuleFor(x => x.ProductId).MustAsync(async (productId, token) => !await db.Reviews
-                    .AnyAsync(x => x.ProductId == productId && x.UserId == currentUser.UserId))
+                    .AnyAsync(x => x.ProductId == productId && x.AuthorId == currentUser.UserId))
                 .WithMessage("User already reviewd this product");
 
                 RuleFor(x => x.Title)

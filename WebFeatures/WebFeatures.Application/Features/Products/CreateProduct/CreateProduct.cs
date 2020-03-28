@@ -23,11 +23,12 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
                 RuleFor(x => x.Price).Must(x => x == null || x.Value >= 0);
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.ManufacturerId)
-                    .MustAsync(async (x, token) => await db.Manufacturers.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Manufacturers.FindAsync(x) != null);
                 RuleFor(x => x.CategoryId)
-                    .MustAsync(async (x, token) => x == null || await db.Categories.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Categories.FindAsync(x) != null)
+                    .When(x => x.CategoryId.HasValue);
                 RuleFor(x => x.BrandId)
-                    .MustAsync(async (x, token) => await db.Brands.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Brands.FindAsync(x) != null);
             }
         }
     }

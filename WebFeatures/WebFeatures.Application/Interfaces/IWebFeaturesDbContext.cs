@@ -22,6 +22,7 @@ namespace WebFeatures.Application.Interfaces
         DbSet<Shipper> Shippers { get; set; }
         DbSet<File> Files { get; set; }
         DbSet<Review> Reviews { get; set; }
+        DbSet<UserComment> UserComments { get; set; }
 
         Task<int> SaveChangesAsync();
     }

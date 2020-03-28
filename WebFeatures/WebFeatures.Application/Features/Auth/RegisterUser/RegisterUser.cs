@@ -14,6 +14,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
         {
             public Validator()
             {
+                // TODO
             }
         }
     }

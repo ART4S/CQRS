@@ -8,9 +8,9 @@ namespace WebFeatures.DataContext.Configurations
     {
         public void Configure(EntityTypeBuilder<Review> builder)
         {
-            builder.HasOne(x => x.User)
+            builder.HasOne(x => x.Author)
                 .WithMany()
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.AuthorId);
         }
     }
 }
