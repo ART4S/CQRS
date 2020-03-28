@@ -3,18 +3,18 @@ using FluentValidation;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
 
-namespace WebFeatures.Application.Features.Products.GetReviewsSummary
+namespace WebFeatures.Application.Features.Products.GetRatingsSummary
 {
-    public class GetReviewsSummary : IQuery<ReviewsSummaryDto>
+    public class GetRatingsSummary : IQuery<RatingsSummaryDto>
     {
         public Guid ProductId { get; set; }
 
-        public class Validator : AbstractValidator<GetReviewsSummary>
+        public class Validator : AbstractValidator<GetRatingsSummary>
         {
             public Validator(IWebFeaturesDbContext db)
             {
                 RuleFor(x => x.ProductId)
-                    .MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);
+                    .MustAsync(async (id, token) => await db.Products.FindAsync(id) != null);
             }
         }
     }

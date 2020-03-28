@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
@@ -15,10 +16,15 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 
         public class Validator : AbstractValidator<CreateReview>
         {
-            public Validator(IWebFeaturesDbContext db)
+            public Validator(IWebFeaturesDbContext db, ICurrentUserService currentUser)
             {
                 RuleFor(x => x.ProductId)
-                    .MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);
+                    .MustAsync(async (productId, token) => await db.Products.FindAsync(productId) != null);
+
+                RuleFor(x => x.ProductId).MustAsync(async (productId, token) => !await db.Reviews
+                    .AnyAsync(x => x.ProductId == productId && x.UserId == currentUser.UserId))
+                .WithMessage("User already reviewd this product");
+
                 RuleFor(x => x.Title)
                     .Must(x => !string.IsNullOrWhiteSpace(x));
                 RuleFor(x => x.Comment)

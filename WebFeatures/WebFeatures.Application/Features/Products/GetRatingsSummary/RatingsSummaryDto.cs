@@ -1,6 +1,6 @@
-﻿namespace WebFeatures.Application.Features.Products.GetReviewsSummary
+﻿namespace WebFeatures.Application.Features.Products.GetRatingsSummary
 {
-    public class ReviewsSummaryDto
+    public class RatingsSummaryDto
     {
         public double RatingAverage { get; set; }
         public int ReviewsCount { get; set; }
