@@ -23,10 +23,9 @@ namespace WebFeatures.WebApi.Tests.Controllers
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
             Guid productId = Guid.Parse("0f7b807f-3737-4997-9627-dbe5dc15310a");
-            string url = $"api/products/{productId}";
 
             // Act
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync($"api/products/{productId}");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -41,10 +40,9 @@ namespace WebFeatures.WebApi.Tests.Controllers
         {
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
-            string url = "api/products/list";
 
             // Act
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync("api/products/list");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -61,10 +59,10 @@ namespace WebFeatures.WebApi.Tests.Controllers
         {
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
-            string url = "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/reviews";
 
             // Act
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(
+                "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/reviews");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -78,10 +76,10 @@ namespace WebFeatures.WebApi.Tests.Controllers
         {
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
-            string url = "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/comments";
 
             // Act
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(
+                "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/comments");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -95,10 +93,10 @@ namespace WebFeatures.WebApi.Tests.Controllers
         {
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
-            string url = $"api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/getRatingsSummary";
 
             // Act
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(
+                "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/getRatingsSummary");
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -121,8 +119,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
             content.Add(new StringContent("test description", Encoding.UTF8), nameof(CreateProduct.Description));
 
             // Act
-            string url = "api/products";
-            HttpResponseMessage response = await client.PostAsync(url, content);
+            HttpResponseMessage response = await client.PostAsync("api/products", content);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -133,7 +130,9 @@ namespace WebFeatures.WebApi.Tests.Controllers
         {
             // Arrange
             HttpClient client = await HttpClientFactory.Create();
+
             string productId = "0f7b807f-3737-4997-9627-dbe5dc15310a";
+
             var content = new MultipartFormDataContent();
             content.Add(new StringContent(productId, Encoding.UTF8), nameof(EditProduct.Id));
             content.Add(new StringContent("new name", Encoding.UTF8), nameof(EditProduct.Name));
@@ -142,8 +141,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
             content.Add(new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(EditProduct.BrandId));
 
             // Act
-            string url = $"api/products/{productId}";
-            HttpResponseMessage response = await client.PutAsync(url, content);
+            HttpResponseMessage response = await client.PutAsync($"api/products/{productId}", content);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
