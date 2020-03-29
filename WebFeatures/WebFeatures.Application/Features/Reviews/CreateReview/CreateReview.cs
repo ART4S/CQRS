@@ -23,7 +23,7 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 
                 RuleFor(x => x.ProductId).MustAsync(async (productId, token) => !await db.Reviews
                     .AnyAsync(x => x.ProductId == productId && x.AuthorId == currentUser.UserId))
-                .WithMessage("User already reviewd this product");
+                .WithMessage("User already reviewed this product");
 
                 RuleFor(x => x.Title)
                     .Must(x => !string.IsNullOrWhiteSpace(x));

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using WebFeatures.Application.Constants;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
@@ -18,6 +18,10 @@ namespace WebFeatures.WebApi.Tests
             using IServiceScope scope = services.CreateScope();
 
             var db = scope.ServiceProvider.GetService<WebFeaturesDbContext>();
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.EnsureCreatedAsync();
+
             var encoder = scope.ServiceProvider.GetService<IPasswordEncoder>();
             var dateTime = scope.ServiceProvider.GetService<IDateTime>();
 
@@ -43,7 +47,7 @@ namespace WebFeatures.WebApi.Tests
 
             #region Products
 
-            var country = new Country("Russia", "EU") { Id = Guid.Parse("ab9d72d4-8e0a-4278-84c7-3beef9b380ac") };
+            var country = new Country("Russia", "EU");
             await db.Countries.AddAsync(country);
 
             var city = new City("City", country.Id) { Id = Guid.Parse("86b0e7e5-03e2-4aa2-b88b-30c0d8a6a02e") };
@@ -60,7 +64,7 @@ namespace WebFeatures.WebApi.Tests
 
             var categories = new[]
             {
-                new Category("Man"),
+                new Category("Man") {Id = Guid.Parse("9ae5bdeb-9df9-4a2c-abd3-68afed9c6561")},
                 new Category("Woman"),
                 new Category("Shoes"),
                 new Category("Watches"),
