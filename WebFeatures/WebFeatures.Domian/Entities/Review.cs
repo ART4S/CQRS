@@ -11,10 +11,10 @@ namespace WebFeatures.Domian.Entities
         public User Author { get; set; }
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
-        public string Title { get; }
-        public string Comment { get; }
-        public DateTime CreatedAt { get; }
-        public UserRating Rating { get; }
+        public string Title { get; private set; }
+        public string Comment { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public UserRating Rating { get; private set; }
 
         public Review(Guid authorId, Guid productId, string title, string comment, DateTime createdAt, UserRating rating)
         {

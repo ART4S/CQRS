@@ -7,6 +7,7 @@ namespace WebFeatures.Application.Features.Products.GetProductsList
 {
     public class ProductListDto : IHasMappings
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal? Price { get; set; }
         public Guid? PictureId { get; set; }

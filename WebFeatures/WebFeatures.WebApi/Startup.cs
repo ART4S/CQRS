@@ -34,7 +34,7 @@ namespace WebFeatures.WebApi
             services.AddInfrastructureServices(Configuration, Environment);
 
             services.AddControllers(
-                opt => 
+                opt =>
                 {
                     opt.ModelBinderProviders.Insert(0, new BytesModelBinderProvider());
                 })

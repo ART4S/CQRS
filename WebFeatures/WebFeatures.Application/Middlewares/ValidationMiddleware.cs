@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Requests;
 using RequestValidationException = WebFeatures.Application.Exceptions.RequestValidationException;
 
@@ -15,7 +14,6 @@ namespace WebFeatures.Application.Middlewares
     /// Request data validation
     /// </summary>
     internal class ValidationMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
-        where TRequest : ICommand<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 

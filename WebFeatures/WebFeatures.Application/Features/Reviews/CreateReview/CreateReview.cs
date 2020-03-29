@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
-    public class CreateReview : ICommand<Empty>
+    public class CreateReview : ICommand<Guid>
     {
         public Guid ProductId { get; set; }
         public string Title { get; set; }

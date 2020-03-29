@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
@@ -8,7 +8,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Comments.CreateComment
 {
-    public class CreateCommentHandler : IRequestHandler<CreateComment, Empty>
+    public class CreateCommentHandler : IRequestHandler<CreateComment, Guid>
     {
         private readonly IWebFeaturesDbContext _db;
         private readonly ICurrentUserService _currentUser;
@@ -24,7 +24,7 @@ namespace WebFeatures.Application.Features.Comments.CreateComment
             _dateTime = dateTime;
         }
 
-        public async Task<Empty> HandleAsync(CreateComment request, CancellationToken cancellationToken)
+        public async Task<Guid> HandleAsync(CreateComment request, CancellationToken cancellationToken)
         {
             var comment = new UserComment(
                 request.ProductId,
@@ -35,7 +35,7 @@ namespace WebFeatures.Application.Features.Comments.CreateComment
 
             await _db.UserComments.AddAsync(comment, cancellationToken);
 
-            return Empty.Value;
+            return comment.Id;
         }
     }
 }

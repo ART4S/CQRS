@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Common;
 using WebFeatures.DataContext;
@@ -38,11 +37,8 @@ namespace WebFeatures.Infrastructure
 
             services.AddScoped<IWebFeaturesDbContext, WebFeaturesDbContext>();
 
-            if (environment.IsDevelopment())
-            {
-                services.AddDbContext<WebFeaturesDbContext>(
-                    options => options.UseInMemoryDatabase("Development"));
-            }
+            services.AddDbContext<WebFeaturesDbContext>(
+                options => options.UseInMemoryDatabase("InMemoryDb"));
         }
     }
 }

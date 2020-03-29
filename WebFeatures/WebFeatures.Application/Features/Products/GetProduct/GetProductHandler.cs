@@ -7,7 +7,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProduct
 {
-    internal class GetProductHandler : IRequestHandler<GetProduct, ProductInfoDto>
+    public class GetProductHandler : IRequestHandler<GetProduct, ProductInfoDto>
     {
         private readonly IWebFeaturesDbContext _db;
         private readonly IMapper _mapper;

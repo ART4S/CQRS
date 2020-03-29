@@ -6,7 +6,7 @@ using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Application.Features.Comments.CreateComment
 {
-    public class CreateComment : ICommand<Empty>
+    public class CreateComment : ICommand<Guid>
     {
         public Guid ProductId { get; set; }
         public string Body { get; set; }

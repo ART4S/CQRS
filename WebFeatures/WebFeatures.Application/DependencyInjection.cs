@@ -26,9 +26,9 @@ namespace WebFeatures.Application
             // Common pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(LoggingMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ValidationMiddleware<,>));
 
             // Commands pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ValidationMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
 
             // Queries pipeline
