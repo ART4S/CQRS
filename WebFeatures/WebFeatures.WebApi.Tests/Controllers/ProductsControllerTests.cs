@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -17,17 +19,29 @@ namespace WebFeatures.WebApi.Tests.Controllers
 {
     public class ProductsControllerTests
     {
+        private readonly TestServer _server;
+        private readonly HttpClient _client;
+
+        public ProductsControllerTests()
+        {
+            _server = new TestServer(
+                new WebHostBuilder().UseStartup<Startup>());
+
+            TestData.SeedData(_server.Services);
+
+            _client = _server.CreateClient();
+        }
+
         [Fact]
         public async Task GetProductById_ReturnsProduct()
         {
             // Arrange
-            HttpClient client = await HttpClientFactory.Create();
             Guid productId = Guid.Parse("0f7b807f-3737-4997-9627-dbe5dc15310a");
 
             // Act
-            HttpResponseMessage response = await client.GetAsync($"api/products/{productId}");
+            HttpResponseMessage response = await _client.GetAsync($"api/products/{productId}");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var product = await response.ReadAsJsonAsync<ProductInfoDto>();
@@ -38,13 +52,10 @@ namespace WebFeatures.WebApi.Tests.Controllers
         [Fact]
         public async Task GetProductsList_ReturnsProductsList()
         {
-            // Arrange
-            HttpClient client = await HttpClientFactory.Create();
-
             // Act
-            HttpResponseMessage response = await client.GetAsync("api/products/list");
+            HttpResponseMessage response = await _client.GetAsync("api/products/list");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var list = await response.ReadAsJsonAsync<List<ProductListDto>>();
@@ -57,14 +68,11 @@ namespace WebFeatures.WebApi.Tests.Controllers
         [Fact]
         public async Task GetProductReviews_ReturnsReviews()
         {
-            // Arrange
-            HttpClient client = await HttpClientFactory.Create();
-
             // Act
-            HttpResponseMessage response = await client.GetAsync(
+            HttpResponseMessage response = await _client.GetAsync(
                 "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/reviews");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var reviews = await response.ReadAsJsonAsync<List<ReviewInfoDto>>();
@@ -74,14 +82,11 @@ namespace WebFeatures.WebApi.Tests.Controllers
         [Fact]
         public async Task GetProductComments_ReturnsComments()
         {
-            // Arrange
-            HttpClient client = await HttpClientFactory.Create();
-
             // Act
-            HttpResponseMessage response = await client.GetAsync(
+            HttpResponseMessage response = await _client.GetAsync(
                 "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/comments");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var comments = await response.ReadAsJsonAsync<List<CommentInfoDto>>();
@@ -91,14 +96,11 @@ namespace WebFeatures.WebApi.Tests.Controllers
         [Fact]
         public async Task GetRatingsSummary_ReturnsSummary()
         {
-            // Arrange
-            HttpClient client = await HttpClientFactory.Create();
-
             // Act
-            HttpResponseMessage response = await client.GetAsync(
+            HttpResponseMessage response = await _client.GetAsync(
                 "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/getRatingsSummary");
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var summary = await response.ReadAsJsonAsync<RatingsSummaryDto>();
@@ -109,7 +111,6 @@ namespace WebFeatures.WebApi.Tests.Controllers
         public async Task CreateProduct_ReturnsCreatedProductId()
         {
             // Arrange
-            HttpClient client = await HttpClientFactory.Create();
             var content = new MultipartFormDataContent();
             content.Add(new StringContent("test", Encoding.UTF8), nameof(CreateProduct.Name));
             content.Add(new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(CreateProduct.BrandId));
@@ -119,7 +120,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
             content.Add(new StringContent("test description", Encoding.UTF8), nameof(CreateProduct.Description));
 
             // Act
-            HttpResponseMessage response = await client.PostAsync("api/products", content);
+            HttpResponseMessage response = await _client.PostAsync("api/products", content);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -129,8 +130,6 @@ namespace WebFeatures.WebApi.Tests.Controllers
         public async Task EditProduct_ReturnsOK()
         {
             // Arrange
-            HttpClient client = await HttpClientFactory.Create();
-
             string productId = "0f7b807f-3737-4997-9627-dbe5dc15310a";
 
             var content = new MultipartFormDataContent();
@@ -141,9 +140,9 @@ namespace WebFeatures.WebApi.Tests.Controllers
             content.Add(new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(EditProduct.BrandId));
 
             // Act
-            HttpResponseMessage response = await client.PutAsync($"api/products/{productId}", content);
+            HttpResponseMessage response = await _client.PutAsync($"api/products/{productId}", content);
 
-            //Assert
+            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
