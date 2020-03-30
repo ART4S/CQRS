@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -13,23 +11,18 @@ using WebFeatures.Application.Features.Products.GetProductComments;
 using WebFeatures.Application.Features.Products.GetProductsList;
 using WebFeatures.Application.Features.Products.GetRatingsSummary;
 using WebFeatures.Application.Features.Products.GetReviews;
+using WebFeatures.WebApi.Tests.Fixtures;
 using Xunit;
 
 namespace WebFeatures.WebApi.Tests.Controllers
 {
-    public class ProductsControllerTests
+    public class ProductsControllerTests : IClassFixture<TestServerFixture>
     {
-        private readonly TestServer _server;
         private readonly HttpClient _client;
 
-        public ProductsControllerTests()
+        public ProductsControllerTests(TestServerFixture fixture)
         {
-            _server = new TestServer(
-                new WebHostBuilder().UseStartup<Startup>());
-
-            TestData.SeedData(_server.Services);
-
-            _client = _server.CreateClient();
+            _client = fixture.Server.CreateClient();
         }
 
         [Fact]
@@ -127,7 +120,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
         }
 
         [Fact]
-        public async Task EditProduct_ReturnsOK()
+        public async Task EditProduct_ReturnsOk()
         {
             // Arrange
             string productId = "0f7b807f-3737-4997-9627-dbe5dc15310a";
