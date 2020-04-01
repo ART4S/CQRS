@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -9,9 +9,9 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 {
     public class CreateProductHandler : IRequestHandler<CreateProduct, Guid>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
 
-        public CreateProductHandler(IWebFeaturesDbContext db) => _db = db;
+        public CreateProductHandler(IWriteContext db) => _db = db;
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {

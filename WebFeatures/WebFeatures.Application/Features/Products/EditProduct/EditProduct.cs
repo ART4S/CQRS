@@ -2,7 +2,7 @@
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 
 namespace WebFeatures.Application.Features.Products.EditProduct
 {
@@ -20,7 +20,7 @@ namespace WebFeatures.Application.Features.Products.EditProduct
 
         public class Validator : AbstractValidator<EditProduct>
         {
-            public Validator(IWebFeaturesDbContext db)
+            public Validator(IWriteContext db)
             {
                 RuleFor(x => x.Id)
                     .MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);

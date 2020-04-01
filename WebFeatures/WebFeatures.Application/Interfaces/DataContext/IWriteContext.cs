@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Application.Interfaces
+namespace WebFeatures.Application.Interfaces.DataContext
 {
-    public interface IWebFeaturesDbContext
+    public interface IWriteContext
     {
         DbSet<User> Users { get; set; }
         DbSet<Role> Roles { get; set; }

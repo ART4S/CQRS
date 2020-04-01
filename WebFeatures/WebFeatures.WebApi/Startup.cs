@@ -31,7 +31,7 @@ namespace WebFeatures.WebApi
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices();
-            services.AddInfrastructureServices(Configuration, Environment);
+            services.AddInfrastructureServices(Configuration);
 
             services.AddControllers(
                 opt =>

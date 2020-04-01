@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Events;
 using WebFeatures.Events;
 
 namespace WebFeatures.DataContext
 {
-    public class WebFeaturesDbContext : DbContext, IWebFeaturesDbContext
+    public class EFWriteContext : DbContext, IWriteContext
     {
         private readonly IEventMediator _eventMediator;
 
-        public WebFeaturesDbContext(
-            DbContextOptions<WebFeaturesDbContext> options,
+        public EFWriteContext(
+            DbContextOptions<EFWriteContext> options,
             IEventMediator eventMediator) : base(options)
         {
             _eventMediator = eventMediator;

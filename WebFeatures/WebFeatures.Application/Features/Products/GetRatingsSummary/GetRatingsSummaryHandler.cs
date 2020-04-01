@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Requests;
 
@@ -12,9 +12,9 @@ namespace WebFeatures.Application.Features.Products.GetRatingsSummary
 {
     public class GetRatingsSummaryHandler : IRequestHandler<GetRatingsSummary, RatingsSummaryDto>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
 
-        public GetRatingsSummaryHandler(IWebFeaturesDbContext db) => _db = db;
+        public GetRatingsSummaryHandler(IWriteContext db) => _db = db;
 
         public async Task<RatingsSummaryDto> HandleAsync(GetRatingsSummary request, CancellationToken cancellationToken)
         {

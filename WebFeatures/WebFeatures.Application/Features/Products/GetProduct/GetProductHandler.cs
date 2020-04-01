@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -9,10 +9,10 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 {
     public class GetProductHandler : IRequestHandler<GetProduct, ProductInfoDto>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
         private readonly IMapper _mapper;
 
-        public GetProductHandler(IWebFeaturesDbContext db, IMapper mapper)
+        public GetProductHandler(IWriteContext db, IMapper mapper)
             => (_db, _mapper) = (db, mapper);
 
         public async Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)

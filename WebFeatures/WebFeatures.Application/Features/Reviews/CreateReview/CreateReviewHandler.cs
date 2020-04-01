@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
@@ -10,12 +11,12 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
     public class CreateReviewHandler : IRequestHandler<CreateReview, Guid>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
         private readonly ICurrentUserService _currentUser;
         private readonly IDateTime _dateTime;
 
         public CreateReviewHandler(
-            IWebFeaturesDbContext db,
+            IWriteContext db,
             ICurrentUserService currentUser,
             IDateTime dateTime)
         {

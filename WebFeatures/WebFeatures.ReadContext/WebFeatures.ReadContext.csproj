@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.5.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
-    <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.WriteContext.csproj" />
-    <ProjectReference Include="..\WebFeatures.ReadContext\WebFeatures.ReadContext.csproj" />
   </ItemGroup>
 
 </Project>

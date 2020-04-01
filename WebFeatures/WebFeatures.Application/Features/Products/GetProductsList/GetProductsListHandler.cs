@@ -3,18 +3,18 @@ using AutoMapper.QueryableExtensions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductsList
 {
     public class GetProductsListHandler : IRequestHandler<GetProductsList, IQueryable<ProductListDto>>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
         private readonly IMapper _mapper;
 
         public GetProductsListHandler(
-            IWebFeaturesDbContext db,
+            IWriteContext db,
             IMapper mapper)
         {
             _db = db;

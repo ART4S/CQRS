@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
 {
@@ -17,7 +17,7 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public class Validator : AbstractValidator<CreateProduct>
         {
-            public Validator(IWebFeaturesDbContext db)
+            public Validator(IWriteContext db)
             {
                 RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Price).Must(x => x == null || x.Value >= 0);

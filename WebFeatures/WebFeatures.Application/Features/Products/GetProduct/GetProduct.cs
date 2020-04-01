@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 
 namespace WebFeatures.Application.Features.Products.GetProduct
 {
@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 
         public class Validator : AbstractValidator<GetProduct>
         {
-            public Validator(IWebFeaturesDbContext db)
+            public Validator(IWriteContext db)
             {
                 RuleFor(x => x.Id)
                     .MustAsync(async (x, t) => await db.Products.FindAsync(x) != null);

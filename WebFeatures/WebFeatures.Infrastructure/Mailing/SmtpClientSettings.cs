@@ -1,6 +1,6 @@
 ﻿namespace WebFeatures.Infrastructure.Mailing
 {
-    internal class SmtpClientOptions
+    internal class SmtpClientSettings
     {
         public string Address { get; set; }
         public string Password { get; set; }

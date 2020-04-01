@@ -2,7 +2,7 @@
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 
 namespace WebFeatures.Application.Features.Comments.CreateComment
 {
@@ -14,7 +14,7 @@ namespace WebFeatures.Application.Features.Comments.CreateComment
 
         public class Validator : AbstractValidator<CreateComment>
         {
-            public Validator(IWebFeaturesDbContext db)
+            public Validator(IWriteContext db)
             {
                 RuleFor(x => x.ProductId)
                     .MustAsync(async (x, t) => await db.Products.FindAsync(x) != null);

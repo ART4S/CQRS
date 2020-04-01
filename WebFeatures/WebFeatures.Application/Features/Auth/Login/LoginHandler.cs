@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -12,13 +13,13 @@ namespace WebFeatures.Application.Features.Auth.Login
 {
     public class LoginHandler : IRequestHandler<Login, UserInfoDto>
     {
-        private readonly IWebFeaturesDbContext _db;
+        private readonly IWriteContext _db;
         private readonly IPasswordEncoder _passwordEncoder;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public LoginHandler(
-            IWebFeaturesDbContext db,
+            IWriteContext db,
             IPasswordEncoder passwordEncoder,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)

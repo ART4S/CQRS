@@ -8,9 +8,9 @@ namespace WebFeatures.Infrastructure.Mailing
 {
     internal class SmtpEmailSender : IEmailSender
     {
-        private readonly SmtpClientOptions _options;
+        private readonly SmtpClientSettings _options;
 
-        public SmtpEmailSender(IOptions<SmtpClientOptions> options)
+        public SmtpEmailSender(IOptions<SmtpClientSettings> options)
         {
             _options = options.Value;
         }

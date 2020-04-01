@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
@@ -16,7 +17,7 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 
         public class Validator : AbstractValidator<CreateReview>
         {
-            public Validator(IWebFeaturesDbContext db, ICurrentUserService currentUser)
+            public Validator(IWriteContext db, ICurrentUserService currentUser)
             {
                 RuleFor(x => x.ProductId)
                     .MustAsync(async (productId, token) => await db.Products.FindAsync(productId) != null);

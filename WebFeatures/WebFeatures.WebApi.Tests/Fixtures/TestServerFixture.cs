@@ -29,7 +29,7 @@ namespace WebFeatures.WebApi.Tests.Fixtures
         {
             using IServiceScope scope = server.Services.CreateScope();
 
-            var db = scope.ServiceProvider.GetService<WebFeaturesDbContext>();
+            var db = scope.ServiceProvider.GetService<EFWriteContext>();
 
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
