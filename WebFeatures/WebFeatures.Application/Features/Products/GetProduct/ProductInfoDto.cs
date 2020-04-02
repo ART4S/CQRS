@@ -1,5 +1,5 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using System;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Entities;
 

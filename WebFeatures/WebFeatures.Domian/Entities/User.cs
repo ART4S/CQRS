@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
@@ -8,29 +7,12 @@ namespace WebFeatures.Domian.Entities
     public class User : BaseEntity
     {
         public string Name { get; set; }
-        public string Email { get; }
-        public string PasswordHash { get; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
 
-        public User(string name, string email, string passwordHash)
-        {
-            Name = name;
-            Email = email;
-            PasswordHash = passwordHash;
-        }
+        public Guid? PictureId { get; set; }
+        public File Picture { get; set; }
 
-        private User() { } // For EF
-
-        public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
-        private readonly List<UserRole> _userRoles = new List<UserRole>();
-
-        public void AssignRole(Guid roleId)
-        {
-            var rel = new UserRole(Id, roleId);
-
-            if (!_userRoles.Any(x => x.UserId == Id && x.RoleId == roleId))
-            {
-                _userRoles.Add(rel);
-            }
-        }
+        public ICollection<UserRole> UserRoles { get; private set; } = new HashSet<UserRole>();
     }
 }

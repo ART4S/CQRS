@@ -5,27 +5,16 @@ namespace WebFeatures.Domian.Entities
 {
     public class UserComment : BaseEntity
     {
-        public Guid ProductId { get; }
-        public Product Product { get; }
+        public string Body { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public Guid AuthorId { get; }
-        public User Author { get; }
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
 
-        public DateTime CreatedAt { get; }
-        public string Body { get; }
+        public Guid AuthorId { get; set; }
+        public User Author { get; set; }
 
-        public Guid? ParentCommentId { get; }
-        public UserComment ParentComment { get; }
-
-        public UserComment(Guid productId, Guid authorId, string body, DateTime createdAt, Guid? parentCommentId = null)
-        {
-            ProductId = productId;
-            AuthorId = authorId;
-            Body = body;
-            CreatedAt = createdAt;
-            ParentCommentId = parentCommentId;
-        }
-
-        private UserComment() { } // For EF
+        public Guid? ParentCommentId { get; set; }
+        public UserComment ParentComment { get; set; }
     }
 }

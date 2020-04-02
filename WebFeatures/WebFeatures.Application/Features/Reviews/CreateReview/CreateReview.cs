@@ -1,19 +1,27 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
+using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
-    public class CreateReview : ICommand<Guid>
+    public class CreateReview : ICommand<Guid>, IHasMappings
     {
         public Guid ProductId { get; set; }
         public string Title { get; set; }
         public string Comment { get; set; }
         public UserRating Rating { get; set; }
+
+        public void ApplyMappings(Profile profile)
+        {
+            profile.CreateMap<CreateReview, Review>(MemberList.Source);
+        }
 
         public class Validator : AbstractValidator<CreateReview>
         {

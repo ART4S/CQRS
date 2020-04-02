@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
-    <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.WriteContext.csproj" />
     <ProjectReference Include="..\WebFeatures.ReadContext\WebFeatures.ReadContext.csproj" />
+    <ProjectReference Include="..\WebFeatures.WtireContext\WebFeatures.WriteContext.csproj" />
   </ItemGroup>
 
 </Project>

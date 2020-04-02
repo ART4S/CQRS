@@ -27,12 +27,14 @@ namespace WebFeatures.Application.Features.Comments.CreateComment
 
         public async Task<Guid> HandleAsync(CreateComment request, CancellationToken cancellationToken)
         {
-            var comment = new UserComment(
-                request.ProductId,
-                _currentUser.UserId,
-                request.Body,
-                _dateTime.Now,
-                request.ParentCommentId);
+            var comment = new UserComment()
+            {
+                ProductId = request.ProductId,
+                AuthorId = _currentUser.UserId,
+                Body = request.Body,
+                CreatedAt = _dateTime.Now,
+                ParentCommentId = request.ParentCommentId
+            };
 
             await _db.UserComments.AddAsync(comment, cancellationToken);
 

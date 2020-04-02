@@ -10,6 +10,7 @@ namespace WebFeatures.Application.Features.Products.GetReviews
     {
         public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
+        public Guid? AuthorPictureId { get; set; }
         public string AuthorName { get; set; }
         public string Title { get; set; }
         public string Comment { get; set; }

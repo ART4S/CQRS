@@ -8,17 +8,8 @@ namespace WebFeatures.Domian.Entities
     {
         public string OrganizationName { get; set; }
         public string HomePageUrl { get; set; }
-        public StreetAddress StreetAddress { get; }
+        public StreetAddress StreetAddress { get; set; }
 
-        public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
-        private readonly List<Product> _products = new List<Product>();
-
-        public Manufacturer(string organizationName, StreetAddress address)
-        {
-            OrganizationName = organizationName;
-            StreetAddress = address;
-        }
-
-        private Manufacturer() { } // For EF
+        public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
     }
 }

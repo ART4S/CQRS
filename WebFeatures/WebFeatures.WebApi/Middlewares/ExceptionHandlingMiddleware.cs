@@ -6,7 +6,6 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Domian.Exceptions;
 
 namespace WebFeatures.WebApi.Middlewares
 {
@@ -42,15 +41,6 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
                         responseBody = JsonConvert.SerializeObject(validation.Errors);
-
-                        break;
-                    }
-
-                case DomianValidationException domian:
-                    {
-                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                        context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = domian.Message;
 
                         break;
                     }

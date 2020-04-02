@@ -9,15 +9,15 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 {
     public class GetProductHandler : IRequestHandler<GetProduct, ProductInfoDto>
     {
-        private readonly IWriteContext _db;
+        private readonly IReadContext _db;
         private readonly IMapper _mapper;
 
-        public GetProductHandler(IWriteContext db, IMapper mapper)
+        public GetProductHandler(IReadContext db, IMapper mapper)
             => (_db, _mapper) = (db, mapper);
 
         public async Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)
         {
-            Product product = await _db.Products.FindAsync(request.Id);
+            Product product = await _db.GetByIdAsync<Product>(request.Id);
             return _mapper.Map<ProductInfoDto>(product);
         }
     }

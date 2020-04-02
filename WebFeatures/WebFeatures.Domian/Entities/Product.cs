@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using WebFeatures.Domian.Common;
-using WebFeatures.Domian.Exceptions;
+using WebFeatures.Domian.Enums;
+using WebFeatures.Domian.Events;
+using WebFeatures.Events;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Product : BaseEntity
+    public class Product : BaseEntity, IHasEvents, IHasCreateDate
     {
         public string Name { get; set; }
-        public decimal? Price { get; private set; }
+        public decimal? Price { get; set; }
         public string Description { get; set; }
+        public UserRating? AverageRating { get; set; }
+        public int ReviewsCount { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public Guid? PictureId { get; set; }
         public File Picture { get; set; }
@@ -22,27 +28,6 @@ namespace WebFeatures.Domian.Entities
         public Guid BrandId { get; set; }
         public Brand Brand { get; set; }
 
-        public Product(string name, string description, Guid manufacturerId, Guid brandId)
-        {
-            Name = name;
-            Description = description;
-            ManufacturerId = manufacturerId;
-            BrandId = brandId;
-        }
-
-        private Product() { } // For EF
-
-        public void SetPrice(decimal price)
-        {
-            if (price <= 0)
-                throw new DomianValidationException("Price shouldn't be less than or equals 0");
-
-            Price = price;
-        }
-
-        public void RemovePrice()
-        {
-            Price = null;
-        }
+        public ICollection<IEvent> Events { get; } = new HashSet<IEvent>();
     }
 }

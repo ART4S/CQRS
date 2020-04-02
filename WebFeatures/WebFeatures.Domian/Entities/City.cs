@@ -5,17 +5,9 @@ namespace WebFeatures.Domian.Entities
 {
     public class City : BaseEntity
     {
-        public string Name { get; }
+        public string Name { get; set; }
 
-        public Guid CountryId { get; }
-        public Country Country { get; }
-
-        public City(string name, Guid countryId)
-        {
-            Name = name;
-            CountryId = countryId;
-        }
-
-        private City() { } // For EF
+        public Guid CountryId { get; set; }
+        public Country Country { get; set; }
     }
 }

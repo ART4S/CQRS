@@ -14,7 +14,7 @@ namespace WebFeatures.WebApi
                 .UseStartup<Startup>()
                 .UseKestrel(options =>
                 {
-                    options.Limits.MaxRequestBodySize = 10 * 1024 * 1024; // 10 MB
+                    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
                 });
     }
 }

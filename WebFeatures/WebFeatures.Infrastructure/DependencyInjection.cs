@@ -2,16 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using WebFeatures.Application.Interfaces;
 using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Common;
-using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Mailing;
 using WebFeatures.Infrastructure.Security;
 using WebFeatures.Infrastructure.Services;
 using WebFeatures.ReadContext;
+using WebFeatures.WriteContext;
 
 namespace WebFeatures.Infrastructure
 {
@@ -38,13 +39,15 @@ namespace WebFeatures.Infrastructure
         {
             services.AddOptions();
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
-            services.AddSingleton(sp => sp.GetService<MongoDbSettings>());
+            services.AddSingleton(sp => sp.GetService<IOptions<MongoDbSettings>>().Value);
 
-            services.AddScoped<IReadContext, ReadContext.MongoDbReadContext>();
+            services.AddScoped<IReadContext, MongoDbReadContext>();
+            services.AddScoped<MongoDbReadContext>();
         }
 
         private static void SetupWriteContext(IServiceCollection services)
         {
+            services.AddScoped<IWriteContext, EFWriteContext>();
             services.AddDbContext<EFWriteContext>(
                 options => options.UseInMemoryDatabase("InMemoryDb"));
         }
@@ -53,7 +56,7 @@ namespace WebFeatures.Infrastructure
         {
             services.AddOptions();
             services.Configure<SmtpClientSettings>(configuration.GetSection("SmtpClient"));
-            services.AddSingleton(sp => sp.GetService<SmtpClientSettings>());
+            services.AddSingleton(sp => sp.GetService<IOptions<SmtpClientSettings>>().Value);
 
             services.AddScoped<IEmailSender, SmtpEmailSender>();
         }

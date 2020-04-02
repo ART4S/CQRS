@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebFeatures.ReadContext\WebFeatures.ReadContext.csproj" />
     <ProjectReference Include="..\WebFeatures.WebApi\WebFeatures.WebApi.csproj" />
+    <ProjectReference Include="..\WebFeatures.WtireContext\WebFeatures.WriteContext.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,10 +15,6 @@ namespace WebFeatures.Application.Interfaces.DataContext
         DbSet<Brand> Brands { get; set; }
         DbSet<Category> Categories { get; set; }
         DbSet<Product> Products { get; set; }
-        DbSet<Basket> Baskets { get; set; }
-        DbSet<BasketItem> BasketItems { get; set; }
-        DbSet<Order> Orders { get; set; }
-        DbSet<OrderItem> OrderItems { get; set; }
         DbSet<Shipper> Shippers { get; set; }
         DbSet<File> Files { get; set; }
         DbSet<Review> Reviews { get; set; }

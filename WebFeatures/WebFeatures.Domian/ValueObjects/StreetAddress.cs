@@ -7,19 +7,11 @@ namespace WebFeatures.Domian.ValueObjects
 {
     public class StreetAddress : ValueObject
     {
-        public Guid CityId { get; }
-        public City City { get; }
-        public string StreetName { get; }
-        public string PostalCode { get; }
+        public string StreetName { get; set; }
+        public string PostalCode { get; set; }
 
-        public StreetAddress(string streetName, string postalCode, Guid cityId)
-        {
-            StreetName = streetName;
-            PostalCode = postalCode;
-            CityId = cityId;
-        }
-
-        private StreetAddress() { } // For EF
+        public Guid CityId { get; set; }
+        public City City { get; set; }
 
         protected override IEnumerable<object> GetComparisionValues()
         {

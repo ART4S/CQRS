@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataContext;
@@ -10,26 +11,20 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
     public class CreateProductHandler : IRequestHandler<CreateProduct, Guid>
     {
         private readonly IWriteContext _db;
+        private readonly IMapper _mapper;
 
-        public CreateProductHandler(IWriteContext db) => _db = db;
+        public CreateProductHandler(IWriteContext db, IMapper mapper)
+        {
+            _db = db;
+            _mapper = mapper;
+        }
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            var product = new Product(
-                request.Name, 
-                request.Description, 
-                request.ManufacturerId, 
-                request.BrandId)
-            {
-                CategoryId = request.CategoryId
-            };
-
-            if (request.Picture != null)
-            {
-                product.Picture = new File(request.Picture);
-            }
-
+            Product product = _mapper.Map<Product>(request);
             await _db.Products.AddAsync(product, cancellationToken);
+
+            product.Events.Add(new ProductCreated(product.Id));
 
             return product.Id;
         }

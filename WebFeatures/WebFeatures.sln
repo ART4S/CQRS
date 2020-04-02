@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.WebApi", "WebFe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Domian", "WebFeatures.Domian\WebFeatures.Domian.csproj", "{7C82B77D-2C44-46F1-863D-A2F625549CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.WriteContext", "WebFeatures.DataContext\WebFeatures.WriteContext.csproj", "{A388E83F-789B-4BA2-9CF5-3466CBDB151A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.WriteContext", "WebFeatures.WtireContext\WebFeatures.WriteContext.csproj", "{A388E83F-789B-4BA2-9CF5-3466CBDB151A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Common", "WebFeatures.Common\WebFeatures.Common.csproj", "{256E7605-B5A8-48F7-97A2-20FCCD1F1FD4}"
 EndProject

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebFeatures.Events
@@ -16,7 +17,7 @@ namespace WebFeatures.Events
             _services = services;
         }
 
-        public Task PublishAsync(IEvent eve)
+        public Task PublishAsync(IEvent eve, CancellationToken cancellationToken)
         {
             Publisher publisher = Publishers.GetOrAdd(
                 eve.GetType(),
@@ -26,23 +27,23 @@ namespace WebFeatures.Events
                     return (Publisher)Activator.CreateInstance(publisherType);
                 });
 
-            return publisher.PublishAsync(eve, _services);
+            return publisher.PublishAsync(eve, _services, cancellationToken);
         }
     }
 
     internal abstract class Publisher
     {
-        public abstract Task PublishAsync(IEvent eve, IServiceProvider services);
+        public abstract Task PublishAsync(IEvent eve, IServiceProvider services, CancellationToken cancellationToken);
     }
 
     internal class PublisherImpl<TEvent> : Publisher
         where TEvent : IEvent
     {
-        public override Task PublishAsync(IEvent eve, IServiceProvider services)
+        public override Task PublishAsync(IEvent eve, IServiceProvider services, CancellationToken cancellationToken)
         {
             var handlers = services.GetServices<IEventHandler<TEvent>>();
 
-            return Task.WhenAll(handlers.Select(x => x.HandleAsync((TEvent)eve)));
+            return Task.WhenAll(handlers.Select(x => x.HandleAsync((TEvent)eve, cancellationToken)));
         }
     }
 }

@@ -29,8 +29,12 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
 
         public async Task<UserInfoDto> HandleAsync(RegisterUser request, CancellationToken cancellationToken)
         {
-            string passwordHash = _passwordEncoder.EncodePassword(request.Password);
-            var user = new User(request.Name, request.Email, passwordHash);
+            var user = new User()
+            {
+                Name = request.Name,
+                Email = request.Email,
+                PasswordHash = _passwordEncoder.EncodePassword(request.Password)
+            };
 
             await _db.Users.AddAsync(user, cancellationToken);
 

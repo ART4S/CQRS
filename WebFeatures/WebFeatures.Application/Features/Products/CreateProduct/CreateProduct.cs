@@ -13,7 +13,6 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
         public Guid ManufacturerId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid BrandId { get; set; }
-        public byte[] Picture { get; set; }
 
         public class Validator : AbstractValidator<CreateProduct>
         {

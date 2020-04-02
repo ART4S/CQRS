@@ -9,7 +9,6 @@ using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProduct;
 using WebFeatures.Application.Features.Products.GetProductComments;
 using WebFeatures.Application.Features.Products.GetProductsList;
-using WebFeatures.Application.Features.Products.GetRatingsSummary;
 using WebFeatures.Application.Features.Products.GetReviews;
 using WebFeatures.WebApi.Tests.Fixtures;
 using Xunit;
@@ -84,20 +83,6 @@ namespace WebFeatures.WebApi.Tests.Controllers
 
             var comments = await response.ReadAsJsonAsync<List<CommentInfoDto>>();
             Assert.NotEmpty(comments);
-        }
-
-        [Fact]
-        public async Task GetRatingsSummary_ReturnsSummary()
-        {
-            // Act
-            HttpResponseMessage response = await _client.GetAsync(
-                "api/products/0f7b807f-3737-4997-9627-dbe5dc15310a/getRatingsSummary");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            var summary = await response.ReadAsJsonAsync<RatingsSummaryDto>();
-            Assert.NotNull(summary);
         }
 
         [Fact]
