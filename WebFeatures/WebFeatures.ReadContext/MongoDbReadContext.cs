@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Common;
+using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 
 namespace WebFeatures.ReadContext
@@ -21,26 +24,31 @@ namespace WebFeatures.ReadContext
 
         public void Add<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
-            throw new NotImplementedException();
+            Collection<TEntity>().InsertOne(entity);
         }
 
         public Task AddAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
-            throw new NotImplementedException();
+            return Collection<TEntity>().InsertOneAsync(entity);
         }
 
         public async Task<IList<TEntity>> GetAllAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : BaseEntity
         {
-            string tableName = TableNames.Get(typeof(TEntity));
-
-            return await (await Database.GetCollection<TEntity>(tableName)
-               .FindAsync(filter ?? (x => true)))
-               .ToListAsync();
+            return await (await Collection<TEntity>().FindAsync(filter ?? (x => true))).ToListAsync();
         }
 
-        public Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity
+        public async Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity
         {
-            throw new NotImplementedException();
+            TEntity entry = await (await Collection<TEntity>().FindAsync(x => x.Id == id)).FirstOrDefaultAsync();
+
+            return entry;
+        }
+
+        private IMongoCollection<TEntity> Collection<TEntity>() where TEntity : BaseEntity
+        {
+            string tableName = typeof(TEntity).GetCustomAttribute<TableNameAttribute>().Name;
+
+            return Database.GetCollection<TEntity>(tableName);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace WebFeatures.Application.Interfaces.DataContext
     public interface IReadContext
     {
         Task<IList<TEntity>> GetAllAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : BaseEntity;
+
         Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity;
 
         void Add<TEntity>(TEntity entity) where TEntity : BaseEntity;

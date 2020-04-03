@@ -1,8 +1,10 @@
 ﻿using System;
+using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
+    [TableName("UserComments")]
     public class UserComment : BaseEntity
     {
         public string Body { get; set; }

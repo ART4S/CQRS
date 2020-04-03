@@ -37,8 +37,10 @@ namespace WebFeatures.Infrastructure
 
         private static void SetupReadContext(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddOptions();
-            services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
+            services.AddOptions<MongoDbSettings>().ValidateDataAnnotations();
+
+            services.Configure<MongoDbSettings>(
+                configuration.GetSection(nameof(MongoDbSettings)));
             services.AddSingleton(sp => sp.GetService<IOptions<MongoDbSettings>>().Value);
 
             services.AddScoped<IReadContext, MongoDbReadContext>();
@@ -55,7 +57,8 @@ namespace WebFeatures.Infrastructure
         private static void SetupMailing(IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions();
-            services.Configure<SmtpClientSettings>(configuration.GetSection("SmtpClient"));
+            services.Configure<SmtpClientSettings>(
+                configuration.GetSection(nameof(SmtpClientSettings)));
             services.AddSingleton(sp => sp.GetService<IOptions<SmtpClientSettings>>().Value);
 
             services.AddScoped<IEmailSender, SmtpEmailSender>();

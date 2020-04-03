@@ -32,6 +32,7 @@ namespace WebFeatures.WriteContext
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyTableNames();
         }
 
         public DbSet<User> Users { get; set; }

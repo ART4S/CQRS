@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Domian.Events;
@@ -7,6 +8,7 @@ using WebFeatures.Events;
 
 namespace WebFeatures.Domian.Entities
 {
+    [TableName("Products")]
     public class Product : BaseEntity, IHasEvents, IHasCreateDate
     {
         public string Name { get; set; }

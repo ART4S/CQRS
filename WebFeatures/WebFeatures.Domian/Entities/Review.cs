@@ -1,9 +1,11 @@
 ﻿using System;
+using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Domian.Entities
 {
+    [TableName("Reviews")]
     public class Review : BaseEntity
     {
         public string Title { get; set; }

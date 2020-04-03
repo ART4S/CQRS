@@ -1,11 +1,14 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using System;
+using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
 {
-    public class CreateProduct : ICommand<Guid>
+    public class CreateProduct : ICommand<Guid>, IHasMappings
     {
         public string Name { get; set; }
         public decimal? Price { get; set; }
@@ -13,6 +16,11 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
         public Guid ManufacturerId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid BrandId { get; set; }
+
+        public void ApplyMappings(Profile profile)
+        {
+            profile.CreateMap<CreateProduct, Product>(MemberList.Source);
+        }
 
         public class Validator : AbstractValidator<CreateProduct>
         {

@@ -25,7 +25,6 @@ namespace WebFeatures.WebApi
         }
 
         public IConfiguration Configuration { get; }
-
         public IWebHostEnvironment Environment { get; }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)

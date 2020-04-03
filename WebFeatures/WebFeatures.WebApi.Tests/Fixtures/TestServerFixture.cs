@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using WebFeatures.Application.Constants;
@@ -21,8 +22,12 @@ namespace WebFeatures.WebApi.Tests.Fixtures
         {
             Server = new TestServer(
                 new WebHostBuilder()
-                    .UseStartup<Startup>()
-                    .UseEnvironment("Testing"));
+                .ConfigureAppConfiguration((ctx, config) =>
+                {
+                    config.AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json");
+                })
+                .UseStartup<Startup>()
+                .UseEnvironment("Testing"));
 
             SeedData(Server);
         }
