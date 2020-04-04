@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\WebFeatures.Common\WebFeatures.Common.csproj" />
+    <ProjectReference Include="..\..\Common\WebFeatures.HangfireJobs\WebFeatures.HangfireJobs.csproj" />
     <ProjectReference Include="..\..\Common\WebFeatures.Requests\WebFeatures.Requests.csproj" />
     <ProjectReference Include="..\WebFeatures.Domian\WebFeatures.Domian.csproj" />
   </ItemGroup>

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Enums;
-using WebFeatures.Events;
 
 namespace WebFeatures.Domian.Entities
 {
     [EntityMetadata("Products")]
-    public class Product : BaseEntity, IHasEvents, IHasCreateDate
+    public class Product : BaseEntity, IHasCreateDate
     {
         public string Name { get; set; }
         public decimal? Price { get; set; }
@@ -28,7 +26,5 @@ namespace WebFeatures.Domian.Entities
 
         public Guid BrandId { get; set; }
         public Brand Brand { get; set; }
-
-        public ICollection<IEvent> Events { get; } = new HashSet<IEvent>();
     }
 }

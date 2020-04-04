@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hangfire;
+using Hangfire.Mongo;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using WebFeatures.Application.Interfaces;
-using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Common;
+using WebFeatures.HangfireJobs;
 using WebFeatures.Infrastructure.Common;
+using WebFeatures.Infrastructure.HangfireJobs;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Mailing;
 using WebFeatures.Infrastructure.Security;
@@ -28,6 +32,7 @@ namespace WebFeatures.Infrastructure
             SetupSecurity(services);
             SetupServices(services);
             SetupLogging(services);
+            SetupHangfireJobs(services, configuration);
         }
 
         private static void SetupCommon(IServiceCollection services)
@@ -37,11 +42,7 @@ namespace WebFeatures.Infrastructure
 
         private static void SetupReadContext(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddOptions<MongoDbSettings>().ValidateDataAnnotations();
-
-            services.Configure<MongoDbSettings>(
-                configuration.GetSection(nameof(MongoDbSettings)));
-            services.AddSingleton(sp => sp.GetService<IOptions<MongoDbSettings>>().Value);
+            AddOptions<MongoDbSettings>(services, configuration);
 
             services.AddScoped<IReadContext, MongoDbReadContext>();
             services.AddScoped<MongoDbReadContext>();
@@ -56,11 +57,7 @@ namespace WebFeatures.Infrastructure
 
         private static void SetupMailing(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddOptions();
-            services.Configure<SmtpClientSettings>(
-                configuration.GetSection(nameof(SmtpClientSettings)));
-            services.AddSingleton(sp => sp.GetService<IOptions<SmtpClientSettings>>().Value);
-
+            AddOptions<SmtpClientSettings>(services, configuration);
             services.AddScoped<IEmailSender, SmtpEmailSender>();
         }
 
@@ -80,6 +77,34 @@ namespace WebFeatures.Infrastructure
         private static void SetupLogging(IServiceCollection services)
         {
             services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
+        }
+
+        private static void SetupHangfireJobs(IServiceCollection services, IConfiguration configuration)
+        {
+            AddOptions<HangfireJobsSettings>(services, configuration);
+
+            services.AddHangfireServices((sp, config) =>
+            {
+                var settings = sp.GetRequiredService<HangfireJobsSettings>();
+
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseMongoStorage(settings.ConnectionString, new MongoStorageOptions()
+                {
+                    QueuePollInterval = TimeSpan.FromMilliseconds(1)
+                });
+            });
+        }
+
+        private static void AddOptions<TOptions>(IServiceCollection services, IConfiguration configuration)
+            where TOptions : class, new()
+        {
+            services.AddOptions<TOptions>()
+                .Bind(configuration.GetSection(typeof(TOptions).Name))
+                .ValidateDataAnnotations();
+
+            services.AddSingleton(sp => sp.GetService<IOptions<TOptions>>().Value);
         }
     }
 }

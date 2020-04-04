@@ -4,12 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Products.CreateProduct;
-using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProduct;
-using WebFeatures.Application.Features.Products.GetProductComments;
-using WebFeatures.Application.Features.Products.GetProductsList;
-using WebFeatures.Application.Features.Products.GetReviews;
+using WebFeatures.Application.Features.Products.Requests.CreateProduct;
+using WebFeatures.Application.Features.Products.Requests.EditProduct;
+using WebFeatures.Application.Features.Products.Requests.GetProductComments;
+using WebFeatures.Application.Features.Products.Requests.GetProductsList;
+using WebFeatures.Application.Features.Products.Requests.GetReviews;
 using WebFeatures.WebApi.Tests.Fixtures;
 using Xunit;
 

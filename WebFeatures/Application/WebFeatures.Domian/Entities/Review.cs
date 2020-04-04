@@ -6,11 +6,11 @@ using WebFeatures.Domian.Enums;
 namespace WebFeatures.Domian.Entities
 {
     [EntityMetadata("Reviews")]
-    public class Review : BaseEntity
+    public class Review : BaseEntity, IHasCreateDate
     {
         public string Title { get; set; }
         public string Comment { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreateDate { get; set; }
         public UserRating Rating { get; set; }
 
         public Guid AuthorId { get; set; }

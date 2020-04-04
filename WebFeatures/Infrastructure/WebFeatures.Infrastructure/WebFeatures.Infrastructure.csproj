@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.5.1" />
+    <PackageReference Include="Hangfire.Mongo" Version="0.6.7" />
+    <PackageReference Include="MailKit" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\WebFeatures.Application\WebFeatures.Application.csproj" />
+    <ProjectReference Include="..\..\Common\WebFeatures.HangfireJobs\WebFeatures.HangfireJobs.csproj" />
     <ProjectReference Include="..\WebFeatures.ReadContext\WebFeatures.ReadContext.csproj" />
     <ProjectReference Include="..\WebFeatures.WtireContext\WebFeatures.WriteContext.csproj" />
   </ItemGroup>

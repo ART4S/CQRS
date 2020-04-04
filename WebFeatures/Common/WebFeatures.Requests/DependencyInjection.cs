@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using WebFeatures.Requests.Internal;
 
 namespace WebFeatures.Requests
 {

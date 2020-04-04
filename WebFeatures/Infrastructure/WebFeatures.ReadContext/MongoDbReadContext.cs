@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces;
 using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 
@@ -21,6 +21,22 @@ namespace WebFeatures.ReadContext
             Database = client.GetDatabase(settings.DatabaseName);
         }
 
+        public async Task<IList<TEntity>> GetAllAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : BaseEntity
+        {
+            return await (await Collection<TEntity>()
+                .FindAsync(filter ?? (x => true)))
+                .ToListAsync();
+        }
+
+        public async Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity
+        {
+            TEntity entry = await (await Collection<TEntity>()
+                .FindAsync(x => x.Id == id))
+                .FirstOrDefaultAsync();
+
+            return entry;
+        }
+
         public void Add<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
             Collection<TEntity>().InsertOne(entity);
@@ -31,16 +47,9 @@ namespace WebFeatures.ReadContext
             return Collection<TEntity>().InsertOneAsync(entity);
         }
 
-        public async Task<IList<TEntity>> GetAllAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : BaseEntity
+        public Task UpsertAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
-            return await (await Collection<TEntity>().FindAsync(filter ?? (x => true))).ToListAsync();
-        }
-
-        public async Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity
-        {
-            TEntity entry = await (await Collection<TEntity>().FindAsync(x => x.Id == id)).FirstOrDefaultAsync();
-
-            return entry;
+            return Collection<TEntity>().ReplaceOneAsync(x => x.Id == entity.Id, entity);
         }
 
         private IMongoCollection<TEntity> Collection<TEntity>() where TEntity : BaseEntity

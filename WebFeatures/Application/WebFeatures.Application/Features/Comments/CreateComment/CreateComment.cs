@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces;
 
 namespace WebFeatures.Application.Features.Comments.CreateComment
 {

@@ -5,6 +5,7 @@ using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Events;
+using WebFeatures.HangfireJobs;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application
@@ -17,6 +18,7 @@ namespace WebFeatures.Application
             AddEvents(services);
             AddValidators(services);
             AddMappings(services);
+            AddHangfireJobs(services);
         }
 
         private static void AddRequests(IServiceCollection services)
@@ -51,6 +53,11 @@ namespace WebFeatures.Application
             mapperConfig.AssertConfigurationIsValid();
 
             services.AddSingleton(x => mapperConfig.CreateMapper());
+        }
+
+        public static void AddHangfireJobs(IServiceCollection services)
+        {
+            services.AddHangfireJobs(Assembly.GetExecutingAssembly());
         }
     }
 }

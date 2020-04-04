@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\WebFeatures.Application\WebFeatures.Application.csproj" />
+    <ProjectReference Include="..\Common\WebFeatures.HangfireJobs\WebFeatures.HangfireJobs.csproj" />
     <ProjectReference Include="..\Infrastructure\WebFeatures.Infrastructure\WebFeatures.Infrastructure.csproj" />
   </ItemGroup>
 
