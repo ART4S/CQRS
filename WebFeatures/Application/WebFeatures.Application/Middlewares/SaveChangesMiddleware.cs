@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataContext;
-using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
@@ -12,12 +11,10 @@ namespace WebFeatures.Application.Middlewares
         where TRequest : ICommand<TResponse>
     {
         private readonly IWriteContext _db;
-        private readonly ILogger<TRequest> _logger;
 
-        public SaveChangesMiddleware(IWriteContext db, ILogger<TRequest> logger)
+        public SaveChangesMiddleware(IWriteContext db)
         {
             _db = db;
-            _logger = logger;
         }
 
         public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)

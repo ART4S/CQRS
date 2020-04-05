@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application
 {
-    public static class DependencyInjection
+    public static class ConfigureServices
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
