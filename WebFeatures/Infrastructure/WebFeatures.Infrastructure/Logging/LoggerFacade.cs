@@ -3,7 +3,7 @@ using System;
 
 namespace WebFeatures.Infrastructure.Logging
 {
-    internal class LoggerFacade<T> : Application.Interfaces.ILogger<T>
+    internal class LoggerFacade<T> : Application.Interfaces.Logging.ILogger<T>
     {
         private readonly ILogger<T> _innerLogger;
 

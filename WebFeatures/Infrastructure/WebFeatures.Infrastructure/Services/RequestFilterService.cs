@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Web;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Services;
 
 namespace WebFeatures.Infrastructure.Services
 {

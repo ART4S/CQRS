@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Mailing;
 
 namespace WebFeatures.Infrastructure.Mailing
 {

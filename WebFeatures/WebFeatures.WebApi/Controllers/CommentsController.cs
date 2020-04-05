@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Comments.CreateComment;
 using WebFeatures.WebApi.Controllers.Base;
+using WebFeatures.Application.Features.Comments.CreateComment;
 
 namespace WebFeatures.WebApi.Controllers
 {

@@ -27,7 +27,7 @@ namespace WebFeatures.WebApi
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
@@ -51,16 +51,6 @@ namespace WebFeatures.WebApi
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
-
-            return CreateProvider(services);
-        }
-
-        private IServiceProvider CreateProvider(IServiceCollection services)
-        {
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-
-            return new AutofacServiceProvider(builder.Build());
         }
 
         public void Configure(IApplicationBuilder app)

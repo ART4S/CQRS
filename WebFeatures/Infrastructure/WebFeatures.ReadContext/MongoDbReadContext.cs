@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 

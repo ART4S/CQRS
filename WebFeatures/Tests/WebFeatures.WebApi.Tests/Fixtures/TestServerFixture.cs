@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using WebFeatures.Application.Constants;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Enums;
@@ -157,7 +157,7 @@ namespace WebFeatures.WebApi.Tests.Fixtures
                 Product = product,
                 Comment = "Comment",
                 Title = "Title",
-                CreatedAt = dateTime.Now,
+                CreateDate = dateTime.Now,
                 Rating = UserRating.FiveStars
             };
             writeDb.Reviews.Add(review);

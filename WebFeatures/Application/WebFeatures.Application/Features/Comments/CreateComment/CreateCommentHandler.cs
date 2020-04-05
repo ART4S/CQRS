@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;

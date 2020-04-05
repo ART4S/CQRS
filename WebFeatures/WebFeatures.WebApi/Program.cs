@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore;
+﻿using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace WebFeatures.WebApi
@@ -9,12 +10,17 @@ namespace WebFeatures.WebApi
         public static Task Main(string[] args)
             => CreateWebHostBuilder(args).Build().RunAsync();
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-            => WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseKestrel(options =>
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
+            => Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureWebHostDefaults(webHostBuilder =>
                 {
-                    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
+                    webHostBuilder
+                        .UseStartup<Startup>()
+                        .UseKestrel(options =>
+                        {
+                            options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
+                        });
                 });
     }
 }

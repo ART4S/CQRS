@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Reviews.Requests.CreateReview;
+using WebFeatures.Application.Features.Reviews.CreateReview;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers

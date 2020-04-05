@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Security;
 
 namespace WebFeatures.Infrastructure.Security
 {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Services;
 
 namespace WebFeatures.Infrastructure.Services
 {

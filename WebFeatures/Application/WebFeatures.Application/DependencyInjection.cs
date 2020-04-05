@@ -5,7 +5,6 @@ using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Events;
-using WebFeatures.HangfireJobs;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application
@@ -57,7 +56,7 @@ namespace WebFeatures.Application
 
         public static void AddHangfireJobs(IServiceCollection services)
         {
-            services.AddHangfireJobs(Assembly.GetExecutingAssembly());
+            Assembly.GetExecutingAssembly();
         }
     }
 }

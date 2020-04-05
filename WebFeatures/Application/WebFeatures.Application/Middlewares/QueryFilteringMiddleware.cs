@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.Application.Interfaces;
+using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
