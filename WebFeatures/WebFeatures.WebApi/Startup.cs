@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,12 +30,11 @@ namespace WebFeatures.WebApi
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
 
-            services.AddControllers(
-                opt =>
-                {
-                    opt.ModelBinderProviders.Insert(0, new BytesModelBinderProvider());
-                })
-                .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
+            services.AddControllers(opt =>
+            {
+                opt.ModelBinderProviders.Insert(0, new BytesModelBinderProvider());
+            })
+            .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>
             {
@@ -55,6 +52,8 @@ namespace WebFeatures.WebApi
 
         public void Configure(IApplicationBuilder app)
         {
+            app.ConfigurePersictence();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

@@ -14,7 +14,6 @@ using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Common;
 using WebFeatures.Infrastructure.Common;
-using WebFeatures.Infrastructure.HangfireJobs;
 using WebFeatures.Infrastructure.Jobs;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Mailing;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebFeatures.Infrastructure.HangfireJobs
+namespace WebFeatures.Infrastructure.Jobs
 {
     public class HangfireSettings
     {

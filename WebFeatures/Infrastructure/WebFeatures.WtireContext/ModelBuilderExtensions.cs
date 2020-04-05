@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
 using WebFeatures.Domian.Attibutes;
+using WebFeatures.Domian.Common;
 
 namespace WebFeatures.WriteContext
 {
@@ -11,10 +12,22 @@ namespace WebFeatures.WriteContext
         {
             foreach (IMutableEntityType entity in modelBuilder.Model.GetEntityTypes())
             {
-                var tableNameAttr = entity.ClrType.GetCustomAttribute<EntityMetadataAttribute>();
-                if (tableNameAttr != null)
+                var tableMetadata = entity.ClrType.GetCustomAttribute<EntityMetadataAttribute>();
+                if (tableMetadata != null)
                 {
-                    modelBuilder.Entity(entity.Name).ToTable(tableNameAttr.Name);
+                    modelBuilder.Entity(entity.Name).ToTable(tableMetadata.Name);
+                }
+            }
+        }
+
+        public static void IgnoreEvents(this ModelBuilder modelBuilder)
+        {
+            foreach (IMutableEntityType entity in modelBuilder.Model.GetEntityTypes())
+            {
+                // TODO:
+                if (typeof(BaseEntity).IsAssignableFrom(entity.ClrType))
+                {
+                    modelBuilder.Entity(entity.Name).Ignore(nameof(BaseEntity.Events));
                 }
             }
         }
