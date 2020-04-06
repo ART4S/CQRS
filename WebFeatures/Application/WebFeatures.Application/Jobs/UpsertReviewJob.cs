@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataContext;
 using WebFeatures.Application.Jobs.Common;
@@ -7,13 +6,7 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Jobs
 {
-    public class UpsertReviewJobArg
-    {
-        public Guid ReviewId { get; }
-        public UpsertReviewJobArg(Guid reviewId) => ReviewId = reviewId;
-    }
-
-    public class UpsertReviewJob : SyncEntityBetweenDatabasesJob<Review>
+    internal class UpsertReviewJob : SyncEntityBetweenDatabasesJob<Review>
     {
         public UpsertReviewJob(IWriteContext writeDb, IReadContext readDb) : base(writeDb, readDb)
         {

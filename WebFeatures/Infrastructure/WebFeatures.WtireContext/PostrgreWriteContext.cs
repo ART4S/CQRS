@@ -12,13 +12,13 @@ using WebFeatures.Events;
 
 namespace WebFeatures.WriteContext
 {
-    public class EFWriteContext : DbContext, IWriteContext
+    public class PostrgreWriteContext : DbContext, IWriteContext
     {
         private readonly IEventMediator _eventMediator;
         private readonly IDateTime _dateTime;
 
-        public EFWriteContext(
-            DbContextOptions<EFWriteContext> options,
+        public PostrgreWriteContext(
+            DbContextOptions<PostrgreWriteContext> options,
             IEventMediator eventMediator,
             IDateTime dateTime) : base(options)
         {

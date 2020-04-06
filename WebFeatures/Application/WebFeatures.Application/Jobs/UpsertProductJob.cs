@@ -6,7 +6,7 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Jobs
 {
-    public class UpsertProductJob : SyncEntityBetweenDatabasesJob<Product>
+    internal class UpsertProductJob : SyncEntityBetweenDatabasesJob<Product>
     {
         public UpsertProductJob(IWriteContext writeDb, IReadContext readDb) : base(writeDb, readDb)
         {

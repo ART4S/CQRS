@@ -12,9 +12,11 @@ namespace WebFeatures.Infrastructure
 {
     internal static class DataSeeder
     {
-        public static void SeedSampleData(EFWriteContext writeDb, MongoDbReadContext readDb, IPasswordEncoder encoder, IDateTime dateTime)
+        public static void SeedSampleData(PostrgreWriteContext writeDb, MongoReadContext readDb, IPasswordEncoder encoder, IDateTime dateTime)
         {
-            #region User and roles
+            #region Users and roles
+
+            #region Users
 
             var usersRole = new Role()
             {
@@ -29,9 +31,13 @@ namespace WebFeatures.Infrastructure
                 Email = "user@mail.com",
                 PasswordHash = encoder.EncodePassword("12345"),
             };
-            user.UserRoles.Add(new UserRole() { Role = usersRole });
-
             writeDb.Users.Add(user);
+
+            user.UserRoles.Add(new UserRole() { RoleId = usersRole.Id, UserId = user.Id });
+
+            #endregion Users 
+
+            #region Administrators
 
             var adminRole = new Role()
             {
@@ -46,9 +52,11 @@ namespace WebFeatures.Infrastructure
                 Email = "admin@mail.com",
                 PasswordHash = encoder.EncodePassword("12345")
             };
-            user.UserRoles.Add(new UserRole() { Role = adminRole });
-
             writeDb.Users.Add(admin);
+
+            admin.UserRoles.Add(new UserRole() { RoleId = adminRole.Id, UserId = admin.Id });
+
+            #endregion Administrators
 
             #endregion
 

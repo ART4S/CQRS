@@ -30,7 +30,7 @@ namespace WebFeatures.Infrastructure
         {
             AddCommon(services);
             AddReadContext(services, configuration);
-            AddWriteContext(services);
+            AddWriteContext(services, configuration);
             AddMailing(services, configuration);
             AddSecurity(services);
             AddSecurity(services);
@@ -46,17 +46,25 @@ namespace WebFeatures.Infrastructure
 
         private static void AddReadContext(IServiceCollection services, IConfiguration configuration)
         {
-            ConfigureServicesHelper.AddOptions<MongoDbSettings>(services, configuration);
+            ConfigureServicesHelper.AddOptions<MongoSettings>(services, configuration);
 
-            services.AddScoped<IReadContext, MongoDbReadContext>();
-            services.AddScoped<MongoDbReadContext>();
+            services.AddScoped<IReadContext, MongoReadContext>();
+            services.AddScoped<MongoReadContext>();
         }
 
-        private static void AddWriteContext(IServiceCollection services)
+        private static void AddWriteContext(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IWriteContext, EFWriteContext>();
-            services.AddDbContext<EFWriteContext>(
-                options => options.UseInMemoryDatabase("InMemoryDb"));
+            ConfigureServicesHelper.AddOptions<PostrgeSettings>(services, configuration);
+
+            services.AddScoped<IWriteContext, PostrgreWriteContext>();
+            services.AddDbContext<PostrgreWriteContext>((sp, options) =>
+            {
+                var settings = sp.GetRequiredService<PostrgeSettings>();
+                options.UseNpgsql(settings.ConnectionString);
+            });
+
+            //services.AddDbContext<PostrgreWriteContext>(
+            //    options => options.UseInMemoryDatabase("InMemoryDb"));
         }
 
         private static void AddMailing(IServiceCollection services, IConfiguration configuration)

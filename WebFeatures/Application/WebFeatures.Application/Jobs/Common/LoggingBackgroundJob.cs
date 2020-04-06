@@ -4,7 +4,7 @@ using WebFeatures.Application.Interfaces.Logging;
 
 namespace WebFeatures.Application.Jobs.Common
 {
-    public class LoggingBackgroundJob<T> : IBackgroundJob<T>
+    internal class LoggingBackgroundJob<T> : IBackgroundJob<T>
     {
         private readonly ILogger<T> _logger;
         private readonly IBackgroundJob<T> _decoratee;

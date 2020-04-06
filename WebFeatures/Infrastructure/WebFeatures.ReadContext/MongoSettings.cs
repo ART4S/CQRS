@@ -2,7 +2,7 @@
 
 namespace WebFeatures.ReadContext
 {
-    public class MongoDbSettings
+    public class MongoSettings
     {
         [Required(AllowEmptyStrings = false)]
         public string DatabaseName { get; set; }

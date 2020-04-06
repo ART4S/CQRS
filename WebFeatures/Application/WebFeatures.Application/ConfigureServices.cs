@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
+using WebFeatures.Application.Interfaces.Jobs;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Events;
 using WebFeatures.Requests;
@@ -17,7 +20,7 @@ namespace WebFeatures.Application
             AddEvents(services);
             AddValidators(services);
             AddMappings(services);
-            AddHangfireJobs(services);
+            AddJobs(services);
         }
 
         private static void AddRequests(IServiceCollection services)
@@ -54,9 +57,23 @@ namespace WebFeatures.Application
             services.AddSingleton(x => mapperConfig.CreateMapper());
         }
 
-        public static void AddHangfireJobs(IServiceCollection services)
+        private static void AddJobs(IServiceCollection services)
         {
-            Assembly.GetExecutingAssembly();
+            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
+
+            foreach (Type type in assemblyTypes)
+            {
+                if (type.IsAbstract || type.IsGenericType)
+                    continue;
+
+                Type ibackgroundJob = type.GetInterfaces()
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IBackgroundJob<>));
+
+                if (ibackgroundJob != null)
+                {
+                    services.AddScoped(ibackgroundJob, type);
+                }
+            }
         }
     }
 }

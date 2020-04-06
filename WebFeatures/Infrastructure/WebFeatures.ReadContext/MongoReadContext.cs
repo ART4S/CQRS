@@ -10,11 +10,11 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.ReadContext
 {
-    public class MongoDbReadContext : IReadContext
+    public class MongoReadContext : IReadContext
     {
         public IMongoDatabase Database { get; }
 
-        public MongoDbReadContext(MongoDbSettings settings)
+        public MongoReadContext(MongoSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
 

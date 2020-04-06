@@ -6,7 +6,7 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Jobs
 {
-    public class UpsertCommentJob : SyncEntityBetweenDatabasesJob<UserComment>
+    internal class UpsertCommentJob : SyncEntityBetweenDatabasesJob<UserComment>
     {
         public UpsertCommentJob(IWriteContext writeDb, IReadContext readDb) : base(writeDb, readDb)
         {

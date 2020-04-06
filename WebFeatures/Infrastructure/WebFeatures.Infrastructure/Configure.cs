@@ -32,12 +32,12 @@ namespace WebFeatures.Infrastructure
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            EFWriteContext writeDb = scope.ServiceProvider.GetService<EFWriteContext>();
+            PostrgreWriteContext writeDb = scope.ServiceProvider.GetService<PostrgreWriteContext>();
 
             writeDb.Database.EnsureDeleted();
             writeDb.Database.EnsureCreated();
 
-            MongoDbReadContext readDb = scope.ServiceProvider.GetService<MongoDbReadContext>();
+            MongoReadContext readDb = scope.ServiceProvider.GetService<MongoReadContext>();
 
             string readDbName = readDb.Database.DatabaseNamespace.DatabaseName;
             readDb.Database.Client.DropDatabase(readDbName);

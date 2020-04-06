@@ -11,9 +11,6 @@ namespace WebFeatures.WriteContext.Configurations
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.PasswordHash).IsRequired();
-
-            var navigation = builder.Metadata.FindNavigation(nameof(User.UserRoles));
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }
