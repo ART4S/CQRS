@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductComments
 {
-    public class GetProductCommentsHandler : IRequestHandler<GetProductComments, IQueryable<CommentInfoDto>>
+    internal class GetProductCommentsHandler : IRequestHandler<GetProductComments, IQueryable<CommentInfoDto>>
     {
         private readonly IReadContext _db;
         private readonly IMapper _mapper;

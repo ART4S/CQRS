@@ -8,7 +8,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
 {
-    public class CreateProductHandler : IRequestHandler<CreateProduct, Guid>
+    internal class CreateProductHandler : IRequestHandler<CreateProduct, Guid>
     {
         private readonly IWriteContext _db;
         private readonly IMapper _mapper;

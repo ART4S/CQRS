@@ -12,7 +12,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.Login
 {
-    public class LoginHandler : IRequestHandler<Login, UserInfoDto>
+    internal class LoginHandler : IRequestHandler<Login, UserInfoDto>
     {
         private readonly IWriteContext _db;
         private readonly IPasswordEncoder _passwordEncoder;

@@ -3,7 +3,7 @@ using WebFeatures.Events;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
 {
-    public class ProductCreatedEvent : IEvent
+    internal class ProductCreatedEvent : IEvent
     {
         public Guid ProductId { get; }
 

@@ -8,7 +8,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.EditProduct
 {
-    public class EditProductHandler : IRequestHandler<EditProduct, Empty>
+    internal class EditProductHandler : IRequestHandler<EditProduct, Empty>
     {
         private readonly IWriteContext _db;
         private readonly IMapper _mapper;

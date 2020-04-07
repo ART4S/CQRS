@@ -93,7 +93,7 @@ namespace WebFeatures.Infrastructure
 
             var brand = new Brand()
             {
-                Id = Guid.Parse("7e6a526d-664e-4b8e-8f55-f78190aa9842"),
+                Id = new Guid("7e6a526d-664e-4b8e-8f55-f78190aa9842"),
                 Name = "Brand",
             };
             writeDb.Brands.Add(brand);
@@ -113,7 +113,7 @@ namespace WebFeatures.Infrastructure
 
             var product = new Product()
             {
-                Id = Guid.Parse("0f7b807f-3737-4997-9627-dbe5dc15310a"),
+                Id = new Guid("0f7b807f-3737-4997-9627-dbe5dc15310a"),
                 Name = "Product",
                 Description = "Description",
                 Manufacturer = manufacturer,
@@ -125,7 +125,7 @@ namespace WebFeatures.Infrastructure
 
             var review = new Review()
             {
-                Id = Guid.Parse("a0925263-244b-4f7e-8f3a-80adc2a9835f"),
+                Id = new Guid("a0925263-244b-4f7e-8f3a-80adc2a9835f"),
                 Author = user,
                 Product = product,
                 Comment = "Comment",

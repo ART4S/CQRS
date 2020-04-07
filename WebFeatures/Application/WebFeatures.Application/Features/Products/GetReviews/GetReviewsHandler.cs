@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetReviews
 {
-    public class GetReviewsHandler : IRequestHandler<GetReviews, IQueryable<ReviewInfoDto>>
+    internal class GetReviewsHandler : IRequestHandler<GetReviews, IQueryable<ReviewInfoDto>>
     {
         private readonly IReadContext _db;
         private readonly IMapper _mapper;

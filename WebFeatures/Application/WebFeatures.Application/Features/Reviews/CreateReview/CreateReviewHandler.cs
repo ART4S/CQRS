@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
-    public class CreateReviewHandler : IRequestHandler<CreateReview, Guid>
+    internal class CreateReviewHandler : IRequestHandler<CreateReview, Guid>
     {
         private readonly IWriteContext _db;
         private readonly IMapper _mapper;

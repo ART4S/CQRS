@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
-    public class RegisterUserHandler : IRequestHandler<RegisterUser, UserInfoDto>
+    internal class RegisterUserHandler : IRequestHandler<RegisterUser, UserInfoDto>
     {
         private readonly IWriteContext _db;
         private readonly IPasswordEncoder _passwordEncoder;

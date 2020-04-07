@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Comments.CreateComment
 {
-    public class CreateCommentHandler : IRequestHandler<CreateComment, Guid>
+    internal class CreateCommentHandler : IRequestHandler<CreateComment, Guid>
     {
         private readonly IWriteContext _db;
         private readonly ICurrentUserService _currentUser;

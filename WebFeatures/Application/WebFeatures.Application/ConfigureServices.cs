@@ -25,7 +25,7 @@ namespace WebFeatures.Application
 
         private static void AddRequests(IServiceCollection services)
         {
-            services.AddRequests(Assembly.GetExecutingAssembly());
+            services.AddRequestMediator();
 
             // Common pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(LoggingMiddleware<,>));
@@ -37,11 +37,37 @@ namespace WebFeatures.Application
 
             // Queries pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(QueryFilteringMiddleware<,>));
+
+            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
+
+            foreach (Type type in assemblyTypes)
+            {
+                Type interfaceType = type.GetInterfaces()
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
+
+                if (interfaceType != null)
+                {
+                    services.AddScoped(interfaceType, type);
+                }
+            }
         }
 
         private static void AddEvents(IServiceCollection services)
         {
-            services.AddEvents(Assembly.GetExecutingAssembly());
+            services.AddEventMediator();
+
+            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
+
+            foreach (Type type in assemblyTypes)
+            {
+                Type interfaceType = type.GetInterfaces()
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>));
+
+                if (interfaceType != null)
+                {
+                    services.AddScoped(interfaceType, type);
+                }
+            }
         }
 
         private static void AddValidators(IServiceCollection services)

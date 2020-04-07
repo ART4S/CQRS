@@ -9,7 +9,7 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductsList
 {
-    public class GetProductsListHandler : IRequestHandler<GetProductsList, IQueryable<ProductListDto>>
+    internal class GetProductsListHandler : IRequestHandler<GetProductsList, IQueryable<ProductListDto>>
     {
         private readonly IReadContext _db;
         private readonly IMapper _mapper;

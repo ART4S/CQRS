@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Exceptions;
 using WebFeatures.Requests;
-using RequestValidationException = WebFeatures.Application.Exceptions.RequestValidationException;
 
 namespace WebFeatures.Application.Middlewares
 {

@@ -7,7 +7,7 @@ using WebFeatures.Events;
 
 namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
-    public class ReviewCreatedEventHandler : IEventHandler<ReviewCreatedEvent>
+    internal class ReviewCreatedEventHandler : IEventHandler<ReviewCreatedEvent>
     {
         private readonly IBackgroundJobManager _jobManager;
 

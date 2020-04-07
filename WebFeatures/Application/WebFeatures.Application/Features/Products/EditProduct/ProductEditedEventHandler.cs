@@ -7,7 +7,7 @@ using WebFeatures.Events;
 
 namespace WebFeatures.Application.Features.Products.EditProduct
 {
-    public class ProductEditedEventHandler : IEventHandler<ProductEditedEvent>
+    internal class ProductEditedEventHandler : IEventHandler<ProductEditedEvent>
     {
         private readonly IBackgroundJobManager _jobManager;
 
