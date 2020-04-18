@@ -1,5 +1,5 @@
 ﻿using Hangfire;
-using Hangfire.Mongo;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,14 +13,13 @@ using WebFeatures.Application.Interfaces.Mailing;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Common;
+using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.Jobs;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Mailing;
 using WebFeatures.Infrastructure.Security;
 using WebFeatures.Infrastructure.Services;
-using WebFeatures.ReadContext;
-using WebFeatures.WriteContext;
 
 namespace WebFeatures.Infrastructure
 {
@@ -29,8 +28,7 @@ namespace WebFeatures.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             AddCommon(services);
-            AddReadContext(services, configuration);
-            AddWriteContext(services, configuration);
+            AddDbContext(services, configuration);
             AddMailing(services, configuration);
             AddSecurity(services);
             AddSecurity(services);
@@ -44,27 +42,16 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IDateTime, MachineDateTime>();
         }
 
-        private static void AddReadContext(IServiceCollection services, IConfiguration configuration)
-        {
-            ConfigureServicesHelper.AddOptions<MongoSettings>(services, configuration);
-
-            services.AddScoped<IReadContext, MongoReadContext>();
-            services.AddScoped<MongoReadContext>();
-        }
-
-        private static void AddWriteContext(IServiceCollection services, IConfiguration configuration)
+        private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
         {
             ConfigureServicesHelper.AddOptions<PostrgeSettings>(services, configuration);
 
-            services.AddScoped<IWriteContext, PostrgreWriteContext>();
-            services.AddDbContext<PostrgreWriteContext>((sp, options) =>
+            services.AddScoped<IDbContext, PostrgreDbContext>();
+            services.AddDbContext<PostrgreDbContext>((sp, options) =>
             {
                 var settings = sp.GetRequiredService<PostrgeSettings>();
                 options.UseNpgsql(settings.ConnectionString);
             });
-
-            //services.AddDbContext<PostrgreWriteContext>(
-            //    options => options.UseInMemoryDatabase("InMemoryDb"));
         }
 
         private static void AddMailing(IServiceCollection services, IConfiguration configuration)
@@ -104,13 +91,10 @@ namespace WebFeatures.Infrastructure
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
-                .UseMongoStorage(settings.ConnectionString, new MongoStorageOptions()
+                .UsePostgreSqlStorage(settings.ConnectionString, new PostgreSqlStorageOptions()
                 {
+                    PrepareSchemaIfNecessary = true,
                     QueuePollInterval = TimeSpan.FromMilliseconds(1),
-                    MigrationOptions = new MongoMigrationOptions()
-                    {
-                        Strategy = MongoMigrationStrategy.Migrate
-                    }
                 });
             });
         }

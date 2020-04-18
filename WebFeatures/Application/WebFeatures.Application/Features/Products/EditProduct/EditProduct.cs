@@ -26,7 +26,7 @@ namespace WebFeatures.Application.Features.Products.EditProduct
 
         public class Validator : AbstractValidator<EditProduct>
         {
-            public Validator(IWriteContext db)
+            public Validator(IDbContext db)
             {
                 RuleFor(x => x.Id)
                     .MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);

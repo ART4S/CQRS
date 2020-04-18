@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.WriteContext.Configurations
+namespace WebFeatures.DataContext.Configurations
 {
-    public class ShipperConfig : IEntityTypeConfiguration<Shipper>
+    public class ManufacturerConfig : IEntityTypeConfiguration<Manufacturer>
     {
-        public void Configure(EntityTypeBuilder<Shipper> builder)
+        public void Configure(EntityTypeBuilder<Manufacturer> builder)
         {
             builder.Property(x => x.OrganizationName).IsRequired();
-            builder.OwnsOne(x => x.HeadOffice, x =>
+            builder.OwnsOne(x => x.StreetAddress, x =>
             {
                 x.WithOwner();
                 x.HasOne(y => y.City);

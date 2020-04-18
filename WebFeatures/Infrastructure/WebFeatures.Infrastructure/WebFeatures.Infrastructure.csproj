@@ -5,15 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hangfire" Version="1.7.10" />
-    <PackageReference Include="Hangfire.Mongo" Version="0.6.7" />
+    <PackageReference Include="Hangfire" Version="1.7.11" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.6.4.2" />
     <PackageReference Include="MailKit" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\WebFeatures.Application\WebFeatures.Application.csproj" />
-    <ProjectReference Include="..\WebFeatures.ReadContext\WebFeatures.ReadContext.csproj" />
-    <ProjectReference Include="..\WebFeatures.WtireContext\WebFeatures.WriteContext.csproj" />
+    <ProjectReference Include="..\WebFeatures.DataContext\WebFeatures.DataContext.csproj" />
   </ItemGroup>
 
 </Project>

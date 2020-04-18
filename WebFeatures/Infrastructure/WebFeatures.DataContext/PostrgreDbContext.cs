@@ -10,15 +10,15 @@ using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Events;
 
-namespace WebFeatures.WriteContext
+namespace WebFeatures.DataContext
 {
-    public class PostrgreWriteContext : DbContext, IWriteContext
+    public class PostrgreDbContext : DbContext, IDbContext
     {
         private readonly IEventMediator _eventMediator;
         private readonly IDateTime _dateTime;
 
-        public PostrgreWriteContext(
-            DbContextOptions<PostrgreWriteContext> options,
+        public PostrgreDbContext(
+            DbContextOptions<PostrgreDbContext> options,
             IEventMediator eventMediator,
             IDateTime dateTime) : base(options)
         {

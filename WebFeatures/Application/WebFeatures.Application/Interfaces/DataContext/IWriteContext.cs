@@ -4,7 +4,7 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Interfaces.DataContext
 {
-    public interface IWriteContext
+    public interface IDbContext
     {
         DbSet<User> Users { get; set; }
         DbSet<Role> Roles { get; set; }

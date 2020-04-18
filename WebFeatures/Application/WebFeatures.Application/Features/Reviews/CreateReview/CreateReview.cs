@@ -25,7 +25,7 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 
         public class Validator : AbstractValidator<CreateReview>
         {
-            public Validator(IWriteContext db, ICurrentUserService currentUser)
+            public Validator(IDbContext db, ICurrentUserService currentUser)
             {
                 RuleFor(x => x.ProductId)
                     .MustAsync(async (productId, token) => await db.Products.FindAsync(productId) != null);

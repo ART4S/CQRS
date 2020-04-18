@@ -11,13 +11,13 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
 {
     internal class RegisterUserHandler : IRequestHandler<RegisterUser, UserInfoDto>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
         private readonly IPasswordEncoder _passwordEncoder;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public RegisterUserHandler(
-            IWriteContext db,
+            IDbContext db,
             IPasswordEncoder passwordEncoder,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)

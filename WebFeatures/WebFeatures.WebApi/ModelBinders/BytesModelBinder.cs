@@ -41,15 +41,15 @@ namespace WebFeatures.WebApi.ModelBinders
 
         private async Task<(bool Success, IFormFile File)> TryGetFirstNotEmptyFileAsync(HttpRequest request, string modelName)
         {
-            if (!request.HasFormContentType)
-                return (false, null);
-
-            IFormCollection form = await request.ReadFormAsync();
-
-            foreach (IFormFile file in form.Files)
+            if (request.HasFormContentType)
             {
-                if (file.Length > 0 && string.Equals(file.Name, modelName, StringComparison.OrdinalIgnoreCase))
-                    return (true, file);
+                IFormCollection form = await request.ReadFormAsync();
+
+                foreach (IFormFile file in form.Files)
+                {
+                    if (file.Length > 0 && string.Equals(file.Name, modelName, StringComparison.OrdinalIgnoreCase))
+                        return (true, file);
+                }
             }
 
             return (false, null);

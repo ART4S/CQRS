@@ -11,12 +11,12 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
 {
     internal class CreateReviewHandler : IRequestHandler<CreateReview, Guid>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUser;
 
         public CreateReviewHandler(
-            IWriteContext db,
+            IDbContext db,
             IMapper mapper,
             ICurrentUserService currentUser)
         {
@@ -31,8 +31,6 @@ namespace WebFeatures.Application.Features.Reviews.CreateReview
             review.AuthorId = _currentUser.UserId;
 
             await _db.Reviews.AddAsync(review, cancellationToken);
-
-            review.Events.Add(new ReviewCreatedEvent(review.Id));
 
             return review.Id;
         }

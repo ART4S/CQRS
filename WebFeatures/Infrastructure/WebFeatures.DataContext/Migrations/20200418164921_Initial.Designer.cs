@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WebFeatures.WriteContext;
+using WebFeatures.DataContext;
 
-namespace WebFeatures.WriteContext.Migrations
+namespace WebFeatures.DataContext.Migrations
 {
-    [DbContext(typeof(PostrgreWriteContext))]
-    [Migration("20200406135752_Initial")]
+    [DbContext(typeof(PostrgreDbContext))]
+    [Migration("20200418164921_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -288,7 +288,7 @@ namespace WebFeatures.WriteContext.Migrations
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ParentCommentId")

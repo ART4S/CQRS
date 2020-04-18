@@ -14,13 +14,13 @@ namespace WebFeatures.Application.Features.Auth.Login
 {
     internal class LoginHandler : IRequestHandler<Login, UserInfoDto>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
         private readonly IPasswordEncoder _passwordEncoder;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public LoginHandler(
-            IWriteContext db,
+            IDbContext db,
             IPasswordEncoder passwordEncoder,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)

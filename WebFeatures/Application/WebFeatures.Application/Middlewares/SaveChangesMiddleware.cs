@@ -10,9 +10,9 @@ namespace WebFeatures.Application.Middlewares
     internal class SaveChangesMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
 
-        public SaveChangesMiddleware(IWriteContext db)
+        public SaveChangesMiddleware(IDbContext db)
         {
             _db = db;
         }

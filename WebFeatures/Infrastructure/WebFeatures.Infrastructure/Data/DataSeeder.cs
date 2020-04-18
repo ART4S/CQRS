@@ -2,17 +2,16 @@
 using WebFeatures.Application.Constants;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Common;
+using WebFeatures.DataContext;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Domian.ValueObjects;
-using WebFeatures.ReadContext;
-using WebFeatures.WriteContext;
 
 namespace WebFeatures.Infrastructure
 {
     internal static class DataSeeder
     {
-        public static void SeedSampleData(PostrgreWriteContext writeDb, MongoReadContext readDb, IPasswordEncoder encoder, IDateTime dateTime)
+        public static void SeedSampleData(PostrgreDbContext db, IPasswordEncoder encoder, IDateTime dateTime)
         {
             #region Users and roles
 
@@ -23,7 +22,7 @@ namespace WebFeatures.Infrastructure
                 Name = ApplicationConstants.Authorization.Roles.Users,
                 Description = "Пользователи"
             };
-            writeDb.Roles.Add(usersRole);
+            db.Roles.Add(usersRole);
 
             var user = new User()
             {
@@ -31,7 +30,7 @@ namespace WebFeatures.Infrastructure
                 Email = "user@mail.com",
                 PasswordHash = encoder.EncodePassword("12345"),
             };
-            writeDb.Users.Add(user);
+            db.Users.Add(user);
 
             user.UserRoles.Add(new UserRole() { RoleId = usersRole.Id, UserId = user.Id });
 
@@ -44,7 +43,7 @@ namespace WebFeatures.Infrastructure
                 Name = ApplicationConstants.Authorization.Roles.Administrators,
                 Description = "Администраторы"
             };
-            writeDb.Roles.Add(adminRole);
+            db.Roles.Add(adminRole);
 
             var admin = new User()
             {
@@ -52,7 +51,7 @@ namespace WebFeatures.Infrastructure
                 Email = "admin@mail.com",
                 PasswordHash = encoder.EncodePassword("12345")
             };
-            writeDb.Users.Add(admin);
+            db.Users.Add(admin);
 
             admin.UserRoles.Add(new UserRole() { RoleId = adminRole.Id, UserId = admin.Id });
 
@@ -68,7 +67,7 @@ namespace WebFeatures.Infrastructure
                 Name = "Russia",
                 Continent = "EU"
             };
-            writeDb.Countries.Add(country);
+            db.Countries.Add(country);
 
             var city = new City()
             {
@@ -76,7 +75,7 @@ namespace WebFeatures.Infrastructure
                 Name = "City",
                 Country = country
             };
-            writeDb.Cities.Add(city);
+            db.Cities.Add(city);
 
             var manufacturer = new Manufacturer()
             {
@@ -89,14 +88,14 @@ namespace WebFeatures.Infrastructure
                     City = city
                 }
             };
-            writeDb.Manufacturers.Add(manufacturer);
+            db.Manufacturers.Add(manufacturer);
 
             var brand = new Brand()
             {
                 Id = new Guid("7e6a526d-664e-4b8e-8f55-f78190aa9842"),
                 Name = "Brand",
             };
-            writeDb.Brands.Add(brand);
+            db.Brands.Add(brand);
 
             var categories = new[]
             {
@@ -109,7 +108,7 @@ namespace WebFeatures.Infrastructure
                 new Category() { Name = "Shoes" },
                 new Category() { Name = "Watches" },
             };
-            writeDb.Categories.AddRange(categories);
+            db.Categories.AddRange(categories);
 
             var product = new Product()
             {
@@ -120,8 +119,7 @@ namespace WebFeatures.Infrastructure
                 Category = categories[0],
                 Brand = brand
             };
-            writeDb.Products.Add(product);
-            readDb.Add(product);
+            db.Products.Add(product);
 
             var review = new Review()
             {
@@ -133,33 +131,30 @@ namespace WebFeatures.Infrastructure
                 CreateDate = dateTime.Now,
                 Rating = UserRating.FiveStars
             };
-            writeDb.Reviews.Add(review);
-            readDb.Add(review);
+            db.Reviews.Add(review);
 
             var comment = new UserComment()
             {
                 Author = user,
                 Body = "Comment",
                 Product = product,
-                CreatedAt = dateTime.Now
+                CreateDate = dateTime.Now
             };
-            writeDb.UserComments.Add(comment);
-            readDb.Add(comment);
+            db.UserComments.Add(comment);
 
             var childComment = new UserComment()
             {
                 Author = user,
                 Body = "Comment",
                 Product = product,
-                CreatedAt = dateTime.Now,
+                CreateDate = dateTime.Now,
                 ParentComment = comment
             };
-            writeDb.UserComments.Add(childComment);
-            readDb.Add(childComment);
+            db.UserComments.Add(childComment);
 
             #endregion
 
-            writeDb.SaveChanges();
+            db.SaveChanges();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Reflection;
 using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 
-namespace WebFeatures.WriteContext
+namespace WebFeatures.DataContext
 {
     internal static class ModelBuilderExtensions
     {

@@ -10,10 +10,10 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 {
     internal class CreateProductHandler : IRequestHandler<CreateProduct, Guid>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
         private readonly IMapper _mapper;
 
-        public CreateProductHandler(IWriteContext db, IMapper mapper)
+        public CreateProductHandler(IDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -22,9 +22,8 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
             Product product = _mapper.Map<Product>(request);
-            await _db.Products.AddAsync(product, cancellationToken);
 
-            product.Events.Add(new ProductCreatedEvent(product.Id));
+            await _db.Products.AddAsync(product, cancellationToken);
 
             return product.Id;
         }

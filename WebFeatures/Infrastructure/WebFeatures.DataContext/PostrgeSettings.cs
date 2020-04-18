@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebFeatures.ReadContext
+namespace WebFeatures.DataContext
 {
-    public class MongoSettings
+    public class PostrgeSettings
     {
-        [Required(AllowEmptyStrings = false)]
-        public string DatabaseName { get; set; }
-
         [Required(AllowEmptyStrings = false)]
         public string ConnectionString { get; set; }
     }

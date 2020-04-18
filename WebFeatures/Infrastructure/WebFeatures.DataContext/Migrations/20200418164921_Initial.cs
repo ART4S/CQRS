@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebFeatures.WriteContext.Migrations
+namespace WebFeatures.DataContext.Migrations
 {
     public partial class Initial : Migration
     {
@@ -271,7 +271,7 @@ namespace WebFeatures.WriteContext.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Body = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    CreateDate = table.Column<DateTime>(nullable: false),
                     ProductId = table.Column<Guid>(nullable: false),
                     AuthorId = table.Column<Guid>(nullable: false),
                     ParentCommentId = table.Column<Guid>(nullable: true)

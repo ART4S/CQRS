@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
@@ -31,11 +32,11 @@ namespace WebFeatures.WebApi.Controllers
             => Mediator.SendAsync(new GetProductComments() { ProductId = id });
 
         [HttpPost]
-        public Task<Guid> CreateProduct([FromForm] CreateProduct request)
+        public Task<Guid> CreateProduct([FromForm, Required] CreateProduct request)
             => Mediator.SendAsync(request);
 
         [HttpPut("{id:guid}")]
-        public Task EditProduct([FromForm] EditProduct request)
+        public Task EditProduct([FromForm, Required] EditProduct request)
             => Mediator.SendAsync(request);
     }
 }

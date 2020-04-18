@@ -24,7 +24,7 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
 
         public class Validator : AbstractValidator<CreateProduct>
         {
-            public Validator(IWriteContext db)
+            public Validator(IDbContext db)
             {
                 RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Price).Must(x => x == null || x.Value >= 0);

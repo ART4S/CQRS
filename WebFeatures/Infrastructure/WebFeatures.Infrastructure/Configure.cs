@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Common;
+using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Jobs;
-using WebFeatures.ReadContext;
-using WebFeatures.WriteContext;
 
 namespace WebFeatures.Infrastructure
 {
@@ -32,20 +31,15 @@ namespace WebFeatures.Infrastructure
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            PostrgreWriteContext writeDb = scope.ServiceProvider.GetService<PostrgreWriteContext>();
+            PostrgreDbContext context = scope.ServiceProvider.GetService<PostrgreDbContext>();
 
-            writeDb.Database.EnsureDeleted();
-            writeDb.Database.EnsureCreated();
-
-            MongoReadContext readDb = scope.ServiceProvider.GetService<MongoReadContext>();
-
-            string readDbName = readDb.Database.DatabaseNamespace.DatabaseName;
-            readDb.Database.Client.DropDatabase(readDbName);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
 
             IPasswordEncoder encoder = scope.ServiceProvider.GetService<IPasswordEncoder>();
             IDateTime dateTime = scope.ServiceProvider.GetService<IDateTime>();
 
-            DataSeeder.SeedSampleData(writeDb, readDb, encoder, dateTime);
+            DataSeeder.SeedSampleData(context, encoder, dateTime);
         }
     }
 }

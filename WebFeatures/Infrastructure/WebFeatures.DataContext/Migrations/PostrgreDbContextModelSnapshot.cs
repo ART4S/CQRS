@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WebFeatures.WriteContext;
+using WebFeatures.DataContext;
 
-namespace WebFeatures.WriteContext.Migrations
+namespace WebFeatures.DataContext.Migrations
 {
-    [DbContext(typeof(PostrgreWriteContext))]
-    partial class PostrgreWriteContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PostrgreDbContext))]
+    partial class PostrgreDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -286,7 +286,7 @@ namespace WebFeatures.WriteContext.Migrations
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ParentCommentId")

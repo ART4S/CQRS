@@ -10,10 +10,10 @@ namespace WebFeatures.Application.Features.Products.EditProduct
 {
     internal class EditProductHandler : IRequestHandler<EditProduct, Empty>
     {
-        private readonly IWriteContext _db;
+        private readonly IDbContext _db;
         private readonly IMapper _mapper;
 
-        public EditProductHandler(IWriteContext db, IMapper mapper)
+        public EditProductHandler(IDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -22,9 +22,8 @@ namespace WebFeatures.Application.Features.Products.EditProduct
         public async Task<Empty> HandleAsync(EditProduct request, CancellationToken cancellationToken)
         {
             Product product = await _db.Products.FindAsync(request.Id);
-            _mapper.Map(request, product);
 
-            product.Events.Add(new ProductEditedEvent(product.Id));
+            _mapper.Map(request, product);
 
             return Empty.Value;
         }

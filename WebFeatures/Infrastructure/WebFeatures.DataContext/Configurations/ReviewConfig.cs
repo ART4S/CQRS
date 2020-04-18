@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.WriteContext.Configurations
+namespace WebFeatures.DataContext.Configurations
 {
     public class ReviewConfig : IEntityTypeConfiguration<Review>
     {
