@@ -44,10 +44,10 @@ namespace WebFeatures.Infrastructure
 
         private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
         {
-            ConfigureServicesHelper.AddOptions<PostrgeSettings>(services, configuration);
+            services.AddScoped<IDbContext, BaseDbContext>();
 
-            services.AddScoped<IDbContext, PostrgreDbContext>();
-            services.AddDbContext<PostrgreDbContext>((sp, options) =>
+            ConfigureServicesHelper.AddOptions<PostrgeSettings>(services, configuration);
+            services.AddDbContext<BaseDbContext>((sp, options) =>
             {
                 var settings = sp.GetRequiredService<PostrgeSettings>();
                 options.UseNpgsql(settings.ConnectionString);

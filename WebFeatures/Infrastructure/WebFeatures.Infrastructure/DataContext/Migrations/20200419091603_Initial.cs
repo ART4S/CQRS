@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebFeatures.DataContext.Migrations
+namespace WebFeatures.Infrastructure.DataContext.Migrations
 {
     public partial class Initial : Migration
     {

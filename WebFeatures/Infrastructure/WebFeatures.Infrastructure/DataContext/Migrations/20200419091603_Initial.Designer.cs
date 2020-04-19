@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebFeatures.DataContext;
 
-namespace WebFeatures.DataContext.Migrations
+namespace WebFeatures.Infrastructure.DataContext.Migrations
 {
-    [DbContext(typeof(PostrgreDbContext))]
-    [Migration("20200418164921_Initial")]
+    [DbContext(typeof(BaseDbContext))]
+    [Migration("20200419091603_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebFeatures.DataContext;
 
-namespace WebFeatures.DataContext.Migrations
+namespace WebFeatures.Infrastructure.DataContext.Migrations
 {
-    [DbContext(typeof(PostrgreDbContext))]
-    partial class PostrgreDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BaseDbContext))]
+    partial class BaseDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

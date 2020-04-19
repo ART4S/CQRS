@@ -31,7 +31,7 @@ namespace WebFeatures.Infrastructure
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            PostrgreDbContext context = scope.ServiceProvider.GetService<PostrgreDbContext>();
+            BaseDbContext context = scope.ServiceProvider.GetService<BaseDbContext>();
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();

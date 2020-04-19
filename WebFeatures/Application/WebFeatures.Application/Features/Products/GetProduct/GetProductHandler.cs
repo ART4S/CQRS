@@ -9,10 +9,10 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 {
     internal class GetProductHandler : IRequestHandler<GetProduct, ProductInfoDto>
     {
-        private readonly IReadContext _db;
+        private readonly IDbContext _db;
         private readonly IMapper _mapper;
 
-        public GetProductHandler(IReadContext db, IMapper mapper)
+        public GetProductHandler(IDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -20,7 +20,7 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 
         public async Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)
         {
-            Product product = await _db.GetByIdAsync<Product>(request.Id);
+            Product product = await _db.Products.FindAsync(request.Id);
             return _mapper.Map<ProductInfoDto>(product);
         }
     }

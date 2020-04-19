@@ -11,7 +11,7 @@ namespace WebFeatures.Infrastructure
 {
     internal static class DataSeeder
     {
-        public static void SeedSampleData(PostrgreDbContext db, IPasswordEncoder encoder, IDateTime dateTime)
+        public static void SeedSampleData(BaseDbContext db, IPasswordEncoder encoder, IDateTime dateTime)
         {
             #region Users and roles
 

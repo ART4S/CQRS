@@ -12,13 +12,13 @@ using WebFeatures.Events;
 
 namespace WebFeatures.DataContext
 {
-    public class PostrgreDbContext : DbContext, IDbContext
+    public class BaseDbContext : DbContext, IDbContext
     {
         private readonly IEventMediator _eventMediator;
         private readonly IDateTime _dateTime;
 
-        public PostrgreDbContext(
-            DbContextOptions<PostrgreDbContext> options,
+        public BaseDbContext(
+            DbContextOptions<BaseDbContext> options,
             IEventMediator eventMediator,
             IDateTime dateTime) : base(options)
         {
@@ -49,7 +49,7 @@ namespace WebFeatures.DataContext
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserComment> UserComments { get; set; }
 
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
             foreach (EntityEntry entry in ChangeTracker.Entries())
             {
