@@ -89,13 +89,15 @@ namespace WebFeatures.WebApi.Tests.Controllers
         public async Task CreateProduct_ReturnsCreatedProductId()
         {
             // Arrange
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent("test", Encoding.UTF8), nameof(CreateProduct.Name));
-            content.Add(new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(CreateProduct.BrandId));
-            content.Add(new StringContent("9ae5bdeb-9df9-4a2c-abd3-68afed9c6561", Encoding.UTF8), nameof(CreateProduct.CategoryId));
-            content.Add(new StringContent("100", Encoding.UTF8), nameof(CreateProduct.Price));
-            content.Add(new StringContent("6fde2362-9aaf-4bf7-886c-d0537fc8f7a6", Encoding.UTF8), nameof(CreateProduct.ManufacturerId));
-            content.Add(new StringContent("test description", Encoding.UTF8), nameof(CreateProduct.Description));
+            var content = new MultipartFormDataContent
+            {
+                { new StringContent("test", Encoding.UTF8), nameof(CreateProduct.Name) },
+                { new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(CreateProduct.BrandId) },
+                { new StringContent("9ae5bdeb-9df9-4a2c-abd3-68afed9c6561", Encoding.UTF8), nameof(CreateProduct.CategoryId) },
+                { new StringContent("100", Encoding.UTF8), nameof(CreateProduct.Price) },
+                { new StringContent("6fde2362-9aaf-4bf7-886c-d0537fc8f7a6", Encoding.UTF8), nameof(CreateProduct.ManufacturerId) },
+                { new StringContent("test description", Encoding.UTF8), nameof(CreateProduct.Description) }
+            };
 
             // Act
             HttpResponseMessage response = await _client.PostAsync("api/products", content);
@@ -110,12 +112,14 @@ namespace WebFeatures.WebApi.Tests.Controllers
             // Arrange
             string productId = "0f7b807f-3737-4997-9627-dbe5dc15310a";
 
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent(productId, Encoding.UTF8), nameof(EditProduct.Id));
-            content.Add(new StringContent("new name", Encoding.UTF8), nameof(EditProduct.Name));
-            content.Add(new StringContent("new description", Encoding.UTF8), nameof(EditProduct.Description));
-            content.Add(new StringContent("6fde2362-9aaf-4bf7-886c-d0537fc8f7a6", Encoding.UTF8), nameof(EditProduct.ManufacturerId));
-            content.Add(new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(EditProduct.BrandId));
+            var content = new MultipartFormDataContent
+            {
+                { new StringContent(productId, Encoding.UTF8), nameof(EditProduct.Id) },
+                { new StringContent("new name", Encoding.UTF8), nameof(EditProduct.Name) },
+                { new StringContent("new description", Encoding.UTF8), nameof(EditProduct.Description) },
+                { new StringContent("6fde2362-9aaf-4bf7-886c-d0537fc8f7a6", Encoding.UTF8), nameof(EditProduct.ManufacturerId) },
+                { new StringContent("7e6a526d-664e-4b8e-8f55-f78190aa9842", Encoding.UTF8), nameof(EditProduct.BrandId) }
+            };
 
             // Act
             HttpResponseMessage response = await _client.PutAsync($"api/products/{productId}", content);
