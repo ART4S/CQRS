@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.DataContext.Configurations
+namespace WebFeatures.Infrastructure.DataContext.Configurations
 {
     public class ManufacturerConfig : IEntityTypeConfiguration<Manufacturer>
     {
