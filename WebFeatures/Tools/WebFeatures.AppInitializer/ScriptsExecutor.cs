@@ -23,7 +23,7 @@ namespace WebFeatures.AppInitializer
 
             connection.Open();
 
-            string database = "webfeatures";
+            string database = "webfeatures_db";
 
             CreateDb(connection, database);
 
