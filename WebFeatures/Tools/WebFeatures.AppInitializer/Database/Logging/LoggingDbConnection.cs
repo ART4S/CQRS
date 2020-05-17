@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
+using WebFeatures.AppInitializer.Logging;
 
-namespace WebFeatures.AppInitializer.Logging
+namespace WebFeatures.AppInitializer.Database.Logging
 {
     internal class LoggingDbConnection : IDbConnection
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
 using WebFeatures.AppInitializer.Database;
+using WebFeatures.AppInitializer.Database.Logging;
 
 namespace WebFeatures.AppInitializer.Logging
 {
