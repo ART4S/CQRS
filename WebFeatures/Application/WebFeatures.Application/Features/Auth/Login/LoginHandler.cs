@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Auth.RegisterUser;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
@@ -15,37 +14,34 @@ namespace WebFeatures.Application.Features.Auth.Login
     internal class LoginHandler : IRequestHandler<Login, UserInfoDto>
     {
         private readonly IDbContext _db;
-        private readonly IPasswordEncoder _passwordEncoder;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public LoginHandler(
             IDbContext db,
-            IPasswordEncoder passwordEncoder,
+            IPasswordHasher passwordHasher,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)
         {
             _db = db;
-            _passwordEncoder = passwordEncoder;
+            _passwordHasher = passwordHasher;
             _logger = logger;
             _mapper = mapper;
         }
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            User user = await _db.Users
-                .AsNoTracking()
-                .Include(x => x.UserRoles).ThenInclude(x => x.Role)
-                .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+            User user = await _db.Users.GetByEmailAsync(request.Email);
 
             if (user == null)
                 throw new ApplicationValidationException("Wrong login or password");
 
-            string password = _passwordEncoder.DecodePassword(user.PasswordHash);
-            if (password != request.Password)
+            string hash = _passwordHasher.EncodePassword(request.Password);
+            if (hash != user.PasswordHash)
                 throw new ApplicationValidationException("Wrong login or password");
 
-            _logger.LogInformation($"{user.Email} logged in");
+            _logger.LogInformation($"{user.Email} signed in");
 
             return _mapper.Map<UserInfoDto>(user);
         }

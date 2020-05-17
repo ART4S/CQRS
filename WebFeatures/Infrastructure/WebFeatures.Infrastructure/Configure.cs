@@ -1,9 +1,6 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using WebFeatures.Application.Interfaces.Security;
-using WebFeatures.Common;
-using WebFeatures.DataContext;
 using WebFeatures.Infrastructure.Jobs;
 
 namespace WebFeatures.Infrastructure
@@ -25,21 +22,6 @@ namespace WebFeatures.Infrastructure
                     DisplayStorageConnectionString = true,
                 });
             }
-        }
-
-        public static void ConfigurePersictence(this IApplicationBuilder app)
-        {
-            using IServiceScope scope = app.ApplicationServices.CreateScope();
-
-            BaseDbContext context = scope.ServiceProvider.GetService<BaseDbContext>();
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            IPasswordEncoder encoder = scope.ServiceProvider.GetService<IPasswordEncoder>();
-            IDateTime dateTime = scope.ServiceProvider.GetService<IDateTime>();
-
-            DataSeeder.SeedSampleData(context, encoder, dateTime);
         }
     }
 }

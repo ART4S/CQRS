@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -23,7 +23,7 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
         {
             Product product = _mapper.Map<Product>(request);
 
-            await _db.Products.AddAsync(product, cancellationToken);
+            await _db.Products.CreateAsync(product);
 
             return product.Id;
         }

@@ -9,7 +9,6 @@ using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProduct;
 using WebFeatures.Application.Features.Products.GetProductComments;
 using WebFeatures.Application.Features.Products.GetProductsList;
-using WebFeatures.Application.Features.Products.GetReviews;
 using WebFeatures.WebApi.Tests.Fixtures;
 using Xunit;
 
@@ -67,7 +66,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var reviews = await response.ReadAsJsonAsync<List<ReviewInfoDto>>();
+            var reviews = await response.ReadAsJsonAsync<List<ProductReviewInfoDto>>();
             Assert.NotEmpty(reviews);
         }
 
@@ -81,7 +80,7 @@ namespace WebFeatures.WebApi.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var comments = await response.ReadAsJsonAsync<List<CommentInfoDto>>();
+            var comments = await response.ReadAsJsonAsync<List<ProductCommentInfoDto>>();
             Assert.NotEmpty(comments);
         }
 

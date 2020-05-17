@@ -3,7 +3,7 @@ using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Products.CreateProduct
@@ -30,12 +30,12 @@ namespace WebFeatures.Application.Features.Products.CreateProduct
                 RuleFor(x => x.Price).Must(x => x == null || x.Value >= 0);
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.ManufacturerId)
-                    .MustAsync(async (x, t) => await db.Manufacturers.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Manufacturers.ExistsAsync(x));
                 RuleFor(x => x.CategoryId)
-                    .MustAsync(async (x, t) => await db.Categories.FindAsync(x) != null)
+                    .MustAsync(async (x, t) => await db.Categories.ExistsAsync(x.Value))
                     .When(x => x.CategoryId.HasValue);
                 RuleFor(x => x.BrandId)
-                    .MustAsync(async (x, t) => await db.Brands.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
             }
         }
     }

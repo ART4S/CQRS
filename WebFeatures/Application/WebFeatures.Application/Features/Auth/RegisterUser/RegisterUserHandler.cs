@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
@@ -12,13 +12,13 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
     internal class RegisterUserHandler : IRequestHandler<RegisterUser, UserInfoDto>
     {
         private readonly IDbContext _db;
-        private readonly IPasswordEncoder _passwordEncoder;
+        private readonly IPasswordHasher _passwordEncoder;
         private readonly ILogger<RegisterUserHandler> _logger;
         private readonly IMapper _mapper;
 
         public RegisterUserHandler(
             IDbContext db,
-            IPasswordEncoder passwordEncoder,
+            IPasswordHasher passwordEncoder,
             ILogger<RegisterUserHandler> logger,
             IMapper mapper)
         {
@@ -37,7 +37,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
                 PasswordHash = _passwordEncoder.EncodePassword(request.Password)
             };
 
-            await _db.Users.AddAsync(user, cancellationToken);
+            await _db.Users.CreateAsync(user);
 
             _logger.LogInformation($"User {user.Name} registered with id: {user.Id}");
 

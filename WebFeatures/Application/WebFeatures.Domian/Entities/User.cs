@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebFeatures.Domian.Attibutes;
 using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
-    [EntityMetadata("Users")]
     public class User : BaseEntity
     {
         public string Name { get; set; }

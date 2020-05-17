@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductsList
 {
-    public class GetProductsList : IQuery<IQueryable<ProductListDto>>
+    public class GetProductsList : IQuery<IEnumerable<ProductListDto>>
     {
     }
 }

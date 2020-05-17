@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductComments
 {
-    internal class GetProductCommentsHandler : IRequestHandler<GetProductComments, IQueryable<CommentInfoDto>>
+    internal class GetProductCommentsHandler : IRequestHandler<GetProductComments, IEnumerable<ProductCommentInfoDto>>
     {
         private readonly IDbContext _db;
         private readonly IMapper _mapper;
@@ -19,14 +19,13 @@ namespace WebFeatures.Application.Features.Products.GetProductComments
             _mapper = mapper;
         }
 
-        public Task<IQueryable<CommentInfoDto>> HandleAsync(GetProductComments request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductCommentInfoDto>> HandleAsync(GetProductComments request, CancellationToken cancellationToken)
         {
-            IQueryable<CommentInfoDto> comments = _db.UserComments
-                .Where(x => x.ProductId == request.ProductId)
-                .AsQueryable()
-                .ProjectTo<CommentInfoDto>(_mapper.ConfigurationProvider);
+            IEnumerable<ProductCommentInfoDto> comments =
+                (await _db.ProductComments.GetByProductAsync(request.ProductId))
+                .Select(x => _mapper.Map<ProductCommentInfoDto>(x));
 
-            return Task.FromResult(comments);
+            return comments;
         }
     }
 }

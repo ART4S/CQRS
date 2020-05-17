@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Requests;
 
@@ -20,7 +20,7 @@ namespace WebFeatures.Application.Features.Products.GetProduct
 
         public async Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)
         {
-            Product product = await _db.Products.FindAsync(request.Id);
+            Product product = await _db.Products.GetAsync(request.Id);
             return _mapper.Map<ProductInfoDto>(product);
         }
     }

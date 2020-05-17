@@ -52,8 +52,6 @@ namespace WebFeatures.WebApi
 
         public void Configure(IApplicationBuilder app)
         {
-            app.ConfigurePersictence();
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

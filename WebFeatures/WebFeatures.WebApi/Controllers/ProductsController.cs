@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Features.Products.EditProduct;
 using WebFeatures.Application.Features.Products.GetProduct;
 using WebFeatures.Application.Features.Products.GetProductComments;
+using WebFeatures.Application.Features.Products.GetProductReviews;
 using WebFeatures.Application.Features.Products.GetProductsList;
-using WebFeatures.Application.Features.Products.GetReviews;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -20,15 +20,15 @@ namespace WebFeatures.WebApi.Controllers
             => Mediator.SendAsync(new GetProduct() { Id = id });
 
         [HttpGet("list")]
-        public Task<IQueryable<ProductListDto>> GetProductsList()
+        public Task<IEnumerable<ProductListDto>> GetProductsList()
             => Mediator.SendAsync(new GetProductsList());
 
         [HttpGet("{id:guid}/reviews")]
-        public Task<IQueryable<ReviewInfoDto>> GetReviews([FromRoute] Guid id)
-            => Mediator.SendAsync(new GetReviews() { ProductId = id });
+        public Task<IEnumerable<ProductReviewInfoDto>> GetReviews([FromRoute] Guid id)
+            => Mediator.SendAsync(new GetProductReviews() { ProductId = id });
 
         [HttpGet("{id:guid}/comments")]
-        public Task<IQueryable<CommentInfoDto>> GetComments([FromRoute] Guid id)
+        public Task<IEnumerable<ProductCommentInfoDto>> GetComments([FromRoute] Guid id)
             => Mediator.SendAsync(new GetProductComments() { ProductId = id });
 
         [HttpPost]

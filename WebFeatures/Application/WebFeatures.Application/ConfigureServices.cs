@@ -32,12 +32,10 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ValidationMiddleware<,>));
 
-            // Commands pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
+            // Command pipeline
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(TransactionMiddleware<,>));
 
-            // Queries pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(QueryFilteringMiddleware<,>));
-
+            // Endpoints
             Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
 
             foreach (Type type in assemblyTypes)

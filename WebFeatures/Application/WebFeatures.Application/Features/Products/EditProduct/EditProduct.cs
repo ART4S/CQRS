@@ -4,7 +4,7 @@ using System;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Products.EditProduct
@@ -29,15 +29,16 @@ namespace WebFeatures.Application.Features.Products.EditProduct
             public Validator(IDbContext db)
             {
                 RuleFor(x => x.Id)
-                    .MustAsync(async (x, token) => await db.Products.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Products.ExistsAsync(x));
                 RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.ManufacturerId)
-                    .MustAsync(async (x, token) => await db.Manufacturers.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Manufacturers.ExistsAsync(x));
                 RuleFor(x => x.CategoryId)
-                    .MustAsync(async (x, token) => x == null || await db.Categories.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Categories.ExistsAsync(x.Value))
+                    .When(x => x.CategoryId.HasValue);
                 RuleFor(x => x.BrandId)
-                    .MustAsync(async (x, token) => await db.Brands.FindAsync(x) != null);
+                    .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
             }
         }
     }

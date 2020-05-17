@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataContext;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductsList
 {
-    internal class GetProductsListHandler : IRequestHandler<GetProductsList, IQueryable<ProductListDto>>
+    internal class GetProductsListHandler : IRequestHandler<GetProductsList, IEnumerable<ProductListDto>>
     {
         private readonly IDbContext _db;
         private readonly IMapper _mapper;
@@ -19,13 +19,12 @@ namespace WebFeatures.Application.Features.Products.GetProductsList
             _mapper = mapper;
         }
 
-        public Task<IQueryable<ProductListDto>> HandleAsync(GetProductsList request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductListDto>> HandleAsync(GetProductsList request, CancellationToken cancellationToken)
         {
-            IQueryable<ProductListDto> products = _db.Products
-                .AsQueryable()
-                .ProjectTo<ProductListDto>(_mapper.ConfigurationProvider);
+            IEnumerable<ProductListDto> products = (await _db.Products.GetAllAsync())
+                .Select(x => _mapper.Map<ProductListDto>(x));
 
-            return Task.FromResult(products);
+            return products;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace WebFeatures.Application.Middlewares
         public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             ValidationFailure[] errors =
-                (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request, cancellationToken))))
+                (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request))))
                 .Where(x => !x.IsValid)
                 .SelectMany(x => x.Errors)
                 .ToArray();
