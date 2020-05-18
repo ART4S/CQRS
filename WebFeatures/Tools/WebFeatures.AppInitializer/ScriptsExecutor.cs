@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
-using System.IO;
 using WebFeatures.AppInitializer.Database;
 using WebFeatures.AppInitializer.Extensions;
 
@@ -25,29 +24,17 @@ namespace WebFeatures.AppInitializer
 
             string database = "webfeatures_db";
 
-            CreateDb(connection, database);
+            _logger.LogInformation("Creating database...");
+
+            connection.ExecuteScript(
+                ScriptsProvider.CreateDbScript(database));
 
             connection.ChangeDatabase(database);
 
-            InitDbSchema(connection);
-        }
+            _logger.LogInformation("Initializing schema...");
 
-        private void CreateDb(IDbConnection connection, string databaseName)
-        {
-            _logger.LogInformation("Executing CreateDb...");
-
-            string script = $"DROP DATABASE IF EXISTS {databaseName};\n" +
-                            $"CREATE DATABASE {databaseName};\n";
-
-            connection.ExecuteScript(script);
-        }
-
-        private void InitDbSchema(IDbConnection connection)
-        {
-            _logger.LogInformation("Executing InitDbSchema...");
-
-            string script = File.ReadAllText("Scripts/Schema.sql");
-            connection.ExecuteScript(script);
+            connection.ExecuteScript(
+                ScriptsProvider.InitDbSchemaScript());
         }
     }
 }

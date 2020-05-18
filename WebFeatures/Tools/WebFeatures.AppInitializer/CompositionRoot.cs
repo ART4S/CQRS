@@ -23,8 +23,6 @@ namespace WebFeatures.AppInitializer
 
         private IServiceProvider BuildServiceProvider()
         {
-            IConfiguration configuration = BuildConfiguration();
-
             var services = new ServiceCollection();
 
             RegisterLogging(services);

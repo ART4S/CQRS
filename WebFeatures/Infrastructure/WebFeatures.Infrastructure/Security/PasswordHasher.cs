@@ -1,25 +1,24 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+﻿using System.Security.Cryptography;
 using WebFeatures.Application.Interfaces.Security;
 
 namespace WebFeatures.Infrastructure.Security
 {
     internal class PasswordHasher : IPasswordHasher
     {
-        private readonly IDataProtector _protector;
+        private static readonly int IterationsCount = 1000;
+        private static readonly int SaltSize = 128 / 8; // 128 bit
+        private static readonly int SubKey = 256 / 8; // 256 bit
 
-        public PasswordHasher(IDataProtectionProvider protectionProvider)
+        private readonly RandomNumberGenerator _random = RandomNumberGenerator.Create();
+
+        public string ComputeHash(string password)
         {
-            _protector = protectionProvider.CreateProtector(nameof(PasswordHasher));
+            throw new System.NotImplementedException();
         }
 
-        public string EncodePassword(string password)
+        public bool Verify(string hashedPassword, string expectedPassword)
         {
-            return _protector.Protect(password);
-        }
-
-        public string DecodePassword(string password)
-        {
-            return _protector.Unprotect(password);
+            throw new System.NotImplementedException();
         }
     }
 }
