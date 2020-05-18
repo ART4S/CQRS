@@ -37,8 +37,7 @@ namespace WebFeatures.Application.Features.Auth.Login
             if (user == null)
                 throw new ApplicationValidationException("Wrong login or password");
 
-            string hash = _passwordHasher.EncodePassword(request.Password);
-            if (hash != user.PasswordHash)
+            if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
                 throw new ApplicationValidationException("Wrong login or password");
 
             _logger.LogInformation($"{user.Email} signed in");

@@ -34,7 +34,7 @@ namespace WebFeatures.Application.Features.Auth.RegisterUser
             {
                 Name = request.Name,
                 Email = request.Email,
-                PasswordHash = _passwordEncoder.EncodePassword(request.Password)
+                PasswordHash = _passwordEncoder.ComputeHash(request.Password)
             };
 
             await _db.Users.CreateAsync(user);
