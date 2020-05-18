@@ -1,0 +1,34 @@
+{
+  "name": "webfeatures",
+  "version": "1.0.0",
+  "description": "web features",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Test\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ART4S/CQRS.git"
+  },
+  "keywords": [
+    "web"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ART4S/CQRS/issues"
+  },
+  "homepage": "https://github.com/ART4S/CQRS#readme",
+  "devDependencies": {
+    "@types/react": "^16.3.13",
+    "@types/react-dom": "^16.9.8",
+    "@types/node": "^9.6.7",
+    "yargs-parser": "^18.1.3",
+    "gulp": "^4.0.2",
+    "del": "^5.1.0"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

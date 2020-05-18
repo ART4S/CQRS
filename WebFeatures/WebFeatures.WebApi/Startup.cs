@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using React.AspNet;
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,6 +13,8 @@ using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
 using WebFeatures.WebApi.ModelBinders;
+using JavaScriptEngineSwitcher.V8;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 
 namespace WebFeatures.WebApi
 {
@@ -48,6 +52,12 @@ namespace WebFeatures.WebApi
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+
+            // For Frontend (React.JS)
+            services.AddMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+            services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8JsEngine.EngineName).AddV8();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -60,6 +70,7 @@ namespace WebFeatures.WebApi
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseDefaultFiles();
 
             app.UseRouting();
 
@@ -72,6 +83,13 @@ namespace WebFeatures.WebApi
             {
                 endpoints.MapControllers();
             });
+            
+            // if (env.IsDevelopment()) 
+            // {
+                app.UseDeveloperExceptionPage();
+            // }
+
+            app.UseReact(config => { });
         }
     }
 }
