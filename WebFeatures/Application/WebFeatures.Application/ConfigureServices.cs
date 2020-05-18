@@ -33,7 +33,7 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ValidationMiddleware<,>));
 
             // Command pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(TransactionMiddleware<,>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
 
             // Endpoints
             Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
