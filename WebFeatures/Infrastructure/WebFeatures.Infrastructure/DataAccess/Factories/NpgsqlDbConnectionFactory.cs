@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System;
 using System.Data;
+using WebFeatures.Persistence;
 
 namespace WebFeatures.Infrastructure.DataAccess.Factories
 {
