@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Persistence
 {
-    public interface IDbConnectionFactory
+    internal interface IDbConnectionFactory
     {
         IDbConnection CreateConnection();
     }

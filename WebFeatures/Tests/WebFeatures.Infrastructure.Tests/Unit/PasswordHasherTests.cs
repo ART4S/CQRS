@@ -7,12 +7,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit
     public class PasswordHasherTests
     {
         private readonly PasswordHasher _hasher = new PasswordHasher();
-        private const string _password = "password";
 
         [Fact]
         public void ComputeHash_ShouldNotReturnNullOrEmptyHash()
         {
-            string hash = _hasher.ComputeHash(_password);
+            string hash = _hasher.ComputeHash("12345");
 
             hash.ShouldNotBeNullOrEmpty();
         }
@@ -20,9 +19,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit
         [Fact]
         public void Verify_ShouldVerifyComputedHash()
         {
-            string hash = _hasher.ComputeHash(_password);
+            string password = "12345";
 
-            _hasher.Verify(hash, _password).ShouldBeTrue();
+            string hash = _hasher.ComputeHash(password);
+
+            _hasher.Verify(hash, password).ShouldBeTrue();
         }
     }
 }

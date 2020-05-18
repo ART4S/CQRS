@@ -2,9 +2,9 @@
 using System;
 using System.Data;
 
-namespace WebFeatures.Persistence
+namespace WebFeatures.Infrastructure.DataAccess.Factories
 {
-    public class NpgsqlDbConnectionFactory : IDbConnectionFactory
+    internal class NpgsqlDbConnectionFactory : IDbConnectionFactory
     {
         private readonly string _connectionString;
 

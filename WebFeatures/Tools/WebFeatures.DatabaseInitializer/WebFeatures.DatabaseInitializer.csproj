@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Scripts\Data.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\Schema.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

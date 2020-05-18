@@ -10,5 +10,8 @@ namespace WebFeatures.AppInitializer
 
         public static string InitDbSchemaScript()
             => File.ReadAllText("Scripts/Schema.sql");
+
+        public static string InitialDataScript()
+            => File.ReadAllText("Scripts/Data.sql");
     }
 }

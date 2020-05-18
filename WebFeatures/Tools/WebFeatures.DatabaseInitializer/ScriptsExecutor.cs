@@ -35,6 +35,11 @@ namespace WebFeatures.AppInitializer
 
             connection.ExecuteScript(
                 ScriptsProvider.InitDbSchemaScript());
+
+            _logger.LogInformation("Seeding initial data...");
+
+            connection.ExecuteScript(
+                ScriptsProvider.InitialDataScript());
         }
     }
 }
