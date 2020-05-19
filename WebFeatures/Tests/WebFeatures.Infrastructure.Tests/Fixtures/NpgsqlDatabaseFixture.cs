@@ -18,7 +18,7 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
         {
             CreateDatabase();
             CreateSchema();
-            SeedData();
+            SeedTastData();
         }
 
         private void CreateDatabase()
@@ -38,9 +38,9 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
             Connection.Execute(sql);
         }
 
-        private void SeedData()
+        private void SeedTastData()
         {
-            DataSeeder.SeedData(Connection);
+            DataSeeder.SeedTestData(Connection);
         }
 
         public override void Dispose()

@@ -4,7 +4,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 {
     internal static class DataSeeder
     {
-        public static void SeedData(IDbConnection connection)
+        public static void SeedTestData(IDbConnection connection)
         {
             // TODO:
         }
