@@ -9,15 +9,17 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
     internal class UserRepository : BaseRepository<User>
     {
-        public UserRepository(IDbTransaction transaction) : base(transaction)
+        public UserRepository(IDbConnection connection) : base(connection)
         {
         }
 
-        public override Task CreateAsync(User entity)
+        public override async Task CreateAsync(User entity)
         {
-            string sql = "INSERT INTO Users VALUES (@Name, @Email, @PasswordHash, @PictureId)";
+            entity.Id = Guid.NewGuid();
 
-            return Connection.ExecuteAsync(sql, entity);
+            string sql = "INSERT INTO Users VALUES (@Id, @Name, @Email, @PasswordHash, @PictureId)";
+
+            await Connection.ExecuteAsync(sql, entity);
         }
 
         public override Task DeleteAsync(User entity)

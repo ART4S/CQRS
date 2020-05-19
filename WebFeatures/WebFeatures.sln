@@ -33,6 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.DatabaseInitial
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure.Tests", "Tests\WebFeatures.Infrastructure.Tests\WebFeatures.Infrastructure.Tests.csproj", "{F6EF8E2A-2D04-4279-A959-15916DF51475}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedScripts", "SharedScripts", "{4756BE67-10B4-458B-AB62-CCD3C6EB0327}"
+	ProjectSection(SolutionItems) = preProject
+		SharedScripts\Schema.sql = SharedScripts\Schema.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

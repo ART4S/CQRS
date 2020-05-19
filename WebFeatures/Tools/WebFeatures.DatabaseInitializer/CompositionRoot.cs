@@ -13,15 +13,15 @@ namespace WebFeatures.AppInitializer
     {
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ServiceProvider { get; }
+        public IServiceProvider Services { get; }
 
         public CompositionRoot()
         {
             Configuration = BuildConfiguration();
-            ServiceProvider = BuildServiceProvider();
+            Services = BuildServices();
         }
 
-        private IServiceProvider BuildServiceProvider()
+        private IServiceProvider BuildServices()
         {
             var services = new ServiceCollection();
 

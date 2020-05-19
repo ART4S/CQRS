@@ -1,4 +1,5 @@
-﻿using WebFeatures.Application.Interfaces.DataAccess.Repositories;
+﻿using System.Data;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Interfaces.DataAccess
@@ -18,6 +19,6 @@ namespace WebFeatures.Application.Interfaces.DataAccess
         IAsyncRepository<Country> Countries { get; }
         IAsyncRepository<File> Files { get; }
 
-        int SaveChanges();
+        IDbTransaction BeginTransaction();
     }
 }

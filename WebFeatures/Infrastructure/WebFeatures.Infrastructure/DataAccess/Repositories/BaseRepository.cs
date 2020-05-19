@@ -10,12 +10,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
     public abstract class BaseRepository<TEntity> : IAsyncRepository<TEntity>
         where TEntity : BaseEntity
     {
-        protected IDbConnection Connection => _transaction.Connection;
-        private readonly IDbTransaction _transaction;
+        protected IDbConnection Connection;
 
-        protected BaseRepository(IDbTransaction transaction)
+        protected BaseRepository(IDbConnection connection)
         {
-            _transaction = transaction;
+            Connection = connection;
         }
 
         public abstract Task CreateAsync(TEntity entity);

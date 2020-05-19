@@ -2,7 +2,7 @@
 using WebFeatures.Infrastructure.Security;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.Unit
+namespace WebFeatures.Infrastructure.Tests.UnitTests.Security
 {
     public class PasswordHasherTests
     {
@@ -11,7 +11,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit
         [Fact]
         public void ComputeHash_ShouldNotReturnNullOrEmptyHash()
         {
-            string hash = _hasher.ComputeHash("12345");
+            string password = "12345";
+
+            string hash = _hasher.ComputeHash(password);
 
             hash.ShouldNotBeNullOrEmpty();
         }

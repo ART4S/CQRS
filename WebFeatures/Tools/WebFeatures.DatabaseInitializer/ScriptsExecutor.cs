@@ -27,19 +27,19 @@ namespace WebFeatures.AppInitializer
             _logger.LogInformation("Creating database...");
 
             connection.ExecuteScript(
-                ScriptsProvider.CreateDbScript(database));
+                Scripts.CreateDb(database));
 
             connection.ChangeDatabase(database);
 
-            _logger.LogInformation("Initializing schema...");
+            _logger.LogInformation("Creating schema...");
 
             connection.ExecuteScript(
-                ScriptsProvider.InitDbSchemaScript());
+                Scripts.CreateDbSchema());
 
             _logger.LogInformation("Seeding initial data...");
 
             connection.ExecuteScript(
-                ScriptsProvider.InitialDataScript());
+                Scripts.SeedInitialData());
         }
     }
 }

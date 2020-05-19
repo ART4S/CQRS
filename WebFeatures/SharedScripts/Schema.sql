@@ -1,9 +1,6 @@
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE Files
 (
-	Id UUID NOT NULL DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Content bytea,
 	
 	CONSTRAINT PK_Files PRIMARY KEY (Id)
@@ -11,7 +8,7 @@ CREATE TABLE Files
 
 CREATE TABLE Users
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	Email VARCHAR,
 	PasswordHash VARCHAR,
@@ -23,7 +20,7 @@ CREATE TABLE Users
 
 CREATE TABLE Roles
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	Description VARCHAR,
 	
@@ -32,8 +29,8 @@ CREATE TABLE Roles
 
 CREATE TABLE UserRoles
 (
-	UserId UUID,
-	RoleId UUID,
+	UserId UUID NOT NULL,
+	RoleId UUID NOT NULL,
 	
 	CONSTRAINT PK_UserRoles PRIMARY KEY (UserId, RoleId),
 	CONSTRAINT FK_UserRoles_Users_UserId FOREIGN KEY (UserId) REFERENCES Users (Id) ON DELETE CASCADE,
@@ -42,7 +39,7 @@ CREATE TABLE UserRoles
 
 CREATE TABLE Countries
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	Continent VARCHAR,
 	
@@ -51,7 +48,7 @@ CREATE TABLE Countries
 
 CREATE TABLE Cities
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	CountryId UUID NOT NULL,
 	
@@ -61,7 +58,7 @@ CREATE TABLE Cities
 
 CREATE TABLE Manufacturers
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	OrganizationName VARCHAR,
 	HomePageUrl VARCHAR,
 	StreetAddress_StreetName VARCHAR NOT NULL,
@@ -74,7 +71,7 @@ CREATE TABLE Manufacturers
 
 CREATE TABLE Categories
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	
 	CONSTRAINT PK_Categories PRIMARY KEY(Id)
@@ -82,7 +79,7 @@ CREATE TABLE Categories
 
 CREATE TABLE Brands
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	
 	CONSTRAINT PK_Brands PRIMARY KEY(Id)
@@ -90,7 +87,7 @@ CREATE TABLE Brands
 
 CREATE TABLE Products
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Name VARCHAR,
 	Price DECIMAL,
 	Description VARCHAR,
@@ -112,7 +109,7 @@ CREATE TABLE Products
 
 CREATE TABLE ProductComments
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Body VARCHAR NOT NULL,
 	CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 	ProductId UUID NOT NULL,
@@ -127,7 +124,7 @@ CREATE TABLE ProductComments
 
 CREATE TABLE ProductReviews
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	Title VARCHAR NOT NULL,
 	Comment VARCHAR NOT NULL,
 	CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -143,7 +140,7 @@ CREATE TABLE ProductReviews
 
 CREATE TABLE Shippers
 (
-	Id UUID DEFAULT uuid_generate_v4 (),
+	Id UUID NOT NULL,
 	OrganizationName VARCHAR NOT NULL,
 	HeadOffice_StreetName VARCHAR NOT NULL,
 	HeadOffice_PostalCode VARCHAR NOT NULL,
