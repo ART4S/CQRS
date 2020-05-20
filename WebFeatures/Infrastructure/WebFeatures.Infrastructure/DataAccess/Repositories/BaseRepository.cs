@@ -16,12 +16,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
         {
             Connection = connection;
         }
-
-        public abstract Task CreateAsync(TEntity entity);
-        public abstract Task DeleteAsync(TEntity entity);
-        public abstract Task<bool> ExistsAsync(Guid id);
         public abstract Task<IEnumerable<TEntity>> GetAllAsync();
         public abstract Task<TEntity> GetAsync(Guid id);
+        public abstract Task CreateAsync(TEntity entity);
         public abstract Task UpdateAsync(TEntity entity);
+        public abstract Task DeleteAsync(TEntity entity);
+        public abstract Task<bool> ExistsAsync(Guid id);
     }
 }
