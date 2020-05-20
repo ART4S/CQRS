@@ -94,7 +94,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
         {
             string sql =
                 $"SELECT 1 FROM {entity.Table}\n" +
-                $"WHERE {entity.Identity.Field} = @id";
+                $"WHERE {entity.Identity.Field} = @{entity.Identity.Property}";
 
             return sql;
         }

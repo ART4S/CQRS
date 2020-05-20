@@ -11,7 +11,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders;
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
     internal class Repository<TEntity, TQueries> : IAsyncRepository<TEntity>
-        where TEntity : BaseEntity
+        where TEntity : BaseEntity, new()
         where TQueries : IQueries<TEntity>, new()
     {
         protected readonly IDbConnection Connection;
@@ -52,7 +52,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
 
         public virtual Task<TEntity> GetAsync(Guid id)
         {
-            return Connection.QuerySingleOrDefaultAsync<TEntity>(Queries.Get, new { id });
+            return Connection.QuerySingleOrDefaultAsync<TEntity>(Queries.Get, new TEntity { Id = id });
         }
 
         public virtual Task UpdateAsync(TEntity entity)
