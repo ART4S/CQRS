@@ -43,6 +43,13 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
                     Name = "noname",
                     Email = "noname@gmail.com",
                     PasswordHash = "hash"
+                },
+                new User()
+                {
+                    Id = new Guid("1db40dd2-f7cd-4074-9572-d1748170e71b"),
+                    Name = "userWithEmail",
+                    Email = "test@gmail.com",
+                    PasswordHash = "hash"
                 }
             };
 
