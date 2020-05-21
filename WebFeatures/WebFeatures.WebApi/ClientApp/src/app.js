@@ -1,7 +1,13 @@
-class Hello extends React.Component {
-    render() {
-        return React.createElement("h1", null, "\u041F\u0440\u0438\u0432\u0435\u0442, React.JS");
-    }
+import React, { Component, Fragment } from 'react';
+
+class App extends Component {
+  render() {
+    return (
+      <Fragment>
+        <p>This is an incredibly complex react app!</p>
+      </Fragment>
+    );
+  }
 }
-ReactDOM.render(React.createElement(Hello, null), document.getElementById("content"));
-//# sourceMappingURL=app.js.map
+
+export default App;
