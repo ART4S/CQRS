@@ -3,16 +3,13 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Queries;
-using WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
     internal class UserRepository : Repository<User, UserQueries>, IUserRepository
     {
-        public UserRepository(
-            IDbConnection connection,
-            IQueryProvider<User, UserQueries> queryProvider) : base(connection, queryProvider)
+        public UserRepository(IDbConnection connection, UserQueries queries) : base(connection, queries)
         {
         }
 

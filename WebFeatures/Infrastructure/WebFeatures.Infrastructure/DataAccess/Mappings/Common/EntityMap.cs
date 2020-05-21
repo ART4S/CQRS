@@ -10,7 +10,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
     internal class EntityMap<TEntity>
-        where TEntity : BaseEntity
+        where TEntity : Entity
     {
         public TableMap Table
         {
@@ -36,7 +36,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         }
         private TableMap _table;
 
-        public PropertyMap Identity { get; private set; } = new PropertyMap(nameof(BaseEntity.Id));
+        public PropertyMap Identity { get; private set; } = new PropertyMap(nameof(Entity.Id));
 
         public IEnumerable<PropertyMap> Mappings => _mappings;
         private readonly HashSet<PropertyMap> _mappings =

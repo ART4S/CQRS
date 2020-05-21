@@ -18,6 +18,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         public void ToField(string field)
         {
             Guard.ThrowIfNullOrWhiteSpace(field, nameof(field));
+
             Field = field;
         }
 

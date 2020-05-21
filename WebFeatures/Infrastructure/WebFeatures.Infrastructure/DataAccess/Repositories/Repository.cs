@@ -5,22 +5,21 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Queries;
-using WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
     internal class Repository<TEntity, TQueries> : IAsyncRepository<TEntity>
-        where TEntity : BaseEntity, new()
-        where TQueries : IQueries<TEntity>, new()
+        where TEntity : Entity, new()
+        where TQueries : Queries, new()
     {
         protected readonly IDbConnection Connection;
         protected readonly TQueries Queries;
 
-        public Repository(IDbConnection connection, IQueryProvider<TEntity, TQueries> queriesProvider)
+        public Repository(IDbConnection connection, TQueries queries)
         {
             Connection = connection;
-            Queries = queriesProvider.GetQueries();
+            Queries = queries;
         }
 
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()

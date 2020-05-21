@@ -3,7 +3,7 @@ using WebFeatures.Domian.ValueObjects;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Shipper : BaseEntity
+    public class Shipper : Entity
     {
         public string OrganizationName { get; set; }
         public StreetAddress HeadOffice { get; set; }

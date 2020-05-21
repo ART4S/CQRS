@@ -5,6 +5,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 {
     internal interface IEntityProfile
     {
-        EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : BaseEntity;
+        EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : Entity;
     }
 }

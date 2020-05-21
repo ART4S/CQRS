@@ -30,7 +30,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
                 .ToDictionary(t => t.EntityType, t => t.Mapping);
         }
 
-        public EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : BaseEntity
+        public EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : Entity
         {
             _mappings.TryGetValue(typeof(TEntity), out object mapping);
             return (EntityMap<TEntity>)mapping;

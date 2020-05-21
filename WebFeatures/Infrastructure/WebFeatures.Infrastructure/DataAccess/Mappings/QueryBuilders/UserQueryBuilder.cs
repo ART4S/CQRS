@@ -1,19 +1,20 @@
 ﻿using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Queries;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
 
-namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
+namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryBuilders
 {
-    internal class UserQueryProvider : QueryProvider<User, UserQueries>
+    internal class UserQueryBuilder : QueryBuilder<User, UserQueries>
     {
-        public UserQueryProvider(IEntityProfile profile) : base(profile)
+        public UserQueryBuilder(IEntityProfile profile) : base(profile)
         {
         }
 
         protected override UserQueries BuildQueries(EntityMap<User> entity)
         {
             UserQueries queries = base.BuildQueries(entity);
+
             queries.GetUserByEmail = BuildGetUserByEmail(entity);
 
             return queries;

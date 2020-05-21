@@ -1,9 +1,6 @@
-﻿using WebFeatures.Domian.Common;
-
-namespace WebFeatures.Infrastructure.DataAccess.Mappings.Queries
+﻿namespace WebFeatures.Infrastructure.DataAccess.Mappings.Querying
 {
-    internal class Queries<TEntity> : IQueries<TEntity>
-        where TEntity : BaseEntity
+    internal class Queries
     {
         public string GetAll { get; set; }
         public string Get { get; set; }

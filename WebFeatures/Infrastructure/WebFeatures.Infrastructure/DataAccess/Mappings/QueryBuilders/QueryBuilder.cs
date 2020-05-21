@@ -1,25 +1,25 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Queries;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
 
-namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
+namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryBuilders
 {
-    internal class QueryProvider<TEntity, TQueries> : IQueryProvider<TEntity, TQueries>
-        where TEntity : BaseEntity
-        where TQueries : IQueries<TEntity>, new()
+    internal class QueryBuilder<TEntity, TQueries> : IQueryBuilder<TEntity, TQueries>
+        where TEntity : Entity, new()
+        where TQueries : Queries, new()
     {
-        private readonly EntityMap<TEntity> _entity;
-        private TQueries _queries;
+        private static Lazy<TQueries> Queries;
 
-        public QueryProvider(IEntityProfile profile)
+        public QueryBuilder(IEntityProfile profile)
         {
-            _entity = profile.GetMappingFor<TEntity>();
+            Queries = Queries ?? new Lazy<TQueries>(() => BuildQueries(profile.GetMappingFor<TEntity>()));
         }
 
-        public TQueries GetQueries() => _queries ?? (_queries = BuildQueries(_entity));
+        public TQueries BuildQueries() => Queries.Value;
 
         protected virtual TQueries BuildQueries(EntityMap<TEntity> entity)
         {
