@@ -5,19 +5,24 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
+using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
+using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
-    internal class ProductReviewRepository : Repository<ProductReview, ProductReviewQueries>, IProductReviewRepository
+    internal class ProductReviewRepository : Repository<ProductReview, ProductReviewQueryBuilder>, IProductReviewRepository
     {
-        public ProductReviewRepository(IDbConnection connection, ProductReviewQueries queries) : base(connection, queries)
+        public ProductReviewRepository(
+            IDbConnection connection,
+            ProductReviewQueryBuilder queryBuilder) : base(connection, queryBuilder)
         {
         }
 
         public Task<IEnumerable<ProductReview>> GetByProductAsync(Guid productId)
         {
-            return Connection.QueryAsync<ProductReview>(Queries.GetByProduct, new { productId });
+            SqlQuery sql = QueryBuilder.BuildGetByProduct(productId);
+
+            return Connection.QueryAsync<ProductReview>(sql.Query, sql.Param);
         }
     }
 }

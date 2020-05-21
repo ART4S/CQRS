@@ -2,10 +2,10 @@
 using System.Data;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
+using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Mappings.QueryBuilders;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
+using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories;
 using WebFeatures.Persistence;
 
@@ -19,44 +19,74 @@ namespace WebFeatures.Infrastructure.DataAccess
         public DbContext(IDbConnectionFactory connectionFactory, IEntityProfile entityProfile)
         {
             _connection = connectionFactory.CreateConnection();
+            _connection.Open();
+
             _entityProfile = entityProfile;
         }
 
-        public IUserRepository Users => _users ?? (_users = new UserRepository(_connection, new UserQueryBuilder(_entityProfile).BuildQueries()));
+        public IUserRepository Users => _users ?? (_users = CreateUserRepository());
         private IUserRepository _users;
 
-        public IAsyncRepository<Role> Roles => _roles ?? (_roles = new Repository<Role, Queries>(_connection, new QueryBuilder<Role, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Role> Roles => _roles ?? (_roles = CreateRepository<Role>());
         private IAsyncRepository<Role> _roles;
 
-        public IAsyncRepository<Product> Products => _products ?? (_products = new Repository<Product, Queries>(_connection, new QueryBuilder<Product, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Product> Products => _products ?? (_products = CreateRepository<Product>());
         private IAsyncRepository<Product> _products;
 
-        public IProductReviewRepository ProductReviews => _productReviews ?? (_productReviews = new ProductReviewRepository(_connection, new ProductReviewQueryBuilder(_entityProfile).BuildQueries()));
+        public IProductReviewRepository ProductReviews => _productReviews ?? (_productReviews = CreateProductReviewRepository());
         private IProductReviewRepository _productReviews;
 
-        public IProductCommentRepository ProductComments => _productComments ?? (_productComments = new ProductCommentRepository(_connection, new ProductCommentQueryBuilder(_entityProfile).BuildQueries()));
+        public IProductCommentRepository ProductComments => _productComments ?? (_productComments = CreateProductCommentRepository());
         private IProductCommentRepository _productComments;
 
-        public IAsyncRepository<Manufacturer> Manufacturers => _manufacturers ?? (_manufacturers = new Repository<Manufacturer, Queries>(_connection, new QueryBuilder<Manufacturer, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Manufacturer> Manufacturers => _manufacturers ?? (_manufacturers = CreateRepository<Manufacturer>());
         private IAsyncRepository<Manufacturer> _manufacturers;
 
-        public IAsyncRepository<Brand> Brands => _brands ?? (_brands = new Repository<Brand, Queries>(_connection, new QueryBuilder<Brand, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Brand> Brands => _brands ?? (_brands = CreateRepository<Brand>());
         private IAsyncRepository<Brand> _brands;
 
-        public IAsyncRepository<Category> Categories => _categories ?? (_categories = new Repository<Category, Queries>(_connection, new QueryBuilder<Category, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Category> Categories => _categories ?? (_categories = CreateRepository<Category>());
         private IAsyncRepository<Category> _categories;
 
-        public IAsyncRepository<Shipper> Shippers => _shippers ?? (_shippers = new Repository<Shipper, Queries>(_connection, new QueryBuilder<Shipper, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Shipper> Shippers => _shippers ?? (_shippers = CreateRepository<Shipper>());
         private IAsyncRepository<Shipper> _shippers;
 
-        public IAsyncRepository<City> Cities => _cities ?? (_cities = new Repository<City, Queries>(_connection, new QueryBuilder<City, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<City> Cities => _cities ?? (_cities = CreateRepository<City>());
         private IAsyncRepository<City> _cities;
 
-        public IAsyncRepository<Country> Countries => _countries ?? (_countries = new Repository<Country, Queries>(_connection, new QueryBuilder<Country, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<Country> Countries => _countries ?? (_countries = CreateRepository<Country>());
         private IAsyncRepository<Country> _countries;
 
-        public IAsyncRepository<File> Files => _files ?? (_files = new Repository<File, Queries>(_connection, new QueryBuilder<File, Queries>(_entityProfile).BuildQueries()));
+        public IAsyncRepository<File> Files => _files ?? (_files = CreateRepository<File>());
         private IAsyncRepository<File> _files;
+
+        private IAsyncRepository<TEntity> CreateRepository<TEntity>() where TEntity : Entity
+        {
+            return new Repository<TEntity, QueryBuilder<TEntity>>(
+                _connection,
+                new QueryBuilder<TEntity>(_entityProfile.GetMappingFor<TEntity>()));
+        }
+
+        private IUserRepository CreateUserRepository()
+        {
+            return new UserRepository(
+                _connection,
+                new UserQueryBuilder(_entityProfile.GetMappingFor<User>()));
+        }
+
+        private IProductCommentRepository CreateProductCommentRepository()
+        {
+            return new ProductCommentRepository(
+                _connection,
+                new ProductCommentQueryBuilder(_entityProfile.GetMappingFor<ProductComment>()));
+        }
+
+        private IProductReviewRepository CreateProductReviewRepository()
+        {
+            return new ProductReviewRepository(
+                _connection,
+                new ProductReviewQueryBuilder(_entityProfile.GetMappingFor<ProductReview>()));
+        }
 
         public IDbTransaction BeginTransaction()
         {

@@ -3,10 +3,9 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Mappings.QueryBuilders;
+using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories;
 using WebFeatures.Infrastructure.Tests.Fixtures;
 using Xunit;
@@ -16,12 +15,15 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
     public class UserRepositoryTests : IClassFixture<NpgsqlDatabaseFixture>
     {
         private readonly NpgsqlDatabaseFixture _db;
-        private readonly IUserRepository _repo;
+        private readonly UserRepository _repo;
 
         public UserRepositoryTests(NpgsqlDatabaseFixture db)
         {
             _db = db;
-            _repo = new UserRepository(db.Connection, new UserQueryBuilder(new EntityProfile()).BuildQueries());
+            _repo = new UserRepository(
+                db.Connection,
+                new UserQueryBuilder(
+                    new EntityProfile().GetMappingFor<User>()));
         }
 
         [Fact]
@@ -159,7 +161,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         public async Task GetUserByEmailAsync_ShouldReturnUserWithEmail()
         {
             // Arrange
-            string existingEmail = "test@gmail.com";
+            string existingEmail = "test@mail.com";
 
             // Act
             User user = await _repo.GetByEmailAsync(existingEmail);

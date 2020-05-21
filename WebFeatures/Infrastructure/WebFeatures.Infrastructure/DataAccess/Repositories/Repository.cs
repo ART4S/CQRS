@@ -5,31 +5,36 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Querying;
+using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
+using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
-    internal class Repository<TEntity, TQueries> : IAsyncRepository<TEntity>
-        where TEntity : Entity, new()
-        where TQueries : Queries, new()
+    internal class Repository<TEntity, TQueryBuilder> : IAsyncRepository<TEntity>
+        where TEntity : Entity
+        where TQueryBuilder : QueryBuilder<TEntity>
     {
-        protected readonly IDbConnection Connection;
-        protected readonly TQueries Queries;
+        protected IDbConnection Connection { get; }
+        protected TQueryBuilder QueryBuilder { get; }
 
-        public Repository(IDbConnection connection, TQueries queries)
+        public Repository(IDbConnection connection, TQueryBuilder queryBuilder)
         {
             Connection = connection;
-            Queries = queries;
+            QueryBuilder = queryBuilder;
         }
 
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return Connection.QueryAsync<TEntity>(Queries.GetAll);
+            SqlQuery sql = QueryBuilder.BuildGetAll();
+
+            return Connection.QueryAsync<TEntity>(sql.Query, sql.Param);
         }
 
         public virtual Task<TEntity> GetAsync(Guid id)
         {
-            return Connection.QuerySingleOrDefaultAsync<TEntity>(Queries.Get, new TEntity { Id = id });
+            SqlQuery sql = QueryBuilder.BuildGet(id);
+
+            return Connection.QuerySingleOrDefaultAsync<TEntity>(sql.Query, sql.Param);
         }
 
         public virtual Task CreateAsync(TEntity entity)
@@ -39,22 +44,30 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
                 entity.Id = Guid.NewGuid();
             }
 
-            return Connection.ExecuteAsync(Queries.Create, entity);
+            SqlQuery sql = QueryBuilder.BuildCreate(entity);
+
+            return Connection.ExecuteAsync(sql.Query, sql.Param);
         }
 
         public virtual Task UpdateAsync(TEntity entity)
         {
-            return Connection.ExecuteAsync(Queries.Update, entity);
+            SqlQuery sql = QueryBuilder.BuildUpdate(entity);
+
+            return Connection.ExecuteAsync(sql.Query, sql.Param);
         }
 
         public virtual Task DeleteAsync(TEntity entity)
         {
-            return Connection.ExecuteAsync(Queries.Delete, entity);
+            SqlQuery sql = QueryBuilder.BuildDelete(entity);
+
+            return Connection.ExecuteAsync(sql.Query, sql.Param);
         }
 
         public virtual async Task<bool> ExistsAsync(Guid id)
         {
-            return await Connection.ExecuteScalarAsync<int>(Queries.Exists, new TEntity { Id = id }) == 1;
+            SqlQuery sql = QueryBuilder.BuildExists(id);
+
+            return await Connection.ExecuteScalarAsync<int>(sql.Query, sql.Param) == 1;
         }
     }
 }
