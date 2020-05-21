@@ -5,7 +5,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Repositories
 {
-    public interface IAsyncRepository<TEntity> where TEntity : BaseEntity
+    public interface IAsyncRepository<TEntity> where TEntity : Entity
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetAsync(Guid id);

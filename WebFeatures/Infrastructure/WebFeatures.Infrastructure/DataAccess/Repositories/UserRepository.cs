@@ -1,56 +1,26 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
+using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
-    internal class UserRepository : BaseRepository<User>
+    internal class UserRepository : Repository<User, UserQueryBuilder>, IUserRepository
     {
-        public UserRepository(IDbConnection connection) : base(connection)
+        public UserRepository(
+            IDbConnection connection,
+            UserQueryBuilder queryBuilder) : base(connection, queryBuilder)
         {
         }
 
-        public override async Task CreateAsync(User entity)
+        public Task<User> GetByEmailAsync(string email)
         {
-            entity.Id = Guid.NewGuid();
+            SqlQuery sql = QueryBuilder.BuildGetUserByEmail(email);
 
-            string sql = "INSERT INTO Users VALUES (@Id, @Name, @Email, @PasswordHash, @PictureId)";
-
-            await Connection.ExecuteAsync(sql, entity);
-        }
-
-        public override Task DeleteAsync(User entity)
-        {
-            string sql = "DELETE FROM Users WHERE Id == @Id";
-
-            return Connection.ExecuteAsync(sql, entity);
-        }
-
-        public override async Task<bool> ExistsAsync(Guid id)
-        {
-            string sql = "SELECT 1 FROM Users WHERE Id == @Id";
-
-            int result = await Connection.ExecuteScalarAsync<int>(sql, new { id });
-
-            return result == 1;
-        }
-
-        public override Task<IEnumerable<User>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task<User> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task UpdateAsync(User entity)
-        {
-            throw new NotImplementedException();
+            return Connection.QuerySingleOrDefaultAsync<User>(sql.Query, sql.Param);
         }
     }
 }

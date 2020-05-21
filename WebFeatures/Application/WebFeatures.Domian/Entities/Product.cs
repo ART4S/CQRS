@@ -4,7 +4,7 @@ using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Product : BaseEntity, IHasCreateDate
+    public class Product : Entity, IHasCreateDate
     {
         public string Name { get; set; }
         public decimal? Price { get; set; }

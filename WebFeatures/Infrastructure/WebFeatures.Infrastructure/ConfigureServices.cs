@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Jobs;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Mailing;
@@ -12,7 +13,9 @@ using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Common;
 using WebFeatures.Infrastructure.Common;
+using WebFeatures.Infrastructure.DataAccess;
 using WebFeatures.Infrastructure.DataAccess.Factories;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.Jobs;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Mailing;
@@ -44,8 +47,9 @@ namespace WebFeatures.Infrastructure
         {
             string connectionString = configuration.GetConnectionString("Npgsql");
 
-            services.AddSingleton<IDbConnectionFactory>(
-                x => new NpgsqlDbConnectionFactory(connectionString));
+            services.AddSingleton<IDbConnectionFactory>(x => new NpgsqlDbConnectionFactory(connectionString));
+            services.AddSingleton<IEntityProfile, EntityProfile>();
+            services.AddScoped<IDbContext, DbContext>();
         }
 
         private static void AddMailing(IServiceCollection services, IConfiguration configuration)

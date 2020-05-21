@@ -4,7 +4,7 @@ using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class ProductReview : BaseEntity, IHasCreateDate
+    public class ProductReview : Entity, IHasCreateDate
     {
         public string Title { get; set; }
         public string Comment { get; set; }
