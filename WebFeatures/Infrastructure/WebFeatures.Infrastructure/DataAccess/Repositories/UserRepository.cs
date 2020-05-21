@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
@@ -16,11 +17,21 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
         {
         }
 
-        public Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             SqlQuery sql = QueryBuilder.BuildGetUserByEmail(email);
 
-            return Connection.QuerySingleOrDefaultAsync<User>(sql.Query, sql.Param);
+            User user = (await Connection.QueryAsync<User, UserRole, User>(
+                sql.Query,
+                (user, userrole) =>
+                {
+                    user.UserRoles.Add(userrole);
+                    return user;
+                },
+                sql.Param))
+                .FirstOrDefault();
+
+            return user;
         }
     }
 }

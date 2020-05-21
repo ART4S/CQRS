@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.Application.Features.Auth.RegisterUser;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
@@ -15,13 +14,13 @@ namespace WebFeatures.Application.Features.Auth.Login
     {
         private readonly IDbContext _db;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly ILogger<RegisterUserHandler> _logger;
+        private readonly ILogger<LoginHandler> _logger;
         private readonly IMapper _mapper;
 
         public LoginHandler(
             IDbContext db,
             IPasswordHasher passwordHasher,
-            ILogger<RegisterUserHandler> logger,
+            ILogger<LoginHandler> logger,
             IMapper mapper)
         {
             _db = db;

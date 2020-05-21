@@ -1,5 +1,4 @@
 ﻿using System;
-using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories;
@@ -16,10 +15,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         public ProductCommentRepositoryTests(NpgsqlDatabaseFixture db)
         {
             _db = db;
-            _repo = new ProductCommentRepository(
-                db.Connection,
-                new ProductCommentQueryBuilder(
-                    new EntityProfile().GetMappingFor<ProductComment>()));
+            _repo = new ProductCommentRepository(db.Connection, new ProductCommentQueryBuilder(new EntityProfile()));
         }
 
         [Fact]
