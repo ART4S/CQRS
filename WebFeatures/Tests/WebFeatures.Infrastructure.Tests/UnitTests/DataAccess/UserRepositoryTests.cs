@@ -20,10 +20,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         public UserRepositoryTests(NpgsqlDatabaseFixture db)
         {
             _db = db;
-            _repo = new UserRepository(
-                db.Connection,
-                new UserQueryBuilder(
-                    new EntityProfile().GetMappingFor<User>()));
+            _repo = new UserRepository(db.Connection, new UserQueryBuilder(new EntityProfile()));
         }
 
         [Fact]

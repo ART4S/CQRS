@@ -9,8 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal class EntityMap<TEntity>
-        where TEntity : Entity
+    internal class EntityMap<TEntity> where TEntity : class
     {
         public TableMap Table
         {
@@ -38,6 +37,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
         public PropertyMap Identity { get; private set; } = new PropertyMap(nameof(Entity.Id));
 
+        internal object Field()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<PropertyMap> Mappings => _mappings;
         private readonly HashSet<PropertyMap> _mappings =
             SqlType<TEntity>.Properties
@@ -58,6 +62,16 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
             return Identity = MapProperty(propertyCall);
+        }
+
+        public void WithoutIdentity()
+        {
+            if (Identity != null)
+            {
+                _mappings.Remove(Identity);
+            }
+
+            Identity = null;
         }
 
         public PropertyMap MapProperty(Expression<Func<TEntity, object>> propertyCall)

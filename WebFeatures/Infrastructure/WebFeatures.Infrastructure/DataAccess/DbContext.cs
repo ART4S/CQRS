@@ -64,28 +64,28 @@ namespace WebFeatures.Infrastructure.DataAccess
         {
             return new Repository<TEntity, QueryBuilder<TEntity>>(
                 _connection,
-                new QueryBuilder<TEntity>(_entityProfile.GetMappingFor<TEntity>()));
+                new QueryBuilder<TEntity>(_entityProfile));
         }
 
         private IUserRepository CreateUserRepository()
         {
             return new UserRepository(
                 _connection,
-                new UserQueryBuilder(_entityProfile.GetMappingFor<User>()));
+                new UserQueryBuilder(_entityProfile));
         }
 
         private IProductCommentRepository CreateProductCommentRepository()
         {
             return new ProductCommentRepository(
                 _connection,
-                new ProductCommentQueryBuilder(_entityProfile.GetMappingFor<ProductComment>()));
+                new ProductCommentQueryBuilder(_entityProfile));
         }
 
         private IProductReviewRepository CreateProductReviewRepository()
         {
             return new ProductReviewRepository(
                 _connection,
-                new ProductReviewQueryBuilder(_entityProfile.GetMappingFor<ProductReview>()));
+                new ProductReviewQueryBuilder(_entityProfile));
         }
 
         public IDbTransaction BeginTransaction()

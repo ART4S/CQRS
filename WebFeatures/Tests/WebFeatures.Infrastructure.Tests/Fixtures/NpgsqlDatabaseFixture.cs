@@ -47,17 +47,16 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
         {
             Connection.ChangeDatabase("postgres");
 
-            string closeExistingConnectionsSql =
+            string closeExistingConnections =
                 "SELECT pg_terminate_backend(pid)\n" +
                 "FROM pg_stat_activity\n" +
                 $"WHERE datname = '{_databaseName}' AND pid <> pg_backend_pid();\n";
 
-            Connection.Execute(closeExistingConnectionsSql);
+            Connection.Execute(closeExistingConnections);
 
+            string dropDb = $"DROP DATABASE {_databaseName};\n";
 
-            string dropDatabaseSql = $"DROP DATABASE {_databaseName};\n";
-
-            Connection.Execute(dropDatabaseSql);
+            Connection.Execute(dropDb);
 
             base.Dispose();
         }

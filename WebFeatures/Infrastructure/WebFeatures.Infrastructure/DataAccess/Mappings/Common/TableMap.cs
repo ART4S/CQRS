@@ -10,12 +10,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         public TableMap(string name)
         {
             Guard.ThrowIfNullOrWhiteSpace(name, nameof(name));
+
             Name = name;
         }
 
         public void WithSchema(string schema)
         {
             Guard.ThrowIfNullOrWhiteSpace(schema, nameof(schema));
+
             Schema = schema;
         }
     }
