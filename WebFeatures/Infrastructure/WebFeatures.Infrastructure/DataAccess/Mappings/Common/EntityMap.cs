@@ -9,24 +9,24 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal class EntityMap<TEntity> : IEntityMap
+    internal class EntityMap<TEntity>
         where TEntity : BaseEntity
     {
-        public Type Type => typeof(TEntity);
-
-        public string Table
+        public TableMap Table
         {
             get
             {
                 if (_table == null)
                 {
-                    if (Type.Name.EndsWith("y"))
+                    string entityName = typeof(TEntity).Name;
+
+                    if (entityName.EndsWith("y"))
                     {
-                        _table = Type.Name.Remove(Type.Name.Length - 1) + "ies";
+                        _table = new TableMap(entityName.Remove(entityName.Length - 1) + "ies");
                     }
                     else
                     {
-                        _table = Type.Name + "s";
+                        _table = new TableMap(entityName + "s");
                     }
                 }
 
@@ -34,7 +34,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             }
             private set => _table = value;
         }
-        private string _table;
+        private TableMap _table;
 
         public PropertyMap Identity { get; private set; } = new PropertyMap(nameof(BaseEntity.Id));
 
@@ -44,24 +44,41 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             .Select(x => new PropertyMap(x.Name))
             .ToHashSet();
 
-        public void ToTable(string table)
+        public TableMap ToTable(string table)
         {
             Guard.ThrowIfNullOrWhiteSpace(table, nameof(table));
-            Table = table;
+
+            _table = new TableMap(table);
+
+            return _table;
         }
 
         public PropertyMap SetIdentity(Expression<Func<TEntity, object>> propertyCall)
         {
+            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
+
             return Identity = MapProperty(propertyCall);
         }
 
         public PropertyMap MapProperty(Expression<Func<TEntity, object>> propertyCall)
         {
-            var visitor = new PropertyNameVisitor();
-            visitor.Visit(propertyCall);
+            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            var map = new PropertyMap(visitor.PropertyName);
+            string propertyName = propertyCall.GetPropetyName();
+
+            PropertyMap map = new PropertyMap(propertyName);
             _mappings.Add(map);
+
+            return map;
+        }
+
+        public PropertyMap GetPropertyMap(Expression<Func<TEntity, object>> propertyCall)
+        {
+            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
+
+            string propertyName = propertyCall.GetPropetyName();
+
+            PropertyMap map = _mappings.FirstOrDefault(x => x.Property == propertyName);
 
             return map;
         }

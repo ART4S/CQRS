@@ -5,12 +5,13 @@ using System.Linq;
 using System.Reflection;
 using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 {
     internal class EntityProfile : IEntityProfile
     {
-        private Dictionary<Type, IEntityMap> _mappings;
+        private Dictionary<Type, object> _mappings;
 
         public EntityProfile()
         {
@@ -20,15 +21,19 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
         private void AddMappingsFromAssembly(Assembly assembly)
         {
             _mappings = assembly.GetTypes()
-                .Where(t => !t.IsGenericType && t.GetInterfaces().Any(i => i == typeof(IEntityMap)))
-                .Select(t => (IEntityMap)Activator.CreateInstance(t))
-                .ToDictionary(m => m.Type, m => m);
+                .Where(t => t.IsSubclassOfGeneric(typeof(EntityMap<>)))
+                .Select(t => new
+                {
+                    EntityType = t.BaseType.GetGenericArguments()[0],
+                    Mapping = Activator.CreateInstance(t)
+                })
+                .ToDictionary(t => t.EntityType, t => t.Mapping);
         }
 
-        public IEntityMap GetMappingFor<TEntity>() where TEntity : BaseEntity
+        public EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : BaseEntity
         {
-            _mappings.TryGetValue(typeof(TEntity), out IEntityMap mapping);
-            return mapping;
+            _mappings.TryGetValue(typeof(TEntity), out object mapping);
+            return (EntityMap<TEntity>)mapping;
         }
     }
 }

@@ -23,28 +23,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
             Queries = queriesProvider.GetQueries();
         }
 
-        public virtual Task CreateAsync(TEntity entity)
-        {
-            if (entity.Id == default)
-            {
-                entity.Id = Guid.NewGuid();
-            }
-
-            return Connection.ExecuteAsync(Queries.Create, entity);
-        }
-
-        public virtual Task DeleteAsync(TEntity entity)
-        {
-            return Connection.ExecuteAsync(Queries.Delete, entity);
-        }
-
-        public virtual async Task<bool> ExistsAsync(Guid id)
-        {
-            int result = await Connection.ExecuteScalarAsync<int>(Queries.Exists, new { id });
-
-            return result == 1;
-        }
-
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return Connection.QueryAsync<TEntity>(Queries.GetAll);
@@ -55,9 +33,29 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
             return Connection.QuerySingleOrDefaultAsync<TEntity>(Queries.Get, new TEntity { Id = id });
         }
 
+        public virtual Task CreateAsync(TEntity entity)
+        {
+            if (entity.Id == default)
+            {
+                entity.Id = Guid.NewGuid();
+            }
+
+            return Connection.ExecuteAsync(Queries.Create, entity);
+        }
+
         public virtual Task UpdateAsync(TEntity entity)
         {
             return Connection.ExecuteAsync(Queries.Update, entity);
+        }
+
+        public virtual Task DeleteAsync(TEntity entity)
+        {
+            return Connection.ExecuteAsync(Queries.Delete, entity);
+        }
+
+        public virtual async Task<bool> ExistsAsync(Guid id)
+        {
+            return await Connection.ExecuteScalarAsync<int>(Queries.Exists, new TEntity { Id = id }) == 1;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Queries;
 
@@ -8,12 +7,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
 {
     internal class UserQueryProvider : QueryProvider<User, UserQueries>
     {
-
         public UserQueryProvider(IEntityProfile profile) : base(profile)
         {
         }
 
-        protected override UserQueries BuildQueries(IEntityMap entity)
+        protected override UserQueries BuildQueries(EntityMap<User> entity)
         {
             UserQueries queries = base.BuildQueries(entity);
             queries.GetUserByEmail = BuildGetUserByEmail(entity);
@@ -21,13 +19,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
             return queries;
         }
 
-        private string BuildGetUserByEmail(IEntityMap entity)
+        private string BuildGetUserByEmail(EntityMap<User> entity)
         {
-            PropertyMap email = entity.GetMapFor<User>(x => x.Email);
+            PropertyMap email = entity.GetPropertyMap(x => x.Email);
 
             string sql =
-                $"SELECT * FROM {entity.Table}\n" +
-                $"WHERE {email.Field} == @{email.Property}";
+                $"SELECT * FROM {entity.Table.Schema}.{entity.Table.Name}\n" +
+                $"WHERE {email.Field} = @{email.Property}";
 
             return sql;
         }

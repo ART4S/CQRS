@@ -11,16 +11,17 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
         where TEntity : BaseEntity
         where TQueries : IQueries<TEntity>, new()
     {
-        private static TQueries _queries;
+        private readonly EntityMap<TEntity> _entity;
+        private TQueries _queries;
 
         public QueryProvider(IEntityProfile profile)
         {
-            _queries = _queries ?? BuildQueries(profile.GetMappingFor<TEntity>());
+            _entity = profile.GetMappingFor<TEntity>();
         }
 
-        public TQueries GetQueries() => _queries;
+        public TQueries GetQueries() => _queries ?? (_queries = BuildQueries(_entity));
 
-        protected virtual TQueries BuildQueries(IEntityMap entity)
+        protected virtual TQueries BuildQueries(EntityMap<TEntity> entity)
         {
             return new TQueries()
             {
@@ -33,32 +34,34 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
             };
         }
 
-        private string BuildGetAll(IEntityMap entity)
+        private string BuildGetAll(EntityMap<TEntity> entity)
         {
-            string sql = $"SELECT * FROM {entity.Table}";
+            string sql = $"SELECT * FROM {entity.Table.Schema}.{entity.Table.Name}";
 
             return sql;
         }
 
-        private string BuildGet(IEntityMap entity)
-        {
-            string sql = $"SELECT * FROM {entity.Table} WHERE {entity.Identity.Field} = @id";
-
-            return sql;
-        }
-
-        private string BuildCreate(IEntityMap entity)
+        private string BuildGet(EntityMap<TEntity> entity)
         {
             string sql =
-                $"INSERT INTO {entity.Table} ({BuildInsertFields(entity)})\n" +
+                $"SELECT * FROM {entity.Table.Schema}.{entity.Table.Name}\n" +
+                $"WHERE {entity.Identity.Field} = @{entity.Identity.Property}";
+
+            return sql;
+        }
+
+        private string BuildCreate(EntityMap<TEntity> entity)
+        {
+            string sql =
+                $"INSERT INTO {entity.Table.Schema}.{entity.Table.Name} ({BuildInsertFields(entity)})\n" +
                 $"VALUES ({BuildInsertParams(entity)})";
 
-            string BuildInsertFields(IEntityMap entity)
+            string BuildInsertFields(EntityMap<TEntity> entity)
             {
                 return string.Join(", ", entity.Mappings.Select(x => x.Field));
             }
 
-            string BuildInsertParams(IEntityMap entity)
+            string BuildInsertParams(EntityMap<TEntity> entity)
             {
                 return string.Join(", ", entity.Mappings.Select(x => "@" + x.Property));
             }
@@ -66,14 +69,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
             return sql;
         }
 
-        private string BuildUpdate(IEntityMap entity)
+        private string BuildUpdate(EntityMap<TEntity> entity)
         {
             string sql =
-                $"UPDATE {entity.Table}\n" +
+                $"UPDATE {entity.Table.Schema}.{entity.Table.Name}\n" +
                 $"SET {BuildSetParams(entity)}\n" +
                 $"WHERE {entity.Identity.Field} = @{entity.Identity.Property}";
 
-            string BuildSetParams(IEntityMap entity)
+            string BuildSetParams(EntityMap<TEntity> entity)
             {
                 return string.Join(", ", entity.Mappings.Select(x => $"{x.Field} = @{x.Property}"));
             }
@@ -81,19 +84,19 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.QueryProviders
             return sql;
         }
 
-        private string BuildDelete(IEntityMap entity)
+        private string BuildDelete(EntityMap<TEntity> entity)
         {
             string sql =
-                $"DELETE FROM {entity.Table}\n" +
+                $"DELETE FROM {entity.Table.Schema}.{entity.Table.Name}\n" +
                 $"WHERE {entity.Identity.Field} = @{entity.Identity.Property}";
 
             return sql;
         }
 
-        private string BuildExists(IEntityMap entity)
+        private string BuildExists(EntityMap<TEntity> entity)
         {
             string sql =
-                $"SELECT 1 FROM {entity.Table}\n" +
+                $"SELECT 1 FROM {entity.Table.Schema}.{entity.Table.Name}\n" +
                 $"WHERE {entity.Identity.Field} = @{entity.Identity.Property}";
 
             return sql;
