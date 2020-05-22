@@ -16,6 +16,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
                 Seed(connection, TestData.UserRoles);
                 Seed(connection, TestData.Countries);
                 Seed(connection, TestData.Cities);
+                Seed(connection, TestData.Addresses);
                 Seed(connection, TestData.Brands);
                 Seed(connection, TestData.Categories);
                 Seed(connection, TestData.Manufacturers);

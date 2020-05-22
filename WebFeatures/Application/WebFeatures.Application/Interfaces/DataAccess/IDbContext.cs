@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.ValueObjects;
 
 namespace WebFeatures.Application.Interfaces.DataAccess
 {
@@ -18,6 +19,7 @@ namespace WebFeatures.Application.Interfaces.DataAccess
         IAsyncRepository<City> Cities { get; }
         IAsyncRepository<Country> Countries { get; }
         IAsyncRepository<File> Files { get; }
+        IAsyncRepository<Address> Addresses { get; }
 
         IDbTransaction BeginTransaction();
     }

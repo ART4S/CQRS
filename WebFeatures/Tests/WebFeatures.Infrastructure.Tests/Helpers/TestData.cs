@@ -15,51 +15,51 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new User()
             {
                 Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c"),
-                Name = "Vyacheslav",
-                Email = "vyacheslav@mail.com",
-                PasswordHash = "hash"
+                Name = "Name_1",
+                Email = "Email_1",
+                PasswordHash = "PasswordHash_1"
             },
             new User()
             {
                 Id = new Guid("1dfae12a-c1a6-47aa-b73f-e44e339d16f1"),
-                Name = "Valentin",
-                Email = "valentin@mail.com",
-                PasswordHash = "hash"
+                Name = "Name_2",
+                Email = "Email_2",
+                PasswordHash = "PasswordHash_2"
             },
             new User()
             {
                 Id = new Guid("067d520f-fe3c-493c-a4c9-0bce1cf57212"),
-                Name = "Ilya",
-                Email = "ilya@mail.com",
-                PasswordHash = "hash"
+                Name = "Name_3",
+                Email = "Email_3",
+                PasswordHash = "PasswordHash_3"
             },
             new User()
             {
                 Id = new Guid("a6945683-34e1-46b2-a911-f0c437422b53"),
-                Name = "noname",
-                Email = "noname@mail.com",
-                PasswordHash = "hash"
+                Name = "Name_4",
+                Email = "Email_4",
+                PasswordHash = "PasswordHash_4"
             },
             new User()
             {
                 Id = new Guid("1db40dd2-f7cd-4074-9572-d1748170e71b"),
-                Name = "noname",
+                Name = "Name_5",
                 Email = "test@mail.com",
-                PasswordHash = "hash"
+                PasswordHash = "PasswordHash_5"
             },
             new User()
             {
                 Id = new Guid("7f46fdda-8ab7-48eb-b713-2970b5038485"),
-                Name = "user",
-                Email = "user@mail.com",
-                PasswordHash = "user"
+                Name = "Name_6",
+                Email = "Email_6",
+                PasswordHash = "PasswordHash_6"
             },
             new User()
             {
                 Id = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03"),
-                Name = "administrator",
-                Email = "administrator@mail.com",
-                PasswordHash = "administrator"
+                Name = "Name_7",
+                Email = "Email_7",
+                PasswordHash = "PasswordHash_7"
             }
         };
 
@@ -71,17 +71,17 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Role()
             {
                 Id = new Guid("481bd67e-4177-457d-aaa5-f002b0cd8a6f"),
-                Name = "Administrators"
+                Name = "Name_1"
             },
             new Role()
             {
                 Id = new Guid("21ab9b3d-e971-45ca-8f3e-5a68abb82a6c"),
-                Name = "Users"
+                Name = "Name_2"
             },
             new Role()
             {
                 Id = new Guid("5c198568-5e41-46aa-9a4b-1565c66100e7"),
-                Name = "Managers"
+                Name = "Name_3"
             }
         };
 
@@ -115,8 +115,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Country()
             {
                 Id = new Guid("bfea0cb8-e4d2-4e7e-a119-caac5b30fa6d"),
-                Name = "Russia",
-                Continent = "Asia"
+                Name = "Name_1",
+                Continent = "Continent_1"
             }
         };
 
@@ -129,7 +129,28 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             {
                 Id = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
                 CountryId = new Guid("bfea0cb8-e4d2-4e7e-a119-caac5b30fa6d"),
-                Name = "Kaliningrad"
+                Name = "Name_1"
+            }
+        };
+
+        /// <summary>
+        /// Адреса
+        /// </summary>
+        public static readonly Address[] Addresses = new[]
+        {
+            new Address()
+            {
+                Id = new Guid("ef1fa5ce-ce73-40d5-8a2e-79e4e6957a8b"),
+                CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
+                PostalCode = "PostalCode_1",
+                StreetName = "StreetName_1"
+            },
+            new Address()
+            {
+                Id = new Guid("639d0b6f-5577-4928-aeb1-5a75527494e5"),
+                CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
+                PostalCode = "PostalCode_2",
+                StreetName = "StreetName_2"
             }
         };
 
@@ -141,13 +162,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Manufacturer()
             {
                 Id = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6"),
-                OrganizationName = "Reliable organization",
-                StreetAddress = new StreetAddress()
-                {
-                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
-                    PostalCode= "12345",
-                    StreetName = "ул. Пушкина д. Колотушкина"
-                }
+                StreetAddressId = new Guid("ef1fa5ce-ce73-40d5-8a2e-79e4e6957a8b"),
+                OrganizationName = "OrganizationName_1"
             }
         };
 
@@ -159,7 +175,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Brand()
             {
                 Id = new Guid("70a5ba68-10f4-47af-b293-21b595b7d477"),
-                Name = "Brand"
+                Name = "Name_1"
             }
         };
 
@@ -171,7 +187,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Category()
             {
                 Id = new Guid("b0fd6429-3de5-403a-b633-ca3bd928deb1"),
-                Name = "Category"
+                Name = "Name_1"
             }
         };
 
@@ -183,13 +199,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Shipper()
             {
                 Id = new Guid("6f794d7d-5396-4f8a-8fde-78090e062203"),
-                ContactPhone = "8-800-555-35-35",
-                HeadOffice = new StreetAddress()
-                {
-                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
-                    PostalCode = "12345",
-                    StreetName = "ул. Есенина д. Каруселина"
-                }
+                HeadOfficeId = new Guid("639d0b6f-5577-4928-aeb1-5a75527494e5"),
+                OrganizationName = "OrganizationName_1",
+                ContactPhone = "ContactPhone_1"
             }
         };
 
@@ -204,9 +216,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
                 BrandId = new Guid("70a5ba68-10f4-47af-b293-21b595b7d477"),
                 CategoryId = new Guid("b0fd6429-3de5-403a-b633-ca3bd928deb1"),
                 ManufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6"),
-                Name = "TestProduct",
+                Name = "Name_1",
                 CreateDate = DateTime.UtcNow,
-                Description = "TestProductDescription",
+                Description = "Description_1",
                 Price = 100,
                 ReviewsCount = 1,
                 AverageRating = ProductRating.FiveStars
@@ -223,7 +235,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
                 Id = new Guid("18c4dc23-3059-49a5-8174-f433123efea7"),
                 AuthorId = new Guid("7f46fdda-8ab7-48eb-b713-2970b5038485"),
                 ProductId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076"),
-                Body = "TestComment_1",
+                Body = "Body_1",
                 CreateDate = DateTime.UtcNow
             },
             new ProductComment()
@@ -232,7 +244,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
                 AuthorId = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03"),
                 ProductId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076"),
                 ParentCommentId = new Guid("18c4dc23-3059-49a5-8174-f433123efea7"),
-                Body = "TestComment_2",
+                Body = "Body_2",
                 CreateDate = DateTime.UtcNow
             }
         };
@@ -245,8 +257,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new ProductReview()
             {
                 Id = new Guid("43de32f1-2378-41ca-8c29-c47dda69c929"),
-                AuthorId = new Guid(),
-                ProductId = new Guid(),
+                AuthorId = new Guid("7f46fdda-8ab7-48eb-b713-2970b5038485"),
+                ProductId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076"),
                 Comment = "Comment_1",
                 Title = "Title_1",
                 Rating = ProductRating.FiveStars,

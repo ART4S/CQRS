@@ -43,7 +43,7 @@ CREATE TABLE Countries
 	Name VARCHAR,
 	Continent VARCHAR,
 	
-	CONSTRAINT PK_Countries PRIMARY KEY(Id)
+	CONSTRAINT PK_Countries PRIMARY KEY (Id)
 );
 
 CREATE TABLE Cities
@@ -52,8 +52,19 @@ CREATE TABLE Cities
 	Name VARCHAR,
 	CountryId UUID NOT NULL,
 	
-	CONSTRAINT PK_Cities PRIMARY KEY(Id),
-	CONSTRAINT FK_Cities_Countries_CountryId FOREIGN KEY(CountryId) REFERENCES Countries(Id)
+	CONSTRAINT PK_Cities PRIMARY KEY (Id),
+	CONSTRAINT FK_Cities_Countries_CountryId FOREIGN KEY (CountryId) REFERENCES Countries (Id)
+);
+
+CREATE TABLE Addresses
+(
+	Id UUID NOT NULL,
+	StreetName VARCHAR NOT NULL,
+	PostalCode VARCHAR NOT NULL,
+	CityId UUID NOT NULL,
+
+	CONSTRAINT PK_Addresses PRIMARY KEY (Id),
+	CONSTRAINT FK_Addresses_Cities_CityId FOREIGN KEY (CityId) REFERENCES Cities (Id)
 );
 
 CREATE TABLE Manufacturers
@@ -61,12 +72,10 @@ CREATE TABLE Manufacturers
 	Id UUID NOT NULL,
 	OrganizationName VARCHAR,
 	HomePageUrl VARCHAR,
-	StreetAddress_StreetName VARCHAR NOT NULL,
-	StreetAddress_PostalCode VARCHAR NOT NULL,
-	StreetAddress_CityId UUID NOT NULL,
+	StreetAddressId UUID NOT NULL,
 	
-	CONSTRAINT PK_Manufacturers PRIMARY KEY(Id),
-	CONSTRAINT FK_Manufacturers_Cities_StreetAddress_CityId FOREIGN KEY (StreetAddress_CityId) REFERENCES Cities (Id)
+	CONSTRAINT PK_Manufacturers PRIMARY KEY (Id),
+	CONSTRAINT FK_Manufacturers_Addresses_StreetAddressId FOREIGN KEY (StreetAddressId) REFERENCES Addresses (Id)
 );
 
 CREATE TABLE Categories
@@ -74,7 +83,7 @@ CREATE TABLE Categories
 	Id UUID NOT NULL,
 	Name VARCHAR,
 	
-	CONSTRAINT PK_Categories PRIMARY KEY(Id)
+	CONSTRAINT PK_Categories PRIMARY KEY (Id)
 );
 
 CREATE TABLE Brands
@@ -82,7 +91,7 @@ CREATE TABLE Brands
 	Id UUID NOT NULL,
 	Name VARCHAR,
 	
-	CONSTRAINT PK_Brands PRIMARY KEY(Id)
+	CONSTRAINT PK_Brands PRIMARY KEY (Id)
 );
 
 CREATE TABLE Products
@@ -99,7 +108,7 @@ CREATE TABLE Products
 	CategoryId UUID,
 	BrandId UUID NOT NULL,
 	
-	CONSTRAINT PK_Products PRIMARY KEY(Id),
+	CONSTRAINT PK_Products PRIMARY KEY (Id),
 	CONSTRAINT FK_Products_Files_PictureId FOREIGN KEY (PictureId) REFERENCES Files (Id) ON DELETE SET NULL,
 	CONSTRAINT FK_Products_Manufacturers_ManufacturerId FOREIGN KEY (ManufacturerId) REFERENCES Manufacturers (Id),
 	CONSTRAINT FK_Products_Categories_CategoryId FOREIGN KEY (CategoryId) REFERENCES Categories (Id) ON DELETE SET NULL,
@@ -116,10 +125,10 @@ CREATE TABLE ProductComments
 	AuthorId UUID NOT NULL,
 	ParentCommentId UUID,
 	
-	CONSTRAINT PK_ProductComments PRIMARY KEY(Id),
-	CONSTRAINT FK_ProductComments_Products_ProductId FOREIGN KEY(ProductId) REFERENCES Products(Id) ON DELETE CASCADE,
-	CONSTRAINT FK_ProductComments_Users_AuthorId FOREIGN KEY(AuthorId) REFERENCES Users(Id) ON DELETE CASCADE,
-	CONSTRAINT FK_ProductComments_ProductComments_ParentCommentId FOREIGN KEY(ParentCommentId) REFERENCES ProductComments(Id) ON DELETE CASCADE
+	CONSTRAINT PK_ProductComments PRIMARY KEY (Id),
+	CONSTRAINT FK_ProductComments_Products_ProductId FOREIGN KEY (ProductId) REFERENCES Products (Id) ON DELETE CASCADE,
+	CONSTRAINT FK_ProductComments_Users_AuthorId FOREIGN KEY (AuthorId) REFERENCES Users (Id) ON DELETE CASCADE,
+	CONSTRAINT FK_ProductComments_ProductComments_ParentCommentId FOREIGN KEY (ParentCommentId) REFERENCES ProductComments (Id) ON DELETE CASCADE
 );
 
 CREATE TABLE ProductReviews
@@ -132,9 +141,9 @@ CREATE TABLE ProductReviews
 	AuthorId UUID NOT NULL,
 	ProductId UUID NOT NULL,
 	
-	CONSTRAINT PK_ProductReviews PRIMARY KEY(Id),
-	CONSTRAINT FK_ProductReviews_Users_AuthorId FOREIGN KEY(AuthorId) REFERENCES Users(Id) ON DELETE CASCADE,
-	CONSTRAINT FK_ProductReviews_Products_ProductId FOREIGN KEY(ProductId) REFERENCES Products(Id) ON DELETE CASCADE,
+	CONSTRAINT PK_ProductReviews PRIMARY KEY (Id),
+	CONSTRAINT FK_ProductReviews_Users_AuthorId FOREIGN KEY (AuthorId) REFERENCES Users (Id) ON DELETE CASCADE,
+	CONSTRAINT FK_ProductReviews_Products_ProductId FOREIGN KEY (ProductId) REFERENCES Products (Id) ON DELETE CASCADE,
 	CONSTRAINT ProductReviews_Rating_Check CHECK (Rating BETWEEN 1 AND 5)
 );
 
@@ -142,11 +151,9 @@ CREATE TABLE Shippers
 (
 	Id UUID NOT NULL,
 	OrganizationName VARCHAR NOT NULL,
-	HeadOffice_StreetName VARCHAR NOT NULL,
-	HeadOffice_PostalCode VARCHAR NOT NULL,
-	HeadOffice_CityId UUID NOT NULL,
 	ContactPhone VARCHAR,
+	HeadOfficeId UUID NOT NULL,
 	
-	CONSTRAINT PK_Shippers PRIMARY KEY(Id),
-	CONSTRAINT PK_Shippers_Cities_HeadOffice_CityId FOREIGN KEY(HeadOffice_CityId) REFERENCES Cities(Id)
+	CONSTRAINT PK_Shippers PRIMARY KEY (Id),
+	CONSTRAINT PK_Shippers_Addresses_HeadOfficeId FOREIGN KEY (HeadOfficeId) REFERENCES Addresses (Id)
 );

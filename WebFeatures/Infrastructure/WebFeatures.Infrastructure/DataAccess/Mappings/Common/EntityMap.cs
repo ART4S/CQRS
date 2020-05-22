@@ -113,10 +113,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             {
                 return entityName.Remove(entityName.Length - 1) + "ies";
             }
-            else
+
+            if (entityName.EndsWith("s"))
             {
-                return entityName + "s";
+                return entityName + "es";
             }
+
+            return entityName + "s";
         }
     }
 }

@@ -13,8 +13,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Helpers
         static SqlType()
         {
             Properties = typeof(T).GetProperties()
-                .Where(x => ValidSqlTypes.Contains(x.PropertyType))
+                .Where(x => IsValidSqlType(x.PropertyType))
                 .ToList();
+        }
+
+        private static bool IsValidSqlType(Type type)
+        {
+            return ValidSqlTypes.Contains(type) || type.IsEnum;
         }
 
         private static HashSet<Type> ValidSqlTypes = new HashSet<Type>()
