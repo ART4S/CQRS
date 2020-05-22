@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Npgsql;
-using System.IO;
 using WebFeatures.Infrastructure.Tests.Helpers;
 
 namespace WebFeatures.Infrastructure.Tests.Fixtures
@@ -32,9 +31,7 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
 
         private void CreateSchema()
         {
-            string sql = File.ReadAllText("Scripts/Schema.sql");
-
-            Connection.Execute(sql);
+            Connection.Execute(ScriptBuilder.CreateSchema());
         }
 
         private void SeedTestData()

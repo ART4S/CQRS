@@ -1,4 +1,6 @@
-﻿namespace WebFeatures.Infrastructure.Tests.Helpers
+﻿using System.IO;
+
+namespace WebFeatures.Infrastructure.Tests.Helpers
 {
     internal static class ScriptBuilder
     {
@@ -18,6 +20,11 @@
                 "SELECT pg_terminate_backend(pid)\n" +
                 "FROM pg_stat_activity\n" +
                 $"WHERE datname = '{databaseName}' AND pid <> pg_backend_pid();\n";
+        }
+
+        public static string CreateSchema()
+        {
+            return File.ReadAllText("Scripts/Schema.sql");
         }
     }
 }
