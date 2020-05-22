@@ -2,6 +2,7 @@
 using System;
 using System.Security.Cryptography;
 using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Common;
 
 namespace WebFeatures.Infrastructure.Security
 {
@@ -15,7 +16,7 @@ namespace WebFeatures.Infrastructure.Security
 
         public string ComputeHash(string password)
         {
-            if (password == null) throw new ArgumentNullException(nameof(password));
+            Guard.ThrowIfNull(password, nameof(password));
 
             byte[] salt = new byte[SaltSize];
             _random.GetBytes(salt);
@@ -31,8 +32,8 @@ namespace WebFeatures.Infrastructure.Security
 
         public bool Verify(string hashedPassword, string expectedPassword)
         {
-            if (hashedPassword == null) throw new ArgumentNullException(nameof(hashedPassword));
-            if (expectedPassword == null) throw new ArgumentNullException(nameof(expectedPassword));
+            Guard.ThrowIfNull(hashedPassword, nameof(hashedPassword));
+            Guard.ThrowIfNull(expectedPassword, nameof(expectedPassword));
 
             byte[] hashed = Convert.FromBase64String(hashedPassword);
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Mailing;
+using WebFeatures.Common;
 
 namespace WebFeatures.Infrastructure.Mailing
 {
@@ -17,6 +18,10 @@ namespace WebFeatures.Infrastructure.Mailing
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
+            Guard.ThrowIfNull(to, nameof(to));
+            Guard.ThrowIfNull(subject, nameof(subject));
+            Guard.ThrowIfNull(body, nameof(body));
+
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress(_options.Address));
