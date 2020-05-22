@@ -23,10 +23,9 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
 
         private void CreateDatabase()
         {
-            string sql = $"DROP DATABASE IF EXISTS {_databaseName};\n" +
-                         $"CREATE DATABASE {_databaseName};";
-
-            Connection.Execute(sql);
+            Connection.Execute(ScriptBuilder.CloseExistingConnections(_databaseName));
+            Connection.Execute(ScriptBuilder.DropDatabase(_databaseName));
+            Connection.Execute(ScriptBuilder.CreateDatabase(_databaseName));
 
             Connection.ChangeDatabase(_databaseName);
         }
@@ -47,16 +46,8 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
         {
             Connection.ChangeDatabase("postgres");
 
-            string closeExistingConnections =
-                "SELECT pg_terminate_backend(pid)\n" +
-                "FROM pg_stat_activity\n" +
-                $"WHERE datname = '{_databaseName}' AND pid <> pg_backend_pid();\n";
-
-            Connection.Execute(closeExistingConnections);
-
-            string dropDb = $"DROP DATABASE {_databaseName};\n";
-
-            Connection.Execute(dropDb);
+            Connection.Execute(ScriptBuilder.CloseExistingConnections(_databaseName));
+            Connection.Execute(ScriptBuilder.DropDatabase(_databaseName));
 
             base.Dispose();
         }

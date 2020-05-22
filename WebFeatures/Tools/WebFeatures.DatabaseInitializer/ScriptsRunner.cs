@@ -5,18 +5,18 @@ using WebFeatures.AppInitializer.Extensions;
 
 namespace WebFeatures.AppInitializer
 {
-    internal class ScriptsExecutor
+    internal class ScriptsRunner
     {
-        private readonly ILogger<ScriptsExecutor> _logger;
+        private readonly ILogger<ScriptsRunner> _logger;
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public ScriptsExecutor(ILogger<ScriptsExecutor> logger, IDbConnectionFactory connectionFactory)
+        public ScriptsRunner(ILogger<ScriptsRunner> logger, IDbConnectionFactory connectionFactory)
         {
             _logger = logger;
             _connectionFactory = connectionFactory;
         }
 
-        public void Execute()
+        public void Run()
         {
             using IDbConnection connection = _connectionFactory.CreateConnection();
 
@@ -27,19 +27,19 @@ namespace WebFeatures.AppInitializer
             _logger.LogInformation("Creating database...");
 
             connection.ExecuteScript(
-                Scripts.CreateDb(database));
+                ScriptsBuilder.CreateDatabase(database));
 
             connection.ChangeDatabase(database);
 
             _logger.LogInformation("Creating schema...");
 
             connection.ExecuteScript(
-                Scripts.CreateDbSchema());
+                ScriptsBuilder.CreateDbSchema());
 
             _logger.LogInformation("Seeding initial data...");
 
             connection.ExecuteScript(
-                Scripts.SeedInitialData());
+                ScriptsBuilder.SeedInitialData());
         }
     }
 }

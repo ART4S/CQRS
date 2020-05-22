@@ -28,7 +28,7 @@ namespace WebFeatures.AppInitializer
             RegisterLogging(services);
             RegisterDataAccess(services);
 
-            services.AddSingleton<ScriptsExecutor>();
+            services.AddSingleton<ScriptsRunner>();
 
             return services.BuildServiceProvider();
         }

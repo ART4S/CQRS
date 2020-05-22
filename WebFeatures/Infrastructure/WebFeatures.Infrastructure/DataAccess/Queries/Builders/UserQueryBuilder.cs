@@ -14,14 +14,18 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
         public SqlQuery BuildGetUserByEmail(string email)
         {
-            EntityMap<UserRole> userRoleMap = Profile.GetMappingFor<UserRole>();
+            EntityMap<UserRole> userRole = Profile.GetMappingFor<UserRole>();
+            EntityMap<Role> role = Profile.GetMappingFor<Role>();
 
             string query =
                 $"SELECT * FROM {EntityMap.Table.NameWithSchema()} u\n" +
-                $"WHERE {EntityMap.Field(x => x.Email)} = @{nameof(email)}" +
-                $"LEFT JOIN {userRoleMap.Table.NameWithSchema()} ur ON ur.{userRoleMap.Field(x => x.UserId)} = u.{EntityMap.Identity.Field}";
+                $"LEFT JOIN {userRole.Table.NameWithSchema()} ur ON ur.{userRole.Field(x => x.UserId)} = u.{EntityMap.Identity.Field}\n" +
+                $"LEFT JOIN {role.Table.NameWithSchema()} r ON r.{role.Field(x => x.Id)} = ur.{userRole.Field(x => x.RoleId)}\n" +
+                $"WHERE u.{EntityMap.Field(x => x.Email)} = @{nameof(email)}";
 
-            return new SqlQuery(query, new { email });
+            string splitOn = $"{EntityMap.Field(x => x.Id)}, {userRole.Field(x => x.UserId)}, {role.Field(x => x.Id)}";
+
+            return new SqlQuery(query, new { email }, splitOn);
         }
     }
 }

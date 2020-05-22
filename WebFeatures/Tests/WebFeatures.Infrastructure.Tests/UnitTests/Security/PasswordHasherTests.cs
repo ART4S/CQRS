@@ -6,23 +6,33 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.Security
 {
     public class PasswordHasherTests
     {
-        private readonly PasswordHasher _hasher = new PasswordHasher();
-        private const string _testPassword = "12345";
-
         [Fact]
         public void ComputeHash_ShouldNotReturnNullOrEmptyHash()
         {
-            string hash = _hasher.ComputeHash(_testPassword);
+            // Arrange
+            string password = "12345";
+            PasswordHasher hasher = new PasswordHasher();
 
+            // Act
+            string hash = hasher.ComputeHash(password);
+
+            // Assert
             hash.ShouldNotBeNullOrEmpty();
         }
 
         [Fact]
         public void Verify_ShouldVerifyComputedHash()
         {
-            string hash = _hasher.ComputeHash(_testPassword);
+            // Arrange
+            string password = "12345";
+            PasswordHasher hasher = new PasswordHasher();
 
-            _hasher.Verify(hash, _testPassword).ShouldBeTrue();
+            // Act
+            string hash = hasher.ComputeHash(password);
+            bool isVerified = hasher.Verify(hash, password);
+
+            // Assert
+            isVerified.ShouldBeTrue();
         }
     }
 }

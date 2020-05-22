@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal class PropertyMap
+    internal partial class PropertyMap
     {
         public string Property { get; }
 
@@ -13,13 +13,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             Guard.ThrowIfNullOrWhiteSpace(property, nameof(property));
 
             Property = Field = property;
-        }
-
-        public void ToField(string field)
-        {
-            Guard.ThrowIfNullOrWhiteSpace(field, nameof(field));
-
-            Field = field;
         }
 
         public override int GetHashCode()

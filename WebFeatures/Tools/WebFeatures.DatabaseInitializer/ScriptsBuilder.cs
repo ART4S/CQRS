@@ -2,9 +2,9 @@
 
 namespace WebFeatures.AppInitializer
 {
-    internal static class Scripts
+    internal static class ScriptsBuilder
     {
-        public static string CreateDb(string databaseName)
+        public static string CreateDatabase(string databaseName)
             => $"DROP DATABASE IF EXISTS {databaseName};\n" +
                $"CREATE DATABASE {databaseName};\n";
 

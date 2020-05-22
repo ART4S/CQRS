@@ -19,10 +19,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Helpers
         {
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            if (!(propertyCall.Body is MemberExpression memberAccess))
-                throw new InvalidOperationException("Invalid property access");
+            if (propertyCall.Body is MemberExpression memberAccess)
+                return memberAccess.Member.Name;
 
-            return memberAccess.Member.Name;
+            if (propertyCall.Body is UnaryExpression unary)
+                return (unary.Operand as MemberExpression).Member.Name;
+
+            throw new InvalidOperationException("Invalid property access");
         }
     }
 }
