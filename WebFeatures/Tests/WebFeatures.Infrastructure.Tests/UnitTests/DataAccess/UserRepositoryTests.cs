@@ -158,7 +158,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         public async Task GetUserByEmailAsync_ShouldReturnUserWithEmail()
         {
             // Arrange
-            string existingEmail = "test@mail.com";
+            string existingEmail = "administrator@mail.com";
 
             // Act
             User user = await _repo.GetByEmailAsync(existingEmail);

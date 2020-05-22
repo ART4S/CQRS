@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Helpers
 {
-    internal static class SqlType<T>
+    internal static class SqlType<T> where T : class
     {
         public static ICollection<PropertyInfo> Properties { get; }
 

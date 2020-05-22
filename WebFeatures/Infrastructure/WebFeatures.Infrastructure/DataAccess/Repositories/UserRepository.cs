@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -22,17 +23,37 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories
         {
             SqlQuery sql = QueryBuilder.BuildGetUserByEmail(email);
 
-            IEnumerable<User> users = (await Connection.QueryAsync<User, UserRole, Role, User>(
+            var users = new Dictionary<Guid, User>();
+
+            User user = (await Connection.QueryAsync<User, UserRole, Role, User>(
                 sql: sql.Query,
-                map: (user, userrole, role) =>
+                map: (user, userRole, role) =>
                 {
-                    user.UserRoles.Add(userrole);
+                    if (!users.TryGetValue(user.Id, out User existingUser))
+                    {
+                        users.Add(user.Id, user);
+                    }
+                    else
+                    {
+                        user = existingUser;
+                    }
+
+                    if (userRole != null)
+                    {
+                        userRole.User = user;
+                        userRole.Role = role;
+
+                        user.UserRoles.Add(userRole);
+                    }
+
                     return user;
                 },
                 param: sql.Param,
-                splitOn: sql.SplitOn));
+                splitOn: sql.SplitOn))
+                .Distinct()
+                .SingleOrDefault();
 
-            return users.FirstOrDefault();
+            return user;
         }
     }
 }

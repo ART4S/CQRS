@@ -42,8 +42,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 $"INSERT INTO {EntityMap.Table.NameWithSchema()} ({BuildInsertFields()})\n" +
                 $"VALUES ({BuildInsertParams()})";
 
-            string BuildInsertFields() => string.Join(", ", EntityMap.Mappings.Select(x => x.Field));
-            string BuildInsertParams() => string.Join(", ", EntityMap.Mappings.Select(x => "@" + x.Property));
+            string BuildInsertFields()
+                => string.Join(", ", EntityMap.Mappings.Select(x => x.Field));
+
+            string BuildInsertParams()
+                => string.Join(", ", EntityMap.Mappings.Select(x => "@" + x.Property));
 
             return new SqlQuery(query, entity);
         }
@@ -55,7 +58,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 $"SET {BuildSetParams()}\n" +
                 $"WHERE {EntityMap.Identity.Field} = @{EntityMap.Identity.Property}";
 
-            string BuildSetParams() => string.Join(", ", EntityMap.Mappings.Select(x => $"{x.Field} = @{x.Property}"));
+            string BuildSetParams()
+                => string.Join(", ", EntityMap.Mappings.Select(x => $"{x.Field} = @{x.Property}"));
 
             return new SqlQuery(query, entity);
         }
