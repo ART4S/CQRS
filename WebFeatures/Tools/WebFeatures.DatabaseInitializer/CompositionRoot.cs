@@ -21,6 +21,17 @@ namespace WebFeatures.AppInitializer
             Services = BuildServices();
         }
 
+        private IConfiguration BuildConfiguration()
+        {
+            string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(basePath)
+                .AddJsonFile("Settings.json");
+
+            return builder.Build();
+        }
+
         private IServiceProvider BuildServices()
         {
             var services = new ServiceCollection();
@@ -31,17 +42,6 @@ namespace WebFeatures.AppInitializer
             services.AddSingleton<ScriptsRunner>();
 
             return services.BuildServiceProvider();
-        }
-
-        private IConfiguration BuildConfiguration()
-        {
-            string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("Settings.json");
-
-            return builder.Build();
         }
 
         private void RegisterLogging(ServiceCollection services)

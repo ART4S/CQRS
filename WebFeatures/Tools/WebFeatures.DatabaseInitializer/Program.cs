@@ -8,6 +8,7 @@ namespace WebFeatures.AppInitializer
         {
             var root = new CompositionRoot();
             var scripts = root.Services.GetService<ScriptsRunner>();
+
             scripts.Run();
         }
     }
