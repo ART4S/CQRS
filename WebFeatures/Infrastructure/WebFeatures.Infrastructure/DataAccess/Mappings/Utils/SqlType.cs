@@ -19,49 +19,30 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
 
         private static bool IsValidSqlType(Type type)
         {
-            return ValidSqlTypes.Contains(type) || type.IsEnum;
+            return
+                ValidSqlTypes.Contains(type) ||
+                (type.IsGenericType &&
+                 type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                 ValidSqlTypes.Contains(type.GetGenericArguments()[0])) ||
+                type.IsEnum;
         }
 
         private static HashSet<Type> ValidSqlTypes = new HashSet<Type>()
         {
             typeof(object),
-
             typeof(string),
-
             typeof(byte[]),
-
             typeof(long),
-            typeof(long?),
-
             typeof(int),
-            typeof(int?),
-
             typeof(short),
-            typeof(short?),
-
             typeof(bool),
-            typeof(bool?),
-
             typeof(decimal),
-            typeof(decimal?),
-
             typeof(double),
-            typeof(double?),
-
             typeof(float),
-            typeof(float?),
-
             typeof(DateTime),
-            typeof(DateTime?),
-
             typeof(DateTimeOffset),
-            typeof(DateTimeOffset?),
-
             typeof(TimeSpan),
-            typeof(TimeSpan?),
-
             typeof(Guid),
-            typeof(Guid?)
         };
     }
 }

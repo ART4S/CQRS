@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
-using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
@@ -9,7 +8,7 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 {
-    internal interface IQueryBuilder<TEntity> where TEntity : Entity
+    internal interface IQueryBuilder<TEntity> where TEntity : class
     {
         SqlQuery BuildGetAll();
         SqlQuery BuildGet(Guid id);
@@ -20,7 +19,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
     }
 
     internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
-        where TEntity : Entity
+        where TEntity : class
     {
         protected IEntityProfile Profile { get; }
 
@@ -59,7 +58,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
             var insertParams = new List<string>();
             var param = new DynamicParameters();
 
-            foreach (PropertyMap map in entityMap.Properties)
+            foreach (PropertyMap<TEntity> map in entityMap.Properties)
             {
                 insertColumns.Add(map.Column);
 
@@ -86,7 +85,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
             var setParams = new List<string>();
             var param = new DynamicParameters();
 
-            foreach (PropertyMap map in entityMap.Properties)
+            foreach (PropertyMap<TEntity> map in entityMap.Properties)
             {
                 string paramName = "@" + map.Column;
 
@@ -115,7 +114,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                   WHERE {1} = @{2}",
                 entityMap.Table.NameWithSchema(),
                 entityMap.Identity.Column,
-                entityMap.Identity.Property);
+                entityMap.Identity.PropertyName);
 
             return new SqlQuery(query, entity);
         }

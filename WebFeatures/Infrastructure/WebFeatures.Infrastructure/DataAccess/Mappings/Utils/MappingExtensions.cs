@@ -19,7 +19,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
 
         public static string Property<TEntity>(this IEntityMap<TEntity> entity, Expression<Func<TEntity, object>> propertyCall) where TEntity : Entity
         {
-            return entity.GetProperty(propertyCall).Property;
+            return entity.GetProperty(propertyCall).PropertyName;
         }
     }
 }

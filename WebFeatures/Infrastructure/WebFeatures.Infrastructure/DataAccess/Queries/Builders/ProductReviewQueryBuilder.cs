@@ -15,13 +15,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
         public SqlQuery BuildGetByProduct(Guid productId)
         {
-            IEntityMap<ProductReview> entityMap = Profile.GetMap<ProductReview>();
+            IEntityMap<ProductReview> review = Profile.GetMap<ProductReview>();
 
             string query = string.Format(
                 @"SELECT * FROM {0} 
                   WHERE {1} = @productId",
-                entityMap.Table.NameWithSchema(),
-                entityMap.Column(x => x.AuthorId));
+                review.Table.NameWithSchema(),
+                review.Column(x => x.AuthorId));
 
             return new SqlQuery(query, new { productId });
         }

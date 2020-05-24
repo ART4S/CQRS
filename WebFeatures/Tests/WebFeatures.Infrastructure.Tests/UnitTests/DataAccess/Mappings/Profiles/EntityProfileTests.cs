@@ -47,11 +47,11 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
             var profile = new EntityProfile();
             var entityTypes = typeof(User).Assembly
                 .GetTypes()
-                .Where(x => typeof(Entity).IsAssignableFrom(x))
+                .Where(x => typeof(Entity).IsAssignableFrom(x) && !x.IsAbstract)
                 .ToList();
 
             // Act
-            var mappings = new List<IEntityMap>();
+            var mappings = new List<object>();
 
             foreach (Type entityType in entityTypes)
             {
@@ -61,11 +61,13 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
                     BindingFlags.Public | BindingFlags.Instance)
                     .MakeGenericMethod(entityType);
 
-                mappings.Add((IEntityMap)getMapMethod.Invoke(profile, null));
+                mappings.Add(getMapMethod.Invoke(profile, null));
             }
 
             // Assert
             entityTypes.Count.ShouldBe(mappings.Count);
+            mappings.ShouldNotBeEmpty();
+            mappings.ShouldNotContain((object)null);
         }
     }
 }

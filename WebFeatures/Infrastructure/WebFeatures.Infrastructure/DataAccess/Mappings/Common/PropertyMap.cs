@@ -1,43 +1,39 @@
 ﻿using System;
 using WebFeatures.Common;
-using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal partial class PropertyMap
+    internal interface IPropertyMap<TEntity> where TEntity : class
     {
-        public string Property { get; }
+        string PropertyName { get; }
+        string Column { get; }
+        object GetValue(TEntity entity);
+    }
+
+    internal partial class PropertyMap<TEntity> : IPropertyMap<TEntity> where TEntity : class
+    {
+        public string PropertyName { get; }
         public string Column { get; private set; }
 
-        private readonly Delegate _valueProvider;
+        private readonly Func<TEntity, object> _propValueAccessor;
 
-        public PropertyMap(string property, Delegate valueProvider)
+        public PropertyMap(string propName, Func<TEntity, object> propValueAccessor)
         {
-            Guard.ThrowIfNull(property, nameof(property));
-            Property = Column = property;
+            Guard.ThrowIfNull(propName, nameof(propName));
 
-            _valueProvider = valueProvider;
+            PropertyName = Column = propName;
+
+            _propValueAccessor = propValueAccessor;
         }
 
-        public object GetValue(object entity)
+        public object GetValue(TEntity entity)
         {
-            return _valueProvider.DynamicInvoke(entity);
+            return _propValueAccessor(entity);
         }
 
         public override int GetHashCode()
         {
-            return Property.GetHashCode();
+            return PropertyName.GetHashCode();
         }
     }
-
-    //internal class PropertyMap<TEntity> : PropertyMap
-    //    where TEntity : Entity
-    //{
-    //    public delegate object GetPropertyValueDelegate(TEntity entity);
-
-    //    public PropertyMap(string property, GetPropertyValueDelegate getValue) : base(property, getValue)
-    //    {
-
-    //    }
-    //}
 }

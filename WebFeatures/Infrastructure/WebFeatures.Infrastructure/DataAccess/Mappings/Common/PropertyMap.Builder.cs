@@ -2,13 +2,13 @@
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal partial class PropertyMap
+    internal partial class PropertyMap<TEntity> where TEntity : class
     {
         public class Builder
         {
-            private readonly PropertyMap _property;
+            private readonly PropertyMap<TEntity> _property;
 
-            public Builder(PropertyMap property)
+            public Builder(PropertyMap<TEntity> property)
             {
                 _property = property;
             }

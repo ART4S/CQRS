@@ -66,11 +66,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
             return propertyNames;
         }
 
-        public static Delegate CreatePropertyAccessDelegate(this Type sourceType, PropertyInfo property)
+        public static Func<T, object> CreateAccessFunc<T>(this PropertyInfo property) where T : class
         {
-            ParameterExpression param = Expression.Parameter(sourceType);
+            ParameterExpression param = Expression.Parameter(typeof(T));
             MemberExpression prop = Expression.Property(param, property);
-            LambdaExpression lambda = Expression.Lambda(prop, new[] { param });
+            UnaryExpression converted = Expression.Convert(prop, typeof(object));
+
+            Expression<Func<T, object>> lambda = Expression.Lambda<Func<T, object>>(converted, new[] { param });
 
             return lambda.Compile();
         }
