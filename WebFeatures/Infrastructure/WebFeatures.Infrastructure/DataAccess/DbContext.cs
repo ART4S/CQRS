@@ -4,7 +4,6 @@ using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories;
@@ -61,10 +60,7 @@ namespace WebFeatures.Infrastructure.DataAccess
         public IAsyncRepository<File> Files => _files ?? (_files = CreateRepository<File>());
         private IAsyncRepository<File> _files;
 
-        public IAsyncRepository<Address> Addresses => _addresses ?? (_addresses = CreateRepository<Address>());
-        private IAsyncRepository<Address> _addresses;
-
-        private IAsyncRepository<TEntity> CreateRepository<TEntity>() where TEntity : Entity
+        private IAsyncRepository<TEntity> CreateRepository<TEntity>() where TEntity : IdentityEntity
         {
             return new Repository<TEntity, QueryBuilder<TEntity>>(
                 _connection,

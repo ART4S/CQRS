@@ -22,16 +22,24 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
 
         private void CreateDatabase()
         {
-            Connection.Execute(SqlBuilder.CloseExistingConnections(_databaseName));
-            Connection.Execute(SqlBuilder.DropDatabase(_databaseName));
-            Connection.Execute(SqlBuilder.CreateDatabase(_databaseName));
+            SqlQuery sql;
+
+            sql = SqlBuilder.CloseExistingConnections(_databaseName);
+            Connection.Execute(sql);
+
+            sql = SqlBuilder.DropDatabase(_databaseName);
+            Connection.Execute(sql);
+
+            sql = SqlBuilder.CreateDatabase(_databaseName);
+            Connection.Execute(sql);
 
             Connection.ChangeDatabase(_databaseName);
         }
 
         private void CreateSchema()
         {
-            Connection.Execute(SqlBuilder.CreateSchema());
+            SqlQuery sql = SqlBuilder.CreateSchema();
+            Connection.Execute(sql);
         }
 
         private void SeedTestData()
@@ -43,8 +51,13 @@ namespace WebFeatures.Infrastructure.Tests.Fixtures
         {
             Connection.ChangeDatabase("postgres");
 
-            Connection.Execute(SqlBuilder.CloseExistingConnections(_databaseName));
-            Connection.Execute(SqlBuilder.DropDatabase(_databaseName));
+            SqlQuery sql;
+
+            sql = SqlBuilder.CloseExistingConnections(_databaseName);
+            Connection.Execute(sql);
+
+            sql = SqlBuilder.DropDatabase(_databaseName);
+            Connection.Execute(sql);
 
             base.Dispose();
         }

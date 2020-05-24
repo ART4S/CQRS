@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(SolutionDir)Infrastructure\SharedScripts\Schema.sql $(TargetDir)Scripts\Schema.sql /C /Y" />
+    <Exec Command="xcopy $(SolutionDir)Scripts\Schema.sql $(TargetDir)Scripts\Schema.sql /C /Y" />
   </Target>
 
 </Project>

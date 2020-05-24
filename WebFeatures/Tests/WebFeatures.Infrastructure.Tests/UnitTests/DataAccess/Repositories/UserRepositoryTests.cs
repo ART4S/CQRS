@@ -10,7 +10,7 @@ using WebFeatures.Infrastructure.DataAccess.Repositories;
 using WebFeatures.Infrastructure.Tests.Fixtures;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
+namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 {
     public class UserRepositoryTests : IClassFixture<NpgsqlDatabaseFixture>
     {
@@ -115,14 +115,14 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         public async Task DeleteAsync_ShouldDeleteRecord()
         {
             // Arrange
-            var user = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
+            var existingUser = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
 
             // Act
-            await _repo.DeleteAsync(user);
+            await _repo.DeleteAsync(existingUser);
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM Users WHERE Id = @Id",
-                user);
+                existingUser);
 
             // Assert
             usersCount.ShouldBe(0);

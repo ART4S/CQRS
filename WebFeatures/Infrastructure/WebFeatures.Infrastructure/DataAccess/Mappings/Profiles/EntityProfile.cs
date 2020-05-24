@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 {
+    internal interface IEntityProfile
+    {
+        IEntityMap<TEntity> GetMap<TEntity>() where TEntity : Entity;
+    }
+
     internal class EntityProfile : IEntityProfile
     {
-        private Dictionary<Type, object> _mappings;
+        private Dictionary<Type, IEntityMap> _mappings;
 
         public EntityProfile()
         {
@@ -24,15 +30,15 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
                 .Select(t => new
                 {
                     EntityType = t.BaseType.GetGenericArguments()[0],
-                    Mapping = Activator.CreateInstance(t)
+                    Mapping = (IEntityMap)Activator.CreateInstance(t)
                 })
                 .ToDictionary(t => t.EntityType, t => t.Mapping);
         }
 
-        public EntityMap<TEntity> GetMappingFor<TEntity>() where TEntity : class
+        public IEntityMap<TEntity> GetMap<TEntity>() where TEntity : Entity
         {
-            _mappings.TryGetValue(typeof(TEntity), out object mapping);
-            return (EntityMap<TEntity>)mapping;
+            _mappings.TryGetValue(typeof(TEntity), out IEntityMap map);
+            return (IEntityMap<TEntity>)map;
         }
     }
 }

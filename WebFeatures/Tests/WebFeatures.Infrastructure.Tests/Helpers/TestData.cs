@@ -134,27 +134,6 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         };
 
         /// <summary>
-        /// Адреса
-        /// </summary>
-        public static readonly Address[] Addresses = new[]
-        {
-            new Address()
-            {
-                Id = new Guid("ef1fa5ce-ce73-40d5-8a2e-79e4e6957a8b"),
-                CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
-                PostalCode = "PostalCode_1",
-                StreetName = "StreetName_1"
-            },
-            new Address()
-            {
-                Id = new Guid("639d0b6f-5577-4928-aeb1-5a75527494e5"),
-                CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
-                PostalCode = "PostalCode_2",
-                StreetName = "StreetName_2"
-            }
-        };
-
-        /// <summary>
         /// Производители
         /// </summary>
         public static readonly Manufacturer[] Manufacturers = new[]
@@ -162,8 +141,13 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Manufacturer()
             {
                 Id = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6"),
-                StreetAddressId = new Guid("ef1fa5ce-ce73-40d5-8a2e-79e4e6957a8b"),
-                OrganizationName = "OrganizationName_1"
+                OrganizationName = "OrganizationName_1",
+                StreetAddress = new Address()
+                {
+                    StreetName = "StreetName_1",
+                    PostalCode = "PostalCode_1",
+                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567")
+                }
             }
         };
 
@@ -199,9 +183,14 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             new Shipper()
             {
                 Id = new Guid("6f794d7d-5396-4f8a-8fde-78090e062203"),
-                HeadOfficeId = new Guid("639d0b6f-5577-4928-aeb1-5a75527494e5"),
                 OrganizationName = "OrganizationName_1",
-                ContactPhone = "ContactPhone_1"
+                ContactPhone = "ContactPhone_1",
+                HeadOffice = new Address()
+                {
+                    StreetName = "StreetName_2",
+                    PostalCode = "PostalCode_2",
+                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567")
+                }
             }
         };
 

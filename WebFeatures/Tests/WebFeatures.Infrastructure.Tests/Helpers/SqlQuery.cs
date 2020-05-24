@@ -1,21 +1,18 @@
 ﻿using WebFeatures.Common;
 
-namespace WebFeatures.Infrastructure.DataAccess.Queries.Common
+namespace WebFeatures.Infrastructure.Tests.Helpers
 {
     internal class SqlQuery
     {
         public string Query { get; }
         public object Param { get; }
-        public string SplitOn { get; }
 
-        public SqlQuery(string query, object param = null, string splitOn = "Id")
+        public SqlQuery(string query, object param = null)
         {
             Guard.ThrowIfNull(query, nameof(query));
-            Guard.ThrowIfNull(splitOn, nameof(splitOn));
 
             Query = query;
             Param = param;
-            SplitOn = splitOn;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
@@ -14,16 +14,28 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
         public SqlQuery BuildGetUserByEmail(string email)
         {
-            EntityMap<UserRole> userRole = Profile.GetMappingFor<UserRole>();
-            EntityMap<Role> role = Profile.GetMappingFor<Role>();
+            IEntityMap<User> user = Profile.GetMap<User>();
+            IEntityMap<UserRole> userRole = Profile.GetMap<UserRole>();
+            IEntityMap<Role> role = Profile.GetMap<Role>();
 
-            string query =
-                $"SELECT * FROM {EntityMap.Table.NameWithSchema()} u\n" +
-                $"LEFT JOIN {userRole.Table.NameWithSchema()} ur ON ur.{userRole.Field(x => x.UserId)} = u.{EntityMap.Identity.Field}\n" +
-                $"LEFT JOIN {role.Table.NameWithSchema()} r ON r.{role.Field(x => x.Id)} = ur.{userRole.Field(x => x.RoleId)}\n" +
-                $"WHERE u.{EntityMap.Field(x => x.Email)} = @{nameof(email)}";
+            string query = string.Format(
+                @"SELECT * FROM {0} users 
+                  LEFT JOIN {1} userRoles ON userRoles.{2} = users.{3} 
+                  LEFT JOIN {4} roles ON roles.{5} = userRoles.{6} 
+                  WHERE users.{7} = @email",
+                    user.Table.NameWithSchema(),
+                    userRole.Table.NameWithSchema(),
+                    userRole.Column(x => x.UserId),
+                    user.Identity.Column,
+                    role.Table.NameWithSchema(),
+                    role.Identity.Column,
+                    userRole.Column(x => x.RoleId),
+                    user.Column(x => x.Email));
 
-            string splitOn = $"{EntityMap.Field(x => x.Id)}, {userRole.Field(x => x.UserId)}, {role.Field(x => x.Id)}";
+            string splitOn = string.Join(", ",
+                user.Identity.Column,
+                userRole.Column(x => x.UserId),
+                role.Identity.Column);
 
             return new SqlQuery(query, new { email }, splitOn);
         }

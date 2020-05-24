@@ -56,26 +56,17 @@ CREATE TABLE Cities
 	CONSTRAINT FK_Cities_Countries_CountryId FOREIGN KEY (CountryId) REFERENCES Countries (Id)
 );
 
-CREATE TABLE Addresses
-(
-	Id UUID NOT NULL,
-	StreetName VARCHAR NOT NULL,
-	PostalCode VARCHAR NOT NULL,
-	CityId UUID NOT NULL,
-
-	CONSTRAINT PK_Addresses PRIMARY KEY (Id),
-	CONSTRAINT FK_Addresses_Cities_CityId FOREIGN KEY (CityId) REFERENCES Cities (Id)
-);
-
 CREATE TABLE Manufacturers
 (
 	Id UUID NOT NULL,
 	OrganizationName VARCHAR,
 	HomePageUrl VARCHAR,
-	StreetAddressId UUID NOT NULL,
+	StreetAddress_StreetName VARCHAR NOT NULL,
+	StreetAddress_PostalCode VARCHAR NOT NULL,
+	StreetAddress_CityId UUID NOT NULL,
 	
-	CONSTRAINT PK_Manufacturers PRIMARY KEY (Id),
-	CONSTRAINT FK_Manufacturers_Addresses_StreetAddressId FOREIGN KEY (StreetAddressId) REFERENCES Addresses (Id)
+	CONSTRAINT PK_Manufacturers PRIMARY KEY(Id),
+	CONSTRAINT FK_Manufacturers_Cities_StreetAddress_CityId FOREIGN KEY (StreetAddress_CityId) REFERENCES Cities (Id)
 );
 
 CREATE TABLE Categories
@@ -152,8 +143,10 @@ CREATE TABLE Shippers
 	Id UUID NOT NULL,
 	OrganizationName VARCHAR NOT NULL,
 	ContactPhone VARCHAR,
-	HeadOfficeId UUID NOT NULL,
+	HeadOffice_StreetName VARCHAR NOT NULL,
+	HeadOffice_PostalCode VARCHAR NOT NULL,
+	HeadOffice_CityId UUID NOT NULL,
 	
-	CONSTRAINT PK_Shippers PRIMARY KEY (Id),
-	CONSTRAINT PK_Shippers_Addresses_HeadOfficeId FOREIGN KEY (HeadOfficeId) REFERENCES Addresses (Id)
+	CONSTRAINT PK_Shippers PRIMARY KEY(Id),
+	CONSTRAINT PK_Shippers_Cities_HeadOffice_CityId FOREIGN KEY(HeadOffice_CityId) REFERENCES Cities(Id)
 );

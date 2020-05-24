@@ -1,83 +1,134 @@
-﻿using System;
-using System.Data;
-using System.Linq;
+﻿using Dapper;
+using System;
+using System.Collections.Generic;
 using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 {
-    internal class QueryBuilder<TEntity> where TEntity : Entity
+    internal interface IQueryBuilder<TEntity> where TEntity : Entity
+    {
+        SqlQuery BuildGetAll();
+        SqlQuery BuildGet(Guid id);
+        SqlQuery BuildCreate(TEntity entity);
+        SqlQuery BuildUpdate(TEntity entity);
+        SqlQuery BuildDelete(TEntity entity);
+        SqlQuery BuildExists(Guid id);
+    }
+
+    internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
+        where TEntity : Entity
     {
         protected IEntityProfile Profile { get; }
-        protected EntityMap<TEntity> EntityMap { get; }
 
         public QueryBuilder(IEntityProfile profile)
         {
             Profile = profile;
-            EntityMap = profile.GetMappingFor<TEntity>();
         }
 
-        public SqlQuery BuildGetAll()
+        public virtual SqlQuery BuildGetAll()
         {
-            string query = $"SELECT * FROM {EntityMap.Table.NameWithSchema()}";
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
+
+            string query = $"SELECT * FROM {entityMap.Table.NameWithSchema()}";
 
             return new SqlQuery(query);
         }
 
-        public SqlQuery BuildGet(Guid id)
+        public virtual SqlQuery BuildGet(Guid id)
         {
-            string query =
-                $"SELECT * FROM {EntityMap.Table.NameWithSchema()}\n" +
-                $"WHERE {EntityMap.Identity.Field} = @{nameof(id)}";
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
+
+            var query = string.Format(
+                @"SELECT * FROM {0} 
+                  WHERE {1} = @id",
+                entityMap.Table.NameWithSchema(),
+                entityMap.Identity.Column);
 
             return new SqlQuery(query, new { id });
         }
 
-        public SqlQuery BuildCreate(TEntity entity)
+        public virtual SqlQuery BuildCreate(TEntity entity)
         {
-            string query =
-                $"INSERT INTO {EntityMap.Table.NameWithSchema()} ({BuildInsertFields()})\n" +
-                $"VALUES ({BuildInsertParams()})";
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
 
-            string BuildInsertFields()
-                => string.Join(", ", EntityMap.Mappings.Select(x => x.Field));
+            var insertColumns = new List<string>();
+            var insertParams = new List<string>();
+            var param = new DynamicParameters();
 
-            string BuildInsertParams()
-                => string.Join(", ", EntityMap.Mappings.Select(x => "@" + x.Property));
+            foreach (PropertyMap map in entityMap.Properties)
+            {
+                insertColumns.Add(map.Column);
+
+                string paramName = "@" + map.Column;
+
+                insertParams.Add(paramName);
+
+                param.Add(paramName, map.GetValue(entity));
+            }
+
+            string query = string.Format(
+                @"INSERT INTO {0} ({1}) VALUES ({2})",
+                entityMap.Table.NameWithSchema(),
+                string.Join(", ", insertColumns),
+                string.Join(", ", insertParams));
+
+            return new SqlQuery(query, param);
+        }
+
+        public virtual SqlQuery BuildUpdate(TEntity entity)
+        {
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
+
+            var setParams = new List<string>();
+            var param = new DynamicParameters();
+
+            foreach (PropertyMap map in entityMap.Properties)
+            {
+                string paramName = "@" + map.Column;
+
+                setParams.Add($"{map.Column} = {paramName}");
+
+                param.Add(paramName, map.GetValue(entity));
+            }
+
+            string query = string.Format(
+                @"UPDATE {0} 
+                  SET {1} 
+                  WHERE {2} = @{2}",
+                entityMap.Table.NameWithSchema(),
+                string.Join(", ", setParams),
+                entityMap.Identity.Column);
+
+            return new SqlQuery(query, param);
+        }
+
+        public virtual SqlQuery BuildDelete(TEntity entity)
+        {
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
+
+            string query = string.Format(
+                @"DELETE FROM {0} 
+                  WHERE {1} = @{2}",
+                entityMap.Table.NameWithSchema(),
+                entityMap.Identity.Column,
+                entityMap.Identity.Property);
 
             return new SqlQuery(query, entity);
         }
 
-        public SqlQuery BuildUpdate(TEntity entity)
+        public virtual SqlQuery BuildExists(Guid id)
         {
-            string query =
-                $"UPDATE {EntityMap.Table.NameWithSchema()}\n" +
-                $"SET {BuildSetParams()}\n" +
-                $"WHERE {EntityMap.Identity.Field} = @{EntityMap.Identity.Property}";
+            IEntityMap<TEntity> entityMap = Profile.GetMap<TEntity>();
 
-            string BuildSetParams()
-                => string.Join(", ", EntityMap.Mappings.Select(x => $"{x.Field} = @{x.Property}"));
-
-            return new SqlQuery(query, entity);
-        }
-
-        public SqlQuery BuildDelete(TEntity entity)
-        {
-            string query =
-                $"DELETE FROM {EntityMap.Table.NameWithSchema()}\n" +
-                $"WHERE {EntityMap.Identity.Field} = @{EntityMap.Identity.Property}";
-
-            return new SqlQuery(query, entity);
-        }
-
-        public SqlQuery BuildExists(Guid id)
-        {
-            string query =
-                $"SELECT 1 FROM {EntityMap.Table.NameWithSchema()}\n" +
-                $"WHERE {EntityMap.Identity.Field} = @{nameof(id)}";
+            string query = string.Format(
+                @"SELECT 1 FROM {0} 
+                  WHERE {1} = @id",
+                entityMap.Table.NameWithSchema(),
+                entityMap.Identity.Column);
 
             return new SqlQuery(query, new { id });
         }

@@ -33,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.DatabaseInitial
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure.Tests", "Tests\WebFeatures.Infrastructure.Tests\WebFeatures.Infrastructure.Tests.csproj", "{F6EF8E2A-2D04-4279-A959-15916DF51475}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedScripts", "SharedScripts", "{701A4776-0BA6-465C-8326-FDA72D7067E0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{61D99F85-E7C0-4490-AD7A-3D1E301E68BC}"
 	ProjectSection(SolutionItems) = preProject
-		Infrastructure\SharedScripts\Schema.sql = Infrastructure\SharedScripts\Schema.sql
+		Scripts\Schema.sql = Scripts\Schema.sql
 	EndProjectSection
 EndProject
 Global
@@ -97,7 +97,6 @@ Global
 		{04F53F84-3F05-4403-A7EB-7C4659F26BAF} = {BA4A1C8A-08EB-479C-BFCF-836EEA78ED93}
 		{F036BE2D-8D0C-4FB9-93D9-4BF0905CE7B0} = {1E2CF22E-2214-489C-BD8A-81C4A1303C3C}
 		{F6EF8E2A-2D04-4279-A959-15916DF51475} = {7647C8BC-5DB2-49FA-86B8-09A8AC7F4F0D}
-		{701A4776-0BA6-465C-8326-FDA72D7067E0} = {BA4A1C8A-08EB-479C-BFCF-836EEA78ED93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E16CD488-F71F-4021-9317-32C3EAD750F6}

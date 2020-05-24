@@ -13,11 +13,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
                 _property = property;
             }
 
-            public void ToField(string field)
+            public void ToColumn(string column)
             {
-                Guard.ThrowIfNullOrWhiteSpace(field, nameof(field));
+                Guard.ThrowIfNullOrWhiteSpace(column, nameof(column));
 
-                _property.Field = field;
+                _property.Column = column;
             }
         }
     }

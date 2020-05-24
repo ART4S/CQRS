@@ -3,7 +3,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class ProductComment : Entity, IHasCreateDate
+    public class ProductComment : IdentityEntity, IHasCreateDate
     {
         public string Body { get; set; }
         public DateTime CreateDate { get; set; }

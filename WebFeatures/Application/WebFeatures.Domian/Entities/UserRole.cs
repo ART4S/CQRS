@@ -1,8 +1,9 @@
 ﻿using System;
+using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class UserRole
+    public class UserRole : Entity
     {
         public Guid UserId { get; set; }
         public User User { get; set; }

@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Brand : Entity
+    public class Brand : IdentityEntity
     {
         public string Name { get; set; }
     }

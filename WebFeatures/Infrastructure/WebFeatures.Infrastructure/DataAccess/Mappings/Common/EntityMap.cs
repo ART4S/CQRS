@@ -5,11 +5,25 @@ using System.Linq;
 using System.Linq.Expressions;
 using WebFeatures.Common;
 using WebFeatures.Domian.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal class EntityMap<TEntity> where TEntity : class
+    internal interface IEntityMap
+    {
+        TableMap Table { get; }
+        PropertyMap Identity { get; }
+        IEnumerable<PropertyMap> Properties { get; }
+    }
+
+    internal interface IEntityMap<TEntity> : IEntityMap
+        where TEntity : Entity
+    {
+        PropertyMap GetProperty(Expression<Func<TEntity, object>> propertyCall);
+    }
+
+    internal class EntityMap<TEntity> : IEntityMap<TEntity>
+        where TEntity : Entity
     {
         public TableMap Table
         {
@@ -18,43 +32,43 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         }
         private TableMap _table;
 
-        public PropertyMap Identity
-        {
-            get => _identity ?? (_identity = MapProperty(nameof(Entity.Id)).ResultMap);
-            private set => _identity = value;
-        }
+        public PropertyMap Identity => _identity;
         private PropertyMap _identity;
 
-        public IEnumerable<PropertyMap> Mappings => _mappings;
-        private readonly HashSet<PropertyMap> _mappings =
-            SqlType<TEntity>.Properties
-            .Select(x => new PropertyMap(x.Name))
-            .ToHashSet();
+        public IEnumerable<PropertyMap> Properties => _properties;
+        private readonly HashSet<PropertyMap> _properties;
 
-        public PropertyMap GetPropertyMap(Expression<Func<TEntity, object>> propertyCall)
+        public EntityMap()
+        {
+            _properties = SqlType<TEntity>.Properties
+                .Select(x => new PropertyMap(
+                    x.Name,
+                    typeof(TEntity).CreatePropertyAccessDelegate(x)))
+                .ToHashSet();
+
+            _identity = _properties.FirstOrDefault(x => x.Property == "Id");
+        }
+
+        public PropertyMap GetProperty(Expression<Func<TEntity, object>> propertyCall)
         {
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            string propertyName = propertyCall.GetPropetyName();
+            string property = propertyCall.GetPropertyName();
 
-            PropertyMap map = _mappings.FirstOrDefault(x => x.Property == propertyName);
+            PropertyMap map = _properties.FirstOrDefault(x => x.Property == property);
 
             return map;
         }
 
         protected TableMap.Builder ToTable(string table)
         {
-            Guard.ThrowIfNullOrWhiteSpace(table, nameof(table));
-
             _table = new TableMap(table);
 
             return new TableMap.Builder(_table);
         }
 
-        protected PropertyMap.Builder SetIdentity(Expression<Func<TEntity, object>> propertyCall)
+        protected PropertyMap.Builder WithIdentity(Expression<Func<TEntity, object>> propertyCall)
         {
-            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
-
             RemoveProperty(ref _identity);
 
             var map = MapPropertyImpl(propertyCall);
@@ -73,7 +87,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         {
             if (property != null)
             {
-                _mappings.Remove(property);
+                _properties.Remove(property);
             }
 
             property = null;
@@ -88,21 +102,15 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
         private (PropertyMap.Builder Builder, PropertyMap ResultMap) MapPropertyImpl(Expression<Func<TEntity, object>> propertyCall)
         {
-            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
+            PropertyMap propertyMap = new PropertyMap(
+                propertyCall.GetPropertyName(),
+                propertyCall.Compile());
 
-            string propertyName = propertyCall.GetPropetyName();
+            _properties.Add(propertyMap);
 
-            return MapProperty(propertyName);
-        }
+            var builder = new PropertyMap.Builder(propertyMap);
 
-        private (PropertyMap.Builder Builder, PropertyMap ResultMap) MapProperty(string propertyName)
-        {
-            PropertyMap property = new PropertyMap(propertyName);
-            _mappings.Add(property);
-
-            var builder = new PropertyMap.Builder(property);
-
-            return (builder, property);
+            return (builder, propertyMap);
         }
 
         private string GetConventionalTableName()

@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Domian.Entities
 {
-    public class File : Entity
+    public class File : IdentityEntity
     {
         public byte[] Content { get; set; }
     }

@@ -11,8 +11,8 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
     internal class Repository<TEntity, TQueryBuilder> : IAsyncRepository<TEntity>
-        where TEntity : Entity
-        where TQueryBuilder : QueryBuilder<TEntity>
+        where TEntity : IdentityEntity
+        where TQueryBuilder : IQueryBuilder<TEntity>
     {
         protected IDbConnection Connection { get; }
         protected TQueryBuilder QueryBuilder { get; }

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Text;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
@@ -14,11 +15,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
         public SqlQuery BuildGetByProduct(Guid productId)
         {
-            string query =
-                $"SELECT * FROM {EntityMap.Table.NameWithSchema()}" +
-                $"WHERE {EntityMap.Field(x => x.AuthorId)} = @{nameof(productId)}";
+            var entity = Profile.GetMap<ProductComment>();
+            var query = new StringBuilder();
 
-            return new SqlQuery(query, new { productId });
+            query.AppendFormat("SELECT * FROM {0}\n", entity.Table.NameWithSchema());
+            query.AppendFormat("WHERE {0} = @productId\n", entity.Column(x => x.AuthorId));
+
+            return new SqlQuery(query.ToString(), new { productId });
         }
     }
 }

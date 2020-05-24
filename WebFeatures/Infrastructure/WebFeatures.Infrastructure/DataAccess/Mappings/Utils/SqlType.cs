@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace WebFeatures.Infrastructure.DataAccess.Mappings.Helpers
+namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
 {
     internal static class SqlType<T> where T : class
     {

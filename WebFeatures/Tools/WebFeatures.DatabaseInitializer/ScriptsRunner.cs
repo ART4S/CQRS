@@ -25,21 +25,15 @@ namespace WebFeatures.AppInitializer
             string database = "webfeatures_db";
 
             _logger.LogInformation("Creating database...");
-
-            connection.ExecuteScript(
-                ScriptsBuilder.CreateDatabase(database));
+            connection.Execute(SqlBuilder.CreateDatabase(database));
 
             connection.ChangeDatabase(database);
 
             _logger.LogInformation("Creating schema...");
-
-            connection.ExecuteScript(
-                ScriptsBuilder.CreateDbSchema());
+            connection.Execute(SqlBuilder.CreateDbSchema());
 
             _logger.LogInformation("Seeding initial data...");
-
-            connection.ExecuteScript(
-                ScriptsBuilder.SeedInitialData());
+            connection.Execute(SqlBuilder.SeedInitialData());
         }
     }
 }
