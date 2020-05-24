@@ -2,7 +2,13 @@
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal partial class TableMap
+    internal interface ITableMap
+    {
+        string Name { get; }
+        string Schema { get; }
+    }
+
+    internal partial class TableMap : ITableMap
     {
         public string Name { get; }
         public string Schema { get; private set; } = "public";

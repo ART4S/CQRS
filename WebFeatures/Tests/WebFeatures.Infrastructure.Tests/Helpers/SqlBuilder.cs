@@ -4,8 +4,6 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 {
     internal static class SqlBuilder
     {
-        private const string Schema = "public";
-
         public static SqlQuery DropDatabase(string databaseName)
         {
             string query = $"DROP DATABASE IF EXISTS {databaseName}";
@@ -24,8 +22,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         {
             string query =
                 @"SELECT pg_terminate_backend(pid) 
-                  FROM pg_stat_activity
-                  WHERE datname = @databaseName AND pid <> pg_backend_pid()";
+                FROM pg_stat_activity
+                WHERE datname = @databaseName AND pid <> pg_backend_pid()";
 
             return new SqlQuery(query, new { databaseName });
         }
@@ -40,9 +38,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertUser(User user)
         {
             string query =
-                @$"INSERT INTO {Schema}.Users 
-                   (Id, Name, Email, PasswordHash, PictureId) 
-                   VALUES (@Id, @Name, @Email, @PasswordHash, @PictureId)";
+                @$"INSERT INTO public.Users 
+                (Id, Name, Email, PasswordHash, PictureId) 
+                VALUES (@Id, @Name, @Email, @PasswordHash, @PictureId)";
 
             return new SqlQuery(query, user);
         }
@@ -50,9 +48,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertRole(Role role)
         {
             string query =
-                @$"INSERT INTO {Schema}.Roles 
-                   (Id, Name, Description) 
-                   VALUES (@Id, @Name, @Description)";
+                @$"INSERT INTO public.Roles 
+                (Id, Name, Description) 
+                VALUES (@Id, @Name, @Description)";
 
             return new SqlQuery(query, role);
         }
@@ -60,9 +58,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertUserRole(UserRole userRole)
         {
             string query =
-                @$"INSERT INTO {Schema}.UserRoles 
-                   (UserId, RoleId) 
-                   VALUES (@UserId, @RoleId)";
+                @$"INSERT INTO public.UserRoles 
+                (UserId, RoleId) 
+                VALUES (@UserId, @RoleId)";
 
             return new SqlQuery(query, userRole);
         }
@@ -70,9 +68,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertCountry(Country country)
         {
             string query =
-                @$"INSERT INTO {Schema}.Countries 
-                   (Id, Name, Continent) 
-                   VALUES (@Id, @Name, @Continent)";
+                @$"INSERT INTO public.Countries 
+                (Id, Name, Continent) 
+                VALUES (@Id, @Name, @Continent)";
 
             return new SqlQuery(query, country);
         }
@@ -80,9 +78,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertCity(City city)
         {
             string query =
-                @$"INSERT INTO {Schema}.Cities 
-                   (Id, Name, CountryId) 
-                   VALUES (@Id, @Name, @CountryId)";
+                @$"INSERT INTO public.Cities 
+                (Id, Name, CountryId) 
+                VALUES (@Id, @Name, @CountryId)";
 
             return new SqlQuery(query, city);
         }
@@ -90,9 +88,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertBrand(Brand brand)
         {
             string query =
-                @$"INSERT INTO {Schema}.Brands 
-                   (Id, Name) 
-                   VALUES (@Id, @Name)";
+                @$"INSERT INTO public.Brands 
+                (Id, Name) 
+                VALUES (@Id, @Name)";
 
             return new SqlQuery(query, brand);
         }
@@ -100,9 +98,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertCategory(Category category)
         {
             string query =
-                @$"INSERT INTO {Schema}.Categories 
-                   (Id, Name) 
-                   VALUES (@Id, @Name)";
+                @$"INSERT INTO public.Categories 
+                (Id, Name) 
+                VALUES (@Id, @Name)";
 
             return new SqlQuery(query, category);
         }
@@ -110,9 +108,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertManufacturer(Manufacturer manufacturer)
         {
             string query =
-                @$"INSERT INTO {Schema}.Manufacturers 
-                   (Id, OrganizationName, StreetAddress_StreetName, StreetAddress_PostalCode, StreetAddress_CityId) 
-                   VALUES (@Id, @OrganizationName, @StreetAddress_StreetName, @StreetAddress_PostalCode, @StreetAddress_CityId)";
+                @$"INSERT INTO public.Manufacturers 
+                (Id, OrganizationName, StreetAddress_StreetName, StreetAddress_PostalCode, StreetAddress_CityId) 
+                VALUES (@Id, @OrganizationName, @StreetAddress_StreetName, @StreetAddress_PostalCode, @StreetAddress_CityId)";
 
             var param = new
             {
@@ -129,9 +127,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertShipper(Shipper shipper)
         {
             string query =
-                @$"INSERT INTO {Schema}.Shippers 
-                   (Id, OrganizationName, ContactPhone, HeadOffice_StreetName, HeadOffice_PostalCode, HeadOffice_CityId) 
-                   VALUES (@Id, @OrganizationName, @ContactPhone, @HeadOffice_StreetName, @HeadOffice_PostalCode, @HeadOffice_CityId)";
+                @$"INSERT INTO public.Shippers 
+                (Id, OrganizationName, ContactPhone, HeadOffice_StreetName, HeadOffice_PostalCode, HeadOffice_CityId) 
+                VALUES (@Id, @OrganizationName, @ContactPhone, @HeadOffice_StreetName, @HeadOffice_PostalCode, @HeadOffice_CityId)";
 
             var param = new
             {
@@ -149,9 +147,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertProduct(Product product)
         {
             string query =
-                @$"INSERT INTO {Schema}.Products 
-                   (Id, Name, Price, Description, AverageRating, ReviewsCount, CreateDate, PictureId, ManufacturerId, CategoryId, BrandId) 
-                   VALUES (@Id, @Name, @Price, @Description, @AverageRating, @ReviewsCount, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
+                @$"INSERT INTO public.Products 
+                (Id, Name, Price, Description, AverageRating, ReviewsCount, CreateDate, PictureId, ManufacturerId, CategoryId, BrandId) 
+                VALUES (@Id, @Name, @Price, @Description, @AverageRating, @ReviewsCount, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
 
             return new SqlQuery(query, product);
         }
@@ -159,9 +157,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertProductReview(ProductReview review)
         {
             string query =
-                @$"INSERT INTO {Schema}.ProductReviews 
-                   (Id, Title, Comment, CreateDate, Rating, AuthorId, ProductId) 
-                   VALUES (@Id, @Title, @Comment, @CreateDate, @Rating, @AuthorId, @ProductId)";
+                @$"INSERT INTO public.ProductReviews 
+                (Id, Title, Comment, CreateDate, Rating, AuthorId, ProductId) 
+                VALUES (@Id, @Title, @Comment, @CreateDate, @Rating, @AuthorId, @ProductId)";
 
             return new SqlQuery(query.ToString(), review);
         }
@@ -169,9 +167,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         public static SqlQuery InsertProductComment(ProductComment comment)
         {
             string query =
-                @$"INSERT INTO {Schema}.ProductComments 
-                   (Id, Body, CreateDate, ProductId, AuthorId, ParentCommentId) 
-                   VALUES (@Id, @Body, @CreateDate, @ProductId, @AuthorId, @ParentCommentId) ";
+                @$"INSERT INTO public.ProductComments 
+                (Id, Body, CreateDate, ProductId, AuthorId, ParentCommentId) 
+                VALUES (@Id, @Body, @CreateDate, @ProductId, @AuthorId, @ParentCommentId) ";
 
             return new SqlQuery(query, comment);
         }

@@ -43,7 +43,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             var query = string.Format(
                 @"SELECT * FROM {0} 
-                  WHERE {1} = @id",
+                WHERE {1} = @id",
                 entityMap.Table.NameWithSchema(),
                 entityMap.Identity.Column);
 
@@ -96,8 +96,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             string query = string.Format(
                 @"UPDATE {0} 
-                  SET {1} 
-                  WHERE {2} = @{2}",
+                SET {1} 
+                WHERE {2} = @{2}",
                 entityMap.Table.NameWithSchema(),
                 string.Join(", ", setParams),
                 entityMap.Identity.Column);
@@ -111,7 +111,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             string query = string.Format(
                 @"DELETE FROM {0} 
-                  WHERE {1} = @{2}",
+                WHERE {1} = @{2}",
                 entityMap.Table.NameWithSchema(),
                 entityMap.Identity.Column,
                 entityMap.Identity.PropertyName);
@@ -125,7 +125,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             string query = string.Format(
                 @"SELECT 1 FROM {0} 
-                  WHERE {1} = @id",
+                WHERE {1} = @id",
                 entityMap.Table.NameWithSchema(),
                 entityMap.Identity.Column);
 

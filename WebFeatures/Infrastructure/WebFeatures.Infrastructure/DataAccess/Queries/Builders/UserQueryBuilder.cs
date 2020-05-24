@@ -20,17 +20,17 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             string query = string.Format(
                 @"SELECT * FROM {0} users 
-                  LEFT JOIN {1} userRoles ON userRoles.{2} = users.{3} 
-                  LEFT JOIN {4} roles ON roles.{5} = userRoles.{6} 
-                  WHERE users.{7} = @email",
-                    user.Table.NameWithSchema(),
-                    userRole.Table.NameWithSchema(),
-                    userRole.Column(x => x.UserId),
-                    user.Identity.Column,
-                    role.Table.NameWithSchema(),
-                    role.Identity.Column,
-                    userRole.Column(x => x.RoleId),
-                    user.Column(x => x.Email));
+                LEFT JOIN {1} userRoles ON userRoles.{2} = users.{3} 
+                LEFT JOIN {4} roles ON roles.{5} = userRoles.{6} 
+                WHERE users.{7} = @email",
+                user.Table.NameWithSchema(),
+                userRole.Table.NameWithSchema(),
+                userRole.Column(x => x.UserId),
+                user.Identity.Column,
+                role.Table.NameWithSchema(),
+                role.Identity.Column,
+                userRole.Column(x => x.RoleId),
+                user.Column(x => x.Email));
 
             string splitOn = string.Join(", ",
                 user.Identity.Column,

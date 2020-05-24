@@ -19,7 +19,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             string query = string.Format(
                 @"SELECT * FROM {0} 
-                  WHERE {1} = @productId",
+                WHERE {1} = @productId",
                 comment.Table.NameWithSchema(),
                 comment.Column(x => x.AuthorId));
 

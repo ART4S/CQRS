@@ -10,30 +10,28 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
     internal interface IEntityMap<TEntity> where TEntity : class
     {
-        TableMap Table { get; }
-        PropertyMap<TEntity> Identity { get; }
-        IEnumerable<PropertyMap<TEntity>> Properties { get; }
-        PropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall);
+        ITableMap Table { get; }
+        IPropertyMap<TEntity> Identity { get; }
+        IEnumerable<IPropertyMap<TEntity>> Properties { get; }
+        IPropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall);
     }
 
     internal class EntityMap<TEntity> : IEntityMap<TEntity>
         where TEntity : class
     {
-        public TableMap Table
-        {
-            get => _table ?? (_table = new TableMap(GetConventionalTableName()));
-            private set => _table = value;
-        }
+        public ITableMap Table => _table;
         private TableMap _table;
 
-        public PropertyMap<TEntity> Identity => _identity;
+        public IPropertyMap<TEntity> Identity => _identity;
         private PropertyMap<TEntity> _identity;
 
-        public IEnumerable<PropertyMap<TEntity>> Properties => _properties;
+        public IEnumerable<IPropertyMap<TEntity>> Properties => _properties;
         private readonly HashSet<PropertyMap<TEntity>> _properties;
 
         public EntityMap()
         {
+            _table = new TableMap(GetConventionalTableName());
+
             _properties = SqlType<TEntity>.Properties
                 .Select(x => new PropertyMap<TEntity>(
                     x.Name,
@@ -43,7 +41,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             _identity = _properties.FirstOrDefault(x => x.PropertyName == "Id");
         }
 
-        public PropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall)
+        public IPropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall)
         {
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
