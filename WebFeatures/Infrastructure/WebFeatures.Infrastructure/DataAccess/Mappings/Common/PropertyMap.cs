@@ -20,6 +20,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         public PropertyMap(string propName, Func<TEntity, object> propValueAccessor)
         {
             Guard.ThrowIfNull(propName, nameof(propName));
+            Guard.ThrowIfNull(propValueAccessor, nameof(propValueAccessor));
 
             PropertyName = Column = propName;
 

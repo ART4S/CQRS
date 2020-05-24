@@ -67,9 +67,9 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
             var user = new User()
             {
                 Id = new Guid("7840a202-0ba5-40ff-a803-20f227354693"),
-                Name = "testName",
-                Email = "testEmail",
-                PasswordHash = "testHash"
+                Name = "",
+                Email = "",
+                PasswordHash = ""
             };
 
             // Act
@@ -166,6 +166,10 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
             // Assert
             user.ShouldNotBeNull();
             user.Email.ShouldBe(existingEmail);
+
+            user.UserRoles.Count.ShouldBe(2);
+            user.UserRoles.ShouldAllBe(x => x.User == user);
+            user.UserRoles.ShouldAllBe(x => x.RoleId == x.Role.Id);
         }
     }
 }

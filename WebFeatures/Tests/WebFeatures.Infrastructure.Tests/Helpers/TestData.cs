@@ -44,7 +44,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             {
                 Id = new Guid("1db40dd2-f7cd-4074-9572-d1748170e71b"),
                 Name = "Name_5",
-                Email = "test@mail.com",
+                Email = "Email_5",
                 PasswordHash = "PasswordHash_5"
             },
             new User()
@@ -58,7 +58,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
             {
                 Id = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03"),
                 Name = "Name_7",
-                Email = "Email_7",
+                Email = "test@mail.com",
                 PasswordHash = "PasswordHash_7"
             }
         };
