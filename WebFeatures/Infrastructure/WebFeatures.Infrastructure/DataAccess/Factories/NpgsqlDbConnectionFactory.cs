@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System;
 using System.Data;
+using WebFeatures.Common;
 using WebFeatures.Persistence;
 
 namespace WebFeatures.Infrastructure.DataAccess.Factories
@@ -11,7 +12,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Factories
 
         public NpgsqlDbConnectionFactory(string connectionString)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            Guard.ThrowIfNull(connectionString, nameof(connectionString));
+
+            _connectionString = connectionString;
         }
 
         public IDbConnection CreateConnection()

@@ -58,6 +58,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
                 }
 
                 propertyNames.Add(property.Name);
+
                 current = memberExpr.Expression;
             }
 
