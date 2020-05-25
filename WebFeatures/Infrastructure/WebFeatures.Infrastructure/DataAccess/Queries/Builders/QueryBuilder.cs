@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
@@ -8,7 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 {
-    internal interface IQueryBuilder<TEntity> where TEntity : class
+    internal interface IQueryBuilder<TEntity> where TEntity : IdentityEntity
     {
         SqlQuery BuildGetAll();
         SqlQuery BuildGet(Guid id);
@@ -19,7 +20,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
     }
 
     internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
-        where TEntity : class
+        where TEntity : IdentityEntity
     {
         protected IEntityProfile Profile { get; }
 
@@ -45,7 +46,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 @"SELECT * FROM {0} 
                 WHERE {1} = @id",
                 entityMap.Table.NameWithSchema(),
-                entityMap.Identity.Column);
+                entityMap.Column(x => x.Id));
 
             return new SqlQuery(query, new { id });
         }
@@ -100,7 +101,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 WHERE {2} = @{2}",
                 entityMap.Table.NameWithSchema(),
                 string.Join(", ", setParams),
-                entityMap.Identity.Column);
+                entityMap.Column(x => x.Id));
 
             return new SqlQuery(query, param);
         }
@@ -113,8 +114,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 @"DELETE FROM {0} 
                 WHERE {1} = @{2}",
                 entityMap.Table.NameWithSchema(),
-                entityMap.Identity.Column,
-                entityMap.Identity.PropertyName);
+                entityMap.Column(x => x.Id),
+                entityMap.Property(x => x.Id));
 
             return new SqlQuery(query, entity);
         }
@@ -127,7 +128,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 @"SELECT 1 FROM {0} 
                 WHERE {1} = @id",
                 entityMap.Table.NameWithSchema(),
-                entityMap.Identity.Column);
+                entityMap.Column(x => x.Id));
 
             return new SqlQuery(query, new { id });
         }

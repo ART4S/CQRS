@@ -15,7 +15,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
     public class EntityProfileTests
     {
         [Fact]
-        public void GetMap_ShouldReturnExistingMap()
+        public void GetMap_ShouldReturnMapForEntityWithManualMap()
         {
             // Arrange
             var profile = new EntityProfile();
@@ -28,7 +28,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
         }
 
         [Fact]
-        public void GetMap_ShouldReturnNullForEntityWithoutMap()
+        public void GetMap_ShouldReturnMapForEntityWithoutManualMap()
         {
             // Arrange
             var profile = new EntityProfile();
@@ -37,11 +37,11 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
             IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
 
             // Assert
-            map.ShouldBeNull();
+            map.ShouldNotBeNull();
         }
 
         [Fact]
-        public void GetMap_AllEntitiesShouldBeMapped()
+        public void GetMap_ShouldReturnMapForAllEntities()
         {
             // Arrange
             var profile = new EntityProfile();
@@ -57,8 +57,8 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Mappings.Profile
             {
                 MethodInfo getMapMethod = typeof(EntityProfile)
                     .GetMethod(
-                    nameof(EntityProfile.GetMap),
-                    BindingFlags.Public | BindingFlags.Instance)
+                        nameof(EntityProfile.GetMap),
+                        BindingFlags.Public | BindingFlags.Instance)
                     .MakeGenericMethod(entityType);
 
                 mappings.Add(getMapMethod.Invoke(profile, null));

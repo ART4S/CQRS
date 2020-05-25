@@ -12,7 +12,8 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 {
-    public class ManufacturerRepositoryTests : IClassFixture<NpgsqlDatabaseFixture>
+    [Collection("NpgsqlDatabase")]
+    public class ManufacturerRepositoryTests
     {
         private readonly NpgsqlDatabaseFixture _db;
         private readonly Repository<Manufacturer, QueryBuilder<Manufacturer>> _repo;
@@ -27,20 +28,17 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldCreateRecord()
+        public async Task CreateAsync_ShouldCreateOneManufacturer()
         {
             // Arrange
-            Guid manufacturerId = new Guid("0fd1e2cd-51a0-4ba5-b830-e0b7cbe76823");
-            Guid cityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
-
             var manufacturer = new Manufacturer()
             {
-                Id = manufacturerId,
+                Id = new Guid("0fd1e2cd-51a0-4ba5-b830-e0b7cbe76823"),
                 OrganizationName = "",
                 HomePageUrl = "",
                 StreetAddress = new Address()
                 {
-                    CityId = cityId,
+                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
                     PostalCode = "",
                     StreetName = ""
                 }
@@ -51,16 +49,14 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 
             int manufacturersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(*) FROM public.Manufacturers
-                WHERE Id = @manufacturerId AND StreetAddress_CityId = @cityId",
+                WHERE Id = @Id AND StreetAddress_CityId = @CityId",
                 new
                 {
-                    manufacturerId,
-                    cityId
+                    manufacturer.Id,
+                    manufacturer.StreetAddress.CityId
                 });
 
             // Assert
-            manufacturer.Id.ShouldBe(manufacturerId);
-            manufacturer.StreetAddress.CityId.ShouldBe(cityId);
             manufacturersCount.ShouldBe(1);
         }
     }

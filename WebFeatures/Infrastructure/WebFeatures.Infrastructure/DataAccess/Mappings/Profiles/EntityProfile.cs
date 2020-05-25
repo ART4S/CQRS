@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 {
@@ -15,7 +13,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 
     internal class EntityProfile : IEntityProfile
     {
-        private Dictionary<Type, object> _mappings;
+        private readonly Dictionary<Type, object> _mappings = new Dictionary<Type, object>();
 
         public EntityProfile()
         {
@@ -24,20 +22,33 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 
         private void AddMappingsFromAssembly(Assembly assembly)
         {
-            _mappings = assembly.GetTypes()
-                .Where(t => t.IsSubclassOfGeneric(typeof(EntityMap<>)))
-                .Select(t => new
-                {
-                    EntityType = t.BaseType.GetGenericArguments()[0],
-                    Mapping = Activator.CreateInstance(t)
-                })
-                .ToDictionary(t => t.EntityType, t => t.Mapping);
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.IsGenericType)
+                    continue;
+
+                Type mapInterface = type.GetInterfaces()
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntityMap<>));
+
+                if (mapInterface == null)
+                    continue;
+
+                Type entityType = mapInterface.GetGenericArguments()[0];
+
+                _mappings[entityType] = Activator.CreateInstance(type);
+            }
         }
 
         public IEntityMap<TEntity> GetMap<TEntity>() where TEntity : class
         {
-            _mappings.TryGetValue(typeof(TEntity), out object map);
-            return (IEntityMap<TEntity>)map;
+            Type entityType = typeof(TEntity);
+
+            if (!_mappings.ContainsKey(entityType))
+            {
+                _mappings[entityType] = new EntityMap<TEntity>();
+            }
+
+            return (IEntityMap<TEntity>)_mappings[entityType];
         }
     }
 }

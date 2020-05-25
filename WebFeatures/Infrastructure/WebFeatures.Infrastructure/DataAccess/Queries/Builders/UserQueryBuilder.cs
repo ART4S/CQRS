@@ -26,16 +26,16 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                 user.Table.NameWithSchema(),
                 userRole.Table.NameWithSchema(),
                 userRole.Column(x => x.UserId),
-                user.Identity.Column,
+                user.Column(x => x.Id),
                 role.Table.NameWithSchema(),
-                role.Identity.Column,
+                role.Column(x => x.Id),
                 userRole.Column(x => x.RoleId),
                 user.Column(x => x.Email));
 
             string splitOn = string.Join(", ",
-                user.Identity.Column,
+                user.Column(x => x.Id),
                 userRole.Column(x => x.UserId),
-                role.Identity.Column);
+                role.Column(x => x.Id));
 
             return new SqlQuery(query, new { email }, splitOn);
         }

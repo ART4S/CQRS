@@ -12,7 +12,8 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 {
-    public class UserRepositoryTests : IClassFixture<NpgsqlDatabaseFixture>
+    [Collection("NpgsqlDatabase")]
+    public class UserRepositoryTests
     {
         private readonly NpgsqlDatabaseFixture _db;
         private readonly UserRepository _repo;
@@ -34,7 +35,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnExistingRecord()
+        public async Task GetAsync_ShouldReturnExistingUser()
         {
             // Arrange
             Guid existingUserId = new Guid("067d520f-fe3c-493c-a4c9-0bce1cf57212");
@@ -48,7 +49,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnNullWhenRecordDoesntExist()
+        public async Task GetAsync_ShouldReturnNullWhenUserDoesntExists()
         {
             // Arrange
             Guid nonExistingUserId = Guid.NewGuid();
@@ -61,7 +62,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldCreateRecord()
+        public async Task CreateAsync_ShouldCreateOneUser()
         {
             // Arrange
             var user = new User()
@@ -77,7 +78,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM Users WHERE Id = @Id",
-                user);
+                new { user.Id });
 
             // Assert
             user.Id.ShouldNotBe(default);
@@ -85,7 +86,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task UpdateAsync_ShouldUpdateRecord()
+        public async Task UpdateAsync_ShouldUpdateUser()
         {
             // Arrange
             var user = new User()
@@ -112,7 +113,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldDeleteRecord()
+        public async Task DeleteAsync_ShouldDeleteExistingUser()
         {
             // Arrange
             var existingUser = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
@@ -122,7 +123,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM Users WHERE Id = @Id",
-                existingUser);
+                new { existingUser.Id });
 
             // Assert
             usersCount.ShouldBe(0);
@@ -142,7 +143,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
         }
 
         [Fact]
-        public async Task ExistsAsync_ShouldReturnFalseWhenRecordDoesntExist()
+        public async Task ExistsAsync_ShouldReturnFalseWhenUserDoesntExist()
         {
             // Arrange
             Guid nonExistingUserId = Guid.NewGuid();
