@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,9 +10,9 @@ namespace WebFeatures.Requests.Internal
         private readonly IServiceProvider _services;
         private static readonly ConcurrentDictionary<Type, object> PipelinesCashe = new ConcurrentDictionary<Type, object>();
 
-        public RequestMediator(IServiceProvider serviceProvider)
+        public RequestMediator(IServiceProvider services)
         {
-            _services = serviceProvider;
+            _services = services;
         }
 
         public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
@@ -22,7 +21,10 @@ namespace WebFeatures.Requests.Internal
                 request.GetType(),
                 _ =>
                 {
-                    Type pipelineType = typeof(PipelineImpl<,>).MakeGenericType(request.GetType(), typeof(TResponse));
+                    Type pipelineType = typeof(PipelineImpl<,>).MakeGenericType(
+                        request.GetType(),
+                        typeof(TResponse));
+
                     return Activator.CreateInstance(pipelineType);
                 });
 

@@ -45,9 +45,9 @@ namespace WebFeatures.Infrastructure
 
         private static void AddDataAccess(IServiceCollection services, IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("Npgsql");
+            string connectionString = configuration.GetConnectionString("PostgreSql");
 
-            services.AddSingleton<IDbConnectionFactory>(x => new NpgsqlDbConnectionFactory(connectionString));
+            services.AddSingleton<IDbConnectionFactory>(x => new PostgreSqlDbConnectionFactory(connectionString));
             services.AddSingleton<IEntityProfile, EntityProfile>();
             services.AddScoped<IDbContext, DbContext>();
         }

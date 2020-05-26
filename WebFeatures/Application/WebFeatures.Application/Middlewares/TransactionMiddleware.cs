@@ -21,7 +21,7 @@ namespace WebFeatures.Application.Middlewares
             _logger = logger;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, RequestDelegate<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             IDbTransaction transaction = _db.BeginTransaction();
             TResponse response = await next();

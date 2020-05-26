@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
-using WebFeatures.AppInitializer.Database;
-using WebFeatures.AppInitializer.Extensions;
+using WebFeatures.DatabaseInitializer.Database;
+using WebFeatures.DatabaseInitializer.Extensions;
 
-namespace WebFeatures.AppInitializer
+namespace WebFeatures.DatabaseInitializer
 {
     internal class ScriptsRunner
     {

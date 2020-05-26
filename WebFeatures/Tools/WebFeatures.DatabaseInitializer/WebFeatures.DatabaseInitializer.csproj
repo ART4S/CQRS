@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\WebFeatures.Common\WebFeatures.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Scripts\InitialData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

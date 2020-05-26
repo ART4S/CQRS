@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace WebFeatures.AppInitializer.Database
+namespace WebFeatures.DatabaseInitializer.Database
 {
     internal interface IDbConnectionFactory
     {

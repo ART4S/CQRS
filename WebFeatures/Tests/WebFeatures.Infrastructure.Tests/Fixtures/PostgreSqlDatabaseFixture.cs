@@ -4,11 +4,11 @@ using WebFeatures.Infrastructure.Tests.Helpers;
 
 namespace WebFeatures.Infrastructure.Tests.Fixtures
 {
-    public class NpgsqlDatabaseFixture : DatabaseFixture<NpgsqlConnection>
+    public class PostgreSqlDatabaseFixture : DatabaseFixture<NpgsqlConnection>
     {
         private const string _databaseName = "webfeatures_test_db";
 
-        public NpgsqlDatabaseFixture() : base(new NpgsqlConnection("server=localhost;port=5432;username=postgres;password=postgres"))
+        public PostgreSqlDatabaseFixture() : base(new NpgsqlConnection("server=localhost;port=5432;username=postgres;password=postgres"))
         {
             Init();
         }

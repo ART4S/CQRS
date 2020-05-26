@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,7 +21,7 @@ namespace WebFeatures.Application.Middlewares
             _validators = validators;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, RequestDelegate<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             ValidationFailure[] errors =
                 (await Task.WhenAll(_validators.Select(x => x.ValidateAsync(request))))

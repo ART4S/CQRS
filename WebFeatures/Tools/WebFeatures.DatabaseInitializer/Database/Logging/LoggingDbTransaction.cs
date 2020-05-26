@@ -2,7 +2,7 @@
 using System;
 using System.Data;
 
-namespace WebFeatures.AppInitializer.Logging
+namespace WebFeatures.DatabaseInitializer.Database.Logging
 {
     internal class LoggingDbTransaction : IDbTransaction
     {

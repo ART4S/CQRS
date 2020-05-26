@@ -12,13 +12,13 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
 {
-    [Collection("NpgsqlDatabase")]
+    [Collection("PostgreSqlDatabase")]
     public class ManufacturerRepositoryTests
     {
-        private readonly NpgsqlDatabaseFixture _db;
+        private readonly PostgreSqlDatabaseFixture _db;
         private readonly Repository<Manufacturer, QueryBuilder<Manufacturer>> _repo;
 
-        public ManufacturerRepositoryTests(NpgsqlDatabaseFixture db)
+        public ManufacturerRepositoryTests(PostgreSqlDatabaseFixture db)
         {
             _db = db;
             _repo = new Repository<Manufacturer, QueryBuilder<Manufacturer>>(

@@ -50,7 +50,7 @@ namespace WebFeatures.Infrastructure.DataAccess
         private IAsyncRepository<File> _files;
 
         private IDbConnection Connection => _connection.Value;
-        private Lazy<IDbConnection> _connection;
+        private readonly Lazy<IDbConnection> _connection;
 
         private readonly IEntityProfile _entityProfile;
 

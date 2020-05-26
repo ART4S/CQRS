@@ -1,9 +1,8 @@
 ﻿using Npgsql;
 using System.Data;
 using WebFeatures.Common;
-using WebFeatures.Persistence;
 
-namespace WebFeatures.Infrastructure.DataAccess.Factories
+namespace WebFeatures.DatabaseInitializer.Database
 {
     internal class PostgreSqlDbConnectionFactory : IDbConnectionFactory
     {

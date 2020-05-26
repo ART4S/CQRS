@@ -1,8 +1,8 @@
 ﻿using System.Data;
 
-namespace WebFeatures.AppInitializer.Extensions
+namespace WebFeatures.DatabaseInitializer.Extensions
 {
-    internal static class DbConnectionExtensions
+    internal static class ConnectionExtensions
     {
         public static void Execute(this IDbConnection connection, string script)
         {

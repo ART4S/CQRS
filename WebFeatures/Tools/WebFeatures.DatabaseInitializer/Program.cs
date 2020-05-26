@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace WebFeatures.AppInitializer
+namespace WebFeatures.DatabaseInitializer
 {
     class Program
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace WebFeatures.AppInitializer
+namespace WebFeatures.DatabaseInitializer
 {
     internal static class SqlBuilder
     {

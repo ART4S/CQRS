@@ -4,10 +4,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
-using WebFeatures.AppInitializer.Database;
-using WebFeatures.AppInitializer.Logging;
+using WebFeatures.DatabaseInitializer.Database;
+using WebFeatures.DatabaseInitializer.Database.Logging;
 
-namespace WebFeatures.AppInitializer
+namespace WebFeatures.DatabaseInitializer
 {
     internal class CompositionRoot
     {
@@ -46,21 +46,22 @@ namespace WebFeatures.AppInitializer
 
         private void RegisterLogging(ServiceCollection services)
         {
-            services.AddSingleton(
-                x => LoggerFactory.Create(
-                    builder => builder.ClearProviders().AddConsole()));
+            services.AddSingleton(x => LoggerFactory.Create(builder =>
+            {
+                builder.ClearProviders()
+                    .AddConsole();
+            }));
 
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
         }
 
         private void RegisterDataAccess(ServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("Npgsql");
+            string connectionString = Configuration.GetConnectionString("PostgreSql");
 
-            services.AddSingleton<IDbConnectionFactory>(
-                x => new LoggingDbConnectionFactory(
-                    new NpgsqlDbConnectionFactory(connectionString),
-                    x.GetService<ILoggerFactory>()));
+            services.AddSingleton<IDbConnectionFactory>(x => new LoggingDbConnectionFactory(
+                new PostgreSqlDbConnectionFactory(connectionString),
+                x.GetService<ILoggerFactory>()));
         }
     }
 }

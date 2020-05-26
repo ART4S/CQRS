@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Logging;
@@ -19,7 +18,7 @@ namespace WebFeatures.Application.Middlewares
             _logger = logger;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> HandleAsync(TRequest request, RequestDelegate<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             var sw = new Stopwatch();
 
