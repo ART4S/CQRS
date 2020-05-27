@@ -6,7 +6,12 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 {
-    internal class UserQueryBuilder : QueryBuilder<User>
+    internal interface IUserQueryBuilder : IQueryBuilder<User>
+    {
+        SqlQuery BuildGetUserByEmail(string email);
+    }
+
+    internal class UserQueryBuilder : QueryBuilder<User>, IUserQueryBuilder
     {
         public UserQueryBuilder(IEntityProfile profile) : base(profile)
         {

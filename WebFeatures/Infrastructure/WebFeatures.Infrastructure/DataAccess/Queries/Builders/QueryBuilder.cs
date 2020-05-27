@@ -61,9 +61,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             foreach (PropertyMap<TEntity> map in entityMap.Properties)
             {
-                insertColumns.Add(map.Column);
+                insertColumns.Add(map.ColumnName);
 
-                string paramName = "@" + map.Column;
+                string paramName = "@" + map.ColumnName;
 
                 insertParams.Add(paramName);
 
@@ -88,9 +88,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 
             foreach (PropertyMap<TEntity> map in entityMap.Properties)
             {
-                string paramName = "@" + map.Column;
+                string paramName = "@" + map.ColumnName;
 
-                setParams.Add($"{map.Column} = {paramName}");
+                setParams.Add($"{map.ColumnName} = {paramName}");
 
                 param.Add(paramName, map.GetValue(entity));
             }

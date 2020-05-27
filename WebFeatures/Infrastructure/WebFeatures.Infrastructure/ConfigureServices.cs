@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Reflection;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Jobs;
 using WebFeatures.Application.Interfaces.Logging;
@@ -48,7 +49,13 @@ namespace WebFeatures.Infrastructure
             string connectionString = configuration.GetConnectionString("PostgreSql");
 
             services.AddSingleton<IDbConnectionFactory>(x => new PostgreSqlDbConnectionFactory(connectionString));
-            services.AddSingleton<IEntityProfile, EntityProfile>();
+            services.AddSingleton<IEntityProfile>(x =>
+            {
+                var profile = new EntityProfile();
+                profile.AddMappingsFromAssembly(Assembly.GetExecutingAssembly());
+
+                return profile;
+            });
             services.AddScoped<IDbContext, DbContext>();
         }
 

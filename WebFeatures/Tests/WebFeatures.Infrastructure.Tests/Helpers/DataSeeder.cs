@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Infrastructure.Tests.Data;
 
 namespace WebFeatures.Infrastructure.Tests.Helpers
 {
@@ -34,7 +35,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedUsers(IDbConnection connection)
         {
-            foreach (User user in TestData.Users)
+            foreach (User user in InitialDbData.Users)
             {
                 SqlQuery sql = SqlBuilder.InsertUser(user);
                 connection.Execute(sql);
@@ -43,7 +44,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedRoles(IDbConnection connection)
         {
-            foreach (Role role in TestData.Roles)
+            foreach (Role role in InitialDbData.Roles)
             {
                 SqlQuery sql = SqlBuilder.InsertRole(role);
                 connection.Execute(sql);
@@ -52,7 +53,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedUserRoles(IDbConnection connection)
         {
-            foreach (UserRole userRole in TestData.UserRoles)
+            foreach (UserRole userRole in InitialDbData.UserRoles)
             {
                 SqlQuery sql = SqlBuilder.InsertUserRole(userRole);
                 connection.Execute(sql);
@@ -61,7 +62,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedCountries(IDbConnection connection)
         {
-            foreach (Country country in TestData.Countries)
+            foreach (Country country in InitialDbData.Countries)
             {
                 SqlQuery sql = SqlBuilder.InsertCountry(country);
                 connection.Execute(sql);
@@ -70,7 +71,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedCities(IDbConnection connection)
         {
-            foreach (City city in TestData.Cities)
+            foreach (City city in InitialDbData.Cities)
             {
                 SqlQuery sql = SqlBuilder.InsertCity(city);
                 connection.Execute(sql);
@@ -79,7 +80,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedBrands(IDbConnection connection)
         {
-            foreach (Brand brand in TestData.Brands)
+            foreach (Brand brand in InitialDbData.Brands)
             {
                 SqlQuery sql = SqlBuilder.InsertBrand(brand);
                 connection.Execute(sql);
@@ -88,7 +89,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedCategories(IDbConnection connection)
         {
-            foreach (Category category in TestData.Categories)
+            foreach (Category category in InitialDbData.Categories)
             {
                 SqlQuery sql = SqlBuilder.InsertCategory(category);
                 connection.Execute(sql);
@@ -97,7 +98,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedManufacturers(IDbConnection connection)
         {
-            foreach (Manufacturer manufacturer in TestData.Manufacturers)
+            foreach (Manufacturer manufacturer in InitialDbData.Manufacturers)
             {
                 SqlQuery sql = SqlBuilder.InsertManufacturer(manufacturer);
                 connection.Execute(sql);
@@ -106,7 +107,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedShippers(IDbConnection connection)
         {
-            foreach (Shipper shipper in TestData.Shippers)
+            foreach (Shipper shipper in InitialDbData.Shippers)
             {
                 SqlQuery sql = SqlBuilder.InsertShipper(shipper);
                 connection.Execute(sql);
@@ -115,7 +116,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedProducts(IDbConnection connection)
         {
-            foreach (Product product in TestData.Products)
+            foreach (Product product in InitialDbData.Products)
             {
                 SqlQuery sql = SqlBuilder.InsertProduct(product);
                 connection.Execute(sql);
@@ -124,7 +125,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedProductReviews(IDbConnection connection)
         {
-            foreach (ProductReview review in TestData.ProductReviews)
+            foreach (ProductReview review in InitialDbData.ProductReviews)
             {
                 SqlQuery sql = SqlBuilder.InsertProductReview(review);
                 connection.Execute(sql);
@@ -133,7 +134,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         private static void SeedProductComments(IDbConnection connection)
         {
-            foreach (ProductComment comment in TestData.ProductComments)
+            foreach (ProductComment comment in InitialDbData.ProductComments)
             {
                 SqlQuery sql = SqlBuilder.InsertProductComment(comment);
                 connection.Execute(sql);

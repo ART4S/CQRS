@@ -1,40 +1,59 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Reflection;
 using WebFeatures.Common;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
     internal interface IPropertyMap<TEntity> where TEntity : class
     {
-        string PropertyName { get; }
-        string Column { get; }
+        string ColumnName { get; }
+        string PropertyCall { get; }
+        PropertyInfo Property { get; }
         object GetValue(TEntity entity);
+        void SetValue(TEntity entity, object value);
     }
 
     internal partial class PropertyMap<TEntity> : IPropertyMap<TEntity> where TEntity : class
     {
-        public string PropertyName { get; }
-        public string Column { get; private set; }
+        public string ColumnName { get; private set; }
+        public string PropertyCall { get; }
+        public PropertyInfo Property { get; }
 
-        private readonly Func<TEntity, object> _propValueAccessor;
+        private Func<TEntity, object> _getter;
+        private Action<TEntity, object> _setter;
 
-        public PropertyMap(string propName, Func<TEntity, object> propValueAccessor)
+        public PropertyMap(Expression<Func<TEntity, object>> propertyCall)
         {
-            Guard.ThrowIfNull(propName, nameof(propName));
-            Guard.ThrowIfNull(propValueAccessor, nameof(propValueAccessor));
+            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            PropertyName = Column = propName;
+            PropertyCall = ColumnName = propertyCall.GetPropertyName();
+            Property = propertyCall.GetFirstProperty();
 
-            _propValueAccessor = propValueAccessor;
+            _getter = propertyCall.Compile();
+            _setter = propertyCall.CreateSetter();
+        }
+
+        public PropertyMap(PropertyInfo property)
+        {
+            Guard.ThrowIfNull(property, nameof(property));
+
+            PropertyCall = ColumnName = property.Name;
+            Property = property;
+
+            _getter = property.CreateGetter<TEntity>();
+            _setter = property.CreateSetter<TEntity>();
         }
 
         public object GetValue(TEntity entity)
         {
-            return _propValueAccessor(entity);
+            return _getter(entity);
         }
 
-        public override int GetHashCode()
+        public void SetValue(TEntity entity, object value)
         {
-            return PropertyName.GetHashCode();
+            _setter(entity, value);
         }
     }
 }

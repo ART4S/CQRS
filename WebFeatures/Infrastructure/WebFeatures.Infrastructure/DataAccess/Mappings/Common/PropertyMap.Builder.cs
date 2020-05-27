@@ -17,7 +17,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             {
                 Guard.ThrowIfNullOrWhiteSpace(column, nameof(column));
 
-                _property.Column = column;
+                _property.ColumnName = column;
             }
         }
     }

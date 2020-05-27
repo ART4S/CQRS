@@ -11,11 +11,11 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories
 {
-    internal class UserRepository : Repository<User, UserQueryBuilder>, IUserRepository
+    internal class UserRepository : Repository<User, IUserQueryBuilder>, IUserRepository
     {
         public UserRepository(
             IDbConnection connection,
-            UserQueryBuilder queryBuilder) : base(connection, queryBuilder)
+            IUserQueryBuilder queryBuilder) : base(connection, queryBuilder)
         {
         }
 

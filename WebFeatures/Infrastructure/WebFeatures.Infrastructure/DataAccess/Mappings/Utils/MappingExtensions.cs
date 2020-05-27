@@ -15,14 +15,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
             Expression<Func<TEntity, object>> propertyCall)
             where TEntity : class
         {
-            return entity.GetProperty(propertyCall).Column;
+            return entity.GetProperty(propertyCall).ColumnName;
         }
 
         public static string Property<TEntity>(this IEntityMap<TEntity> entity,
             Expression<Func<TEntity, object>> propertyCall)
             where TEntity : class
         {
-            return entity.GetProperty(propertyCall).PropertyName;
+            return entity.GetProperty(propertyCall).Property.Name;
         }
     }
 }

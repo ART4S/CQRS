@@ -21,27 +21,28 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         public ITableMap Table => _table;
         private TableMap _table;
 
-        public IEnumerable<IPropertyMap<TEntity>> Properties => _properties;
-        private readonly HashSet<PropertyMap<TEntity>> _properties;
+        public IEnumerable<IPropertyMap<TEntity>> Properties => _properties.Values;
+        private readonly Dictionary<string, PropertyMap<TEntity>> _properties;
 
         public EntityMap()
         {
             _table = new TableMap(GetConventionalTableName());
 
             _properties = SqlType<TEntity>.Properties
-                .Select(x => new PropertyMap<TEntity>(
-                    x.Name,
-                    x.CreateAccessFunc<TEntity>()))
-                .ToHashSet();
+                .Select(x => new PropertyMap<TEntity>(x))
+                .ToDictionary(x => x.PropertyCall, x => x);
         }
 
         public IPropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall)
         {
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            string property = propertyCall.GetPropertyName();
+            string propertyName = propertyCall.GetPropertyName();
 
-            PropertyMap<TEntity> map = _properties.FirstOrDefault(x => x.PropertyName == property);
+            if (!_properties.TryGetValue(propertyName, out PropertyMap<TEntity> map))
+            {
+                throw new InvalidOperationException($"Property doesn't exists");
+            }
 
             return map;
         }
@@ -53,15 +54,13 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             return new TableMap.Builder(_table);
         }
 
-        protected PropertyMap<TEntity>.Builder MapProperty(Expression<Func<TEntity, object>> propAccess)
+        protected PropertyMap<TEntity>.Builder MapProperty(Expression<Func<TEntity, object>> propertyCall)
         {
-            Guard.ThrowIfNull(propAccess, nameof(propAccess));
+            Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            var property = new PropertyMap<TEntity>(
-                propAccess.GetPropertyName(),
-                propAccess.Compile());
+            var property = new PropertyMap<TEntity>(propertyCall);
 
-            _properties.Add(property);
+            _properties[property.PropertyCall] = property;
 
             return new PropertyMap<TEntity>.Builder(property);
         }

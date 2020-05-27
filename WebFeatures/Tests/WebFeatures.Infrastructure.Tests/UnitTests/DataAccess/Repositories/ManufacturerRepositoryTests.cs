@@ -1,9 +1,11 @@
 ﻿using Dapper;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
+using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories;
@@ -16,15 +18,46 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess.Repositories
     public class ManufacturerRepositoryTests
     {
         private readonly PostgreSqlDatabaseFixture _db;
-        private readonly Repository<Manufacturer, QueryBuilder<Manufacturer>> _repo;
+        private readonly ManufacturerRepository _repo;
 
         public ManufacturerRepositoryTests(PostgreSqlDatabaseFixture db)
         {
             _db = db;
-            _repo = new Repository<Manufacturer, QueryBuilder<Manufacturer>>(
+
+            var profile = new EntityProfile();
+            profile.AddMappingsFromAssembly(typeof(ManufacturerMap).Assembly);
+
+            _repo = new ManufacturerRepository(
                 db.Connection,
-                new QueryBuilder<Manufacturer>(
-                    new EntityProfile()));
+                new ManufacturerQueryBuilder(profile));
+        }
+
+        [Fact]
+        public async Task GetAllAsync_ShouldNotReturnEmptyCollection()
+        {
+            // Act
+            IEnumerable<Manufacturer> manufacturers = await _repo.GetAllAsync();
+
+            // Assert
+            manufacturers.ShouldNotBeEmpty();
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ShouldReturnExistingManufacturer()
+        {
+            // Arrange
+            Guid existingManufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6");
+            Guid existingManufacturerCityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
+
+            // Act
+            Manufacturer manufacturer = await _repo.GetAsync(existingManufacturerId);
+
+            // Assert
+            manufacturer.ShouldNotBeNull();
+            manufacturer.Id.ShouldBe(existingManufacturerId);
+            manufacturer.StreetAddress.ShouldNotBeNull();
+            manufacturer.StreetAddress.CityId.ShouldBe(existingManufacturerCityId);
+            manufacturer.StreetAddress.StreetName.ShouldNotBeNull();
         }
 
         [Fact]

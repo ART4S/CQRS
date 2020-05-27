@@ -3,9 +3,9 @@ using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Domian.ValueObjects;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers
+namespace WebFeatures.Infrastructure.Tests.Data
 {
-    internal static class TestData
+    internal static class InitialDbData
     {
         /// <summary>
         ///  Пользователи
