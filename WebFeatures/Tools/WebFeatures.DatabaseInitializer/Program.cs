@@ -15,7 +15,7 @@ namespace WebFeatures.DatabaseInitializer
             try
             {
                 scripts.Run();
-                logger.LogInformation("Finished succesefully");
+                logger.LogInformation("Finished successfully");
 
             }
             catch (Exception e)

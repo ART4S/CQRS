@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Features.Products.Dto
         public DateTime CreateDate { get; set; }
         public ProductRating Rating { get; set; }
         public Guid AuthorId { get; set; }
-        public Guid? AuthorPictureId { get; set; }
+        public string AuthorName { get; set; }
         public Guid ProductId { get; set; }
     }
 }

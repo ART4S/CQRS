@@ -1,4 +1,4 @@
-DO $$
+DO $tables$
 BEGIN
 
 CREATE TABLE Files
@@ -151,4 +151,4 @@ CREATE TABLE Shippers
 	CONSTRAINT PK_Shippers_Cities_HeadOffice_CityId FOREIGN KEY(HeadOffice_CityId) REFERENCES Cities(Id)
 );
 
-END $$
+END $tables$

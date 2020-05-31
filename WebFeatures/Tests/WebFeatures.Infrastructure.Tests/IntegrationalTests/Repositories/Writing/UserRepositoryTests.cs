@@ -11,7 +11,7 @@ using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Fixtures;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories
+namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writing
 {
     [Collection("PostgreSqlDatabase")]
     public class UserRepositoryTests

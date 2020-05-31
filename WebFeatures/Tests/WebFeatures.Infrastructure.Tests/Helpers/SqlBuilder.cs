@@ -30,7 +30,9 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         public static SqlQuery CreateSchema()
         {
-            string query = System.IO.File.ReadAllText("Scripts/Schema.sql");
+            string query =
+                  $"{System.IO.File.ReadAllText("Scripts/Schema/Tables.sql")};\n" +
+                  $"{System.IO.File.ReadAllText("Scripts/Schema/Functions.sql")};\n";
 
             return new SqlQuery(query);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Features.Products.Requests.Queries;
 using WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories;
@@ -26,9 +27,16 @@ namespace WebFeatures.Application.Features.Products.Handlers
             return _repo.GetListAsync();
         }
 
-        public Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)
+        public async Task<ProductInfoDto> HandleAsync(GetProduct request, CancellationToken cancellationToken)
         {
-            return _repo.GetProductAsync(request.Id);
+            ProductInfoDto product = await _repo.GetProductAsync(request.Id);
+
+            if (product == null)
+            {
+                throw new ApplicationValidationException("Product doesn't exist");
+            }
+
+            return product;
         }
 
         public Task<IEnumerable<ProductCommentInfoDto>> HandleAsync(GetProductComments request, CancellationToken cancellationToken)
