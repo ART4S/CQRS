@@ -1,7 +1,7 @@
 ﻿INSERT INTO Users (id, name, email, passwordhash, pictureid)
 VALUES
-('a91e29b7-813b-47a3-93f0-8ad34d4c8a09', 'Admin', 'admin@gmail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
-('5687c80f-d495-460a-aae5-94ea8054ee2c', 'User', 'user@gmail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null);
+('a91e29b7-813b-47a3-93f0-8ad34d4c8a09', 'Admin', 'admin@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
+('5687c80f-d495-460a-aae5-94ea8054ee2c', 'User', 'user@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null);
 	
 INSERT INTO Roles (id, name, description)
 VALUES
@@ -43,10 +43,10 @@ VALUES
 ('03e9c4b2-7587-4640-b376-2437414fd610', 'Trousers'),
 ('98d35a36-fc8f-4711-9211-a36c02a1e506', 'T-Shirts');
 
-INSERT INTO Products (id, name, price, description, averagerating, reviewscount, createdate, manufacturerid, categoryid, brandid)
+INSERT INTO Products (id, name, price, description, createdate, manufacturerid, categoryid, brandid)
 VALUES
-('f321a9fa-fc44-47e9-9739-bb4d57724f3e', 'Nice trousers', 100, 'The best trousers in the world', 5, 1, '2020-05-18', '278a79e9-5889-4953-a7c9-448c1e185600', '03e9c4b2-7587-4640-b376-2437414fd610', 'f612a3d0-573a-47e5-9f6b-a941f99fb26f'),
-('af8b5fe9-d32c-4897-a124-0ca3675939cf', 'Awesome t-shirt', null, null, null, 0, '2020-05-18', 'f5e7d6a2-c3c3-433c-93ec-adf4964bfcc8', '98d35a36-fc8f-4711-9211-a36c02a1e506', '3385b8ee-a5d6-4a8f-9f91-6c4c50d3628f');
+('f321a9fa-fc44-47e9-9739-bb4d57724f3e', 'Nice trousers', 100, 'The best trousers in the world', '2020-05-18', '278a79e9-5889-4953-a7c9-448c1e185600', '03e9c4b2-7587-4640-b376-2437414fd610', 'f612a3d0-573a-47e5-9f6b-a941f99fb26f'),
+('af8b5fe9-d32c-4897-a124-0ca3675939cf', 'Awesome t-shirt', null, null, '2020-05-18', 'f5e7d6a2-c3c3-433c-93ec-adf4964bfcc8', '98d35a36-fc8f-4711-9211-a36c02a1e506', '3385b8ee-a5d6-4a8f-9f91-6c4c50d3628f');
 
 
 INSERT INTO ProductReviews (id, title, comment, createdate, rating, authorid, productid)

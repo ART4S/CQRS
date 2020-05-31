@@ -8,9 +8,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Auth;
-using WebFeatures.Application.Features.Auth.Login;
-using WebFeatures.Application.Features.Auth.RegisterUser;
+using WebFeatures.Application.Features.Auth.Dto;
+using WebFeatures.Application.Features.Auth.Requests.Commands;
 using WebFeatures.Common;
 using WebFeatures.WebApi.Controllers.Base;
 

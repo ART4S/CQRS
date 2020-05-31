@@ -32,23 +32,65 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
             return GetProperties(propertyCall).First();
         }
 
-        private static IEnumerable<PropertyInfo> GetProperties(LambdaExpression propertyCallExpr)
+        public static Func<T, object> CreateGetter<T>(this PropertyInfo property)
         {
-            Expression current;
+            ParameterExpression source;
 
-            switch (propertyCallExpr.Body)
-            {
-                case MemberExpression memberExpr:
-                    current = memberExpr;
-                    break;
+            UnaryExpression body = Expression.Convert(
+                Expression.Property(
+                    source = Expression.Parameter(typeof(T)),
+                    property),
+                typeof(object));
 
-                case UnaryExpression unary when unary.Operand is MemberExpression memberExpr:
-                    current = memberExpr;
-                    break;
+            Expression<Func<T, object>> lambda = Expression.Lambda<Func<T, object>>(
+                body,
+                new[] { source });
 
-                default:
-                    throw new InvalidOperationException("Invalid property access");
-            }
+            return lambda.Compile();
+        }
+
+        public static Action<T, object> CreateSetter<T>(this PropertyInfo property)
+        {
+            ParameterExpression source;
+            ParameterExpression propertyValue;
+
+            BinaryExpression body = Expression.Assign(
+                Expression.Property(
+                    source = Expression.Parameter(typeof(T)), property),
+                Expression.Convert(
+                    propertyValue = Expression.Parameter(typeof(object)),
+                    property.PropertyType));
+
+            Expression<Action<T, object>> lambda = Expression.Lambda<Action<T, object>>(
+                body,
+                new[] { source, propertyValue });
+
+            return lambda.Compile();
+        }
+
+        public static Action<T, object> CreateSetter<T>(this Expression<Func<T, object>> propertyCall)
+        {
+            MemberExpression propertyCallExpr = GetPropertyCallExpression(propertyCall);
+
+            ParameterExpression source = propertyCall.Parameters.Single();
+            ParameterExpression propertyValue;
+
+            BinaryExpression body = Expression.Assign(
+                propertyCallExpr,
+                Expression.Convert(
+                    propertyValue = Expression.Parameter(typeof(object)),
+                    propertyCallExpr.Type));
+
+            Expression<Action<T, object>> lambda = Expression.Lambda<Action<T, object>>(
+                body,
+                new[] { source, propertyValue });
+
+            return lambda.Compile();
+        }
+
+        private static IEnumerable<PropertyInfo> GetProperties(LambdaExpression propertyCall)
+        {
+            Expression current = GetPropertyCallExpression(propertyCall);
 
             var properties = new List<PropertyInfo>();
 
@@ -71,61 +113,19 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Utils
             return properties;
         }
 
-        public static Func<T, object> CreateGetter<T>(this PropertyInfo property) where T : class
+        private static MemberExpression GetPropertyCallExpression(LambdaExpression propertyCallExpr)
         {
-            ParameterExpression param = Expression.Parameter(typeof(T));
-            MemberExpression prop = Expression.Property(param, property);
-            UnaryExpression converted = Expression.Convert(prop, typeof(object));
-
-            Expression<Func<T, object>> lambda = Expression.Lambda<Func<T, object>>(converted, new[] { param });
-
-            return lambda.Compile();
-        }
-
-        public static Action<T, object> CreateSetter<T>(this PropertyInfo property)
-        {
-            ParameterExpression propSource = Expression.Parameter(typeof(T));
-            ParameterExpression propValue = Expression.Parameter(typeof(object));
-            MemberExpression prop = Expression.Property(propSource, property);
-            UnaryExpression convertedPropValue = Expression.Convert(propValue, property.PropertyType);
-            BinaryExpression body = Expression.Assign(prop, convertedPropValue);
-
-            Expression<Action<T, object>> lambda = Expression.Lambda<Action<T, object>>(
-                body,
-                new[] { propSource, propValue });
-
-            return lambda.Compile();
-        }
-
-        public static Action<T, object> CreateSetter<T>(this Expression<Func<T, object>> propertyCall)
-        {
-            MemberExpression current;
-
-            switch (propertyCall.Body)
+            switch (propertyCallExpr.Body)
             {
                 case MemberExpression memberExpr:
-                    current = memberExpr;
-                    break;
+                    return memberExpr;
 
                 case UnaryExpression unary when unary.Operand is MemberExpression memberExpr:
-                    current = memberExpr;
-                    break;
+                    return memberExpr;
 
                 default:
                     throw new InvalidOperationException("Invalid property access");
             }
-
-            ParameterExpression propSource = propertyCall.Parameters.Single();
-            ParameterExpression propValue = Expression.Parameter(typeof(object));
-
-            UnaryExpression convertedPropValue = Expression.Convert(propValue, current.Type);
-            BinaryExpression body = Expression.Assign(current, convertedPropValue);
-
-            Expression<Action<T, object>> lambda = Expression.Lambda<Action<T, object>>(
-                body,
-                new[] { propSource, propValue });
-
-            return lambda.Compile();
         }
     }
 }

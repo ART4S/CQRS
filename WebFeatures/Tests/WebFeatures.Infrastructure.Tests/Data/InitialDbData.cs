@@ -208,9 +208,7 @@ namespace WebFeatures.Infrastructure.Tests.Data
                 Name = "Name_1",
                 CreateDate = DateTime.UtcNow,
                 Description = "Description_1",
-                Price = 100,
-                ReviewsCount = 1,
-                AverageRating = ProductRating.FiveStars
+                Price = 100
             }
         };
 

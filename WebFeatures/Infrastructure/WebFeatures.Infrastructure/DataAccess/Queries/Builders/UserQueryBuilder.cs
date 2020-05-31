@@ -20,29 +20,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
         public SqlQuery BuildGetUserByEmail(string email)
         {
             IEntityMap<User> user = Profile.GetMap<User>();
-            IEntityMap<UserRole> userRole = Profile.GetMap<UserRole>();
-            IEntityMap<Role> role = Profile.GetMap<Role>();
 
             string query = string.Format(
-                @"SELECT * FROM {0} users 
-                LEFT JOIN {1} userRoles ON userRoles.{2} = users.{3} 
-                LEFT JOIN {4} roles ON roles.{5} = userRoles.{6} 
-                WHERE users.{7} = @email",
+                @"SELECT * FROM {0}
+                WHERE {1} = @email",
                 user.Table.NameWithSchema(),
-                userRole.Table.NameWithSchema(),
-                userRole.Column(x => x.UserId),
-                user.Column(x => x.Id),
-                role.Table.NameWithSchema(),
-                role.Column(x => x.Id),
-                userRole.Column(x => x.RoleId),
                 user.Column(x => x.Email));
 
-            string splitOn = string.Join(", ",
-                user.Column(x => x.Id),
-                userRole.Column(x => x.UserId),
-                role.Column(x => x.Id));
-
-            return new SqlQuery(query, new { email }, splitOn);
+            return new SqlQuery(query, new { email });
         }
     }
 }

@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Products.CreateProduct;
-using WebFeatures.Application.Features.Products.EditProduct;
-using WebFeatures.Application.Features.Products.GetProduct;
-using WebFeatures.Application.Features.Products.GetProductComments;
-using WebFeatures.Application.Features.Products.GetProductReviews;
-using WebFeatures.Application.Features.Products.GetProductsList;
+using WebFeatures.Application.Features.Products.Dto;
+using WebFeatures.Application.Features.Products.Requests.Commands;
+using WebFeatures.Application.Features.Products.Requests.Queries;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -32,10 +29,12 @@ namespace WebFeatures.WebApi.Controllers
             => Mediator.SendAsync(new GetProductComments() { ProductId = id });
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public Task<Guid> CreateProduct([FromForm, Required] CreateProduct request)
             => Mediator.SendAsync(request);
 
         [HttpPut("{id:guid}")]
+        //[ValidateAntiForgeryToken]
         public Task EditProduct([FromForm, Required] EditProduct request)
             => Mediator.SendAsync(request);
     }

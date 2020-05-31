@@ -2,13 +2,13 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
-using WebFeatures.Application.Interfaces.Jobs;
 using WebFeatures.Application.Middlewares;
-using WebFeatures.Events;
 using WebFeatures.Requests;
+using WebFeatures.Requests.DependencyInjection;
 
 namespace WebFeatures.Application
 {
@@ -17,10 +17,8 @@ namespace WebFeatures.Application
         public static void AddApplicationServices(this IServiceCollection services)
         {
             AddRequests(services);
-            AddEvents(services);
             AddValidators(services);
             AddMappings(services);
-            AddJobs(services);
         }
 
         private static void AddRequests(IServiceCollection services)
@@ -36,36 +34,7 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(TransactionMiddleware<,>));
 
             // Endpoints
-            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
-
-            foreach (Type type in assemblyTypes)
-            {
-                Type interfaceType = type.GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
-
-                if (interfaceType != null)
-                {
-                    services.AddScoped(interfaceType, type);
-                }
-            }
-        }
-
-        private static void AddEvents(IServiceCollection services)
-        {
-            services.AddEventMediator();
-
-            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
-
-            foreach (Type type in assemblyTypes)
-            {
-                Type interfaceType = type.GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>));
-
-                if (interfaceType != null)
-                {
-                    services.AddScoped(interfaceType, type);
-                }
-            }
+            services.AddTypesFromAsseblyWithInterface(Assembly.GetExecutingAssembly(), typeof(IRequestHandler<,>));
         }
 
         private static void AddValidators(IServiceCollection services)
@@ -80,22 +49,38 @@ namespace WebFeatures.Application
 
             services.AddSingleton(x => mapperConfig.CreateMapper());
         }
+    }
 
-        private static void AddJobs(IServiceCollection services)
+    internal static class ConfigureServicesHelper
+    {
+        public static void AddTypesFromAsseblyWithInterface(this IServiceCollection services,
+            Assembly assembly,
+            Type interfaceType,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            Type[] assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
-
-            foreach (Type type in assemblyTypes)
+            if (!interfaceType.IsInterface)
             {
-                if (type.IsAbstract || type.IsGenericType)
-                    continue;
+                throw new ArgumentException($"{interfaceType} should be an interface type");
+            }
 
-                Type ibackgroundJob = type.GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IBackgroundJob<>));
+            foreach (Type type in assembly.GetTypes())
+            {
+                IEnumerable<Type> serviceTypes;
 
-                if (ibackgroundJob != null)
+                if (interfaceType.IsGenericType)
                 {
-                    services.AddScoped(ibackgroundJob, type);
+                    serviceTypes = type.GetInterfaces()
+                        .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == interfaceType);
+                }
+                else
+                {
+                    serviceTypes = type.GetInterfaces()
+                        .Where(x => x == interfaceType);
+                }
+
+                foreach (Type serviceType in serviceTypes)
+                {
+                    services.Add(new ServiceDescriptor(serviceType, type, lifetime));
                 }
             }
         }

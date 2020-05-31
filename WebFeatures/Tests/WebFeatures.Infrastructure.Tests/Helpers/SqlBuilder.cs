@@ -148,8 +148,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
         {
             string query =
                 @$"INSERT INTO public.Products 
-                (Id, Name, Price, Description, AverageRating, ReviewsCount, CreateDate, PictureId, ManufacturerId, CategoryId, BrandId) 
-                VALUES (@Id, @Name, @Price, @Description, @AverageRating, @ReviewsCount, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
+                (Id, Name, Price, Description, CreateDate, PictureId, ManufacturerId, CategoryId, BrandId) 
+                VALUES (@Id, @Name, @Price, @Description, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
 
             return new SqlQuery(query, product);
         }

@@ -31,17 +31,22 @@ namespace WebFeatures.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             AddCommon(services);
-            AddDataAccess(services, configuration);
-            AddMailing(services, configuration);
-            AddSecurity(services);
-            AddServices(services);
             AddLogging(services);
+            AddDataAccess(services, configuration);
+            AddSecurity(services);
+            AddMailing(services, configuration);
+            AddOtherServices(services);
             AddJobs(services, configuration);
         }
 
         private static void AddCommon(IServiceCollection services)
         {
             services.AddScoped<IDateTime, MachineDateTime>();
+        }
+
+        private static void AddLogging(IServiceCollection services)
+        {
+            services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
         }
 
         private static void AddDataAccess(IServiceCollection services, IConfiguration configuration)
@@ -56,7 +61,12 @@ namespace WebFeatures.Infrastructure
 
                 return profile;
             });
-            services.AddScoped<IDbContext, DbContext>();
+            services.AddScoped<IWriteDbContext, WriteDbContext>();
+        }
+
+        private static void AddSecurity(IServiceCollection services)
+        {
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
 
         private static void AddMailing(IServiceCollection services, IConfiguration configuration)
@@ -65,20 +75,10 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IEmailSender, SmtpEmailSender>();
         }
 
-        private static void AddSecurity(IServiceCollection services)
-        {
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
-        }
-
-        private static void AddServices(IServiceCollection services)
+        private static void AddOtherServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-        }
-
-        private static void AddLogging(IServiceCollection services)
-        {
-            services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
         }
 
         private static void AddJobs(IServiceCollection services, IConfiguration configuration)

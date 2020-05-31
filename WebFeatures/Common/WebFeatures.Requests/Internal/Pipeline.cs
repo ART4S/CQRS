@@ -16,7 +16,7 @@ namespace WebFeatures.Requests.Internal
     {
         public override Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceProvider services, CancellationToken cancellationToken)
         {
-            var handler = services.GetService<IRequestHandler<TRequest, TResponse>>();
+            var handler = services.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
 
             RequestDelegate<Task<TResponse>> pipeline =
                 () => handler.HandleAsync((TRequest)request, cancellationToken);

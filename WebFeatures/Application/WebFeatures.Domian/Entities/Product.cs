@@ -1,6 +1,5 @@
 ﻿using System;
 using WebFeatures.Domian.Common;
-using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Domian.Entities
 {
@@ -9,8 +8,6 @@ namespace WebFeatures.Domian.Entities
         public string Name { get; set; }
         public decimal? Price { get; set; }
         public string Description { get; set; }
-        public ProductRating? AverageRating { get; set; }
-        public int ReviewsCount { get; set; }
         public DateTime CreateDate { get; set; }
 
         public Guid? PictureId { get; set; }

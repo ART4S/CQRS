@@ -1,3 +1,6 @@
+DO $$
+BEGIN
+
 CREATE TABLE Files
 (
 	Id UUID NOT NULL,
@@ -91,8 +94,6 @@ CREATE TABLE Products
 	Name VARCHAR,
 	Price DECIMAL,
 	Description VARCHAR,
-	AverageRating INT,
-	ReviewsCount INT NOT NULL DEFAULT 0,
 	CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 	PictureId UUID,
 	ManufacturerId UUID NOT NULL,
@@ -103,8 +104,7 @@ CREATE TABLE Products
 	CONSTRAINT FK_Products_Files_PictureId FOREIGN KEY (PictureId) REFERENCES Files (Id) ON DELETE SET NULL,
 	CONSTRAINT FK_Products_Manufacturers_ManufacturerId FOREIGN KEY (ManufacturerId) REFERENCES Manufacturers (Id),
 	CONSTRAINT FK_Products_Categories_CategoryId FOREIGN KEY (CategoryId) REFERENCES Categories (Id) ON DELETE SET NULL,
-	CONSTRAINT FK_Products_Brands_BrandId FOREIGN KEY (BrandId) REFERENCES Brands (Id),
-	CONSTRAINT Products_AverageRating_Check CHECK (AverageRating IS NULL OR AverageRating BETWEEN 1 AND 5)
+	CONSTRAINT FK_Products_Brands_BrandId FOREIGN KEY (BrandId) REFERENCES Brands (Id)
 );
 
 CREATE TABLE ProductComments
@@ -150,3 +150,5 @@ CREATE TABLE Shippers
 	CONSTRAINT PK_Shippers PRIMARY KEY(Id),
 	CONSTRAINT PK_Shippers_Cities_HeadOffice_CityId FOREIGN KEY(HeadOffice_CityId) REFERENCES Cities(Id)
 );
+
+END $$

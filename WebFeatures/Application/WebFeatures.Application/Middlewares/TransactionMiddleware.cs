@@ -13,9 +13,9 @@ namespace WebFeatures.Application.Middlewares
         where TRequest : ICommand<TResponse>
     {
         private readonly ILogger<TRequest> _logger;
-        private readonly IDbContext _db;
+        private readonly IWriteDbContext _db;
 
-        public TransactionMiddleware(ILogger<TRequest> logger, IDbContext db)
+        public TransactionMiddleware(ILogger<TRequest> logger, IWriteDbContext db)
         {
             _db = db;
             _logger = logger;

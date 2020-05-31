@@ -25,7 +25,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                     {entityMap.Column(x => x.StreetAddress.CityId)} as {nameof(Address.CityId)}, 
                     {entityMap.Column(x => x.StreetAddress.PostalCode)} as {nameof(Address.PostalCode)}, 
                     {entityMap.Column(x => x.StreetAddress.StreetName)} as {nameof(Address.StreetName)} 
-                FROM Manufacturers");
+                FROM {entityMap.Table.NameWithSchema()}");
 
             string splitOn = string.Join(", ",
                 entityMap.Column(x => x.Id),
@@ -45,7 +45,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
                     {entityMap.Column(x => x.StreetAddress.CityId)} as {nameof(Address.CityId)}, 
                     {entityMap.Column(x => x.StreetAddress.PostalCode)} as {nameof(Address.PostalCode)}, 
                     {entityMap.Column(x => x.StreetAddress.StreetName)} as {nameof(Address.StreetName)} 
-                FROM Manufacturers
+                FROM {entityMap.Table.NameWithSchema()} 
                 WHERE {entityMap.Column(x => x.Id)} = @id");
 
             string splitOn = string.Join(", ",
