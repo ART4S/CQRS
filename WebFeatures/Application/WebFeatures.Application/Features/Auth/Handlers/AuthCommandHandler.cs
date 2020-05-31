@@ -55,10 +55,14 @@ namespace WebFeatures.Application.Features.Auth.Handlers
             User user = await _db.Users.GetByEmailAsync(request.Email);
 
             if (user == null)
+            {
                 throw new ApplicationValidationException("Wrong login or password");
+            }
 
             if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
+            {
                 throw new ApplicationValidationException("Wrong login or password");
+            }
 
             _loggerFactory.CreateLogger<Login>()
                 .LogInformation($"{user.Email} signed in");

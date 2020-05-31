@@ -30,7 +30,7 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         }
 
         [Fact]
-        public async Task GetAllAsync_ShouldNotReturnEmptyCollection()
+        public async Task GetAllAsync_ShouldReturnNonEmptyCollection()
         {
             // Act
             IEnumerable<User> users = await _repo.GetAllAsync();
@@ -40,27 +40,27 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnExistingUser()
+        public async Task GetAsync_ShouldReturnUser_IfUserExists()
         {
             // Arrange
-            Guid existingUserId = new Guid("067d520f-fe3c-493c-a4c9-0bce1cf57212");
+            Guid userId = new Guid("067d520f-fe3c-493c-a4c9-0bce1cf57212");
 
             // Act
-            User user = await _repo.GetAsync(existingUserId);
+            User user = await _repo.GetAsync(userId);
 
             // Assert
             user.ShouldNotBeNull();
-            user.Id.ShouldBe(existingUserId);
+            user.Id.ShouldBe(userId);
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnNullWhenUserDoesntExists()
+        public async Task GetAsync_ShouldReturnNull_IfUserDoesntExists()
         {
             // Arrange
-            Guid nonExistingUserId = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
 
             // Act
-            User user = await _repo.GetAsync(nonExistingUserId);
+            User user = await _repo.GetAsync(userId);
 
             // Assert
             user.ShouldBeNull();
@@ -91,7 +91,7 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         }
 
         [Fact]
-        public async Task UpdateAsync_ShouldUpdateUser()
+        public async Task UpdateAsync_ShouldUpdateExistingUser()
         {
             // Arrange
             var user = new User()
@@ -121,57 +121,57 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         public async Task DeleteAsync_ShouldDeleteExistingUser()
         {
             // Arrange
-            var existingUser = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
+            var user = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
 
             // Act
-            await _repo.DeleteAsync(existingUser);
+            await _repo.DeleteAsync(user);
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM Users WHERE Id = @Id",
-                new { existingUser.Id });
+                new { user.Id });
 
             // Assert
             usersCount.ShouldBe(0);
         }
 
         [Fact]
-        public async Task ExistsAsync_ShouldReturnTrueWhenRecordExists()
+        public async Task ExistsAsync_ShouldReturnTrue_IfUserExists()
         {
             // Arrange
-            Guid existingUserId = new Guid("1dfae12a-c1a6-47aa-b73f-e44e339d16f1");
+            Guid userId = new Guid("1dfae12a-c1a6-47aa-b73f-e44e339d16f1");
 
             // Act
-            bool recordExists = await _repo.ExistsAsync(existingUserId);
+            bool recordExists = await _repo.ExistsAsync(userId);
 
             // Assert
             recordExists.ShouldBeTrue();
         }
 
         [Fact]
-        public async Task ExistsAsync_ShouldReturnFalseWhenUserDoesntExist()
+        public async Task ExistsAsync_ShouldReturnFalse_IfUserDoesntExist()
         {
             // Arrange
-            Guid nonExistingUserId = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
 
             // Act
-            bool recordExists = await _repo.ExistsAsync(nonExistingUserId);
+            bool recordExists = await _repo.ExistsAsync(userId);
 
             // Assert
             recordExists.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task GetUserByEmailAsync_ShouldReturnUserWithEmail()
+        public async Task GetUserByEmailAsync_ShouldReturnUser_IfUserWithEmailExists()
         {
             // Arrange
-            string existingEmail = "test@mail.com";
+            string email = "test@mail.com";
 
             // Act
-            User user = await _repo.GetByEmailAsync(existingEmail);
+            User user = await _repo.GetByEmailAsync(email);
 
             // Assert
             user.ShouldNotBeNull();
-            user.Email.ShouldBe(existingEmail);
+            user.Email.ShouldBe(email);
         }
     }
 }

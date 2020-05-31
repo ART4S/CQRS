@@ -31,7 +31,7 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         }
 
         [Fact]
-        public async Task GetAllAsync_ShouldNotReturnEmptyCollection()
+        public async Task GetAllAsync_ShouldReturnNonEmptyCollection()
         {
             // Act
             IEnumerable<Manufacturer> manufacturers = await _repo.GetAllAsync();
@@ -41,21 +41,34 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnExistingManufacturer()
+        public async Task GetByIdAsync_ShouldReturnManufacturer_IfManufacturerExists()
         {
             // Arrange
-            Guid existingManufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6");
-            Guid existingManufacturerCityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
+            Guid manufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6");
+            Guid cityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
 
             // Act
-            Manufacturer manufacturer = await _repo.GetAsync(existingManufacturerId);
+            Manufacturer manufacturer = await _repo.GetAsync(manufacturerId);
 
             // Assert
             manufacturer.ShouldNotBeNull();
-            manufacturer.Id.ShouldBe(existingManufacturerId);
+            manufacturer.Id.ShouldBe(manufacturerId);
             manufacturer.StreetAddress.ShouldNotBeNull();
-            manufacturer.StreetAddress.CityId.ShouldBe(existingManufacturerCityId);
+            manufacturer.StreetAddress.CityId.ShouldBe(cityId);
             manufacturer.StreetAddress.StreetName.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ShouldReturnNull_IfManufacturerDoesntExist()
+        {
+            // Arrange
+            Guid manufacturerId = Guid.NewGuid();
+
+            // Act
+            Manufacturer manufacturer = await _repo.GetAsync(manufacturerId);
+
+            // Assert
+            manufacturer.ShouldBeNull();
         }
 
         [Fact]
