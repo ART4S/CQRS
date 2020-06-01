@@ -1,5 +1,6 @@
 DO $functions$
 BEGIN
+
 CREATE FUNCTION get_products_list()
 RETURNS TABLE
 (
@@ -14,7 +15,7 @@ BEGIN
 		p.name,
 		p.price
 	FROM
-		public.Products p;
+		public.products p;
 
 END; $$ LANGUAGE 'plpgsql';
 
@@ -38,9 +39,9 @@ BEGIN
 		u.name,
 		c.parentcommentid
 	FROM
-		public.ProductComments c
+		public.productComments c
 	JOIN 
-		public.Users u ON u.id = c.authorid
+		public.users u ON u.id = c.authorid
 	WHERE 
 		c.productid = product_id;
 
@@ -70,9 +71,9 @@ BEGIN
 		u.name,
 		r.productid
 	FROM
-		ProductReviews r
+		productReviews r
 	JOIN 
-		Users u ON u.id = r.authorid
+		users u ON u.id = r.authorid
 	WHERE 
 		r.productid = product_id;
 
