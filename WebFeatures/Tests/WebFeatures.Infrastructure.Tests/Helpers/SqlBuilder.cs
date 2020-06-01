@@ -30,11 +30,13 @@ namespace WebFeatures.Infrastructure.Tests.Helpers
 
         public static SqlQuery CreateSchema()
         {
-            string query =
-                  $"{System.IO.File.ReadAllText("Scripts/Schema/Tables.sql")};\n" +
-                  $"{System.IO.File.ReadAllText("Scripts/Schema/Functions.sql")};\n";
+            string createTables =
+                $"{System.IO.File.ReadAllText("Scripts/Schema/Tables.sql")};\n";
 
-            return new SqlQuery(query);
+            string createFunctions =
+                $"{System.IO.File.ReadAllText("Scripts/Schema/Functions.sql")};\n";
+
+            return new SqlQuery(createTables + createFunctions);
         }
 
         public static SqlQuery InsertUser(User user)

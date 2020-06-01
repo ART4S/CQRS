@@ -4,8 +4,14 @@ using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Products.Requests.Queries
 {
+    /// <summary>
+    /// Получить товар
+    /// </summary>
     public class GetProduct : IQuery<ProductInfoDto>
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public Guid Id { get; set; }
     }
 }

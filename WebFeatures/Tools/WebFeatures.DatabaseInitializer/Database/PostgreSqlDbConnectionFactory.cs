@@ -10,7 +10,7 @@ namespace WebFeatures.DatabaseInitializer.Database
 
         public PostgreSqlDbConnectionFactory(string connectionString)
         {
-            Guard.ThrowIfNullOrWhiteSpace(connectionString, nameof(connectionString));
+            Guard.ThrowIfNullOrEmpty(connectionString, nameof(connectionString));
 
             _connectionString = connectionString;
         }

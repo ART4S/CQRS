@@ -6,7 +6,7 @@ RETURNS TABLE
 	Id UUID,
 	Name VARCHAR,
 	Price DECIMAL
-) AS $function$
+) AS $$
 BEGIN
 	RETURN QUERY 
 	SELECT
@@ -16,7 +16,7 @@ BEGIN
 	FROM
 		public.Products p;
 
-END; $function$ LANGUAGE 'plpgsql';
+END; $$ LANGUAGE 'plpgsql';
 
 CREATE FUNCTION get_product_comments(product_id UUID)
 RETURNS TABLE
@@ -27,7 +27,7 @@ RETURNS TABLE
 	AuthorId UUID,
 	AuthorName VARCHAR,
 	ParentCommentId UUID
-) AS $function$
+) AS $$
 BEGIN
 	RETURN QUERY 
 	SELECT
@@ -44,7 +44,7 @@ BEGIN
 	WHERE 
 		c.productid = product_id;
 
-END; $function$ LANGUAGE 'plpgsql';
+END; $$ LANGUAGE 'plpgsql';
 
 CREATE FUNCTION get_product_reviews(product_id UUID)
 RETURNS TABLE
@@ -57,7 +57,7 @@ RETURNS TABLE
 	AuthorId UUID,
 	AuthorName VARCHAR,
 	ProductId UUID
-) AS $function$
+) AS $$
 BEGIN
 	RETURN QUERY 
 	SELECT
@@ -76,7 +76,7 @@ BEGIN
 	WHERE 
 		r.productid = product_id;
 
-END; $function$ LANGUAGE 'plpgsql';
+END; $$ LANGUAGE 'plpgsql';
 
 CREATE FUNCTION get_product(product_id UUID)
 RETURNS TABLE
@@ -88,7 +88,7 @@ RETURNS TABLE
 	ManufacturerId UUID,
 	CategoryId UUID,
 	BrandId UUID
-) AS $function$
+) AS $$
 BEGIN
 	RETURN QUERY 
 	SELECT
@@ -104,6 +104,6 @@ BEGIN
 	WHERE 
 		p.id = product_id;
 
-END; $function$ LANGUAGE 'plpgsql';
+END; $$ LANGUAGE 'plpgsql';
 
 END $functions$

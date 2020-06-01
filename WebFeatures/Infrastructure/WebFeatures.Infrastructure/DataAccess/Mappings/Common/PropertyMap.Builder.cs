@@ -15,7 +15,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
             public void ToColumn(string column)
             {
-                Guard.ThrowIfNullOrWhiteSpace(column, nameof(column));
+                Guard.ThrowIfNullOrEmpty(column, nameof(column));
 
                 _property.ColumnName = column;
             }

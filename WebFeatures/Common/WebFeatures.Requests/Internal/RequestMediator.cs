@@ -2,15 +2,16 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Requests.Services;
 
 namespace WebFeatures.Requests.Internal
 {
     internal class RequestMediator : IRequestMediator
     {
-        private readonly IServiceProvider _services;
+        private readonly IServiceFactory _services;
         private static readonly ConcurrentDictionary<Type, object> PipelinesCashe = new ConcurrentDictionary<Type, object>();
 
-        public RequestMediator(IServiceProvider services)
+        public RequestMediator(IServiceFactory services)
         {
             _services = services;
         }

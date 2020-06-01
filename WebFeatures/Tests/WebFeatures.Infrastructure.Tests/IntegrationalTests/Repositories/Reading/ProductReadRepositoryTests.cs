@@ -20,16 +20,6 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Readi
         }
 
         [Fact]
-        public async Task GetListAsync_ShouldReturnNonEmptyProductsCollection()
-        {
-            // Act
-            IEnumerable<ProductListDto> list = await _repo.GetListAsync();
-
-            // Assert
-            list.ShouldNotBeEmpty();
-        }
-
-        [Fact]
         public async Task GetProductAsync_ShouldReturnProduct_IfProductExists()
         {
             // Arrange
@@ -54,6 +44,16 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Readi
 
             // Assert
             product.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ShouldReturnNonEmptyProductsCollection()
+        {
+            // Act
+            IEnumerable<ProductListDto> list = await _repo.GetListAsync();
+
+            // Assert
+            list.ShouldNotBeEmpty();
         }
 
         [Fact]

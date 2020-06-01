@@ -12,7 +12,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 {
     internal class ProductCommandHandler :
         IRequestHandler<CreateProduct, Guid>,
-        IRequestHandler<EditProduct, Empty>
+        IRequestHandler<UpdateProduct, Empty>
     {
         private readonly IWriteDbContext _db;
         private readonly IMapper _mapper;
@@ -32,7 +32,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
             return product.Id;
         }
 
-        public async Task<Empty> HandleAsync(EditProduct request, CancellationToken cancellationToken)
+        public async Task<Empty> HandleAsync(UpdateProduct request, CancellationToken cancellationToken)
         {
             Product product = await _db.Products.GetAsync(request.Id);
 

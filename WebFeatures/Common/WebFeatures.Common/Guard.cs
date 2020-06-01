@@ -4,7 +4,7 @@ namespace WebFeatures.Common
 {
     public static class Guard
     {
-        public static void ThrowIfNullOrWhiteSpace(string str, string paramName = null)
+        public static void ThrowIfNullOrEmpty(string str, string paramName = null)
         {
             if (string.IsNullOrWhiteSpace(str))
             {

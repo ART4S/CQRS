@@ -9,6 +9,9 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
+    /// <summary>
+    /// Performs transaction over request
+    /// </summary>
     internal class TransactionMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {

@@ -14,18 +14,18 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
         {
         }
 
-        public Task<IEnumerable<ProductListDto>> GetListAsync()
-        {
-            return Connection.QueryAsync<ProductListDto>(
-                sql: "get_products_list",
-                commandType: CommandType.StoredProcedure);
-        }
-
         public Task<ProductInfoDto> GetProductAsync(Guid id)
         {
             return Connection.QuerySingleOrDefaultAsync<ProductInfoDto>(
                 sql: "get_product",
                 param: new { product_id = id },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public Task<IEnumerable<ProductListDto>> GetListAsync()
+        {
+            return Connection.QueryAsync<ProductListDto>(
+                sql: "get_products_list",
                 commandType: CommandType.StoredProcedure);
         }
 

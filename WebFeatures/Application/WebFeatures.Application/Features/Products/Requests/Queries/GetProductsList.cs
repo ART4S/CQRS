@@ -4,6 +4,9 @@ using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Products.Requests.Queries
 {
+    /// <summary>
+    /// Получить список товаров
+    /// </summary>
     public class GetProductsList : IQuery<IEnumerable<ProductListDto>>
     {
     }

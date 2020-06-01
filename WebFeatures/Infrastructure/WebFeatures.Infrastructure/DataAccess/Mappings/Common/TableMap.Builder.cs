@@ -15,7 +15,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
             public void WithSchema(string schema)
             {
-                Guard.ThrowIfNullOrWhiteSpace(schema, nameof(schema));
+                Guard.ThrowIfNullOrEmpty(schema, nameof(schema));
 
                 _table.Schema = schema;
             }

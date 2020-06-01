@@ -1,10 +1,10 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
@@ -12,7 +12,7 @@ using WebFeatures.Persistence;
 
 namespace WebFeatures.Infrastructure.DataAccess
 {
-    internal class WriteDbContext : IWriteDbContext, IDisposable
+    internal class WriteDbContext : BaseDbContext, IWriteDbContext
     {
         public IUserWriteRepository Users => _users ??= CreateUserRepository();
         private IUserWriteRepository _users;
@@ -50,21 +50,12 @@ namespace WebFeatures.Infrastructure.DataAccess
         public IWriteRepository<File> Files => _files ??= CreateRepository<File>();
         private IWriteRepository<File> _files;
 
-        private IDbConnection Connection => _connection.Value;
-        private readonly Lazy<IDbConnection> _connection;
-
         private readonly IEntityProfile _entityProfile;
 
-        public WriteDbContext(IDbConnectionFactory connectionFactory, IEntityProfile entityProfile)
+        public WriteDbContext(
+            IDbConnectionFactory connectionFactory,
+            IEntityProfile entityProfile) : base(connectionFactory)
         {
-            _connection = new Lazy<IDbConnection>(() =>
-            {
-                IDbConnection connection = connectionFactory.CreateConnection();
-                connection.Open();
-
-                return connection;
-            });
-
             _entityProfile = entityProfile;
         }
 
@@ -83,14 +74,6 @@ namespace WebFeatures.Infrastructure.DataAccess
         public IDbTransaction BeginTransaction()
         {
             return Connection.BeginTransaction();
-        }
-
-        public void Dispose()
-        {
-            if (_connection.IsValueCreated)
-            {
-                _connection.Value.Dispose();
-            }
         }
     }
 }

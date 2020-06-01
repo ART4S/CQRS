@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using WebFeatures.DatabaseInitializer.Core;
 
 namespace WebFeatures.DatabaseInitializer
 {
@@ -15,12 +16,13 @@ namespace WebFeatures.DatabaseInitializer
             try
             {
                 scripts.Run();
+
                 logger.LogInformation("Finished successfully");
 
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Finished with exception");
+                logger.LogError(e, "Finished with an exception");
             }
         }
     }

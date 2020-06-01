@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
-using System.Reflection;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
@@ -40,10 +37,10 @@ namespace WebFeatures.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
 
-                string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                string xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+                //string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //string xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
 
-                c.IncludeXmlComments(xmlFilePath, true);
+                //c.IncludeXmlComments(xmlFilePath, true);
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

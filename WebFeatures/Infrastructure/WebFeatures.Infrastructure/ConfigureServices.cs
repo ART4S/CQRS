@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 using WebFeatures.Application.Interfaces.DataAccess;
+using WebFeatures.Application.Interfaces.DataAccess.Reading;
 using WebFeatures.Application.Interfaces.Jobs;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Mailing;
@@ -62,6 +63,8 @@ namespace WebFeatures.Infrastructure
                 return profile;
             });
             services.AddScoped<IWriteDbContext, WriteDbContext>();
+
+            services.AddScoped<IReadDbContext, ReadDbContext>();
         }
 
         private static void AddSecurity(IServiceCollection services)

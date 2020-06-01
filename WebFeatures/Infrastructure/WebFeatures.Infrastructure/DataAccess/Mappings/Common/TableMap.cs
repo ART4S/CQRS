@@ -15,7 +15,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
         public TableMap(string name)
         {
-            Guard.ThrowIfNullOrWhiteSpace(name, nameof(name));
+            Guard.ThrowIfNullOrEmpty(name, nameof(name));
 
             Name = name;
         }

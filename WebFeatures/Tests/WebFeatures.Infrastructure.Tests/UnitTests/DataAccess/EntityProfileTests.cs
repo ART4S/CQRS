@@ -15,6 +15,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
         {
             // Arrange
             var profile = new EntityProfile();
+
             profile.AddMappingsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Act

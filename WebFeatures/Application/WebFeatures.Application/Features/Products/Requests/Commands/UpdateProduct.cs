@@ -9,22 +9,52 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {
-    public class EditProduct : ICommand<Empty>, IHasMappings
+    /// <summary>
+    /// Редактировать товар
+    /// </summary>
+    public class UpdateProduct : ICommand<Empty>, IHasMappings
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Цена
+        /// </summary>
         public decimal? Price { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Идентификатор производителя
+        /// </summary>
         public Guid ManufacturerId { get; set; }
+
+        /// <summary>
+        /// Идентификатор категории
+        /// </summary>
         public Guid? CategoryId { get; set; }
+
+        /// <summary>
+        /// Идентификатор бренда
+        /// </summary>
         public Guid BrandId { get; set; }
 
         public void ApplyMappings(Profile profile)
         {
-            profile.CreateMap<EditProduct, Product>(MemberList.Source);
+            profile.CreateMap<UpdateProduct, Product>(MemberList.Source);
         }
 
-        public class Validator : AbstractValidator<EditProduct>
+        public class Validator : AbstractValidator<UpdateProduct>
         {
             public Validator(IWriteDbContext db)
             {

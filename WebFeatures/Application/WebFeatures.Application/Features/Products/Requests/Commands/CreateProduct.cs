@@ -8,13 +8,39 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {
+    /// <summary>
+    /// Создать товар
+    /// </summary>
     public class CreateProduct : ICommand<Guid>, IHasMappings
     {
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Цена
+        /// </summary>
         public decimal? Price { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Идентификатор производителя
+        /// </summary>
         public Guid ManufacturerId { get; set; }
+
+        /// <summary>
+        /// Идентификатор категории
+        /// </summary>
         public Guid? CategoryId { get; set; }
+
+        /// <summary>
+        /// Идентификатор бренда
+        /// </summary>
         public Guid BrandId { get; set; }
 
         public void ApplyMappings(Profile profile)

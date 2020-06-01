@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
+using WebFeatures.DatabaseInitializer.Core;
 using WebFeatures.DatabaseInitializer.Database;
 using WebFeatures.DatabaseInitializer.Database.Logging;
 

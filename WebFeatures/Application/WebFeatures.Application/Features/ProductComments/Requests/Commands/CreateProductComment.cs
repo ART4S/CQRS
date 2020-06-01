@@ -8,10 +8,24 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.ProductComments.Requests.Commands
 {
+    /// <summary>
+    /// Создать комментарий к товару
+    /// </summary>
     public class CreateProductComment : ICommand<Guid>, IHasMappings
     {
+        /// <summary>
+        /// Идентификатор товара
+        /// </summary>
         public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Комментарий
+        /// </summary>
         public string Body { get; set; }
+
+        /// <summary>
+        /// Индентификатор родительского комментария
+        /// </summary>
         public Guid? ParentCommentId { get; set; }
 
         public void ApplyMappings(Profile profile)

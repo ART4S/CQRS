@@ -1,22 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Requests.Services;
 
 namespace WebFeatures.Requests.Internal
 {
     internal abstract class Pipeline<TResponse>
     {
-        public abstract Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceProvider services, CancellationToken cancellationToken);
+        public abstract Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceFactory services, CancellationToken cancellationToken);
     }
 
     internal class PipelineImpl<TRequest, TResponse> : Pipeline<TResponse>
         where TRequest : IRequest<TResponse>
     {
-        public override Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceProvider services, CancellationToken cancellationToken)
+        public override Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceFactory services, CancellationToken cancellationToken)
         {
-            var handler = services.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
+            var handler = services.GetService<IRequestHandler<TRequest, TResponse>>();
 
             RequestDelegate<Task<TResponse>> pipeline =
                 () => handler.HandleAsync((TRequest)request, cancellationToken);

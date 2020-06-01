@@ -3,7 +3,7 @@ using System.Data;
 using WebFeatures.DatabaseInitializer.Database;
 using WebFeatures.DatabaseInitializer.Extensions;
 
-namespace WebFeatures.DatabaseInitializer
+namespace WebFeatures.DatabaseInitializer.Core
 {
     internal class ScriptsRunner
     {

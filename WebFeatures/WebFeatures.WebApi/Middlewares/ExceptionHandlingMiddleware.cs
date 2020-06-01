@@ -36,20 +36,11 @@ namespace WebFeatures.WebApi.Middlewares
 
             switch (exception)
             {
-                case RequestValidationException validation:
+                case ValidationException validation:
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
-                        responseBody = JsonConvert.SerializeObject(validation.Errors);
-
-                        break;
-                    }
-
-                case ApplicationValidationException application:
-                    {
-                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                        context.Response.ContentType = MediaTypeNames.Text.Plain;
-                        responseBody = application.Message;
+                        responseBody = JsonConvert.SerializeObject(validation.Error);
 
                         break;
                     }

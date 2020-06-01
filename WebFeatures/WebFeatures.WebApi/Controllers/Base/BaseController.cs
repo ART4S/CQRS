@@ -5,9 +5,8 @@ using WebFeatures.Requests;
 
 namespace WebFeatures.WebApi.Controllers.Base
 {
-    [ApiController]
-    [Produces(MediaTypeNames.Application.Json)]
     [Route("api/[controller]")]
+    [Produces(MediaTypeNames.Application.Json)]
     public abstract class BaseController : ControllerBase
     {
         protected IRequestMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IRequestMediator>();

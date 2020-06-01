@@ -10,11 +10,15 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Auth.Dto;
 using WebFeatures.Application.Features.Auth.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Common;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
 {
+    /// <summary>
+    /// Аутентификация
+    /// </summary>
     public class AuthController : BaseController
     {
         private readonly IDateTime _dateTime;
@@ -24,18 +28,32 @@ namespace WebFeatures.WebApi.Controllers
             _dateTime = dateTime;
         }
 
+        /// <summary>
+        /// Зарегистрировать нового пользователя
+        /// </summary>
+        /// <response code="200">Успех</response>
+        /// <response code="400" cref="ValidationError">Неверные пользовательские данные</response>
         [HttpPost("[action]")]
-        public async Task RegisterUser([FromBody, Required] RegisterUser command)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
+        public async Task RegisterUser([FromBody, Required] RegisterUser request)
         {
-            UserInfoDto user = await Mediator.SendAsync(command);
+            UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
         }
 
+        /// <summary>
+        /// Войти на сайт
+        /// </summary>
+        /// <response code="200">Успех</response>
+        /// <response code="400" cref="ValidationError">Неверные пользовательские данные</response>
         [HttpPost("[action]")]
-        public async Task Login([FromBody, Required] Login command)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
+        public async Task Login([FromBody, Required] Login request)
         {
-            UserInfoDto user = await Mediator.SendAsync(command);
+            UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
         }
@@ -61,8 +79,13 @@ namespace WebFeatures.WebApi.Controllers
             return HttpContext.SignInAsync(principal, authProperties);
         }
 
-        [Authorize]
+        /// <summary>
+        /// Выйти из сайта
+        /// </summary>
+        /// <response code="200">Успех</response>
         [HttpPost("[action]")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public Task Logout()
         {
             return HttpContext.SignOutAsync();

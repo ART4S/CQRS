@@ -7,8 +7,8 @@ namespace WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories
 {
     public interface IProductReadRepository
     {
-        Task<IEnumerable<ProductListDto>> GetListAsync();
         Task<ProductInfoDto> GetProductAsync(Guid id);
+        Task<IEnumerable<ProductListDto>> GetListAsync();
         Task<IEnumerable<ProductCommentInfoDto>> GetCommentsAsync(Guid id);
         Task<IEnumerable<ProductReviewInfoDto>> GetReviewsAsync(Guid id);
     }

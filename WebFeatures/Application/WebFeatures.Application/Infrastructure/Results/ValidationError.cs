@@ -1,14 +1,19 @@
 ﻿using FluentValidation.Results;
-using System;
 using System.Collections.Generic;
 
-namespace WebFeatures.Application.Exceptions
+namespace WebFeatures.Application.Infrastructure.Results
 {
-    public class RequestValidationException : Exception
+    public class ValidationError
     {
+        public string Message { get; }
         public Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
 
-        public RequestValidationException(IEnumerable<ValidationFailure> failures)
+        public ValidationError(string message)
+        {
+            Message = message;
+        }
+
+        public ValidationError(IEnumerable<ValidationFailure> failures)
         {
             foreach (ValidationFailure failure in failures)
             {
