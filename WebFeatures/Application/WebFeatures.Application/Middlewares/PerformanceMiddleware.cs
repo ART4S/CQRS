@@ -7,7 +7,7 @@ using WebFeatures.Requests;
 namespace WebFeatures.Application.Middlewares
 {
     /// <summary>
-    /// Checks request performance
+    /// Logs long running requests
     /// </summary>
     internal class PerformanceMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
     {

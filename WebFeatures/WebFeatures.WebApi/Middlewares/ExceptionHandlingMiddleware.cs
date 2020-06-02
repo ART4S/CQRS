@@ -40,6 +40,7 @@ namespace WebFeatures.WebApi.Middlewares
                     {
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
+
                         responseBody = JsonConvert.SerializeObject(validation.Error);
 
                         break;
@@ -49,9 +50,10 @@ namespace WebFeatures.WebApi.Middlewares
                     {
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
+
                         responseBody = "Something went wrong";
 
-                        var logger = context.RequestServices.GetService<ILogger<ExceptionHandlingMiddleware>>();
+                        var logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlingMiddleware>>();
                         logger.LogError(exception.Message, exception);
 
                         break;

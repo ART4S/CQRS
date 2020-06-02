@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
+using WebFeatures.WebApi.Extensions;
 
 namespace WebFeatures.WebApi
 {
@@ -21,6 +22,7 @@ namespace WebFeatures.WebApi
                         {
                             options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
                         });
-                });
+                })
+                .UseLogging();
     }
 }

@@ -20,7 +20,9 @@ namespace WebFeatures.Application.Middlewares
         public async Task<TResponse> HandleAsync(TRequest request, RequestDelegate<Task<TResponse>> next, CancellationToken cancellationToken)
         {
             TResponse response = await next();
+
             _logger.LogInformation($"{request} => {response}");
+
             return response;
         }
     }

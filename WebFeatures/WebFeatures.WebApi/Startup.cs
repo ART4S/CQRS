@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
@@ -64,6 +65,8 @@ namespace WebFeatures.WebApi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseDefaultFiles();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 

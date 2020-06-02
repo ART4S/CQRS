@@ -4,7 +4,7 @@ using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Persistence;
 
-namespace WebFeatures.Infrastructure.DataAccess
+namespace WebFeatures.Infrastructure.DataAccess.Contexts
 {
     internal class ReadDbContext : BaseDbContext, IReadDbContext
     {

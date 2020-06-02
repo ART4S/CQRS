@@ -10,7 +10,7 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Persistence;
 
-namespace WebFeatures.Infrastructure.DataAccess
+namespace WebFeatures.Infrastructure.DataAccess.Contexts
 {
     internal class WriteDbContext : BaseDbContext, IWriteDbContext
     {

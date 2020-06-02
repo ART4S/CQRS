@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using WebFeatures.Requests.Services;
 
 namespace WebFeatures.Requests.DependencyInjection
@@ -13,14 +13,9 @@ namespace WebFeatures.Requests.DependencyInjection
             _serviceProvider = serviceProvider;
         }
 
-        public T GetService<T>()
+        public object GetService(Type type)
         {
-            return (T)_serviceProvider.GetService(typeof(T));
-        }
-
-        public IEnumerable<T> GetServices<T>()
-        {
-            return (IEnumerable<T>)_serviceProvider.GetService(typeof(IEnumerable<T>));
+            return _serviceProvider.GetRequiredService(type);
         }
     }
 }
