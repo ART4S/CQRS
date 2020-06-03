@@ -16,7 +16,7 @@ namespace WebFeatures.Infrastructure.Tests.UnitTests.DataAccess
             // Arrange
             var profile = new EntityProfile();
 
-            profile.AddMappingsFromAssembly(Assembly.GetExecutingAssembly());
+            profile.RegisterMappingsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Act
             IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();

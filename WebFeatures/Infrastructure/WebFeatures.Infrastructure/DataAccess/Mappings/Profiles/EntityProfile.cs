@@ -16,28 +16,26 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
     {
         private readonly Dictionary<Type, object> _mappings = new Dictionary<Type, object>();
 
-        public void AddMappingsFromAssembly(Assembly assembly)
+        public bool TryRegisterMap(Type map)
         {
-            foreach (Type type in assembly.GetTypes())
+            if (!map.IsSubclassOfGeneric(typeof(EntityMap<>)))
             {
-                if (type.IsGenericType)
-                    continue;
-
-                if (!type.IsSubclassOfGeneric(typeof(EntityMap<>)))
-                    continue;
-
-                Type entityType = type.BaseType.GetGenericArguments()[0];
-
-                object entityMap = Activator.CreateInstance(type);
-
-                _mappings[entityType] = entityMap;
-
-                var entityTypeMap = (SqlMapper.ITypeMap)Activator.CreateInstance(
-                    typeof(EntityTypeMap<>).MakeGenericType(entityType),
-                    entityMap);
-
-                SqlMapper.SetTypeMap(entityType, entityTypeMap);
+                return false;
             }
+
+            Type entityType = map.BaseType.GetGenericArguments()[0];
+
+            object mapInstance = Activator.CreateInstance(map);
+
+            _mappings[entityType] = mapInstance;
+
+            var entityTypeMap = (SqlMapper.ITypeMap)Activator.CreateInstance(
+                typeof(EntityTypeMap<>).MakeGenericType(entityType),
+                mapInstance);
+
+            SqlMapper.SetTypeMap(entityType, entityTypeMap);
+
+            return true;
         }
 
         public IEntityMap<TEntity> GetMap<TEntity>() where TEntity : class
@@ -48,6 +46,17 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
             }
 
             return (IEntityMap<TEntity>)map;
+        }
+    }
+
+    internal static class EntityProfileExtensions
+    {
+        public static void RegisterMappingsFromAssembly(this EntityProfile profile, Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                profile.TryRegisterMap(type);
+            }
         }
     }
 }

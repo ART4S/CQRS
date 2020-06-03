@@ -22,7 +22,7 @@ namespace WebFeatures.WebApi.Controllers
         /// Получить товар
         /// </summary>
         /// <param name="id">Идентификатор товара</param>
-        /// <returns>Product</returns>
+        /// <returns>Товар</returns>
         /// <response code="200" cref="ProductInfoDto">Успех</response>
         /// <response code="400" cref="ValidationError">Товар отсутствует</response>
         [HttpGet("{id:guid}")]

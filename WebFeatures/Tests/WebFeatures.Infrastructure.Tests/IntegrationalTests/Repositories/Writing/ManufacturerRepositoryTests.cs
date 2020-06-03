@@ -25,7 +25,8 @@ namespace WebFeatures.Infrastructure.Tests.IntegrationalTests.Repositories.Writi
             _db = db;
 
             var profile = new EntityProfile();
-            profile.AddMappingsFromAssembly(typeof(ManufacturerMap).Assembly);
+
+            profile.RegisterMappingsFromAssembly(typeof(ManufacturerMap).Assembly);
 
             _repo = new ManufacturerWriteRepository(db.Connection, new ManufacturerQueryBuilder(profile));
         }

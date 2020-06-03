@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +9,6 @@ using Serilog;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Middlewares;
-using WebFeatures.WebApi.ModelBinders;
 
 namespace WebFeatures.WebApi
 {
@@ -28,11 +28,8 @@ namespace WebFeatures.WebApi
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
 
-            services.AddControllers(opt =>
-            {
-                opt.ModelBinderProviders.Insert(0, new BytesModelBinderProvider());
-            })
-            .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
+            services.AddControllers()
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>
             {
@@ -46,6 +43,13 @@ namespace WebFeatures.WebApi
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+                options.Cookie.Name = "XSRF-TOKEN";
+                options.Cookie.HttpOnly = false;
+            });
 
             // For Frontend (React.JS)
             //services.AddMemoryCache();

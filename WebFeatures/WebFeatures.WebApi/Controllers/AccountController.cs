@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,13 +20,15 @@ namespace WebFeatures.WebApi.Controllers
     /// <summary>
     /// Аутентификация
     /// </summary>
-    public class AuthController : BaseController
+    public class AccountController : BaseController
     {
         private readonly IDateTime _dateTime;
+        private readonly IAntiforgery _antiforgery;
 
-        public AuthController(IDateTime dateTime)
+        public AccountController(IDateTime dateTime, IAntiforgery antiforgery)
         {
             _dateTime = dateTime;
+            _antiforgery = antiforgery;
         }
 
         /// <summary>
@@ -36,11 +39,13 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task RegisterUser([FromBody, Required] RegisterUser request)
+        public async Task Register([FromBody, Required] RegisterUser request)
         {
             UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
+
+            _antiforgery.GetAndStoreTokens(HttpContext);
         }
 
         /// <summary>
@@ -56,6 +61,8 @@ namespace WebFeatures.WebApi.Controllers
             UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
+
+            _antiforgery.GetAndStoreTokens(HttpContext);
         }
 
         private Task SignInUser(UserInfoDto user)

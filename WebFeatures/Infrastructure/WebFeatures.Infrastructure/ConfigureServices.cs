@@ -58,7 +58,7 @@ namespace WebFeatures.Infrastructure
             services.AddSingleton<IEntityProfile>(x =>
             {
                 var profile = new EntityProfile();
-                profile.AddMappingsFromAssembly(Assembly.GetExecutingAssembly());
+                profile.RegisterMappingsFromAssembly(Assembly.GetExecutingAssembly());
 
                 return profile;
             });
