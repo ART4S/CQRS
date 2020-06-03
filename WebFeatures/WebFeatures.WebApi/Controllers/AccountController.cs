@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,12 +22,10 @@ namespace WebFeatures.WebApi.Controllers
     public class AccountController : BaseController
     {
         private readonly IDateTime _dateTime;
-        private readonly IAntiforgery _antiforgery;
 
-        public AccountController(IDateTime dateTime, IAntiforgery antiforgery)
+        public AccountController(IDateTime dateTime)
         {
             _dateTime = dateTime;
-            _antiforgery = antiforgery;
         }
 
         /// <summary>
@@ -44,8 +41,6 @@ namespace WebFeatures.WebApi.Controllers
             UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
-
-            _antiforgery.GetAndStoreTokens(HttpContext);
         }
 
         /// <summary>
@@ -61,8 +56,6 @@ namespace WebFeatures.WebApi.Controllers
             UserInfoDto user = await Mediator.SendAsync(request);
 
             await SignInUser(user);
-
-            _antiforgery.GetAndStoreTokens(HttpContext);
         }
 
         private Task SignInUser(UserInfoDto user)

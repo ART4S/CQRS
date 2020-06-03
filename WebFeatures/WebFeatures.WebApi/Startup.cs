@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
+using WebFeatures.WebApi.Extensions;
 using WebFeatures.WebApi.Middlewares;
 
 namespace WebFeatures.WebApi
@@ -71,6 +71,8 @@ namespace WebFeatures.WebApi
             app.UseDefaultFiles();
 
             app.UseSerilogRequestLogging();
+
+            app.UseAntiforgery();
 
             app.UseRouting();
 

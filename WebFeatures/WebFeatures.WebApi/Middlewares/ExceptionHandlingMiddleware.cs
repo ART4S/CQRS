@@ -9,7 +9,7 @@ using WebFeatures.Application.Interfaces.Logging;
 
 namespace WebFeatures.WebApi.Middlewares
 {
-    public class ExceptionHandlingMiddleware
+    internal class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
 
