@@ -1,11 +1,10 @@
-﻿using System.Data;
-using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
+﻿using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Interfaces.DataAccess
 {
-    public interface IWriteDbContext
+    public interface IWriteDbContext : IDbContext
     {
         IUserWriteRepository Users { get; }
         IWriteRepository<Role> Roles { get; }
@@ -19,7 +18,5 @@ namespace WebFeatures.Application.Interfaces.DataAccess
         IWriteRepository<City> Cities { get; }
         IWriteRepository<Country> Countries { get; }
         IWriteRepository<File> Files { get; }
-
-        IDbTransaction BeginTransaction();
     }
 }

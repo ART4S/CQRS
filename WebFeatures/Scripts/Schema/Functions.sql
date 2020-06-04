@@ -1,52 +1,6 @@
 DO $functions$
 BEGIN
 
-CREATE FUNCTION get_products_list()
-RETURNS TABLE
-(
-	Id UUID,
-	Name VARCHAR,
-	Price DECIMAL
-) AS $$
-BEGIN
-	RETURN QUERY 
-	SELECT
-		p.id,
-		p.name,
-		p.price
-	FROM
-		public.products p;
-
-END; $$ LANGUAGE 'plpgsql';
-
-CREATE FUNCTION get_product_comments(product_id UUID)
-RETURNS TABLE
-(
-	Id UUID,
-	Body VARCHAR,
-	CreateDate TIMESTAMP WITHOUT TIME ZONE,
-	AuthorId UUID,
-	AuthorName VARCHAR,
-	ParentCommentId UUID
-) AS $$
-BEGIN
-	RETURN QUERY 
-	SELECT
-		c.id,
-		c.body,
-		c.createdate,
-		c.authorid,
-		u.name,
-		c.parentcommentid
-	FROM
-		public.productComments c
-	JOIN 
-		public.users u ON u.id = c.authorid
-	WHERE 
-		c.productid = product_id;
-
-END; $$ LANGUAGE 'plpgsql';
-
 CREATE FUNCTION get_product_reviews(product_id UUID)
 RETURNS TABLE
 (
@@ -107,4 +61,39 @@ BEGIN
 
 END; $$ LANGUAGE 'plpgsql';
 
-END $functions$
+END $functions$;
+
+DO 
+$views$ BEGIN
+
+CREATE MATERIALIZED VIEW get_products_list AS
+	SELECT
+		p.id as Id,
+		p.name as Name,
+		p.price as Price
+	FROM
+		public.products p
+
+WITH NO DATA;
+	
+CREATE UNIQUE INDEX IX_get_products_list_Id ON get_products_list (Id);
+
+CREATE MATERIALIZED VIEW get_product_comments AS
+	SELECT
+		pc.id as Id,
+		pc.body as Body,
+		pc.createdate as CreateDate,
+		pc.productid as ProductId,
+		pc.authorid as AuthorId,
+		u.name as AuthorName,
+		pc.parentcommentid as ParentCommentId
+	FROM
+		public.productComments pc
+	JOIN 
+		public.users u ON u.id = pc.authorid
+
+WITH NO DATA;
+
+CREATE UNIQUE INDEX IX_get_product_comments_Id ON get_product_comments (Id);
+
+END $views$;

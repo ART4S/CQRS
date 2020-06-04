@@ -3,10 +3,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.ProductReviews.Handlers
 {

@@ -2,11 +2,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Features.ProductComments.Events;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Events;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.ProductComments.Handlers
 {
@@ -14,15 +16,18 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
     {
         private readonly IWriteDbContext _db;
         private readonly ICurrentUserService _currentUser;
+        private readonly IEventStorage _events;
         private readonly IMapper _mapper;
 
         public ProductCommentCommandHandler(
             IWriteDbContext db,
             ICurrentUserService currentUser,
+            IEventStorage events,
             IMapper mapper)
         {
             _db = db;
             _currentUser = currentUser;
+            _events = events;
             _mapper = mapper;
         }
 
@@ -32,6 +37,8 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
             comment.AuthorId = _currentUser.UserId;
 
             await _db.ProductComments.CreateAsync(comment);
+
+            _events.Add(new ProductCommentCreated(comment.Id));
 
             return comment.Id;
         }

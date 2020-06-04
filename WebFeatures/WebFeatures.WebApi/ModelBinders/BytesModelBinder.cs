@@ -15,7 +15,12 @@ namespace WebFeatures.WebApi.ModelBinders
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return context.Metadata.ModelType == typeof(byte[]) ? new BytesModelBinder() : null;
+            if (context.Metadata.ModelType != typeof(byte[]))
+            {
+                return null;
+            }
+
+            return new BytesModelBinder();
         }
     }
 

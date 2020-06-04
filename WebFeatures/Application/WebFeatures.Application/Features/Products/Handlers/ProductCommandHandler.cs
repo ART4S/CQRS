@@ -2,11 +2,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Features.Products.Events;
 using WebFeatures.Application.Features.Products.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Events;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Products.Handlers
 {
@@ -15,11 +17,13 @@ namespace WebFeatures.Application.Features.Products.Handlers
         IRequestHandler<UpdateProduct, Empty>
     {
         private readonly IWriteDbContext _db;
+        private readonly IEventStorage _events;
         private readonly IMapper _mapper;
 
-        public ProductCommandHandler(IWriteDbContext db, IMapper mapper)
+        public ProductCommandHandler(IWriteDbContext db, IEventStorage events, IMapper mapper)
         {
             _db = db;
+            _events = events;
             _mapper = mapper;
         }
 
@@ -28,6 +32,8 @@ namespace WebFeatures.Application.Features.Products.Handlers
             Product product = _mapper.Map<Product>(request);
 
             await _db.Products.CreateAsync(product);
+
+            _events.Add(new ProductCreated(product.Id));
 
             return product.Id;
         }

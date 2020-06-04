@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mime;
-using WebFeatures.Requests;
+using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.WebApi.Controllers.Base
 {

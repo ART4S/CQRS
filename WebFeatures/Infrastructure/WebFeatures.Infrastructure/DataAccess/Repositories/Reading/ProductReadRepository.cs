@@ -5,6 +5,7 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories;
+using WebFeatures.Infrastructure.DataAccess.Constants;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
 {
@@ -25,16 +26,15 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
         public Task<IEnumerable<ProductListDto>> GetListAsync()
         {
             return Connection.QueryAsync<ProductListDto>(
-                sql: "get_products_list",
-                commandType: CommandType.StoredProcedure);
+                sql: ViewNames.Products.GET_PRODUCTS_LIST,
+                commandType: CommandType.TableDirect);
         }
 
         public Task<IEnumerable<ProductCommentInfoDto>> GetCommentsAsync(Guid id)
         {
-            return Connection.QueryAsync<ProductCommentInfoDto>(
-                sql: "get_product_comments",
-                param: new { product_id = id },
-                commandType: CommandType.StoredProcedure);
+            string sql = $"SELECT * FROM {ViewNames.Products.GET_PRODUCT_COMMENTS} WHERE ProductId = @id";
+
+            return Connection.QueryAsync<ProductCommentInfoDto>(sql, new { id });
         }
 
         public Task<IEnumerable<ProductReviewInfoDto>> GetReviewsAsync(Guid id)

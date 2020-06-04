@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Scripts\InitialData.sql">
+    <None Update="Core\Scripts\InitialData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Settings.json">
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(SolutionDir)Scripts $(TargetDir)Scripts /e /y" />
+    <Exec Command="xcopy $(SolutionDir)Scripts $(TargetDir)Core\Scripts /e /y" />
   </Target>
 
 </Project>

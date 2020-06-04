@@ -1,6 +1,5 @@
 ﻿using WebFeatures.Application.Interfaces.DataAccess.Reading;
 using WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories;
-using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Persistence;
 

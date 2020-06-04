@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Reading
 {
-    public interface IReadDbContext
+    public interface IReadDbContext : IDbContext
     {
         IProductReadRepository Products { get; }
     }

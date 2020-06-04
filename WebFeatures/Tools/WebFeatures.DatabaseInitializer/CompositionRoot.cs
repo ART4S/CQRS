@@ -5,8 +5,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using WebFeatures.DatabaseInitializer.Core;
-using WebFeatures.DatabaseInitializer.Database;
-using WebFeatures.DatabaseInitializer.Database.Logging;
+using WebFeatures.DatabaseInitializer.Core.Database;
+using WebFeatures.DatabaseInitializer.Core.Database.Logging;
 
 namespace WebFeatures.DatabaseInitializer
 {
@@ -49,8 +49,8 @@ namespace WebFeatures.DatabaseInitializer
         {
             services.AddSingleton(x => LoggerFactory.Create(builder =>
             {
-                builder.ClearProviders()
-                    .AddConsole();
+                builder.ClearProviders();
+                builder.AddConsole();
             }));
 
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
@@ -60,9 +60,10 @@ namespace WebFeatures.DatabaseInitializer
         {
             string connectionString = Configuration.GetConnectionString("PostgreSql");
 
-            services.AddSingleton<IDbConnectionFactory>(x => new LoggingDbConnectionFactory(
-                new PostgreSqlDbConnectionFactory(connectionString),
-                x.GetService<ILoggerFactory>()));
+            services.AddSingleton<IDbConnectionFactory>(x =>
+                new LoggingDbConnectionFactory(
+                    new PostgreSqlDbConnectionFactory(connectionString),
+                    x.GetService<ILoggerFactory>()));
         }
     }
 }

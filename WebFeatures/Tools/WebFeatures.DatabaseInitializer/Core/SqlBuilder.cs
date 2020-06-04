@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace WebFeatures.DatabaseInitializer.Core
 {
@@ -23,20 +24,35 @@ namespace WebFeatures.DatabaseInitializer.Core
         public static string CreateDbSchema()
         {
             string createTables =
-                $"{File.ReadAllText("Scripts/Schema/Tables.sql")};\n";
+                $"{File.ReadAllText("Core/Scripts/Schema/Tables.sql")};\n";
 
             string createFunctions =
-                $"{File.ReadAllText("Scripts/Schema/Functions.sql")};\n";
+                $"{File.ReadAllText("Core/Scripts/Schema/Functions.sql")};\n";
 
             return createTables + createFunctions;
         }
 
         public static string SeedInitialData()
         {
-            string insertData =
-                File.ReadAllText("Scripts/InitialData.sql");
+            return File.ReadAllText("Core/Scripts/InitialData.sql");
+        }
 
-            return insertData;
+        public static string RefreshMaterializedViews()
+        {
+            string[] views =
+            {
+                "get_products_list",
+                "get_product_comments"
+            };
+
+            var sb = new StringBuilder();
+
+            foreach (string view in views)
+            {
+                sb.AppendLine($"REFRESH MATERIALIZED VIEW {view};");
+            }
+
+            return sb.ToString();
         }
     }
 }

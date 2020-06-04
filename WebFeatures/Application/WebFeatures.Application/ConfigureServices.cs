@@ -6,9 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Middlewares;
-using WebFeatures.Requests;
-using WebFeatures.Requests.DependencyInjection;
 
 namespace WebFeatures.Application
 {
@@ -23,8 +22,6 @@ namespace WebFeatures.Application
 
         private static void AddRequests(IServiceCollection services)
         {
-            services.AddRequestMediator();
-
             // Common pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(LoggingMiddleware<,>));
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(PerformanceMiddleware<,>));
@@ -32,6 +29,7 @@ namespace WebFeatures.Application
 
             // Command pipeline
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(TransactionMiddleware<,>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(EventsMiddleware<,>));
 
             // Endpoints
             services.AddTypesFromAsseblyWithInterface(Assembly.GetExecutingAssembly(), typeof(IRequestHandler<,>));

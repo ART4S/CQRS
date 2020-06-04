@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Auth.Dto;
 using WebFeatures.Application.Features.Auth.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Features.Auth.Handlers
 {
@@ -52,9 +52,9 @@ namespace WebFeatures.Application.Features.Auth.Handlers
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            User user = await _db.Users.GetByEmailAsync(request.Email);
+            User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException("Wrong login or password");
 
-            if (user == null || !_passwordHasher.Verify(user.PasswordHash, request.Password))
+            if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
             {
                 throw new ValidationException("Wrong login or password");
             }

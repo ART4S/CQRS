@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
-using WebFeatures.DatabaseInitializer.Database;
-using WebFeatures.DatabaseInitializer.Extensions;
+using WebFeatures.DatabaseInitializer.Core.Database;
+using WebFeatures.DatabaseInitializer.Core.Extensions;
 
 namespace WebFeatures.DatabaseInitializer.Core
 {
@@ -24,16 +24,19 @@ namespace WebFeatures.DatabaseInitializer.Core
 
             string database = "webfeatures_db";
 
-            _logger.LogInformation("Creating database...");
+            _logger.LogInformation("Creating database");
             connection.Execute(SqlBuilder.CreateDatabase(database));
 
             connection.ChangeDatabase(database);
 
-            _logger.LogInformation("Creating schema...");
+            _logger.LogInformation("Creating schema");
             connection.Execute(SqlBuilder.CreateDbSchema());
 
-            _logger.LogInformation("Seeding initial data...");
+            _logger.LogInformation("Seeding initial data");
             connection.Execute(SqlBuilder.SeedInitialData());
+
+            _logger.LogInformation("Updating materialized views");
+            connection.Execute(SqlBuilder.RefreshMaterializedViews());
         }
     }
 }

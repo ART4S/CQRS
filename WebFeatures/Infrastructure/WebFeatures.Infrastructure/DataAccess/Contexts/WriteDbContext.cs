@@ -1,10 +1,8 @@
-﻿using System.Data;
-using WebFeatures.Application.Interfaces.DataAccess;
+﻿using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
@@ -69,11 +67,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         private IUserWriteRepository CreateUserRepository()
         {
             return new UserWriteRepository(Connection, new UserQueryBuilder(_entityProfile));
-        }
-
-        public IDbTransaction BeginTransaction()
-        {
-            return Connection.BeginTransaction();
         }
     }
 }

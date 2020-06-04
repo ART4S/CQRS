@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Logging;
-using WebFeatures.Requests;
 
 namespace WebFeatures.Application.Middlewares
 {
