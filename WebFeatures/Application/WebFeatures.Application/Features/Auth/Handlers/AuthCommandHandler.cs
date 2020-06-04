@@ -52,11 +52,13 @@ namespace WebFeatures.Application.Features.Auth.Handlers
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException("Wrong login or password");
+            const string errorMessage = "Wrong login or password";
+
+            User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException(errorMessage);
 
             if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
             {
-                throw new ValidationException("Wrong login or password");
+                throw new ValidationException(errorMessage);
             }
 
             _loggerFactory.CreateLogger<Login>()
