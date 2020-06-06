@@ -1,4 +1,9 @@
-﻿using WebFeatures.Domian.Entities;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using WebFeatures.Domian.Entities;
+using WebFeatures.Infrastructure.DataAccess.Constants;
 
 namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
 {
@@ -30,20 +35,36 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
 
         public static SqlQuery CreateSchema()
         {
-            string createTables =
-                $"{System.IO.File.ReadAllText("Scripts/Schema/Tables.sql")};\n";
+            var sb = new StringBuilder();
 
-            string createFunctions =
-                $"{System.IO.File.ReadAllText("Scripts/Schema/Functions.sql")};\n";
+            IEnumerable<string> scripts = Directory.GetFiles("Scripts/Schema", "*.sql")
+                .Select(x => System.IO.File.ReadAllText(x));
 
-            return new SqlQuery(createTables + createFunctions);
+            foreach (string script in scripts)
+            {
+                sb.AppendLine(script);
+            }
+
+            return new SqlQuery(sb.ToString());
+        }
+
+        public static SqlQuery RefreshAllViews()
+        {
+            var sb = new StringBuilder();
+
+            foreach (string view in ViewNames.All)
+            {
+                sb.AppendLine($"REFRESH MATERIALIZED VIEW {view};");
+            }
+
+            return new SqlQuery(sb.ToString());
         }
 
         public static SqlQuery InsertUser(User user)
         {
             string query =
-                @$"INSERT INTO public.Users 
-                (Id, Name, Email, PasswordHash, PictureId) 
+                @$"INSERT INTO public.users 
+                (id, name, email, passwordhash, pictureid) 
                 VALUES (@Id, @Name, @Email, @PasswordHash, @PictureId)";
 
             return new SqlQuery(query, user);
@@ -52,8 +73,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertRole(Role role)
         {
             string query =
-                @$"INSERT INTO public.Roles 
-                (Id, Name, Description) 
+                @$"INSERT INTO public.roles 
+                (id, name, description) 
                 VALUES (@Id, @Name, @Description)";
 
             return new SqlQuery(query, role);
@@ -62,8 +83,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertUserRole(UserRole userRole)
         {
             string query =
-                @$"INSERT INTO public.UserRoles 
-                (UserId, RoleId) 
+                @$"INSERT INTO public.userroles 
+                (userid, roleid) 
                 VALUES (@UserId, @RoleId)";
 
             return new SqlQuery(query, userRole);
@@ -72,8 +93,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertCountry(Country country)
         {
             string query =
-                @$"INSERT INTO public.Countries 
-                (Id, Name, Continent) 
+                @$"INSERT INTO public.countries 
+                (id, name, continent) 
                 VALUES (@Id, @Name, @Continent)";
 
             return new SqlQuery(query, country);
@@ -82,8 +103,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertCity(City city)
         {
             string query =
-                @$"INSERT INTO public.Cities 
-                (Id, Name, CountryId) 
+                @$"INSERT INTO public.cities 
+                (id, name, countryId) 
                 VALUES (@Id, @Name, @CountryId)";
 
             return new SqlQuery(query, city);
@@ -92,8 +113,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertBrand(Brand brand)
         {
             string query =
-                @$"INSERT INTO public.Brands 
-                (Id, Name) 
+                @$"INSERT INTO public.brands 
+                (id, name) 
                 VALUES (@Id, @Name)";
 
             return new SqlQuery(query, brand);
@@ -102,8 +123,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertCategory(Category category)
         {
             string query =
-                @$"INSERT INTO public.Categories 
-                (Id, Name) 
+                @$"INSERT INTO public.categories 
+                (id, name) 
                 VALUES (@Id, @Name)";
 
             return new SqlQuery(query, category);
@@ -112,8 +133,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertManufacturer(Manufacturer manufacturer)
         {
             string query =
-                @$"INSERT INTO public.Manufacturers 
-                (Id, OrganizationName, StreetAddress_StreetName, StreetAddress_PostalCode, StreetAddress_CityId) 
+                @$"INSERT INTO public.manufacturers 
+                (id, organizationname, streetaddress_streetname, streetaddress_postalcode, streetaddress_cityId) 
                 VALUES (@Id, @OrganizationName, @StreetAddress_StreetName, @StreetAddress_PostalCode, @StreetAddress_CityId)";
 
             var param = new
@@ -131,8 +152,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertShipper(Shipper shipper)
         {
             string query =
-                @$"INSERT INTO public.Shippers 
-                (Id, OrganizationName, ContactPhone, HeadOffice_StreetName, HeadOffice_PostalCode, HeadOffice_CityId) 
+                @$"INSERT INTO public.shippers 
+                (id, organizationName, contactPhone, headoffice_streetname, headoffice_postalcode, headoffice_cityId) 
                 VALUES (@Id, @OrganizationName, @ContactPhone, @HeadOffice_StreetName, @HeadOffice_PostalCode, @HeadOffice_CityId)";
 
             var param = new
@@ -151,8 +172,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertProduct(Product product)
         {
             string query =
-                @$"INSERT INTO public.Products 
-                (Id, Name, Price, Description, CreateDate, PictureId, ManufacturerId, CategoryId, BrandId) 
+                @$"INSERT INTO public.products 
+                (id, name, price, description, createDate, pictureid, manufacturerid, categoryid, brandid) 
                 VALUES (@Id, @Name, @Price, @Description, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
 
             return new SqlQuery(query, product);
@@ -161,8 +182,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertProductReview(ProductReview review)
         {
             string query =
-                @$"INSERT INTO public.ProductReviews 
-                (Id, Title, Comment, CreateDate, Rating, AuthorId, ProductId) 
+                @$"INSERT INTO public.productreviews 
+                (id, title, comment, createdate, rating, authorid, productid) 
                 VALUES (@Id, @Title, @Comment, @CreateDate, @Rating, @AuthorId, @ProductId)";
 
             return new SqlQuery(query.ToString(), review);
@@ -171,8 +192,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         public static SqlQuery InsertProductComment(ProductComment comment)
         {
             string query =
-                @$"INSERT INTO public.ProductComments 
-                (Id, Body, CreateDate, ProductId, AuthorId, ParentCommentId) 
+                @$"INSERT INTO public.productcomments 
+                (id, body, createdate, productid, authorid, parentcommentid) 
                 VALUES (@Id, @Body, @CreateDate, @ProductId, @AuthorId, @ParentCommentId) ";
 
             return new SqlQuery(query, comment);

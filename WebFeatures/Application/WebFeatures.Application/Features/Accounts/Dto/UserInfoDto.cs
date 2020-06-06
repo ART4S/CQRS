@@ -3,7 +3,7 @@ using System.Linq;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Application.Features.Auth.Dto
+namespace WebFeatures.Application.Features.Accounts.Dto
 {
     public class UserInfoDto : IHasMappings
     {

@@ -1,7 +1,7 @@
-﻿using WebFeatures.Application.Features.Auth.Dto;
+﻿using WebFeatures.Application.Features.Accounts.Dto;
 using WebFeatures.Application.Infrastructure.Requests;
 
-namespace WebFeatures.Application.Features.Auth.Requests.Commands
+namespace WebFeatures.Application.Features.Accounts.Requests.Commands
 {
     /// <summary>
     /// Войти в систему

@@ -26,10 +26,10 @@ namespace WebFeatures.Infrastructure.EventHandlers
 
         public Task HandleAsync(ProductCreated eve, CancellationToken cancellationToken)
         {
-            return UpdateRelatedMaterializedViewsAsync();
+            return RefreshViewsAsync();
         }
 
-        private async Task UpdateRelatedMaterializedViewsAsync()
+        private async Task RefreshViewsAsync()
         {
             var sb = new StringBuilder();
 

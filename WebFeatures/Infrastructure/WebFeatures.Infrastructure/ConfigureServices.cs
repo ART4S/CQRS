@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebFeatures.Application.Features.ProductComments.Events;
+using WebFeatures.Application.Features.ProductReviews.Events;
 using WebFeatures.Application.Features.Products.Events;
 using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Infrastructure.Requests;
@@ -47,7 +48,7 @@ namespace WebFeatures.Infrastructure
 
         private static void AddLogging(IServiceCollection services)
         {
-            services.AddScoped(typeof(ILogger<>), typeof(LoggerFacade<>));
+            services.AddScoped(typeof(ILogger<>), typeof(LoggerAdapter<>));
         }
 
         private static void AddDataAccess(IServiceCollection services, IConfiguration configuration)
@@ -58,6 +59,7 @@ namespace WebFeatures.Infrastructure
             services.AddSingleton<IEntityProfile>(x =>
             {
                 var profile = new EntityProfile();
+
                 profile.RegisterMappingsFromAssembly(Assembly.GetExecutingAssembly());
 
                 return profile;
@@ -78,6 +80,7 @@ namespace WebFeatures.Infrastructure
 
             services.AddScoped<IEventHandler<ProductCreated>, ProductCreatedEventHandler>();
             services.AddScoped<IEventHandler<ProductCommentCreated>, ProductCommentCreatedEventHandler>();
+            services.AddScoped<IEventHandler<ProductReviewCreated>, ProductReviewCreatedEventHandler>();
         }
 
         private static void AddRequests(IServiceCollection services)
@@ -89,10 +92,6 @@ namespace WebFeatures.Infrastructure
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-        }
-
-        private static void AddMailing(IServiceCollection services, IConfiguration configuration)
-        {
         }
 
         private static void AddJobs(IServiceCollection services, IConfiguration configuration)

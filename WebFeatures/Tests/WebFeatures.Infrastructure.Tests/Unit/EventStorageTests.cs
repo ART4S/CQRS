@@ -19,7 +19,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit
             var eventMock = new Mock<IEvent>();
 
             // Act
-            storage.Add(eventMock.Object);
+            storage.AddAsync(eventMock.Object);
         }
 
         [Fact]

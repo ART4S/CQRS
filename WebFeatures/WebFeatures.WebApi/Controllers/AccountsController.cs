@@ -8,8 +8,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Auth.Dto;
-using WebFeatures.Application.Features.Auth.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Dto;
+using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Common;
 using WebFeatures.WebApi.Controllers.Base;
@@ -19,11 +19,11 @@ namespace WebFeatures.WebApi.Controllers
     /// <summary>
     /// Аутентификация
     /// </summary>
-    public class AccountController : BaseController
+    public class AccountsController : BaseController
     {
         private readonly IDateTime _dateTime;
 
-        public AccountController(IDateTime dateTime)
+        public AccountsController(IDateTime dateTime)
         {
             _dateTime = dateTime;
         }
@@ -36,7 +36,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task Register([FromBody, Required] RegisterUser request)
+        public async Task Register([FromBody, Required] Register request)
         {
             UserInfoDto user = await Mediator.SendAsync(request);
 

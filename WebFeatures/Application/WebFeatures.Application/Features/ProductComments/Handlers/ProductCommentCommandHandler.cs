@@ -38,7 +38,7 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
 
             await _db.ProductComments.CreateAsync(comment);
 
-            _events.Add(new ProductCommentCreated(comment.Id));
+            await _events.AddAsync(new ProductCommentCreated(comment.Id));
 
             return comment.Id;
         }

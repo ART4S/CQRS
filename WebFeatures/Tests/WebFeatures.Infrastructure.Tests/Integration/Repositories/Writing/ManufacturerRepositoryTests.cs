@@ -93,8 +93,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             await _repo.CreateAsync(manufacturer);
 
             int manufacturersCount = await _db.Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM public.Manufacturers
-                WHERE Id = @Id AND StreetAddress_CityId = @CityId",
+                @"SELECT COUNT(*) FROM public.manufacturers
+                WHERE id = @Id AND streetaddress_cityid = @CityId",
                 new
                 {
                     manufacturer.Id,

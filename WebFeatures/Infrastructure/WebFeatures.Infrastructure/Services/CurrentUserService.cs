@@ -9,6 +9,9 @@ namespace WebFeatures.Infrastructure.Services
 {
     internal class CurrentUserService : ICurrentUserService
     {
+        public Guid UserId { get; }
+        public IEnumerable<string> Roles { get; }
+
         public CurrentUserService(IHttpContextAccessor contexAccessor)
         {
             HttpContext context = contexAccessor.HttpContext;
@@ -21,13 +24,7 @@ namespace WebFeatures.Infrastructure.Services
                 Roles = context.User.Claims
                     .Where(x => x.Type == ClaimTypes.Role)
                     .Select(x => x.Value);
-
-                IsAuthenticated = true;
             }
         }
-
-        public bool IsAuthenticated { get; }
-        public Guid UserId { get; }
-        public IEnumerable<string> Roles { get; }
     }
 }

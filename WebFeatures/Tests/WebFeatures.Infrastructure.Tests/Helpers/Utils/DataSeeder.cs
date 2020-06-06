@@ -30,6 +30,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
             catch
             {
                 transaction.Rollback();
+                throw;
             }
         }
 

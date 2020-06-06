@@ -5,7 +5,7 @@ namespace WebFeatures.Application.Infrastructure.Events
 {
     public interface IEventStorage
     {
-        void Add(IEvent eve);
+        Task AddAsync(IEvent eve);
         Task PublishAllAsync(CancellationToken cancellationToken);
     }
 }

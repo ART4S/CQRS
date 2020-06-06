@@ -15,49 +15,35 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Fixtures
 
         private void Init()
         {
-            CreateDatabase();
-            CreateSchema();
-            SeedTestData();
-        }
+            Connection.Execute(
+                SqlBuilder.CloseExistingConnections(_databaseName));
 
-        private void CreateDatabase()
-        {
-            SqlQuery sql;
+            Connection.Execute(
+                SqlBuilder.DropDatabase(_databaseName));
 
-            sql = SqlBuilder.CloseExistingConnections(_databaseName);
-            Connection.Execute(sql);
-
-            sql = SqlBuilder.DropDatabase(_databaseName);
-            Connection.Execute(sql);
-
-            sql = SqlBuilder.CreateDatabase(_databaseName);
-            Connection.Execute(sql);
+            Connection.Execute(
+                SqlBuilder.CreateDatabase(_databaseName));
 
             Connection.ChangeDatabase(_databaseName);
-        }
 
-        private void CreateSchema()
-        {
-            SqlQuery sql = SqlBuilder.CreateSchema();
-            Connection.Execute(sql);
-        }
+            Connection.Execute(
+                SqlBuilder.CreateSchema());
 
-        private void SeedTestData()
-        {
             DataSeeder.SeedTestData(Connection);
+
+            Connection.Execute(
+                SqlBuilder.RefreshAllViews());
         }
 
         public override void Dispose()
         {
             Connection.ChangeDatabase("postgres");
 
-            SqlQuery sql;
+            Connection.Execute(
+                SqlBuilder.CloseExistingConnections(_databaseName));
 
-            sql = SqlBuilder.CloseExistingConnections(_databaseName);
-            Connection.Execute(sql);
-
-            sql = SqlBuilder.DropDatabase(_databaseName);
-            Connection.Execute(sql);
+            Connection.Execute(
+                SqlBuilder.DropDatabase(_databaseName));
 
             base.Dispose();
         }

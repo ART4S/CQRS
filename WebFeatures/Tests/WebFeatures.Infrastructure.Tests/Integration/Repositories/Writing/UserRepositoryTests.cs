@@ -83,7 +83,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             await _repo.CreateAsync(user);
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM Users WHERE Id = @Id",
+                "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
             // Assert
@@ -103,7 +103,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
                 PasswordHash = "test"
             };
 
-            string sql = $"SELECT * FROM Users WHERE Id = @Id";
+            string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
             User beforeUpdate = await _db.Connection.QuerySingleAsync<User>(sql, user);
@@ -128,7 +128,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             await _repo.DeleteAsync(user);
 
             int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM Users WHERE Id = @Id",
+                "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
             // Assert

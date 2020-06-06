@@ -3,11 +3,11 @@ using System;
 
 namespace WebFeatures.Infrastructure.Logging
 {
-    internal class LoggerFacade<T> : Application.Interfaces.Logging.ILogger<T>
+    internal class LoggerAdapter<T> : Application.Interfaces.Logging.ILogger<T>
     {
         private readonly ILogger<T> _innerLogger;
 
-        public LoggerFacade(ILoggerFactory loggerFactory)
+        public LoggerAdapter(ILoggerFactory loggerFactory)
         {
             _innerLogger = loggerFactory.CreateLogger<T>();
         }

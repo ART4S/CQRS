@@ -2,7 +2,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Features.ProductReviews.Events;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
+using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Services;
@@ -13,17 +15,20 @@ namespace WebFeatures.Application.Features.ProductReviews.Handlers
     internal class ProductReviewCommandHandler : IRequestHandler<CreateProductReview, Guid>
     {
         private readonly IWriteDbContext _db;
-        private readonly IMapper _mapper;
+        private readonly IEventStorage _events;
         private readonly ICurrentUserService _currentUser;
+        private readonly IMapper _mapper;
 
         public ProductReviewCommandHandler(
             IWriteDbContext db,
-            IMapper mapper,
-            ICurrentUserService currentUser)
+            IEventStorage events,
+            ICurrentUserService currentUser,
+            IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
             _currentUser = currentUser;
+            _events = events;
         }
 
         public async Task<Guid> HandleAsync(CreateProductReview request, CancellationToken cancellationToken)
@@ -32,6 +37,8 @@ namespace WebFeatures.Application.Features.ProductReviews.Handlers
             review.AuthorId = _currentUser.UserId;
 
             await _db.ProductReviews.CreateAsync(review);
+
+            await _events.AddAsync(new ProductReviewCreated(review.Id));
 
             return review.Id;
         }

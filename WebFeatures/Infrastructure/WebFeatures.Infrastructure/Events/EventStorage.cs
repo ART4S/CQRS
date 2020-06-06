@@ -22,9 +22,11 @@ namespace WebFeatures.Infrastructure.Events
             _services = services;
         }
 
-        public void Add(IEvent eve)
+        public Task AddAsync(IEvent eve)
         {
             _events.Add(eve);
+
+            return Task.CompletedTask;
         }
 
         public async Task PublishAllAsync(CancellationToken cancellationToken)

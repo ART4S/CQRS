@@ -33,7 +33,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             await _db.Products.CreateAsync(product);
 
-            _events.Add(new ProductCreated(product.Id));
+            _events.AddAsync(new ProductCreated(product.Id));
 
             return product.Id;
         }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace WebFeatures.DatabaseInitializer.Core
@@ -7,29 +8,33 @@ namespace WebFeatures.DatabaseInitializer.Core
     {
         public static string CreateDatabase(string databaseName)
         {
-            string closeExistingConnections =
-                "SELECT pg_terminate_backend(pid)\n" +
-                "FROM pg_stat_activity\n" +
-                $"WHERE datname = '{databaseName}' AND pid <> pg_backend_pid();\n";
+            var sb = new StringBuilder();
 
-            string dropDatabase =
-                $"DROP DATABASE IF EXISTS {databaseName};\n";
+            sb.AppendLine(
+                @$"SELECT pg_terminate_backend(pid) 
+                FROM pg_stat_activity 
+                WHERE datname = '{databaseName}' AND pid <> pg_backend_pid();");
 
-            string createDatabase =
-                $"CREATE DATABASE {databaseName};\n";
+            sb.AppendLine($"DROP DATABASE IF EXISTS {databaseName};");
 
-            return closeExistingConnections + dropDatabase + createDatabase;
+            sb.AppendLine($"CREATE DATABASE {databaseName};");
+
+            return sb.ToString();
         }
 
         public static string CreateDbSchema()
         {
-            string createTables =
-                $"{File.ReadAllText("Core/Scripts/Schema/Tables.sql")};\n";
+            var sb = new StringBuilder();
 
-            string createFunctions =
-                $"{File.ReadAllText("Core/Scripts/Schema/Functions.sql")};\n";
+            var scripts = Directory.GetFiles("Core/Scripts/Schema", "*.sql")
+                .Select(x => File.ReadAllText(x));
 
-            return createTables + createFunctions;
+            foreach (string script in scripts)
+            {
+                sb.AppendLine(script);
+            }
+
+            return sb.ToString();
         }
 
         public static string SeedInitialData()
@@ -37,12 +42,13 @@ namespace WebFeatures.DatabaseInitializer.Core
             return File.ReadAllText("Core/Scripts/InitialData.sql");
         }
 
-        public static string RefreshMaterializedViews()
+        public static string RefreshViews()
         {
             string[] views =
             {
                 "get_products_list",
-                "get_product_comments"
+                "get_product_comments",
+                "get_product_reviews"
             };
 
             var sb = new StringBuilder();

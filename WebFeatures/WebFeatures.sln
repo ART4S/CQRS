@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schema", "Schema", "{2114CA
 	ProjectSection(SolutionItems) = preProject
 		Scripts\Schema\Functions.sql = Scripts\Schema\Functions.sql
 		Scripts\Schema\Tables.sql = Scripts\Schema\Tables.sql
+		Scripts\Schema\Views.sql = Scripts\Schema\Views.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1292254E-A1F2-48B7-8521-819951597C7D}"

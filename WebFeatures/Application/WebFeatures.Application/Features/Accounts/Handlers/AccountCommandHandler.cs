@@ -3,17 +3,17 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.Application.Features.Auth.Dto;
-using WebFeatures.Application.Features.Auth.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Dto;
+using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Application.Features.Auth.Handlers
+namespace WebFeatures.Application.Features.Accounts.Handlers
 {
-    internal class AuthCommandHandler :
-        IRequestHandler<RegisterUser, UserInfoDto>,
+    internal class AccountCommandHandler :
+        IRequestHandler<Register, UserInfoDto>,
         IRequestHandler<Login, UserInfoDto>
     {
         private readonly IWriteDbContext _db;
@@ -21,7 +21,7 @@ namespace WebFeatures.Application.Features.Auth.Handlers
         private readonly ILoggerFactory _loggerFactory;
         private readonly IMapper _mapper;
 
-        public AuthCommandHandler(
+        public AccountCommandHandler(
             IWriteDbContext db,
             IPasswordHasher passwordHasher,
             ILoggerFactory loggerFactory,
@@ -33,7 +33,7 @@ namespace WebFeatures.Application.Features.Auth.Handlers
             _mapper = mapper;
         }
 
-        public async Task<UserInfoDto> HandleAsync(RegisterUser request, CancellationToken cancellationToken)
+        public async Task<UserInfoDto> HandleAsync(Register request, CancellationToken cancellationToken)
         {
             var user = new User()
             {
@@ -44,7 +44,7 @@ namespace WebFeatures.Application.Features.Auth.Handlers
 
             await _db.Users.CreateAsync(user);
 
-            _loggerFactory.CreateLogger<RegisterUser>()
+            _loggerFactory.CreateLogger<Register>()
                 .LogInformation($"User {user.Name} registered with id: {user.Id}");
 
             return _mapper.Map<UserInfoDto>(user);
@@ -52,7 +52,7 @@ namespace WebFeatures.Application.Features.Auth.Handlers
 
         public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
         {
-            const string errorMessage = "Wrong login or password";
+            const string errorMessage = "Неверный логин или пароль";
 
             User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException(errorMessage);
 
