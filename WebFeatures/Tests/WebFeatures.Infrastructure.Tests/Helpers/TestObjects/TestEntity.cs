@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Tests.Helpers.TestObjects
 {
-    internal class TestEntity : IdentityEntity
+    internal class TestEntity : Entity
     {
         public int IntField;
         public int IntProperty { get; set; }

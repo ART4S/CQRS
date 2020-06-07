@@ -9,6 +9,7 @@ using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Extensions;
 using WebFeatures.WebApi.Middlewares;
+using WebFeatures.WebApi.ModelBinding;
 
 namespace WebFeatures.WebApi
 {
@@ -28,7 +29,10 @@ namespace WebFeatures.WebApi
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
 
-            services.AddControllers()
+            services.AddControllers(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new FileModelBinderProvider());
+                })
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>

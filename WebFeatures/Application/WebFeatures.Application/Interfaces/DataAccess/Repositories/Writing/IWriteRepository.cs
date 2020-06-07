@@ -5,7 +5,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories
 {
-    public interface IWriteRepository<TEntity> where TEntity : IdentityEntity
+    public interface IWriteRepository<TEntity> where TEntity : Entity
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetAsync(Guid id);

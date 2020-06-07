@@ -3,8 +3,10 @@ $tables$ BEGIN
 
 CREATE TABLE files
 (
-	Id UUID NOT NULL,
-	Content bytea,
+	id UUID NOT NULL,
+	name VARCHAR NOT NULL,
+	contenttype VARCHAR NOT NULL,
+	content bytea NOT NULL,
 	
 	CONSTRAINT pk_files PRIMARY KEY (id)
 );
@@ -12,20 +14,16 @@ CREATE TABLE files
 CREATE TABLE users
 (
 	id UUID NOT NULL,
-	name VARCHAR,
-	email VARCHAR,
-	passwordhash VARCHAR,
+	name VARCHAR NOT NULL,
+	email VARCHAR NOT NULL,
+	passwordhash VARCHAR NOT NULL,
 	pictureid uuid,
 	
 	CONSTRAINT pk_users PRIMARY KEY (id),
 	CONSTRAINT fk_users_files_pictureid FOREIGN KEY (pictureid) REFERENCES files (id)
 );
 
-CREATE INDEX idx_users_email ON users 
-USING btree
-(
-	email
-);
+CREATE INDEX idx_users_email ON users (email);
 
 CREATE TABLE roles
 (
@@ -38,26 +36,22 @@ CREATE TABLE roles
 
 CREATE TABLE userroles
 (
+	id UUID NOT NULL,
 	userid UUID NOT NULL,
 	roleid UUID NOT NULL,
 	
-	CONSTRAINT pk_userroles PRIMARY KEY (userid, roleid),
+	CONSTRAINT pk_userroles PRIMARY KEY (id),
 	CONSTRAINT fk_userroles_users_userid FOREIGN KEY (userid) REFERENCES users (id) ON DELETE CASCADE,
 	CONSTRAINT fk_userroles_roles_roleid FOREIGN KEY (roleid) REFERENCES roles (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_userroles_userid_roleid ON userroles
-USING btree
-(
-	userid,
-	roleid
-);
+CREATE INDEX idx_userroles_userid ON userroles (userid);
 
 CREATE TABLE countries
 (
 	id UUID NOT NULL,
-	name VARCHAR,
-	continent VARCHAR,
+	name VARCHAR NOT NULL,
+	continent VARCHAR NOT NULL,
 	
 	CONSTRAINT pk_countries PRIMARY KEY (id)
 );
@@ -65,23 +59,19 @@ CREATE TABLE countries
 CREATE TABLE cities
 (
 	id UUID NOT NULL,
-	name VARCHAR,
+	name VARCHAR NOT NULL,
 	countryid UUID NOT NULL,
 	
 	CONSTRAINT pk_cities PRIMARY KEY (id),
 	CONSTRAINT fk_cities_countries_countryid FOREIGN KEY (countryid) REFERENCES countries (id)
 );
 
-CREATE INDEX idx_cities_countryid ON cities
-USING btree
-(
-	countryid
-);
+CREATE INDEX idx_cities_countryid ON cities (countryid);
 
 CREATE TABLE manufacturers
 (
 	id UUID NOT NULL,
-	organizationname VARCHAR,
+	organizationname VARCHAR NOT NULL,
 	homepageurl VARCHAR,
 	streetaddress_streetname VARCHAR NOT NULL,
 	streetaddress_postalcode VARCHAR NOT NULL,
@@ -91,16 +81,12 @@ CREATE TABLE manufacturers
 	CONSTRAINT fk_manufacturers_cities_streetaddress_cityid FOREIGN KEY (streetaddress_cityid) REFERENCES cities (id)
 );
 
-CREATE INDEX idx_manufacturers_streetaddress_cityid ON manufacturers
-USING btree
-(
-	streetaddress_cityid
-);
+CREATE INDEX idx_manufacturers_streetaddress_cityid ON manufacturers (streetaddress_cityid);
 
 CREATE TABLE categories
 (
 	id UUID NOT NULL,
-	name VARCHAR,
+	name VARCHAR NOT NULL,
 	
 	CONSTRAINT pk_categories PRIMARY KEY (id)
 );
@@ -108,7 +94,7 @@ CREATE TABLE categories
 CREATE TABLE brands
 (
 	id UUID NOT NULL,
-	name VARCHAR,
+	name VARCHAR NOT NULL,
 	
 	CONSTRAINT pk_brands PRIMARY KEY (id)
 );
@@ -116,39 +102,23 @@ CREATE TABLE brands
 CREATE TABLE products
 (
 	id UUID NOT NULL,
-	name VARCHAR,
+	name VARCHAR NOT NULL,
 	price DECIMAL,
 	description VARCHAR,
 	createdate TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-	pictureid UUID,
 	manufacturerid UUID NOT NULL,
 	categoryid UUID,
 	brandid UUID NOT NULL,
 	
 	CONSTRAINT pk_products PRIMARY KEY (id),
-	CONSTRAINT fk_products_files_pictureid FOREIGN KEY (pictureid) REFERENCES files (id) ON DELETE SET NULL,
 	CONSTRAINT FK_products_manufacturers_manufacturerid FOREIGN KEY (manufacturerid) REFERENCES manufacturers (id),
 	CONSTRAINT FK_products_categories_categoryid FOREIGN KEY (categoryid) REFERENCES categories (id) ON DELETE SET NULL,
 	CONSTRAINT FK_products_brands_brandid FOREIGN KEY (brandid) REFERENCES brands (id)
 );
 
-CREATE INDEX idx_products_manufacturerid ON products
-USING btree
-(
-	manufacturerid
-);
-
-CREATE INDEX idx_products_categoryid ON products
-USING btree
-(
-	categoryid
-);
-
-CREATE INDEX idx_products_brandid ON products
-USING btree
-(
-	brandid
-);
+CREATE INDEX idx_products_manufacturerid ON products (manufacturerid);
+CREATE INDEX idx_products_categoryid ON products (categoryid);
+CREATE INDEX idx_products_brandid ON products (brandid);
 
 CREATE TABLE productcomments
 (
@@ -165,11 +135,7 @@ CREATE TABLE productcomments
 	CONSTRAINT fk_productcomments_productcomments_parentcommentid FOREIGN KEY (parentcommentid) REFERENCES productcomments (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_productcomments_productid ON productcomments
-USING btree
-(
-	productid
-);
+CREATE INDEX idx_productcomments_productid ON productcomments (productid);
 
 CREATE TABLE productreviews
 (
@@ -187,11 +153,20 @@ CREATE TABLE productreviews
 	CONSTRAINT productreviews_rating_check CHECK (rating BETWEEN 1 AND 5)
 );
 
-CREATE INDEX idx_productreviews_productid ON productreviews
-USING btree
+CREATE INDEX idx_productreviews_productid ON productreviews (productid);
+
+CREATE TABLE productfiles
 (
-	productid
+	id UUID NOT NULL,
+	productid UUID NOT NULL,
+	fileid UUID NOT NULL,
+	
+	CONSTRAINT pk_productfiles PRIMARY KEY (id),
+	CONSTRAINT fk_productfiles_products_productid FOREIGN KEY (productid) REFERENCES products (id) ON DELETE CASCADE,
+	CONSTRAINT fk_productfiles_files_fileid FOREIGN KEY (fileid) REFERENCES files (id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_productfiles_productid ON productfiles (productid);
 
 CREATE TABLE shippers
 (
@@ -206,10 +181,6 @@ CREATE TABLE shippers
 	CONSTRAINT pk_shippers_cities_headoffice_cityid FOREIGN KEY (headoffice_cityid) REFERENCES cities (id)
 );
 
-CREATE INDEX idx_shippers_headoffice_cityid ON shippers
-USING btree
-(
-	headoffice_cityid
-);
+CREATE INDEX idx_shippers_headoffice_cityid ON shippers (headoffice_cityid);
 
 END $tables$;

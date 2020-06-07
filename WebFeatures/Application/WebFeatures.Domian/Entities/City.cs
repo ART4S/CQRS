@@ -3,7 +3,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
 {
-    public class City : IdentityEntity
+    public class City : Entity
     {
         public string Name { get; set; }
 

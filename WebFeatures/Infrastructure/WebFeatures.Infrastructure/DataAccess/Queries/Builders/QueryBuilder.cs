@@ -9,7 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 
 namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
 {
-    internal interface IQueryBuilder<TEntity> where TEntity : IdentityEntity
+    internal interface IQueryBuilder<TEntity> where TEntity : Entity
     {
         SqlQuery BuildGetAll();
         SqlQuery BuildGet(Guid id);
@@ -20,7 +20,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Queries.Builders
     }
 
     internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
-        where TEntity : IdentityEntity
+        where TEntity : Entity
     {
         protected IEntityProfile Profile { get; }
 

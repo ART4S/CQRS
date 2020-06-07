@@ -12,14 +12,11 @@ using WebFeatures.Application.Interfaces.DataAccess.Reading;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
-using WebFeatures.Common;
-using WebFeatures.Infrastructure.Common;
 using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Factories;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.EventHandlers;
 using WebFeatures.Infrastructure.Events;
-using WebFeatures.Infrastructure.Events.Handlers;
 using WebFeatures.Infrastructure.Logging;
 using WebFeatures.Infrastructure.Requests;
 using WebFeatures.Infrastructure.Security;
@@ -32,18 +29,12 @@ namespace WebFeatures.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            AddCommon(services);
             AddLogging(services);
             AddDataAccess(services, configuration);
             AddSecurity(services);
             AddEvents(services);
             AddRequests(services);
             AddOtherServices(services);
-        }
-
-        private static void AddCommon(IServiceCollection services)
-        {
-            services.AddScoped<IDateTime, MachineDateTime>();
         }
 
         private static void AddLogging(IServiceCollection services)
@@ -78,9 +69,10 @@ namespace WebFeatures.Infrastructure
         {
             services.AddScoped<IEventStorage, EventStorage>();
 
-            services.AddScoped<IEventHandler<ProductCreated>, ProductCreatedEventHandler>();
-            services.AddScoped<IEventHandler<ProductCommentCreated>, ProductCommentCreatedEventHandler>();
-            services.AddScoped<IEventHandler<ProductReviewCreated>, ProductReviewCreatedEventHandler>();
+            // TODO: scan handlers
+            services.AddScoped<IEventHandler<ProductCreated>, ProductChangedEventHandler>();
+            services.AddScoped<IEventHandler<ProductCommentCreated>, ProductChangedEventHandler>();
+            services.AddScoped<IEventHandler<ProductReviewCreated>, ProductChangedEventHandler>();
         }
 
         private static void AddRequests(IServiceCollection services)

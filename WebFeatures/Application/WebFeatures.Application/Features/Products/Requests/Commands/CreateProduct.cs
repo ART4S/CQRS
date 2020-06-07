@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using System;
+using WebFeatures.Application.Infrastructure.Files;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess;
@@ -43,9 +44,15 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         /// </summary>
         public Guid BrandId { get; set; }
 
+        /// <summary>
+        /// Изображения
+        /// </summary>
+        public IFile[] Pictures { get; set; }
+
         public void ApplyMappings(Profile profile)
         {
-            profile.CreateMap<CreateProduct, Product>(MemberList.Source);
+            profile.CreateMap<CreateProduct, Product>(MemberList.Source)
+                .ForSourceMember(src => src.Pictures, opt => opt.DoNotValidate());
         }
 
         public class Validator : AbstractValidator<CreateProduct>
@@ -70,6 +77,11 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
 
                 RuleFor(p => p.BrandId)
                     .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
+
+                RuleFor(p => p.Pictures)
+                    .Cascade(CascadeMode.StopOnFirstFailure)
+                    .NotNull()
+                    .Must(p => p.Length != 0);
             }
         }
     }

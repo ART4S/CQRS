@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebFeatures.Common
+namespace WebFeatures.Common.SystemTime
 {
     public interface IDateTime
     {

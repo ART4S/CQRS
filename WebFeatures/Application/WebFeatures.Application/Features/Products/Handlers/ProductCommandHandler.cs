@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Events;
 using WebFeatures.Application.Features.Products.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Events;
+using WebFeatures.Application.Infrastructure.Files;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces.DataAccess;
@@ -33,7 +34,25 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             await _db.Products.CreateAsync(product);
 
-            _events.AddAsync(new ProductCreated(product.Id));
+            foreach (IFile picture in request.Pictures)
+            {
+                var pictureFile = new File()
+                {
+                    Name = picture.Name,
+                    ContentType = picture.ContentType,
+                    Content = await picture.ReadBytesAsync()
+                };
+
+                await _db.Files.CreateAsync(pictureFile);
+
+                await _db.ProductFiles.CreateAsync(new ProductFile()
+                {
+                    ProductId = product.Id,
+                    FileId = pictureFile.Id
+                });
+            }
+
+            await _events.AddAsync(new ProductCreated(product.Id));
 
             return product.Id;
         }
@@ -45,6 +64,8 @@ namespace WebFeatures.Application.Features.Products.Handlers
             _mapper.Map(request, product);
 
             await _db.Products.UpdateAsync(product);
+
+            await _events.AddAsync(new ProductUpdated(product.Id));
 
             return Empty.Value;
         }

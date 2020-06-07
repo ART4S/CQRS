@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Common.SystemTime;
 using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Queries.Common;
@@ -11,13 +12,15 @@ using WebFeatures.Infrastructure.DataAccess.Queries.Common;
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
     internal class WriteRepository<TEntity, TQueryBuilder> : IWriteRepository<TEntity>
-        where TEntity : IdentityEntity
+        where TEntity : Entity
         where TQueryBuilder : IQueryBuilder<TEntity>
     {
         protected IDbConnection Connection { get; }
         protected TQueryBuilder QueryBuilder { get; }
 
-        public WriteRepository(IDbConnection connection, TQueryBuilder queryBuilder)
+        public WriteRepository(
+            IDbConnection connection,
+            TQueryBuilder queryBuilder)
         {
             Connection = connection;
             QueryBuilder = queryBuilder;
@@ -42,6 +45,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
             if (entity.Id == default)
             {
                 entity.Id = Guid.NewGuid();
+            }
+
+            if (entity is IHasCreateDate cd)
+            {
+                cd.CreateDate = DateTimeProvider.DateTime.Now;
             }
 
             SqlQuery sql = QueryBuilder.BuildCreate(entity);

@@ -92,16 +92,19 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Data
         {
             new UserRole()
             {
+                Id = new Guid("a34a0fc6-17b3-4d04-83d2-e48c8ffefdf2"),
                 UserId = new Guid("7f46fdda-8ab7-48eb-b713-2970b5038485"),
                 RoleId = new Guid("21ab9b3d-e971-45ca-8f3e-5a68abb82a6c")
             },
             new UserRole()
             {
+                Id = new Guid("df6c8e5c-bb46-4899-94af-f48945def2cd"),
                 UserId = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03"),
                 RoleId = new Guid("481bd67e-4177-457d-aaa5-f002b0cd8a6f")
             },
             new UserRole()
             {
+                Id = new Guid("8de6eef5-ad9a-43bb-8ee0-efecf1e0e68a"),
                 UserId = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03"),
                 RoleId = new Guid("5c198568-5e41-46aa-9a4b-1565c66100e7")
             },

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Features.Accounts.Dto;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Common;
+using WebFeatures.Common.SystemTime;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -21,13 +21,6 @@ namespace WebFeatures.WebApi.Controllers
     /// </summary>
     public class AccountsController : BaseController
     {
-        private readonly IDateTime _dateTime;
-
-        public AccountsController(IDateTime dateTime)
-        {
-            _dateTime = dateTime;
-        }
-
         /// <summary>
         /// Зарегистрировать нового пользователя
         /// </summary>
@@ -73,7 +66,7 @@ namespace WebFeatures.WebApi.Controllers
             var authProperties = new AuthenticationProperties()
             {
                 IsPersistent = true,
-                ExpiresUtc = _dateTime.Now.AddMinutes(20)
+                ExpiresUtc = DateTimeProvider.DateTime.Now.AddMinutes(20)
             };
 
             return HttpContext.SignInAsync(principal, authProperties);

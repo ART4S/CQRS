@@ -8,6 +8,11 @@ namespace WebFeatures.DatabaseInitializer.Core
     {
         public static string CreateDatabase(string databaseName)
         {
+            return $"CREATE DATABASE {databaseName};";
+        }
+
+        public static string DropDatabase(string databaseName)
+        {
             var sb = new StringBuilder();
 
             sb.AppendLine(
@@ -16,8 +21,6 @@ namespace WebFeatures.DatabaseInitializer.Core
                 WHERE datname = '{databaseName}' AND pid <> pg_backend_pid();");
 
             sb.AppendLine($"DROP DATABASE IF EXISTS {databaseName};");
-
-            sb.AppendLine($"CREATE DATABASE {databaseName};");
 
             return sb.ToString();
         }

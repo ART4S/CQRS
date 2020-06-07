@@ -1,9 +1,9 @@
 ﻿using System;
 using WebFeatures.Common;
 
-namespace WebFeatures.Infrastructure.Common
+namespace WebFeatures.Common.SystemTime
 {
-    internal class MachineDateTime : IDateTime
+    internal class DefaultDateTime : IDateTime
     {
         public DateTime Now => DateTime.Now;
     }

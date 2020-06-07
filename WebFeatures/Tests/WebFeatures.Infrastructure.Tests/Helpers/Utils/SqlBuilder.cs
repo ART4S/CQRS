@@ -84,8 +84,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         {
             string query =
                 @$"INSERT INTO public.userroles 
-                (userid, roleid) 
-                VALUES (@UserId, @RoleId)";
+                (id, userid, roleid) 
+                VALUES (@Id, @UserId, @RoleId)";
 
             return new SqlQuery(query, userRole);
         }

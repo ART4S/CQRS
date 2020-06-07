@@ -18,6 +18,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IWriteRepository<Role> Roles => _roles ??= CreateRepository<Role>();
         private IWriteRepository<Role> _roles;
 
+        public IWriteRepository<UserRole> UserRoles => _userRoles ??= CreateRepository<UserRole>();
+        private IWriteRepository<UserRole> _userRoles;
+
         public IWriteRepository<Product> Products => _products ??= CreateRepository<Product>();
         private IWriteRepository<Product> _products;
 
@@ -26,6 +29,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         public IWriteRepository<ProductComment> ProductComments => _productComments ??= CreateRepository<ProductComment>();
         private IWriteRepository<ProductComment> _productComments;
+
+        public IWriteRepository<ProductFile> ProductFiles => _productFiles ??= CreateRepository<ProductFile>();
+        private IWriteRepository<ProductFile> _productFiles;
 
         public IWriteRepository<Manufacturer> Manufacturers => _manufacturers ??= CreateRepository<Manufacturer>();
         private IWriteRepository<Manufacturer> _manufacturers;
@@ -57,7 +63,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
             _entityProfile = entityProfile;
         }
 
-        private IWriteRepository<TEntity> CreateRepository<TEntity>() where TEntity : IdentityEntity
+        private IWriteRepository<TEntity> CreateRepository<TEntity>() where TEntity : Entity
         {
             return new WriteRepository<TEntity, QueryBuilder<TEntity>>(
                 Connection,

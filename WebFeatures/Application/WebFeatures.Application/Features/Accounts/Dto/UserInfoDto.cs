@@ -5,9 +5,19 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Accounts.Dto
 {
+    /// <summary>
+    /// Информация о пользователе
+    /// </summary>
     public class UserInfoDto : IHasMappings
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Роли
+        /// </summary>
         public string[] Roles { get; set; }
 
         public void ApplyMappings(Profile profile)

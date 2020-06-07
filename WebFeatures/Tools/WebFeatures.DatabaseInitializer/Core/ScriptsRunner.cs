@@ -22,29 +22,47 @@ namespace WebFeatures.DatabaseInitializer.Core
 
             connection.Open();
 
-            string database = "webfeatures_db";
+            string defaultDb = connection.Database;
+
+            const string appDb = "webfeatures_db";
 
             _logger.LogInformation("Creating database");
 
-            connection.Execute(
-                SqlBuilder.CreateDatabase(database));
+            connection.Execute(SqlBuilder.DropDatabase(appDb));
 
-            connection.ChangeDatabase(database);
+            connection.Execute(SqlBuilder.CreateDatabase(appDb));
 
-            _logger.LogInformation("Creating schema");
+            connection.ChangeDatabase(appDb);
 
-            connection.Execute(
-                SqlBuilder.CreateDbSchema());
+            IDbTransaction transaction = connection.BeginTransaction();
 
-            _logger.LogInformation("Seeding initial data");
+            try
+            {
+                _logger.LogInformation("Creating schema");
 
-            connection.Execute(
-                SqlBuilder.SeedInitialData());
+                connection.Execute(SqlBuilder.CreateDbSchema());
 
-            _logger.LogInformation("Updating materialized views");
+                _logger.LogInformation("Seeding initial data");
 
-            connection.Execute(
-                SqlBuilder.RefreshViews());
+                connection.Execute(SqlBuilder.SeedInitialData());
+
+                _logger.LogInformation("Updating materialized views");
+
+                connection.Execute(SqlBuilder.RefreshViews());
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+                transaction.Dispose();
+
+                connection.ChangeDatabase(defaultDb);
+
+                connection.Execute(SqlBuilder.DropDatabase(appDb));
+
+                throw;
+            }
         }
     }
 }

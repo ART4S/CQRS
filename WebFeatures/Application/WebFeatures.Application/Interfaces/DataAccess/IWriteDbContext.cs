@@ -8,7 +8,10 @@ namespace WebFeatures.Application.Interfaces.DataAccess
     {
         IUserWriteRepository Users { get; }
         IWriteRepository<Role> Roles { get; }
+        IWriteRepository<UserRole> UserRoles { get; }
+        IWriteRepository<File> Files { get; }
         IWriteRepository<Product> Products { get; }
+        IWriteRepository<ProductFile> ProductFiles { get; }
         IWriteRepository<ProductReview> ProductReviews { get; }
         IWriteRepository<ProductComment> ProductComments { get; }
         IWriteRepository<Manufacturer> Manufacturers { get; }
@@ -17,6 +20,5 @@ namespace WebFeatures.Application.Interfaces.DataAccess
         IWriteRepository<Shipper> Shippers { get; }
         IWriteRepository<City> Cities { get; }
         IWriteRepository<Country> Countries { get; }
-        IWriteRepository<File> Files { get; }
     }
 }
