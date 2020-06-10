@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Interfaces.Logging;
+using WebFeatures.WebApi.Exceptions;
 
 namespace WebFeatures.WebApi.Middlewares
 {
@@ -30,10 +31,8 @@ namespace WebFeatures.WebApi.Middlewares
             }
         }
 
-        private Task HandleExceptionAsync(Exception exception, HttpContext context)
+        private async Task HandleExceptionAsync(Exception exception, HttpContext context)
         {
-            string responseBody;
-
             switch (exception)
             {
                 case ValidationException validation:
@@ -41,9 +40,18 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                        responseBody = JsonConvert.SerializeObject(validation.Error);
+                        var body = JsonConvert.SerializeObject(validation.Error);
 
-                        break;
+                        await context.Response.WriteAsync(body);
+
+                        return;
+                    }
+
+                case AccessDeniedException _:
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                        return;
                     }
 
                 default:
@@ -51,16 +59,14 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
 
-                        responseBody = "Something went wrong";
-
                         var logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlingMiddleware>>();
                         logger.LogError(exception.Message, exception);
 
-                        break;
+                        await context.Response.WriteAsync("Something went wrong");
+
+                        return;
                     }
             }
-
-            return context.Response.WriteAsync(responseBody);
         }
     }
 }

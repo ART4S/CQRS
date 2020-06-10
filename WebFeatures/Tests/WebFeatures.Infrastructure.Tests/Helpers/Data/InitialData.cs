@@ -1,5 +1,7 @@
 ﻿using System;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Domian.ValueObjects;
 

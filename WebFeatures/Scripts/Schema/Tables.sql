@@ -6,6 +6,7 @@ CREATE TABLE files
 	id UUID NOT NULL,
 	name VARCHAR NOT NULL,
 	contenttype VARCHAR NOT NULL,
+	checksum VARCHAR NOT NULL,
 	content bytea NOT NULL,
 	
 	CONSTRAINT pk_files PRIMARY KEY (id)
@@ -17,7 +18,7 @@ CREATE TABLE users
 	name VARCHAR NOT NULL,
 	email VARCHAR NOT NULL,
 	passwordhash VARCHAR NOT NULL,
-	pictureid uuid,
+	pictureid UUID,
 	
 	CONSTRAINT pk_users PRIMARY KEY (id),
 	CONSTRAINT fk_users_files_pictureid FOREIGN KEY (pictureid) REFERENCES files (id)
@@ -46,6 +47,18 @@ CREATE TABLE userroles
 );
 
 CREATE INDEX idx_userroles_userid ON userroles (userid);
+
+CREATE TABLE rolepermissions
+(
+	id UUID NOT NULL,
+	roleid UUID NOT NULL,
+	permission INT NOT NULL,
+
+	CONSTRAINT pk_rolepermissions PRIMARY KEY (id),
+	CONSTRAINT fk_rolepermissions_roles_roleid FOREIGN KEY (roleid) REFERENCES roles (id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_rolepermissions_roleid ON rolepermissions (roleid);
 
 CREATE TABLE countries
 (
@@ -106,11 +119,13 @@ CREATE TABLE products
 	price DECIMAL,
 	description VARCHAR,
 	createdate TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+	mainpictureid UUID,
 	manufacturerid UUID NOT NULL,
 	categoryid UUID,
 	brandid UUID NOT NULL,
 	
 	CONSTRAINT pk_products PRIMARY KEY (id),
+	CONSTRAINT FK_products_files_mainpictureid FOREIGN KEY (mainpictureid) REFERENCES files (id),
 	CONSTRAINT FK_products_manufacturers_manufacturerid FOREIGN KEY (manufacturerid) REFERENCES manufacturers (id),
 	CONSTRAINT FK_products_categories_categoryid FOREIGN KEY (categoryid) REFERENCES categories (id) ON DELETE SET NULL,
 	CONSTRAINT FK_products_brands_brandid FOREIGN KEY (brandid) REFERENCES brands (id)
@@ -149,24 +164,23 @@ CREATE TABLE productreviews
 	
 	CONSTRAINT pk_productreviews PRIMARY KEY (id),
 	CONSTRAINT fk_productreviews_users_authorid FOREIGN KEY (authorid) REFERENCES users (id) ON DELETE CASCADE,
-	CONSTRAINT fk_productreviews_products_productid FOREIGN KEY (productid) REFERENCES products (id) ON DELETE CASCADE,
-	CONSTRAINT productreviews_rating_check CHECK (rating BETWEEN 1 AND 5)
+	CONSTRAINT fk_productreviews_products_productid FOREIGN KEY (productid) REFERENCES products (id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_productreviews_productid ON productreviews (productid);
 
-CREATE TABLE productfiles
+CREATE TABLE productpictures
 (
 	id UUID NOT NULL,
 	productid UUID NOT NULL,
 	fileid UUID NOT NULL,
 	
-	CONSTRAINT pk_productfiles PRIMARY KEY (id),
-	CONSTRAINT fk_productfiles_products_productid FOREIGN KEY (productid) REFERENCES products (id) ON DELETE CASCADE,
-	CONSTRAINT fk_productfiles_files_fileid FOREIGN KEY (fileid) REFERENCES files (id) ON DELETE CASCADE
+	CONSTRAINT pk_productpictures PRIMARY KEY (id),
+	CONSTRAINT fk_productpictures_products_productid FOREIGN KEY (productid) REFERENCES products (id) ON DELETE CASCADE,
+	CONSTRAINT fk_productpictures_files_fileid FOREIGN KEY (fileid) REFERENCES files (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_productfiles_productid ON productfiles (productid);
+CREATE INDEX idx_productpictures_productid ON productpictures (productid);
 
 CREATE TABLE shippers
 (

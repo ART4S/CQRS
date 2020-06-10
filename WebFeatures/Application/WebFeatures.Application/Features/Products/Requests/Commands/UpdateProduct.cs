@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using System;
+using System.Linq;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Application.Interfaces.DataAccess;
-using WebFeatures.Domian.Entities;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Files;
+using WebFeatures.Domian.Entities.Products;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {
@@ -49,9 +52,21 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         /// </summary>
         public Guid BrandId { get; set; }
 
+        /// <summary>
+        /// Основное изображение
+        /// </summary>
+        public IFile MainPicture { get; set; }
+
+        /// <summary>
+        /// Изображения
+        /// </summary>
+        public IFile[] Pictures { get; set; }
+
         public void ApplyMappings(Profile profile)
         {
-            profile.CreateMap<UpdateProduct, Product>(MemberList.Source);
+            profile.CreateMap<UpdateProduct, Product>(MemberList.Source)
+                .ForMember(dest => dest.MainPicture, opt => opt.Ignore())
+                .ForSourceMember(src => src.Pictures, opt => opt.DoNotValidate());
         }
 
         public class Validator : AbstractValidator<UpdateProduct>
@@ -76,6 +91,17 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
 
                 RuleFor(p => p.BrandId)
                     .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
+
+                RuleFor(x => x.MainPicture)
+                    .Must(x => ValidationConstants.Products.AllowedPictureFormats.Contains(
+                        System.IO.Path.GetExtension(x.Name)))
+                    .WithMessage(ValidationConstants.Products.PictureFormatError)
+                    .When(x => x.MainPicture != null);
+
+                RuleFor(x => x.Pictures)
+                    .Must(x => x.All(y => ValidationConstants.Products.AllowedPictureFormats.Contains(
+                        System.IO.Path.GetExtension(y.Name))))
+                    .WithMessage(ValidationConstants.Products.PictureFormatError);
             }
         }
     }

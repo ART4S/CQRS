@@ -1,5 +1,7 @@
 ﻿using System.Data;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Infrastructure.Tests.Helpers.Data;
 
 namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
@@ -8,30 +10,18 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
     {
         public static void SeedTestData(IDbConnection connection)
         {
-            IDbTransaction transaction = connection.BeginTransaction();
-
-            try
-            {
-                SeedUsers(connection);
-                SeedRoles(connection);
-                SeedUserRoles(connection);
-                SeedCountries(connection);
-                SeedCities(connection);
-                SeedBrands(connection);
-                SeedCategories(connection);
-                SeedManufacturers(connection);
-                SeedShippers(connection);
-                SeedProducts(connection);
-                SeedProductReviews(connection);
-                SeedProductComments(connection);
-
-                transaction.Commit();
-            }
-            catch
-            {
-                transaction.Rollback();
-                throw;
-            }
+            SeedUsers(connection);
+            SeedRoles(connection);
+            SeedUserRoles(connection);
+            SeedCountries(connection);
+            SeedCities(connection);
+            SeedBrands(connection);
+            SeedCategories(connection);
+            SeedManufacturers(connection);
+            SeedShippers(connection);
+            SeedProducts(connection);
+            SeedProductReviews(connection);
+            SeedProductComments(connection);
         }
 
         private static void SeedUsers(IDbConnection connection)

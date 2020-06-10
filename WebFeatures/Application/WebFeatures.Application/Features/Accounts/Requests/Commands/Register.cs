@@ -1,10 +1,13 @@
 ﻿using FluentValidation;
-using WebFeatures.Application.Features.Accounts.Dto;
+using System;
 using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Accounts.Requests.Commands
 {
-    public class Register : ICommand<UserInfoDto>
+    /// <summary>
+    /// Зарегистрировать новго пользователя
+    /// </summary>
+    public class Register : ICommand<Guid>
     {
         /// <summary>
         /// Логин
@@ -12,7 +15,7 @@ namespace WebFeatures.Application.Features.Accounts.Requests.Commands
         public string Name { get; set; }
 
         /// <summary>
-        /// E-mail пользователя
+        /// E-mail
         /// </summary>
         public string Email { get; set; }
 

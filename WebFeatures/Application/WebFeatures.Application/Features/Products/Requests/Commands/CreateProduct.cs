@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using System;
-using WebFeatures.Application.Infrastructure.Files;
+using System.Linq;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess;
-using WebFeatures.Domian.Entities;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Files;
+using WebFeatures.Domian.Entities.Products;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {
@@ -45,6 +47,11 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         public Guid BrandId { get; set; }
 
         /// <summary>
+        /// Основное изображение
+        /// </summary>
+        public IFile MainPicture { get; set; }
+
+        /// <summary>
         /// Изображения
         /// </summary>
         public IFile[] Pictures { get; set; }
@@ -52,6 +59,7 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         public void ApplyMappings(Profile profile)
         {
             profile.CreateMap<CreateProduct, Product>(MemberList.Source)
+                .ForMember(dest => dest.MainPicture, opt => opt.Ignore())
                 .ForSourceMember(src => src.Pictures, opt => opt.DoNotValidate());
         }
 
@@ -59,29 +67,38 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         {
             public Validator(IWriteDbContext db)
             {
-                RuleFor(p => p.Name)
+                RuleFor(x => x.Name)
                     .NotEmpty();
 
-                RuleFor(p => p.Price)
+                RuleFor(x => x.Price)
                     .Must(price => price == null || price.Value >= 0);
 
-                RuleFor(p => p.Description)
+                RuleFor(x => x.Description)
                     .NotEmpty();
 
-                RuleFor(p => p.ManufacturerId)
+                RuleFor(x => x.ManufacturerId)
                     .MustAsync(async (x, t) => await db.Manufacturers.ExistsAsync(x));
 
-                RuleFor(p => p.CategoryId)
+                RuleFor(x => x.CategoryId)
                     .MustAsync(async (x, t) => await db.Categories.ExistsAsync(x.Value))
-                    .When(p => p.CategoryId.HasValue);
+                    .When(x => x.CategoryId.HasValue);
 
-                RuleFor(p => p.BrandId)
+                RuleFor(x => x.BrandId)
                     .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
 
-                RuleFor(p => p.Pictures)
+                RuleFor(x => x.MainPicture)
                     .Cascade(CascadeMode.StopOnFirstFailure)
                     .NotNull()
-                    .Must(p => p.Length != 0);
+                    .Must(x => ValidationConstants.Products.AllowedPictureFormats.Contains(
+                        System.IO.Path.GetExtension(x.Name)))
+                    .WithMessage(ValidationConstants.Products.PictureFormatError);
+
+                RuleFor(x => x.Pictures)
+                    .Cascade(CascadeMode.StopOnFirstFailure)
+                    .NotNull()
+                    .Must(x => x.All(y => ValidationConstants.Products.AllowedPictureFormats.Contains(
+                        System.IO.Path.GetExtension(y.Name))))
+                    .WithMessage(ValidationConstants.Products.PictureFormatError);
             }
         }
     }

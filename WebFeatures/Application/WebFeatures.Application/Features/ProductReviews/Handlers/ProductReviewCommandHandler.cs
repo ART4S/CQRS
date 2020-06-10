@@ -6,9 +6,9 @@ using WebFeatures.Application.Features.ProductReviews.Events;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Services;
-using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Products;
 
 namespace WebFeatures.Application.Features.ProductReviews.Handlers
 {

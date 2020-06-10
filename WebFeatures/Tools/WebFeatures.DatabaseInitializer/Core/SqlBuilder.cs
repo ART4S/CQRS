@@ -49,9 +49,7 @@ namespace WebFeatures.DatabaseInitializer.Core
         {
             string[] views =
             {
-                "get_products_list",
-                "get_product_comments",
-                "get_product_reviews"
+                "get_products_list"
             };
 
             var sb = new StringBuilder();

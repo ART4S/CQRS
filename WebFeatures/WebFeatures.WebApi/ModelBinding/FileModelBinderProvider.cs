@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Files;
+using WebFeatures.Application.Interfaces.Files;
 using WebFeatures.Common;
 
 namespace WebFeatures.WebApi.ModelBinding
@@ -80,7 +80,7 @@ namespace WebFeatures.WebApi.ModelBinding
     {
         private readonly IFormFile _file;
 
-        public string Name => _file.Name;
+        public string Name => _file.FileName;
         public string ContentType => _file.ContentType;
 
         public FileAdapter(IFormFile file)
@@ -88,11 +88,6 @@ namespace WebFeatures.WebApi.ModelBinding
             _file = file;
         }
 
-        public async Task<byte[]> ReadBytesAsync()
-        {
-            await using var ms = new MemoryStream();
-            await _file.CopyToAsync(ms);
-            return ms.ToArray();
-        }
+        public Stream OpenReadStream() => _file.OpenReadStream();
     }
 }

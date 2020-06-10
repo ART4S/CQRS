@@ -10,7 +10,7 @@ namespace WebFeatures.WebApi.Extensions
     {
         public static IHostBuilder UseLogging(this IHostBuilder hostBuilder)
         {
-            string logFilePath = GetLogFilePath();
+            string logFilePath = CreateLogFilePath();
 
             hostBuilder.UseSerilog((context, configuration) =>
             {
@@ -27,7 +27,7 @@ namespace WebFeatures.WebApi.Extensions
             return hostBuilder;
         }
 
-        private static string GetLogFilePath()
+        private static string CreateLogFilePath()
         {
             string projectDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string logsDir = Path.Combine(projectDir, "Logs");

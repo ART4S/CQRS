@@ -6,51 +6,67 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
-using WebFeatures.Infrastructure.DataAccess.Queries.Common;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
-    internal class ShipperWrtieRepository : WriteRepository<Shipper, IQueryBuilder<Shipper>>
+    internal class ShipperWrtieRepository : WriteRepository<Shipper>
     {
-        public ShipperWrtieRepository(
-            IDbConnection connection,
-            IQueryBuilder<Shipper> queryBuilder) : base(connection, queryBuilder)
+        public ShipperWrtieRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
         {
         }
 
         public override async Task<IEnumerable<Shipper>> GetAllAsync()
         {
-            SqlQuery sql = QueryBuilder.BuildGetAll();
+            string sql =
+                $@"SELECT 
+                    {Entity.Column(x => x.Id)}, 
+                    {Entity.Column(x => x.OrganizationName)}, 
+                    {Entity.Column(x => x.ContactPhone)},
+                    {Entity.Column(x => x.HeadOffice.CityId)} as {nameof(Address.CityId)}, 
+                    {Entity.Column(x => x.HeadOffice.PostalCode)} as {nameof(Address.PostalCode)}, 
+                    {Entity.Column(x => x.HeadOffice.StreetName)} as {nameof(Address.StreetName)} 
+                FROM 
+                    {Entity.Table.NameWithSchema()}";
 
             IEnumerable<Shipper> shipper =
                 await Connection.QueryAsync<Shipper, Address, Shipper>(
-                    sql.Query,
+                    sql,
                     (shipper, address) =>
                     {
                         shipper.HeadOffice = address;
                         return shipper;
                     },
-                    param: sql.Param,
-                    splitOn: sql.SplitOn);
+                    splitOn: nameof(Address.CityId));
 
             return shipper;
         }
 
         public override async Task<Shipper> GetAsync(Guid id)
         {
-            SqlQuery sql = QueryBuilder.BuildGet(id);
+            string sql =
+                $@"SELECT 
+                    {Entity.Column(x => x.Id)}, 
+                    {Entity.Column(x => x.OrganizationName)}, 
+                    {Entity.Column(x => x.ContactPhone)},
+                    {Entity.Column(x => x.HeadOffice.CityId)} as {nameof(Address.CityId)}, 
+                    {Entity.Column(x => x.HeadOffice.PostalCode)} as {nameof(Address.PostalCode)}, 
+                    {Entity.Column(x => x.HeadOffice.StreetName)} as {nameof(Address.StreetName)} 
+                FROM 
+                    {Entity.Table.NameWithSchema()} 
+                WHERE 
+                    {Entity.Column(x => x.Id)} = @id";
 
             Shipper shipper =
                 (await Connection.QueryAsync<Shipper, Address, Shipper>(
-                    sql.Query,
+                    sql,
                     (shipper, address) =>
                     {
                         shipper.HeadOffice = address;
                         return shipper;
                     },
-                    param: sql.Param,
-                    splitOn: sql.SplitOn))
+                    splitOn: nameof(Address.CityId)))
                 .FirstOrDefault();
 
             return shipper;

@@ -4,28 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
-using WebFeatures.Infrastructure.DataAccess.Queries.Common;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
-    internal class UserWriteRepository : WriteRepository<User, IUserQueryBuilder>, IUserWriteRepository
+    internal class UserWriteRepository : WriteRepository<User>, IUserWriteRepository
     {
-        public UserWriteRepository(
-            IDbConnection connection,
-            IUserQueryBuilder queryBuilder) : base(connection, queryBuilder)
+        public UserWriteRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
         {
         }
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            SqlQuery sql = QueryBuilder.BuildGetUserByEmail(email);
+            string sql = string.Format(
+                @"SELECT * FROM {0}
+                WHERE {1} = @email",
+                Entity.Table.NameWithSchema(),
+                Entity.Column(x => x.Email));
 
-            User user = (await Connection.QueryAsync<User>(sql.Query, sql.Param))
-                .Distinct()
-                .SingleOrDefault();
-
-            return user;
+            return (await Connection.QueryAsync<User>(sql, new { email })).SingleOrDefault();
         }
     }
 }

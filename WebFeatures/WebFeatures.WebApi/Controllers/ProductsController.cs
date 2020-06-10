@@ -9,6 +9,8 @@ using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Features.Products.Requests.Commands;
 using WebFeatures.Application.Features.Products.Requests.Queries;
 using WebFeatures.Application.Infrastructure.Results;
+using WebFeatures.Domian.Enums;
+using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -38,8 +40,8 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="200" cref="IEnumerable{ProductInfoDto}">Успех</response>
         [HttpGet("list")]
         [ProducesResponseType(typeof(IEnumerable<ProductListDto>), StatusCodes.Status200OK)]
-        public Task<IEnumerable<ProductListDto>> GetProductsList()
-            => Mediator.SendAsync(new GetProductsList());
+        public Task<IEnumerable<ProductListDto>> GetList()
+            => Mediator.SendAsync(new GetProductList());
 
         /// <summary>
         /// Получить обзоры на товар
@@ -69,11 +71,14 @@ namespace WebFeatures.WebApi.Controllers
         /// <returns>Идентификатор созданного товара</returns>
         /// <response code="200" cref="Guid">Успех</response>
         /// <response code="400" cref="ValidationError">Ошибка валидации</response>
+        /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
+        [AuthorizePermission(Permission.CreateProduct)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public Task<Guid> CreateProduct([FromForm, Required] CreateProduct request)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public Task<Guid> Create([FromForm, Required] CreateProduct request)
             => Mediator.SendAsync(request);
 
         /// <summary>
@@ -81,11 +86,18 @@ namespace WebFeatures.WebApi.Controllers
         /// </summary>
         /// <response code="200">Успех</response>
         /// <response code="400" cref="ValidationError">Ошибка валидации</response>
+        /// <response code="403">Доступ запрещен</response>
         [HttpPut("{id:guid}")]
         [Authorize]
+        [AuthorizePermission(Permission.UpdateProduct)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public Task UpdateProduct([FromForm, Required] UpdateProduct request)
-            => Mediator.SendAsync(request);
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public Task Update([FromRoute] Guid id, [FromForm, Required] UpdateProduct request)
+        {
+            request.Id = id;
+
+            return Mediator.SendAsync(request);
+        }
     }
 }

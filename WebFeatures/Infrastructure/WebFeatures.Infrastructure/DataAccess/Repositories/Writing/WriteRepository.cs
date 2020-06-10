@@ -2,42 +2,48 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Common.Extensions;
 using WebFeatures.Common.SystemTime;
 using WebFeatures.Domian.Common;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
-using WebFeatures.Infrastructure.DataAccess.Queries.Common;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
-    internal class WriteRepository<TEntity, TQueryBuilder> : IWriteRepository<TEntity>
+    internal class WriteRepository<TEntity> : IWriteRepository<TEntity>
         where TEntity : Entity
-        where TQueryBuilder : IQueryBuilder<TEntity>
     {
         protected IDbConnection Connection { get; }
-        protected TQueryBuilder QueryBuilder { get; }
+        protected IEntityProfile Profile { get; }
+        protected IEntityMap<TEntity> Entity { get; }
 
-        public WriteRepository(
-            IDbConnection connection,
-            TQueryBuilder queryBuilder)
+        public WriteRepository(IDbConnection connection, IEntityProfile profile)
         {
             Connection = connection;
-            QueryBuilder = queryBuilder;
+            Profile = profile;
+            Entity = profile.GetMap<TEntity>();
         }
 
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            SqlQuery sql = QueryBuilder.BuildGetAll();
+            string sql = $"SELECT * FROM {Entity.Table.NameWithSchema()}";
 
-            return Connection.QueryAsync<TEntity>(sql.Query, sql.Param);
+            return Connection.QueryAsync<TEntity>(sql);
         }
 
         public virtual Task<TEntity> GetAsync(Guid id)
         {
-            SqlQuery sql = QueryBuilder.BuildGet(id);
+            var sql = string.Format(
+                @"SELECT * FROM {0} 
+                WHERE {1} = @id",
+                Entity.Table.NameWithSchema(),
+                Entity.Column(x => x.Id));
 
-            return Connection.QuerySingleOrDefaultAsync<TEntity>(sql.Query, sql.Param);
+            return Connection.QuerySingleOrDefaultAsync<TEntity>(sql, new { id });
         }
 
         public virtual Task CreateAsync(TEntity entity)
@@ -52,30 +58,97 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 cd.CreateDate = DateTimeProvider.DateTime.Now;
             }
 
-            SqlQuery sql = QueryBuilder.BuildCreate(entity);
+            var insertColumns = new List<string>();
+            var insertParams = new List<string>();
+            var param = new DynamicParameters();
 
-            return Connection.ExecuteAsync(sql.Query, sql.Param);
+            foreach (PropertyMap<TEntity> map in Entity.Properties)
+            {
+                insertColumns.Add(map.ColumnName);
+
+                string paramName = "@" + map.ColumnName;
+
+                insertParams.Add(paramName);
+
+                param.Add(paramName, map.GetValue(entity));
+            }
+
+            string sql = string.Format(
+                @"INSERT INTO {0} ({1}) VALUES ({2})",
+                Entity.Table.NameWithSchema(),
+                insertColumns.JoinString(),
+                insertParams.JoinString());
+
+            return Connection.ExecuteAsync(sql, param);
         }
 
         public virtual Task UpdateAsync(TEntity entity)
         {
-            SqlQuery sql = QueryBuilder.BuildUpdate(entity);
+            var setParams = new List<string>();
+            var param = new DynamicParameters();
 
-            return Connection.ExecuteAsync(sql.Query, sql.Param);
+            foreach (PropertyMap<TEntity> map in Entity.Properties)
+            {
+                string paramName = "@" + map.ColumnName;
+
+                setParams.Add($"{map.ColumnName} = {paramName}");
+
+                param.Add(paramName, map.GetValue(entity));
+            }
+
+            string sql = string.Format(
+                @"UPDATE {0} 
+                SET {1} 
+                WHERE {2} = @{2}",
+                Entity.Table.NameWithSchema(),
+                setParams.JoinString(),
+                Entity.Column(x => x.Id));
+
+            return Connection.ExecuteAsync(sql, param);
         }
 
         public virtual Task DeleteAsync(TEntity entity)
         {
-            SqlQuery sql = QueryBuilder.BuildDelete(entity);
+            return DeleteAsync(entity.Id);
+        }
 
-            return Connection.ExecuteAsync(sql.Query, sql.Param);
+        public virtual Task DeleteAsync(Guid id)
+        {
+            string sql = string.Format(
+                @"DELETE FROM {0} 
+                WHERE {1} = @id",
+                Entity.Table.NameWithSchema(),
+                Entity.Column(x => x.Id));
+
+            return Connection.ExecuteAsync(sql, new { id });
+        }
+
+        public Task DeleteAsync(IEnumerable<TEntity> entities)
+        {
+            if (!entities.Any())
+            {
+                return Task.CompletedTask;
+            }
+
+            string sql = string.Format(
+                @"DELETE FROM {0} 
+                WHERE {1} IN ({2})",
+                Entity.Table.NameWithSchema(),
+                Entity.Column(x => x.Id),
+                entities.Select(x => $"'{x.Id}'").JoinString());
+
+            return Connection.ExecuteAsync(sql);
         }
 
         public virtual async Task<bool> ExistsAsync(Guid id)
         {
-            SqlQuery sql = QueryBuilder.BuildExists(id);
+            string sql = string.Format(
+                @"SELECT 1 FROM {0} 
+                WHERE {1} = @id",
+                Entity.Table.NameWithSchema(),
+                Entity.Column(x => x.Id));
 
-            return await Connection.ExecuteScalarAsync<int>(sql.Query, sql.Param) == 1;
+            return await Connection.ExecuteScalarAsync<int>(sql, new { id }) == 1;
         }
     }
 }

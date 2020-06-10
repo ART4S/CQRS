@@ -1,6 +1,4 @@
 ﻿using Shouldly;
-using System;
-using System.Reflection;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.Tests.Helpers.TestObjects;
@@ -11,12 +9,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
     public class EntityProfileTests
     {
         [Fact]
-        public void GetMap_ShouldReturnMap_WhenEntityHaveMap()
+        public void GetMap_ShouldReturnMap_WhenEntityHasBeenRegisteredManually()
         {
             // Arrange
             var profile = new EntityProfile();
-
-            profile.RegisterMappingsFromAssembly(Assembly.GetExecutingAssembly());
+            profile.TryRegisterMap(typeof(TestEntityMap));
 
             // Act
             IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
@@ -26,13 +23,16 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetMap_ShouldThrow_WhenMapForEntityIsMissing()
+        public void GetMap_ShouldReturnMap_WhenEntityHasNotBeenRegisteredManually()
         {
             // Arrange
             var profile = new EntityProfile();
 
+            // Act
+            IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
+
             // Assert
-            Assert.Throws<InvalidOperationException>(() => profile.GetMap<TestEntity>());
+            map.ShouldNotBeNull();
         }
     }
 }

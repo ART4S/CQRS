@@ -4,7 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using WebFeatures.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Helpers;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {

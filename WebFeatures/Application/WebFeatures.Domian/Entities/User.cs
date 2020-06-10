@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Domian.Entities
@@ -12,7 +11,5 @@ namespace WebFeatures.Domian.Entities
 
         public Guid? PictureId { get; set; }
         public File Picture { get; set; }
-
-        public ICollection<UserRole> UserRoles { get; private set; } = new HashSet<UserRole>();
     }
 }

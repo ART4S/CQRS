@@ -3,8 +3,8 @@ using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess;
-using WebFeatures.Domian.Entities;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.ProductReviews.Requests.Commands

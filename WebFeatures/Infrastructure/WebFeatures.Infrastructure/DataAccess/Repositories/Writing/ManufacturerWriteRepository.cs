@@ -6,51 +6,66 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
-using WebFeatures.Infrastructure.DataAccess.Queries.Common;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
+using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
-    internal class ManufacturerWriteRepository : WriteRepository<Manufacturer, IQueryBuilder<Manufacturer>>
+    internal class ManufacturerWriteRepository : WriteRepository<Manufacturer>
     {
-        public ManufacturerWriteRepository(
-            IDbConnection connection,
-            IQueryBuilder<Manufacturer> queryBuilder) : base(connection, queryBuilder)
+        public ManufacturerWriteRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
         {
         }
 
         public override async Task<IEnumerable<Manufacturer>> GetAllAsync()
         {
-            SqlQuery sql = QueryBuilder.BuildGetAll();
+            string sql =
+                $@"SELECT 
+                    {Entity.Column(x => x.Id)}, 
+                    {Entity.Column(x => x.OrganizationName)}, 
+                    {Entity.Column(x => x.StreetAddress.CityId)} as {nameof(Address.CityId)}, 
+                    {Entity.Column(x => x.StreetAddress.PostalCode)} as {nameof(Address.PostalCode)}, 
+                    {Entity.Column(x => x.StreetAddress.StreetName)} as {nameof(Address.StreetName)} 
+                FROM 
+                    {Entity.Table.NameWithSchema()}";
 
             IEnumerable<Manufacturer> manufacturers =
                 await Connection.QueryAsync<Manufacturer, Address, Manufacturer>(
-                    sql.Query,
+                    sql,
                     (manufacturer, address) =>
                     {
                         manufacturer.StreetAddress = address;
                         return manufacturer;
                     },
-                    param: sql.Param,
-                    splitOn: sql.SplitOn);
+                    splitOn: nameof(Address.CityId));
 
             return manufacturers;
         }
 
         public override async Task<Manufacturer> GetAsync(Guid id)
         {
-            SqlQuery sql = QueryBuilder.BuildGet(id);
+            string sql =
+                $@"SELECT 
+                    {Entity.Column(x => x.Id)}, 
+                    {Entity.Column(x => x.OrganizationName)}, 
+                    {Entity.Column(x => x.StreetAddress.CityId)} as {nameof(Address.CityId)}, 
+                    {Entity.Column(x => x.StreetAddress.PostalCode)} as {nameof(Address.PostalCode)}, 
+                    {Entity.Column(x => x.StreetAddress.StreetName)} as {nameof(Address.StreetName)} 
+                FROM 
+                    {Entity.Table.NameWithSchema()} 
+                WHERE 
+                    {Entity.Column(x => x.Id)} = @id";
 
             Manufacturer manufacturer =
                 (await Connection.QueryAsync<Manufacturer, Address, Manufacturer>(
-                    sql.Query,
+                    sql,
                     (manufacturer, address) =>
                     {
                         manufacturer.StreetAddress = address;
                         return manufacturer;
                     },
-                    param: sql.Param,
-                    splitOn: sql.SplitOn))
+                    param: new { id },
+                    splitOn: nameof(Address.CityId)))
                 .FirstOrDefault();
 
             return manufacturer;

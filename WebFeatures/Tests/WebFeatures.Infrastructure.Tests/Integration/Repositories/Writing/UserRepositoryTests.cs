@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Helpers.Fixtures;
 using Xunit;
@@ -22,12 +20,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public UserRepositoryTests(PostgreSqlDatabaseFixture db)
         {
             _db = db;
-
-            var profile = new EntityProfile();
-
-            profile.RegisterMappingsFromAssembly(typeof(UserMap).Assembly);
-
-            _repo = new UserWriteRepository(db.Connection, new UserQueryBuilder(profile));
+            _repo = new UserWriteRepository(db.Connection, new EntityProfile());
         }
 
         [Fact]

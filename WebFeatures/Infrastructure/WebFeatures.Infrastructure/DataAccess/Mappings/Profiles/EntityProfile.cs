@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 {
@@ -18,12 +18,20 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 
         public bool TryRegisterMap(Type map)
         {
-            if (!map.IsSubclassOfGeneric(typeof(EntityMap<>)))
+            var mapInterface = map.GetInterfaces()
+                .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntityMap<>));
+
+            if (mapInterface == null)
             {
                 return false;
             }
 
-            Type entityType = map.BaseType.GetGenericArguments()[0];
+            Type entityType = mapInterface.GetGenericArguments()[0];
+
+            if (_mappings.ContainsKey(entityType))
+            {
+                return false;
+            }
 
             object mapInstance = Activator.CreateInstance(map);
 
@@ -40,12 +48,12 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 
         public IEntityMap<TEntity> GetMap<TEntity>() where TEntity : class
         {
-            if (!_mappings.TryGetValue(typeof(TEntity), out object map))
+            if (!_mappings.ContainsKey(typeof(TEntity)))
             {
-                throw new InvalidOperationException($"Mapping for type '{typeof(TEntity).Name}' is missing");
+                TryRegisterMap(typeof(EntityMap<TEntity>));
             }
 
-            return (IEntityMap<TEntity>)map;
+            return (IEntityMap<TEntity>)_mappings[typeof(TEntity)];
         }
     }
 

@@ -1,10 +1,11 @@
-﻿using WebFeatures.Application.Interfaces.DataAccess;
+﻿using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Common;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Persistence;
 
@@ -30,8 +31,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IWriteRepository<ProductComment> ProductComments => _productComments ??= CreateRepository<ProductComment>();
         private IWriteRepository<ProductComment> _productComments;
 
-        public IWriteRepository<ProductFile> ProductFiles => _productFiles ??= CreateRepository<ProductFile>();
-        private IWriteRepository<ProductFile> _productFiles;
+        public IWriteRepository<ProductPicture> ProductPictures => _productFiles ??= CreateRepository<ProductPicture>();
+        private IWriteRepository<ProductPicture> _productFiles;
 
         public IWriteRepository<Manufacturer> Manufacturers => _manufacturers ??= CreateRepository<Manufacturer>();
         private IWriteRepository<Manufacturer> _manufacturers;
@@ -51,28 +52,31 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IWriteRepository<Country> Countries => _countries ??= CreateRepository<Country>();
         private IWriteRepository<Country> _countries;
 
-        public IWriteRepository<File> Files => _files ??= CreateRepository<File>();
-        private IWriteRepository<File> _files;
+        public IFileWriteRepository Files => _files ??= CreateFileRepository();
+        private IFileWriteRepository _files;
 
-        private readonly IEntityProfile _entityProfile;
+        public IRolePermissionWriteRepository RolePermissions => _rolePermissions ??= CreateRolePermissionWriteRepository();
+        private IRolePermissionWriteRepository _rolePermissions;
+
+        private readonly IEntityProfile _profile;
 
         public WriteDbContext(
             IDbConnectionFactory connectionFactory,
             IEntityProfile entityProfile) : base(connectionFactory)
         {
-            _entityProfile = entityProfile;
+            _profile = entityProfile;
         }
 
         private IWriteRepository<TEntity> CreateRepository<TEntity>() where TEntity : Entity
-        {
-            return new WriteRepository<TEntity, QueryBuilder<TEntity>>(
-                Connection,
-                new QueryBuilder<TEntity>(_entityProfile));
-        }
+            => new WriteRepository<TEntity>(Connection, _profile);
 
         private IUserWriteRepository CreateUserRepository()
-        {
-            return new UserWriteRepository(Connection, new UserQueryBuilder(_entityProfile));
-        }
+            => new UserWriteRepository(Connection, _profile);
+
+        private IFileWriteRepository CreateFileRepository()
+            => new FileWriteRepository(Connection, _profile);
+
+        private IRolePermissionWriteRepository CreateRolePermissionWriteRepository()
+            => new RolePermissionWriteRepository(Connection, _profile);
     }
 }

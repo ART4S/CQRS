@@ -2,7 +2,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.Tests.Helpers.TestObjects;
 using Xunit;
 

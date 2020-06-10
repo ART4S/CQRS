@@ -3,10 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Infrastructure.DataAccess.Constants;
 
 namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
 {
+    // TODO: BulkInsert
     internal static class SqlBuilder
     {
         public static SqlQuery DropDatabase(string databaseName)
@@ -173,8 +176,8 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         {
             string query =
                 @$"INSERT INTO public.products 
-                (id, name, price, description, createDate, pictureid, manufacturerid, categoryid, brandid) 
-                VALUES (@Id, @Name, @Price, @Description, @CreateDate, @PictureId, @ManufacturerId, @CategoryId, @BrandId)";
+                (id, name, price, description, createDate, mainpictureid, manufacturerid, categoryid, brandid) 
+                VALUES (@Id, @Name, @Price, @Description, @CreateDate, @MainPictureId, @ManufacturerId, @CategoryId, @BrandId)";
 
             return new SqlQuery(query, product);
         }

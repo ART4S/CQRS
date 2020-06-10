@@ -26,22 +26,24 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
         public Task<IEnumerable<ProductListDto>> GetListAsync()
         {
             return Connection.QueryAsync<ProductListDto>(
-                sql: ViewNames.Products.GET_PRODUCTS_LIST,
+                sql: ViewNames.GET_PRODUCTS_LIST,
                 commandType: CommandType.TableDirect);
         }
 
         public Task<IEnumerable<ProductCommentInfoDto>> GetCommentsAsync(Guid id)
         {
-            string sql = $"SELECT * FROM {ViewNames.Products.GET_PRODUCT_COMMENTS} WHERE productid = @id";
-
-            return Connection.QueryAsync<ProductCommentInfoDto>(sql, new { id });
+            return Connection.QueryAsync<ProductCommentInfoDto>(
+                sql: "get_product_comments",
+                param: new { product_id = id },
+                commandType: CommandType.StoredProcedure);
         }
 
         public Task<IEnumerable<ProductReviewInfoDto>> GetReviewsAsync(Guid id)
         {
-            string sql = $"SELECT * FROM {ViewNames.Products.GET_PRODUCT_REVIEWS} WHERE productid = @id";
-
-            return Connection.QueryAsync<ProductReviewInfoDto>(sql, new { id });
+            return Connection.QueryAsync<ProductReviewInfoDto>(
+                sql: "get_product_reviews",
+                param: new { product_id = id },
+                commandType: CommandType.StoredProcedure);
         }
     }
 }

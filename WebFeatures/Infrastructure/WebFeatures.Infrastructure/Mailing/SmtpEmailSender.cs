@@ -24,8 +24,8 @@ namespace WebFeatures.Infrastructure.Mailing
 
             var message = new MimeMessage();
 
-            message.From.Add(new MailboxAddress(_options.Address));
-            message.To.Add(new MailboxAddress(to));
+            message.From.Add(new MailboxAddress("", _options.Address));
+            message.To.Add(new MailboxAddress("", to));
             message.Subject = subject;
             message.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 

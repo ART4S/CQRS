@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using WebFeatures.Common;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Utils;
+using WebFeatures.Infrastructure.DataAccess.Extensions;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {

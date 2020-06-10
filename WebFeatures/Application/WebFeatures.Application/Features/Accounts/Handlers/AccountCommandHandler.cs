@@ -1,39 +1,35 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
-using WebFeatures.Application.Features.Accounts.Dto;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Accounts.Handlers
 {
     internal class AccountCommandHandler :
-        IRequestHandler<Register, UserInfoDto>,
-        IRequestHandler<Login, UserInfoDto>
+        IRequestHandler<Register, Guid>,
+        IRequestHandler<Login, Guid>
     {
         private readonly IWriteDbContext _db;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILoggerFactory _loggerFactory;
-        private readonly IMapper _mapper;
 
         public AccountCommandHandler(
             IWriteDbContext db,
             IPasswordHasher passwordHasher,
-            ILoggerFactory loggerFactory,
-            IMapper mapper)
+            ILoggerFactory loggerFactory)
         {
             _db = db;
             _passwordHasher = passwordHasher;
             _loggerFactory = loggerFactory;
-            _mapper = mapper;
         }
 
-        public async Task<UserInfoDto> HandleAsync(Register request, CancellationToken cancellationToken)
+        public async Task<Guid> HandleAsync(Register request, CancellationToken cancellationToken)
         {
             var user = new User()
             {
@@ -47,10 +43,10 @@ namespace WebFeatures.Application.Features.Accounts.Handlers
             _loggerFactory.CreateLogger<Register>()
                 .LogInformation($"User {user.Name} registered with id: {user.Id}");
 
-            return _mapper.Map<UserInfoDto>(user);
+            return user.Id;
         }
 
-        public async Task<UserInfoDto> HandleAsync(Login request, CancellationToken cancellationToken)
+        public async Task<Guid> HandleAsync(Login request, CancellationToken cancellationToken)
         {
             const string errorMessage = "Неверный логин или пароль";
 
@@ -64,7 +60,7 @@ namespace WebFeatures.Application.Features.Accounts.Handlers
             _loggerFactory.CreateLogger<Login>()
                 .LogInformation($"{user.Email} signed in");
 
-            return _mapper.Map<UserInfoDto>(user);
+            return user.Id;
         }
     }
 }

@@ -7,7 +7,6 @@ using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.Queries.Builders;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Helpers.Fixtures;
 using Xunit;
@@ -26,9 +25,9 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var profile = new EntityProfile();
 
-            profile.RegisterMappingsFromAssembly(typeof(ManufacturerMap).Assembly);
+            profile.TryRegisterMap(typeof(ManufacturerMap));
 
-            _repo = new ManufacturerWriteRepository(db.Connection, new ManufacturerQueryBuilder(profile));
+            _repo = new ManufacturerWriteRepository(db.Connection, profile);
         }
 
         [Fact]

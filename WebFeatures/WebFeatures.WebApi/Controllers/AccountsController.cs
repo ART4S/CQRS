@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Accounts.Dto;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Common.SystemTime;
@@ -31,9 +30,9 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         public async Task Register([FromBody, Required] Register request)
         {
-            UserInfoDto user = await Mediator.SendAsync(request);
+            Guid userId = await Mediator.SendAsync(request);
 
-            await SignInUser(user);
+            await SignInUser(userId);
         }
 
         /// <summary>
@@ -46,20 +45,17 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         public async Task Login([FromBody, Required] Login request)
         {
-            UserInfoDto user = await Mediator.SendAsync(request);
+            Guid userId = await Mediator.SendAsync(request);
 
-            await SignInUser(user);
+            await SignInUser(userId);
         }
 
-        private Task SignInUser(UserInfoDto user)
+        private Task SignInUser(Guid userId)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
-
-            var roleClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
-            claims.AddRange(roleClaims);
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

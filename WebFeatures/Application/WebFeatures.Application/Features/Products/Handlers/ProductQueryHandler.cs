@@ -5,13 +5,13 @@ using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Features.Products.Requests.Queries;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess.Reading;
+using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 
 namespace WebFeatures.Application.Features.Products.Handlers
 {
     internal class ProductQueryHandler :
         IRequestHandler<GetProduct, ProductInfoDto>,
-        IRequestHandler<GetProductsList, IEnumerable<ProductListDto>>,
+        IRequestHandler<GetProductList, IEnumerable<ProductListDto>>,
         IRequestHandler<GetProductComments, IEnumerable<ProductCommentInfoDto>>,
         IRequestHandler<GetProductReviews, IEnumerable<ProductReviewInfoDto>>
     {
@@ -34,7 +34,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
             return product;
         }
 
-        public Task<IEnumerable<ProductListDto>> HandleAsync(GetProductsList request, CancellationToken cancellationToken)
+        public Task<IEnumerable<ProductListDto>> HandleAsync(GetProductList request, CancellationToken cancellationToken)
         {
             return _db.Products.GetListAsync();
         }

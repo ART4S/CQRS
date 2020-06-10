@@ -5,7 +5,7 @@
         public static IDateTime DateTime
         {
             get => _dateTime ??= new DefaultDateTime();
-            set => _dateTime = value;
+            internal set => _dateTime = value;
         }
         private static IDateTime _dateTime;
     }

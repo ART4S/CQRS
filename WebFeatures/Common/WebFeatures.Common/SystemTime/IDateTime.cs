@@ -6,4 +6,9 @@ namespace WebFeatures.Common.SystemTime
     {
         DateTime Now { get; }
     }
+
+    internal class DefaultDateTime : IDateTime
+    {
+        public DateTime Now => DateTime.Now;
+    }
 }

@@ -12,6 +12,8 @@ namespace WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories
         Task CreateAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task DeleteAsync(Guid id);
+        Task DeleteAsync(IEnumerable<TEntity> entities);
         Task<bool> ExistsAsync(Guid id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using WebFeatures.Application.Features.Accounts.Dto;
+﻿using System;
 using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Accounts.Requests.Commands
@@ -6,7 +6,7 @@ namespace WebFeatures.Application.Features.Accounts.Requests.Commands
     /// <summary>
     /// Войти в систему
     /// </summary>
-    public class Login : ICommand<UserInfoDto>
+    public class Login : ICommand<Guid>
     {
         /// <summary>
         /// E-mail пользователя
