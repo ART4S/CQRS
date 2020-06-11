@@ -5,7 +5,7 @@ using WebFeatures.Persistence;
 
 namespace WebFeatures.Infrastructure.DataAccess.Contexts
 {
-    internal class BaseDbContext : IDisposable, IDbContext
+    internal class BaseDbContext : IDbContext, IDisposable
     {
         public IDbConnection Connection
         {

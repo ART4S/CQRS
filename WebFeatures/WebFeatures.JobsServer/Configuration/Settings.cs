@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebFeatures.Infrastructure.Jobs
+namespace WebFeatures.JobsServer.Configuration
 {
-    public class HangfireSettings
+    public class Settings
     {
         [Required(AllowEmptyStrings = false)]
         public string ConnectionString { get; set; }

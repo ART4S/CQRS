@@ -55,13 +55,16 @@ namespace WebFeatures.DatabaseInitializer.Core
             catch
             {
                 transaction.Rollback();
-                transaction.Dispose();
 
                 connection.ChangeDatabase(defaultDb);
 
                 connection.Execute(SqlBuilder.DropDatabase(appDb));
 
                 throw;
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
     }

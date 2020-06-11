@@ -16,8 +16,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IUserWriteRepository Users => _users ??= CreateUserRepository();
         private IUserWriteRepository _users;
 
-        public IWriteRepository<Role> Roles => _roles ??= CreateRepository<Role>();
-        private IWriteRepository<Role> _roles;
+        public IRoleWriteRepository Roles => _roles ??= CreateRoleRepository();
+        private IRoleWriteRepository _roles;
 
         public IWriteRepository<UserRole> UserRoles => _userRoles ??= CreateRepository<UserRole>();
         private IWriteRepository<UserRole> _userRoles;
@@ -55,16 +55,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IFileWriteRepository Files => _files ??= CreateFileRepository();
         private IFileWriteRepository _files;
 
-        public IRolePermissionWriteRepository RolePermissions => _rolePermissions ??= CreateRolePermissionWriteRepository();
+        public IRolePermissionWriteRepository RolePermissions => _rolePermissions ??= CreateRolePermissionRepository();
         private IRolePermissionWriteRepository _rolePermissions;
 
         private readonly IEntityProfile _profile;
 
-        public WriteDbContext(
-            IDbConnectionFactory connectionFactory,
-            IEntityProfile entityProfile) : base(connectionFactory)
+        public WriteDbContext(IDbConnectionFactory connectionFactory, IEntityProfile profile) : base(connectionFactory)
         {
-            _profile = entityProfile;
+            _profile = profile;
         }
 
         private IWriteRepository<TEntity> CreateRepository<TEntity>() where TEntity : Entity
@@ -76,7 +74,10 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         private IFileWriteRepository CreateFileRepository()
             => new FileWriteRepository(Connection, _profile);
 
-        private IRolePermissionWriteRepository CreateRolePermissionWriteRepository()
+        private IRolePermissionWriteRepository CreateRolePermissionRepository()
             => new RolePermissionWriteRepository(Connection, _profile);
+
+        private IRoleWriteRepository CreateRoleRepository()
+            => new RoleWriteRepository(Connection, _profile);
     }
 }

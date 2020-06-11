@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace WebFeatures.Infrastructure.Jobs
+namespace WebFeatures.JobsServer.Configuration
 {
     internal class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
     {

@@ -9,7 +9,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
     internal interface IPropertyMap<TEntity> where TEntity : class
     {
         string ColumnName { get; }
-        string PropertyCall { get; }
+        string PropertyAlias { get; }
         PropertyInfo Property { get; }
         object GetValue(TEntity entity);
         void SetValue(TEntity entity, object value);
@@ -18,7 +18,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
     internal partial class PropertyMap<TEntity> : IPropertyMap<TEntity> where TEntity : class
     {
         public string ColumnName { get; private set; }
-        public string PropertyCall { get; }
+        public string PropertyAlias { get; }
         public PropertyInfo Property { get; }
 
         private Func<TEntity, object> _getter;
@@ -28,7 +28,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         {
             Guard.ThrowIfNull(propertyCall, nameof(propertyCall));
 
-            PropertyCall = ColumnName = propertyCall.GetPropertyName();
+            PropertyAlias = ColumnName = propertyCall.GetPropertyName();
             Property = propertyCall.GetFirstProperty();
 
             _getter = propertyCall.Compile();
@@ -39,7 +39,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         {
             Guard.ThrowIfNull(property, nameof(property));
 
-            PropertyCall = ColumnName = property.Name;
+            PropertyAlias = ColumnName = property.Name;
             Property = property;
 
             _getter = property.CreateGetter<TEntity>();

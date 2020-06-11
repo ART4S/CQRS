@@ -9,7 +9,7 @@ namespace WebFeatures.Application.Interfaces.DataAccess.Contexts
     public interface IWriteDbContext : IDbContext
     {
         IUserWriteRepository Users { get; }
-        IWriteRepository<Role> Roles { get; }
+        IRoleWriteRepository Roles { get; }
         IWriteRepository<UserRole> UserRoles { get; }
         IRolePermissionWriteRepository RolePermissions { get; }
         IFileWriteRepository Files { get; }

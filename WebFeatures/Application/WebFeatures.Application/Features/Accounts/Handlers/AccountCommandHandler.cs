@@ -2,12 +2,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
+using WebFeatures.Domian.Entities.Permissions;
 
 namespace WebFeatures.Application.Features.Accounts.Handlers
 {
@@ -39,6 +41,14 @@ namespace WebFeatures.Application.Features.Accounts.Handlers
             };
 
             await _db.Users.CreateAsync(user);
+
+            Role role = await _db.Roles.GetByNameAsync(AuthorizationConstants.Roles.Users) ?? throw new InvalidOperationException("Cannot find role for new user");
+
+            await _db.UserRoles.CreateAsync(new UserRole()
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            });
 
             _loggerFactory.CreateLogger<Register>()
                 .LogInformation($"User {user.Name} registered with id: {user.Id}");

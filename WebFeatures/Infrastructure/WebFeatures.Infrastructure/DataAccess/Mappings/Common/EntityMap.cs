@@ -31,7 +31,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
             _properties = SqlType<TEntity>.Properties
                 .Select(x => new PropertyMap<TEntity>(x))
-                .ToDictionary(x => x.PropertyCall, x => x);
+                .ToDictionary(x => x.PropertyAlias, x => x);
         }
 
         public IPropertyMap<TEntity> GetProperty(Expression<Func<TEntity, object>> propertyCall)
@@ -61,7 +61,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 
             var property = new PropertyMap<TEntity>(propertyCall);
 
-            _properties[property.PropertyCall] = property;
+            _properties[property.PropertyAlias] = property;
 
             return new PropertyMap<TEntity>.Builder(property);
         }

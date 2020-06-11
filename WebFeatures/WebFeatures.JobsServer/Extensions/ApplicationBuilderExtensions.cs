@@ -1,9 +1,9 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using WebFeatures.Infrastructure.Jobs;
+using WebFeatures.JobsServer.Configuration;
 
-namespace WebFeatures.Infrastructure
+namespace WebFeatures.JobsServer.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
@@ -11,7 +11,7 @@ namespace WebFeatures.Infrastructure
         {
             app.UseHangfireServer();
 
-            var settings = app.ApplicationServices.GetService<HangfireSettings>();
+            var settings = app.ApplicationServices.GetService<Settings>();
 
             if (settings.EnableDashboard)
             {

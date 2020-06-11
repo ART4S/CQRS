@@ -1,10 +1,9 @@
 ﻿namespace WebFeatures.Application.Constants
 {
-    public static class AuthorizationConstants
+    internal class AuthorizationConstants
     {
-        public static class Roles
+        public class Roles
         {
-            public const string Administrators = "Administrators";
             public const string Users = "Users";
         }
     }

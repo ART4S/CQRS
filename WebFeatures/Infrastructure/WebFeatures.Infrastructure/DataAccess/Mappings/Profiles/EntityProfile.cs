@@ -18,6 +18,11 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
 
         public bool TryRegisterMap(Type map)
         {
+            if (map.IsGenericTypeDefinition)
+            {
+                return false;
+            }
+
             var mapInterface = map.GetInterfaces()
                 .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntityMap<>));
 

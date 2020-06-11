@@ -89,25 +89,25 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
 
-        private static void AddJobs(IServiceCollection services, IConfiguration configuration)
-        {
-            //services.AddSingleton<IBackgroundJobManager, BackgroundJobManager>();
+        //private static void AddJobs(IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.AddSingleton<IBackgroundJobManager, BackgroundJobManager>();
 
-            //ConfigureServicesHelper.AddOptions<HangfireSettings>(services, configuration);
+        //    ConfigureServicesHelper.AddOptions<HangfireSettings>(services, configuration);
 
-            //string connectionString = configuration.GetConnectionString("Hangfire");
+        //    string connectionString = configuration.GetConnectionString("Hangfire");
 
-            //services.AddHangfire(config =>
-            //{
-            //    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            //    .UseSimpleAssemblyNameTypeSerializer()
-            //    .UseRecommendedSerializerSettings()
-            //    .UsePostgreSqlStorage(connectionString, new PostgreSqlStorageOptions()
-            //    {
-            //        PrepareSchemaIfNecessary = true,
-            //        QueuePollInterval = TimeSpan.FromMilliseconds(1),
-            //    });
-            //});
-        }
+        //    services.AddHangfire(config =>
+        //    {
+        //        config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        //        .UseSimpleAssemblyNameTypeSerializer()
+        //        .UseRecommendedSerializerSettings()
+        //        .UsePostgreSqlStorage(connectionString, new PostgreSqlStorageOptions()
+        //        {
+        //            PrepareSchemaIfNecessary = true,
+        //            QueuePollInterval = TimeSpan.FromMilliseconds(1),
+        //        });
+        //    });
+        //}
     }
 }
