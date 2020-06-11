@@ -30,7 +30,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ProductInfoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public Task<ProductInfoDto> Get([FromRoute] Guid id)
+        public Task<ProductInfoDto> Get(Guid id)
             => Mediator.SendAsync(new GetProduct() { Id = id });
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="200" cref="IEnumerable{ProductReviewInfoDto}">Успех</response>
         [HttpGet("{id:guid}/reviews")]
         [ProducesResponseType(typeof(IEnumerable<ProductReviewInfoDto>), StatusCodes.Status200OK)]
-        public Task<IEnumerable<ProductReviewInfoDto>> GetReviews([FromRoute] Guid id)
+        public Task<IEnumerable<ProductReviewInfoDto>> GetReviews(Guid id)
             => Mediator.SendAsync(new GetProductReviews() { ProductId = id });
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="200" cref="IEnumerable{ProductCommentInfoDto}">Успех</response>
         [HttpGet("{id:guid}/comments")]
         [ProducesResponseType(typeof(IEnumerable<ProductCommentInfoDto>), StatusCodes.Status200OK)]
-        public Task<IEnumerable<ProductCommentInfoDto>> GetComments([FromRoute] Guid id)
+        public Task<IEnumerable<ProductCommentInfoDto>> GetComments(Guid id)
             => Mediator.SendAsync(new GetProductComments() { ProductId = id });
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public Task Update([FromRoute] Guid id, [FromForm, Required] UpdateProduct request)
+        public Task Update(Guid id, [FromForm, Required] UpdateProduct request)
         {
             request.Id = id;
 

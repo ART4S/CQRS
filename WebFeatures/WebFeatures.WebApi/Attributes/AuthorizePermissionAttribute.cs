@@ -21,9 +21,7 @@ namespace WebFeatures.WebApi.Attributes
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            IServiceProvider services = context.HttpContext.RequestServices;
-
-            var mediator = services.GetRequiredService<IRequestMediator>();
+            IRequestMediator mediator = context.HttpContext.RequestServices.GetRequiredService<IRequestMediator>();
 
             bool userHasPermission = await mediator.SendAsync(new UserHasPermission() { Permission = _permission });
 
