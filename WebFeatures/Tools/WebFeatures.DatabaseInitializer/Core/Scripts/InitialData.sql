@@ -18,7 +18,8 @@ VALUES
 ('3c0e64a7-baf1-4071-bdfb-9ae655e1387e', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 1),
 ('800c5e48-d56a-4529-b1c6-ae8c6296cc21', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 2),
 ('973f17b1-f702-468f-a9a2-dc4558dae003', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 3),
-('500cf60b-8370-4e36-a750-c171d762373d', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 4);
+('500cf60b-8370-4e36-a750-c171d762373d', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 4),
+('d15d3f83-6e05-4235-b995-bd784886de27', '8f4032ba-2bb8-4fa7-8ad8-393df9107590', 4);
 
 INSERT INTO countries (id, name, continent)
 VALUES

@@ -5,14 +5,14 @@
         // Products
 
         CreateProduct = 1,
-        UpdateProduct,
+        UpdateProduct = 2,
 
         // ProductReviews
 
-        CreateProductReview,
+        CreateProductReview = 3,
 
         // ProductComments
 
-        CreateProductComment
+        CreateProductComment = 4
     }
 }

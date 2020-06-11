@@ -38,11 +38,6 @@ namespace WebFeatures.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
-
-                //string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //string xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
-
-                //c.IncludeXmlComments(xmlFilePath, true);
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -53,6 +48,7 @@ namespace WebFeatures.WebApi
                 options.HeaderName = "X-CSRF-TOKEN";
                 options.Cookie.Name = "XSRF-TOKEN";
                 options.Cookie.HttpOnly = false;
+                options.Cookie.IsEssential = true;
             });
 
             // For Frontend (React.JS)
@@ -64,15 +60,16 @@ namespace WebFeatures.WebApi
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseDefaultFiles();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseDefaultFiles();
 
             app.UseSerilogRequestLogging();
 
