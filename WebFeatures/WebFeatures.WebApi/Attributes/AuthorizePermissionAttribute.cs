@@ -2,9 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Permissions.Requests;
+using WebFeatures.Application.Features.Permissions.Requests.Queries;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Domian.Enums;
 using WebFeatures.WebApi.Exceptions;
 
 namespace WebFeatures.WebApi.Attributes
@@ -12,9 +11,9 @@ namespace WebFeatures.WebApi.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     internal class AuthorizePermissionAttribute : Attribute, IAsyncAuthorizationFilter
     {
-        private readonly Permission _permission;
+        private readonly string _permission;
 
-        public AuthorizePermissionAttribute(Permission permission)
+        public AuthorizePermissionAttribute(string permission)
         {
             _permission = permission;
         }

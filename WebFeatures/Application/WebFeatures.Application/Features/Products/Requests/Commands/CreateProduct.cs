@@ -67,24 +67,16 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         {
             public Validator(IWriteDbContext db)
             {
-                RuleFor(x => x.Name)
-                    .NotEmpty();
-
-                RuleFor(x => x.Price)
-                    .Must(price => price == null || price.Value >= 0);
-
-                RuleFor(x => x.Description)
-                    .NotEmpty();
-
-                RuleFor(x => x.ManufacturerId)
-                    .MustAsync((x, t) => db.Manufacturers.ExistsAsync(x));
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Price).Must(price => price == null || price.Value >= 0);
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.ManufacturerId).MustAsync((x, t) => db.Manufacturers.ExistsAsync(x));
 
                 RuleFor(x => x.CategoryId)
                     .MustAsync((x, t) => db.Categories.ExistsAsync(x.Value))
                     .When(x => x.CategoryId.HasValue);
 
-                RuleFor(x => x.BrandId)
-                    .MustAsync((x, t) => db.Brands.ExistsAsync(x));
+                RuleFor(x => x.BrandId).MustAsync((x, t) => db.Brands.ExistsAsync(x));
 
                 RuleFor(x => x.MainPicture)
                     .Cascade(CascadeMode.StopOnFirstFailure)

@@ -37,14 +37,11 @@ namespace WebFeatures.Application.Features.ProductComments.Requests.Commands
         {
             public Validator(IWriteDbContext db)
             {
-                RuleFor(x => x.ProductId)
-                    .MustAsync(async (x, t) => await db.Products.ExistsAsync(x));
-
-                RuleFor(x => x.Body)
-                    .NotEmpty();
+                RuleFor(x => x.ProductId).MustAsync((x, t) => db.Products.ExistsAsync(x));
+                RuleFor(x => x.Body).NotEmpty();
 
                 RuleFor(x => x.ParentCommentId)
-                    .MustAsync(async (x, t) => await db.ProductComments.ExistsAsync(x.Value))
+                    .MustAsync((x, t) => db.ProductComments.ExistsAsync(x.Value))
                     .When(x => x.ParentCommentId.HasValue);
             }
         }

@@ -12,7 +12,8 @@ namespace WebFeatures.Infrastructure.EventHandlers
 {
     internal class ProductChangedEventHandler :
         IEventHandler<ProductCreated>,
-        IEventHandler<ProductUpdated>
+        IEventHandler<ProductUpdated>,
+        IEventHandler<ProductDeleted>
     {
         private readonly ILogger<ProductChangedEventHandler> _logger;
         private readonly IWriteDbContext _db;
@@ -31,6 +32,11 @@ namespace WebFeatures.Infrastructure.EventHandlers
         }
 
         public Task HandleAsync(ProductUpdated eve, CancellationToken cancellationToken)
+        {
+            return RefreshViewsAsync();
+        }
+
+        public Task HandleAsync(ProductDeleted eve, CancellationToken cancellationToken)
         {
             return RefreshViewsAsync();
         }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -25,19 +26,14 @@ namespace WebFeatures.DatabaseInitializer.Core
             return sb.ToString();
         }
 
-        public static string CreateDbSchema()
+        public static IEnumerable<(string Name, string Body)> GetDbSchemaScripts()
         {
-            var sb = new StringBuilder();
+            var files = Directory.GetFiles("Core/Scripts/Schema", "*.sql");
 
-            var scripts = Directory.GetFiles("Core/Scripts/Schema", "*.sql")
-                .Select(x => File.ReadAllText(x));
-
-            foreach (string script in scripts)
+            foreach (string file in files)
             {
-                sb.AppendLine(script);
+                yield return (file, File.ReadAllText(file));
             }
-
-            return sb.ToString();
         }
 
         public static string SeedInitialData()

@@ -55,9 +55,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IFileWriteRepository Files => _files ??= CreateFileRepository();
         private IFileWriteRepository _files;
 
-        public IRolePermissionWriteRepository RolePermissions => _rolePermissions ??= CreateRolePermissionRepository();
-        private IRolePermissionWriteRepository _rolePermissions;
-
         private readonly IEntityProfile _profile;
 
         public WriteDbContext(IDbConnectionFactory connectionFactory, IEntityProfile profile) : base(connectionFactory)
@@ -73,9 +70,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         private IFileWriteRepository CreateFileRepository()
             => new FileWriteRepository(Connection, _profile);
-
-        private IRolePermissionWriteRepository CreateRolePermissionRepository()
-            => new RolePermissionWriteRepository(Connection, _profile);
 
         private IRoleWriteRepository CreateRoleRepository()
             => new RoleWriteRepository(Connection, _profile);

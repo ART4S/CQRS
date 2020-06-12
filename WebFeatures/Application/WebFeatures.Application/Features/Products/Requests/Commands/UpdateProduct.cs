@@ -73,24 +73,16 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
         {
             public Validator(IWriteDbContext db)
             {
-                RuleFor(p => p.Id)
-                    .MustAsync(async (x, t) => await db.Products.ExistsAsync(x));
+                RuleFor(x => x.Id).MustAsync((x, t) => db.Products.ExistsAsync(x));
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.ManufacturerId).MustAsync((x, t) => db.Manufacturers.ExistsAsync(x));
 
-                RuleFor(p => p.Name)
-                    .NotEmpty();
+                RuleFor(x => x.CategoryId)
+                    .MustAsync((x, t) => db.Categories.ExistsAsync(x.Value))
+                    .When(x => x.CategoryId.HasValue);
 
-                RuleFor(p => p.Description)
-                    .NotEmpty();
-
-                RuleFor(p => p.ManufacturerId)
-                    .MustAsync(async (x, t) => await db.Manufacturers.ExistsAsync(x));
-
-                RuleFor(p => p.CategoryId)
-                    .MustAsync(async (x, t) => await db.Categories.ExistsAsync(x.Value))
-                    .When(p => p.CategoryId.HasValue);
-
-                RuleFor(p => p.BrandId)
-                    .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
+                RuleFor(x => x.BrandId).MustAsync((x, t) => db.Brands.ExistsAsync(x));
 
                 RuleFor(x => x.MainPicture)
                     .Must(x => ValidationConstants.Products.AllowedPictureFormats.Contains(

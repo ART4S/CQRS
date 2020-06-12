@@ -52,7 +52,7 @@ CREATE TABLE rolepermissions
 (
 	id UUID NOT NULL,
 	roleid UUID NOT NULL,
-	permission INT NOT NULL,
+	name VARCHAR NOT NULL,
 
 	CONSTRAINT pk_rolepermissions PRIMARY KEY (id),
 	CONSTRAINT fk_rolepermissions_roles_roleid FOREIGN KEY (roleid) REFERENCES roles (id) ON DELETE CASCADE

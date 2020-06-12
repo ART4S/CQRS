@@ -1,13 +1,12 @@
 ﻿using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Domian.Enums;
 
-namespace WebFeatures.Application.Features.Permissions.Requests
+namespace WebFeatures.Application.Features.Permissions.Requests.Queries
 {
     /// <summary>
     /// Проверить наличие разрешения у пользователя
     /// </summary>
     public class UserHasPermission : IQuery<bool>
     {
-        public Permission Permission { get; set; }
+        public string Permission { get; set; }
     }
 }

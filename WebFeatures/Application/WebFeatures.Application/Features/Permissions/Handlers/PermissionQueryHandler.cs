@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Permissions.Requests;
+using WebFeatures.Application.Features.Permissions.Requests.Queries;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
-using WebFeatures.Domian.Entities.Permissions;
 
 namespace WebFeatures.Application.Features.Permissions.Handlers
 {
     internal class PermissionQueryHandler : IRequestHandler<UserHasPermission, bool>
     {
-        private readonly IWriteDbContext _db;
+        private readonly IAuthService _authService;
         private readonly ICurrentUserService _currentUser;
 
-        public PermissionQueryHandler(IWriteDbContext db, ICurrentUserService currentUser)
+        public PermissionQueryHandler(IAuthService authService, ICurrentUserService currentUser)
         {
-            _db = db;
+            _authService = authService;
             _currentUser = currentUser;
         }
 
@@ -25,9 +22,7 @@ namespace WebFeatures.Application.Features.Permissions.Handlers
         {
             if (!_currentUser.IsAuthenticated) return false;
 
-            IEnumerable<RolePermission> userPermissions = await _db.RolePermissions.GetByUserIdAsync(_currentUser.UserId);
-
-            return userPermissions.Any(x => x.Permission == request.Permission);
+            return await _authService.UserHasPermissionAsync(_currentUser.UserId, request.Permission);
         }
     }
 }

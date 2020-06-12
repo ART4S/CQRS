@@ -83,6 +83,16 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
             return new SqlQuery(query, role);
         }
 
+        public static SqlQuery InsertRolePermission(RolePermission permission)
+        {
+            string query =
+                @$"INSERT INTO public.rolepermissions 
+                (id, roleid, name) 
+                VALUES (@Id, @RoleId, @Name)";
+
+            return new SqlQuery(query, permission);
+        }
+
         public static SqlQuery InsertUserRole(UserRole userRole)
         {
             string query =

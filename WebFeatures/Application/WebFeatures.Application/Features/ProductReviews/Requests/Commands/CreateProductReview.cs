@@ -43,14 +43,9 @@ namespace WebFeatures.Application.Features.ProductReviews.Requests.Commands
         {
             public Validator(IWriteDbContext db)
             {
-                RuleFor(r => r.ProductId)
-                    .MustAsync(async (x, t) => await db.Products.ExistsAsync(x));
-
-                RuleFor(r => r.Title)
-                    .NotEmpty();
-
-                RuleFor(r => r.Comment)
-                    .NotEmpty();
+                RuleFor(x => x.ProductId).MustAsync((x, t) => db.Products.ExistsAsync(x));
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Comment).NotEmpty();
             }
         }
     }

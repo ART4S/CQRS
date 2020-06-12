@@ -11,7 +11,6 @@ namespace WebFeatures.Application.Interfaces.DataAccess.Contexts
         IUserWriteRepository Users { get; }
         IRoleWriteRepository Roles { get; }
         IWriteRepository<UserRole> UserRoles { get; }
-        IRolePermissionWriteRepository RolePermissions { get; }
         IFileWriteRepository Files { get; }
         IWriteRepository<Product> Products { get; }
         IWriteRepository<ProductPicture> ProductPictures { get; }

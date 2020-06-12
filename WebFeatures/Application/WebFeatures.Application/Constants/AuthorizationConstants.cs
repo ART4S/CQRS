@@ -4,7 +4,8 @@
     {
         public class Roles
         {
-            public const string Users = "Users";
+            public const string Users = "users";
+            public const string Administrators = "administrators";
         }
     }
 }

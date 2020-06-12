@@ -12,6 +12,7 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
         {
             SeedUsers(connection);
             SeedRoles(connection);
+            SeedRolePermissions(connection);
             SeedUserRoles(connection);
             SeedCountries(connection);
             SeedCities(connection);
@@ -38,6 +39,15 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
             foreach (Role role in InitialData.Roles)
             {
                 SqlQuery sql = SqlBuilder.InsertRole(role);
+                connection.Execute(sql);
+            }
+        }
+
+        private static void SeedRolePermissions(IDbConnection connection)
+        {
+            foreach (RolePermission permission in InitialData.RolePermissions)
+            {
+                SqlQuery sql = SqlBuilder.InsertRolePermission(permission);
                 connection.Execute(sql);
             }
         }

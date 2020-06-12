@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Domian.Enums;
 using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
 
@@ -26,7 +26,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
-        [AuthorizePermission(Permission.CreateProductComment)]
+        [AuthorizePermission(PermissionConstants.ProductComments.Create)]
         [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]

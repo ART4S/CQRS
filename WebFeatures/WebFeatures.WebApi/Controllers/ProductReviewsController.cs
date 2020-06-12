@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Domian.Enums;
 using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
 
@@ -24,7 +24,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
-        [AuthorizePermission(Permission.CreateProductReview)]
+        [AuthorizePermission(PermissionConstants.ProductReviews.Create)]
         [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]

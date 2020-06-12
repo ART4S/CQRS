@@ -17,7 +17,8 @@ namespace WebFeatures.Application.Features.Products.Handlers
 {
     internal class ProductCommandHandler :
         IRequestHandler<CreateProduct, Guid>,
-        IRequestHandler<UpdateProduct, Empty>
+        IRequestHandler<UpdateProduct, Empty>,
+        IRequestHandler<DeleteProduct, Empty>
     {
         private readonly IWriteDbContext _db;
         private readonly IEventStorage _events;
@@ -120,6 +121,15 @@ namespace WebFeatures.Application.Features.Products.Handlers
             await _db.Files.DeleteAsync(oldPictures);
 
             await _events.AddAsync(new ProductUpdated(product.Id));
+
+            return Empty.Value;
+        }
+
+        public async Task<Empty> HandleAsync(DeleteProduct request, CancellationToken cancellationToken)
+        {
+            await _db.Products.DeleteAsync(request.Id);
+
+            await _events.AddAsync(new ProductDeleted());
 
             return Empty.Value;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using WebFeatures.Application.Constants;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using WebFeatures.Domian.Entities.Products;
@@ -84,6 +85,19 @@ namespace WebFeatures.Infrastructure.Tests.Helpers.Data
             {
                 Id = new Guid("5c198568-5e41-46aa-9a4b-1565c66100e7"),
                 Name = "Name_3"
+            }
+        };
+
+        /// <summary>
+        /// Разрешения ролей
+        /// </summary>
+        public static readonly RolePermission[] RolePermissions = new[]
+        {
+            new RolePermission()
+            {
+                Id = new Guid("815a14c2-21c4-4230-9964-e4a37186eb45"),
+                RoleId = new Guid("481bd67e-4177-457d-aaa5-f002b0cd8a6f"),
+                Name = "products_create"
             }
         };
 

@@ -34,13 +34,20 @@ namespace WebFeatures.DatabaseInitializer.Core
 
             connection.ChangeDatabase(appDb);
 
-            IDbTransaction transaction = connection.BeginTransaction();
+            using IDbTransaction transaction = connection.BeginTransaction();
 
             try
             {
                 _logger.LogInformation("Creating schema");
 
-                connection.Execute(SqlBuilder.CreateDbSchema());
+                var schemaScripts = SqlBuilder.GetDbSchemaScripts();
+
+                foreach (var script in schemaScripts)
+                {
+                    _logger.LogInformation($"Running: {script.Name}");
+
+                    connection.Execute(script.Body);
+                }
 
                 _logger.LogInformation("Seeding initial data");
 
@@ -61,10 +68,6 @@ namespace WebFeatures.DatabaseInitializer.Core
                 connection.Execute(SqlBuilder.DropDatabase(appDb));
 
                 throw;
-            }
-            finally
-            {
-                transaction.Dispose();
             }
         }
     }

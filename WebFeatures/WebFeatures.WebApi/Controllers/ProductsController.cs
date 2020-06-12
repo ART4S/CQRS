@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using WebFeatures.Application.Constants;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Features.Products.Requests.Commands;
 using WebFeatures.Application.Features.Products.Requests.Queries;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Domian.Enums;
 using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
 
@@ -74,7 +74,7 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
-        [AuthorizePermission(Permission.CreateProduct)]
+        [AuthorizePermission(PermissionConstants.Products.Create)]
         [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
@@ -90,12 +90,28 @@ namespace WebFeatures.WebApi.Controllers
         /// <response code="403">Доступ запрещен</response>
         [HttpPut("{id:guid}")]
         [Authorize]
-        [AuthorizePermission(Permission.UpdateProduct)]
+        [AuthorizePermission(PermissionConstants.Products.Update)]
         [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public Task Update(Guid id, [FromForm, Required] UpdateProduct request)
             => Mediator.SendAsync(request);
+
+        /// <summary>
+        /// Удалить товар
+        /// </summary>
+        /// <response code="200">Успех</response>
+        /// <response code="400" cref="ValidationError">Товар отсутствует</response>
+        /// <response code="403">Доступ запрещен</response>
+        [HttpDelete("{id:guid}")]
+        [Authorize]
+        [AuthorizePermission(PermissionConstants.Products.Delete)]
+        [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public Task Delete(Guid id)
+            => Mediator.SendAsync(new DeleteProduct() { Id = id });
     }
 }

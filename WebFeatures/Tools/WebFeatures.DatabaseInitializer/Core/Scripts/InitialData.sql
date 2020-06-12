@@ -5,21 +5,22 @@ VALUES
 	
 INSERT INTO roles (id, name, description)
 VALUES
-('9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'Administrators', 'Администраторы'),
-('8f4032ba-2bb8-4fa7-8ad8-393df9107590', 'Users', 'Пользователи');
+('9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'administrators', 'Администраторы'),
+('8f4032ba-2bb8-4fa7-8ad8-393df9107590', 'users', 'Пользователи');
 
 INSERT INTO userroles (id, userid, roleid)
 VALUES
 ('8d8af20f-fc3a-4f83-b2d3-68fafcd3b4df', 'a91e29b7-813b-47a3-93f0-8ad34d4c8a09', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd'),
 ('cfe66686-6e3a-4606-831f-99e859fc32c4', '5687c80f-d495-460a-aae5-94ea8054ee2c', '8f4032ba-2bb8-4fa7-8ad8-393df9107590');
 
-INSERT INTO rolepermissions (id, roleid, permission)
+INSERT INTO rolepermissions (id, roleid, name)
 VALUES
-('3c0e64a7-baf1-4071-bdfb-9ae655e1387e', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 1),
-('800c5e48-d56a-4529-b1c6-ae8c6296cc21', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 2),
-('973f17b1-f702-468f-a9a2-dc4558dae003', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 3),
-('500cf60b-8370-4e36-a750-c171d762373d', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 4),
-('d15d3f83-6e05-4235-b995-bd784886de27', '8f4032ba-2bb8-4fa7-8ad8-393df9107590', 4);
+('3c0e64a7-baf1-4071-bdfb-9ae655e1387e', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_create'),
+('800c5e48-d56a-4529-b1c6-ae8c6296cc21', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_update'),
+('973f17b1-f702-468f-a9a2-dc4558dae003', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_delete'),
+('500cf60b-8370-4e36-a750-c171d762373d', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'productcomments_create'),
+('91eb35c1-46e3-4b6f-95fe-c9adf49c6f5f', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'productreviews_create'),
+('d15d3f83-6e05-4235-b995-bd784886de27', '8f4032ba-2bb8-4fa7-8ad8-393df9107590', 'productcomments_create');
 
 INSERT INTO countries (id, name, continent)
 VALUES

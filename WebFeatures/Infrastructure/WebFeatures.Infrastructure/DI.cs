@@ -62,6 +62,7 @@ namespace WebFeatures.Infrastructure
         private static void AddSecurity(IServiceCollection services)
         {
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         private static void AddEvents(IServiceCollection services)
