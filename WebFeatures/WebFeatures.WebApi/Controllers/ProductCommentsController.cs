@@ -27,6 +27,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost]
         [Authorize]
         [AuthorizePermission(Permission.CreateProductComment)]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

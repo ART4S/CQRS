@@ -10,12 +10,12 @@ using WebFeatures.Domian.Entities.Permissions;
 
 namespace WebFeatures.Application.Features.Permissions.Handlers
 {
-    internal class PermissionCommandHandler : IRequestHandler<UserHasPermission, bool>
+    internal class PermissionQueryHandler : IRequestHandler<UserHasPermission, bool>
     {
         private readonly IWriteDbContext _db;
         private readonly ICurrentUserService _currentUser;
 
-        public PermissionCommandHandler(IWriteDbContext db, ICurrentUserService currentUser)
+        public PermissionQueryHandler(IWriteDbContext db, ICurrentUserService currentUser)
         {
             _db = db;
             _currentUser = currentUser;

@@ -75,6 +75,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost]
         [Authorize]
         [AuthorizePermission(Permission.CreateProduct)]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -90,14 +91,11 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPut("{id:guid}")]
         [Authorize]
         [AuthorizePermission(Permission.UpdateProduct)]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public Task Update(Guid id, [FromForm, Required] UpdateProduct request)
-        {
-            request.Id = id;
-
-            return Mediator.SendAsync(request);
-        }
+            => Mediator.SendAsync(request);
     }
 }

@@ -60,14 +60,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         public void Dispose()
         {
-            if (_connection != null)
-            {
-                _transaction.Dispose();
-                _transaction = null;
-
-                _connection.Dispose();
-                _connection = null;
-            }
+            _transaction?.Dispose();
+            _connection?.Dispose();
         }
     }
 }

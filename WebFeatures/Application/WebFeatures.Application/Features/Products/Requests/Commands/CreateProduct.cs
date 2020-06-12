@@ -77,14 +77,14 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
                     .NotEmpty();
 
                 RuleFor(x => x.ManufacturerId)
-                    .MustAsync(async (x, t) => await db.Manufacturers.ExistsAsync(x));
+                    .MustAsync((x, t) => db.Manufacturers.ExistsAsync(x));
 
                 RuleFor(x => x.CategoryId)
-                    .MustAsync(async (x, t) => await db.Categories.ExistsAsync(x.Value))
+                    .MustAsync((x, t) => db.Categories.ExistsAsync(x.Value))
                     .When(x => x.CategoryId.HasValue);
 
                 RuleFor(x => x.BrandId)
-                    .MustAsync(async (x, t) => await db.Brands.ExistsAsync(x));
+                    .MustAsync((x, t) => db.Brands.ExistsAsync(x));
 
                 RuleFor(x => x.MainPicture)
                     .Cascade(CascadeMode.StopOnFirstFailure)
@@ -94,7 +94,6 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
                     .WithMessage(ValidationConstants.Products.PictureFormatError);
 
                 RuleFor(x => x.Pictures)
-                    .Cascade(CascadeMode.StopOnFirstFailure)
                     .NotNull()
                     .Must(x => x.All(y => ValidationConstants.Products.AllowedPictureFormats.Contains(
                         System.IO.Path.GetExtension(y.Name))))

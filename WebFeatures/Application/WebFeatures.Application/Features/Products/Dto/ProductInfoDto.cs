@@ -1,4 +1,5 @@
 ﻿using System;
+using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Features.Products.Dto
 {
@@ -41,5 +42,10 @@ namespace WebFeatures.Application.Features.Products.Dto
         /// Идентификатор бренда
         /// </summary>
         public Guid BrandId { get; set; }
+
+        /// <summary>
+        /// Рейтинг
+        /// </summary>
+        public ProductRating AverageRating { get; set; }
     }
 }

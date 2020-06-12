@@ -8,7 +8,6 @@ using Serilog;
 using WebFeatures.Application;
 using WebFeatures.Infrastructure;
 using WebFeatures.WebApi.Extensions;
-using WebFeatures.WebApi.Middlewares;
 using WebFeatures.WebApi.ModelBinding;
 
 namespace WebFeatures.WebApi
@@ -36,20 +35,18 @@ namespace WebFeatures.WebApi
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
-            });
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
+                });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
+            services.AddMvc();
             services.AddAntiforgery(options =>
-            {
-                options.HeaderName = "X-CSRF-TOKEN";
-                options.Cookie.Name = "XSRF-TOKEN";
-                options.Cookie.HttpOnly = false;
-                options.Cookie.IsEssential = true;
-            });
+                {
+                    options.HeaderName = "X-CSRF-TOKEN";
+                });
 
             // For Frontend (React.JS)
             //services.AddMemoryCache();
@@ -60,6 +57,8 @@ namespace WebFeatures.WebApi
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseExceptionHandling();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
@@ -73,14 +72,12 @@ namespace WebFeatures.WebApi
 
             app.UseSerilogRequestLogging();
 
-            app.UseAntiforgery();
-
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseAntiforgery();
 
             app.UseEndpoints(endpoints =>
             {

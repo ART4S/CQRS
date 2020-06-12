@@ -10,11 +10,11 @@ using WebFeatures.WebApi.Exceptions;
 
 namespace WebFeatures.WebApi.Middlewares
 {
-    internal class ExceptionHandlingMiddleware
+    internal class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -59,7 +59,7 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
 
-                        var logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlingMiddleware>>();
+                        var logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlerMiddleware>>();
                         logger.LogError(exception.Message, exception);
 
                         await context.Response.WriteAsync("Something went wrong");
