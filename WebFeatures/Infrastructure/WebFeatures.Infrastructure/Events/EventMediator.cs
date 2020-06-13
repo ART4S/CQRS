@@ -20,7 +20,7 @@ namespace WebFeatures.Infrastructure.Events
             _services = services;
         }
 
-        public Task PublishAsync(IEvent eve, CancellationToken cancellationToken)
+        public Task PublishAsync(IEvent eve, CancellationToken cancellationToken = default)
         {
             Publisher publisher = PublishersCache.GetOrAdd(
                 eve.GetType(),

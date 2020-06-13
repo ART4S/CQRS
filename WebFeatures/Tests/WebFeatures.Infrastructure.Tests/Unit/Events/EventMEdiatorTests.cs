@@ -8,18 +8,18 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit
 {
-    public class EventStorageTests
+    public class EventMediatorTests
     {
         [Fact]
-        public void PublishAllAsync_ShouldCallHandlers()
+        public void PublishAllAsync_ShouldNotThrow()
         {
             // Arrange
             var serviceProviderMock = new Mock<IServiceProvider>();
-            var storage = new EventMediator(serviceProviderMock.Object);
+            var mediator = new EventMediator(serviceProviderMock.Object);
             var eventMock = new Mock<IEvent>();
 
             // Act
-            storage.PublishAsync(eventMock.Object);
+            mediator.PublishAsync(eventMock.Object);
         }
 
         [Fact]
