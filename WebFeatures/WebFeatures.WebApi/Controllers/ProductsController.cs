@@ -52,7 +52,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet("{id:guid}/reviews")]
         [ProducesResponseType(typeof(IEnumerable<ProductReviewInfoDto>), StatusCodes.Status200OK)]
         public Task<IEnumerable<ProductReviewInfoDto>> GetReviews(Guid id)
-            => Mediator.SendAsync(new GetProductReviews() { ProductId = id });
+            => Mediator.SendAsync(new GetProductReviews() { Id = id });
 
         /// <summary>
         /// Получить комментарии к товару
@@ -63,7 +63,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpGet("{id:guid}/comments")]
         [ProducesResponseType(typeof(IEnumerable<ProductCommentInfoDto>), StatusCodes.Status200OK)]
         public Task<IEnumerable<ProductCommentInfoDto>> GetComments(Guid id)
-            => Mediator.SendAsync(new GetProductComments() { ProductId = id });
+            => Mediator.SendAsync(new GetProductComments() { Id = id });
 
         /// <summary>
         /// Создать товар

@@ -16,13 +16,13 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
     {
         private readonly IWriteDbContext _db;
         private readonly ICurrentUserService _currentUser;
-        private readonly IEventStorage _events;
+        private readonly IEventMediator _events;
         private readonly IMapper _mapper;
 
         public ProductCommentCommandHandler(
             IWriteDbContext db,
             ICurrentUserService currentUser,
-            IEventStorage events,
+            IEventMediator events,
             IMapper mapper)
         {
             _db = db;
@@ -38,7 +38,7 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
 
             await _db.ProductComments.CreateAsync(comment);
 
-            await _events.AddAsync(new ProductCommentCreated(comment.Id));
+            await _events.PublishAsync(new ProductCommentCreated(comment.Id));
 
             return comment.Id;
         }

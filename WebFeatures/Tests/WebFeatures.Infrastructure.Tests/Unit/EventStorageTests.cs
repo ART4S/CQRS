@@ -15,11 +15,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit
         {
             // Arrange
             var serviceProviderMock = new Mock<IServiceProvider>();
-            var storage = new EventStorage(serviceProviderMock.Object);
+            var storage = new EventMediator(serviceProviderMock.Object);
             var eventMock = new Mock<IEvent>();
 
             // Act
-            storage.AddAsync(eventMock.Object);
+            storage.PublishAsync(eventMock.Object);
         }
 
         [Fact]

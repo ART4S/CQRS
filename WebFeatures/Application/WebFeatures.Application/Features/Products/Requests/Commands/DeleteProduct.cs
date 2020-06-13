@@ -6,8 +6,14 @@ using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {
+    /// <summary>
+    /// Удалить товар
+    /// </summary>
     public class DeleteProduct : ICommand<Empty>
     {
+        /// <summary>
+        /// Идентификатор товара
+        /// </summary>
         public Guid Id { get; set; }
 
         public class Validator : AbstractValidator<DeleteProduct>

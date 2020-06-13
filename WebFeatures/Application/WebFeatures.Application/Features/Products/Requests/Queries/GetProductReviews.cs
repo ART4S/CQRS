@@ -13,6 +13,6 @@ namespace WebFeatures.Application.Features.Products.Requests.Queries
         /// <summary>
         /// Идентификатор товара
         /// </summary>
-        public Guid ProductId { get; set; }
+        public Guid Id { get; set; }
     }
 }

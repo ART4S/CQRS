@@ -21,13 +21,13 @@ namespace WebFeatures.Application.Features.Products.Handlers
         IRequestHandler<DeleteProduct, Empty>
     {
         private readonly IWriteDbContext _db;
-        private readonly IEventStorage _events;
+        private readonly IEventMediator _events;
         private readonly IFileReader _fileReader;
         private readonly IMapper _mapper;
 
         public ProductCommandHandler(
             IWriteDbContext db,
-            IEventStorage events,
+            IEventMediator events,
             IFileReader fileReader,
             IMapper mapper)
         {
@@ -62,7 +62,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
                 });
             }
 
-            await _events.AddAsync(new ProductCreated(product.Id));
+            await _events.PublishAsync(new ProductCreated(product.Id));
 
             return product.Id;
         }
@@ -120,7 +120,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             await _db.Files.DeleteAsync(oldPictures);
 
-            await _events.AddAsync(new ProductUpdated(product.Id));
+            await _events.PublishAsync(new ProductUpdated(product.Id));
 
             return Empty.Value;
         }
@@ -129,7 +129,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
         {
             await _db.Products.DeleteAsync(request.Id);
 
-            await _events.AddAsync(new ProductDeleted());
+            await _events.PublishAsync(new ProductDeleted());
 
             return Empty.Value;
         }

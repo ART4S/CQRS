@@ -41,12 +41,12 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
         public Task<IEnumerable<ProductCommentInfoDto>> HandleAsync(GetProductComments request, CancellationToken cancellationToken)
         {
-            return _db.Products.GetCommentsAsync(request.ProductId);
+            return _db.Products.GetCommentsAsync(request.Id);
         }
 
         public Task<IEnumerable<ProductReviewInfoDto>> HandleAsync(GetProductReviews request, CancellationToken cancellationToken)
         {
-            return _db.Products.GetReviewsAsync(request.ProductId);
+            return _db.Products.GetReviewsAsync(request.Id);
         }
     }
 }

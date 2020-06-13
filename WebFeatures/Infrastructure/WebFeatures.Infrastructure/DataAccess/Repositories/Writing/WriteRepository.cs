@@ -59,7 +59,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
             }
 
             var insertColumns = new List<string>();
-            var insertParams = new List<string>();
+            var insertValues = new List<string>();
             var param = new DynamicParameters();
 
             foreach (PropertyMap<TEntity> map in Entity.Properties)
@@ -68,7 +68,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 
                 string paramName = "@" + map.ColumnName;
 
-                insertParams.Add(paramName);
+                insertValues.Add(paramName);
 
                 param.Add(paramName, map.GetValue(entity));
             }
@@ -77,21 +77,21 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 @"INSERT INTO {0} ({1}) VALUES ({2})",
                 Entity.Table.NameWithSchema(),
                 insertColumns.JoinString(),
-                insertParams.JoinString());
+                insertValues.JoinString());
 
             return Connection.ExecuteAsync(sql, param);
         }
 
         public virtual Task UpdateAsync(TEntity entity)
         {
-            var setParams = new List<string>();
+            var setValues = new List<string>();
             var param = new DynamicParameters();
 
             foreach (PropertyMap<TEntity> map in Entity.Properties)
             {
                 string paramName = "@" + map.ColumnName;
 
-                setParams.Add($"{map.ColumnName} = {paramName}");
+                setValues.Add($"{map.ColumnName} = {paramName}");
 
                 param.Add(paramName, map.GetValue(entity));
             }
@@ -101,7 +101,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 SET {1} 
                 WHERE {2} = @{2}",
                 Entity.Table.NameWithSchema(),
-                setParams.JoinString(),
+                setValues.JoinString(),
                 Entity.Column(x => x.Id));
 
             return Connection.ExecuteAsync(sql, param);

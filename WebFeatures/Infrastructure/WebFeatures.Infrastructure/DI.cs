@@ -67,7 +67,7 @@ namespace WebFeatures.Infrastructure
 
         private static void AddEvents(IServiceCollection services)
         {
-            services.AddScoped<IEventStorage, EventStorage>();
+            services.AddScoped<IEventMediator, EventMediator>();
 
             services.RegisterTypesFromAssembly(Assembly.GetExecutingAssembly())
                 .WithInterface(typeof(IEventHandler<>))

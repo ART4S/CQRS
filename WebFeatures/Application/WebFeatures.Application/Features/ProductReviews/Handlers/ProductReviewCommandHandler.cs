@@ -15,13 +15,13 @@ namespace WebFeatures.Application.Features.ProductReviews.Handlers
     internal class ProductReviewCommandHandler : IRequestHandler<CreateProductReview, Guid>
     {
         private readonly IWriteDbContext _db;
-        private readonly IEventStorage _events;
+        private readonly IEventMediator _events;
         private readonly ICurrentUserService _currentUser;
         private readonly IMapper _mapper;
 
         public ProductReviewCommandHandler(
             IWriteDbContext db,
-            IEventStorage events,
+            IEventMediator events,
             ICurrentUserService currentUser,
             IMapper mapper)
         {
@@ -38,7 +38,7 @@ namespace WebFeatures.Application.Features.ProductReviews.Handlers
 
             await _db.ProductReviews.CreateAsync(review);
 
-            await _events.AddAsync(new ProductReviewCreated(review.Id));
+            await _events.PublishAsync(new ProductReviewCreated(review.Id));
 
             return review.Id;
         }

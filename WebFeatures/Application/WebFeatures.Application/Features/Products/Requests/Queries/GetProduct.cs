@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Features.Products.Requests.Queries
     public class GetProduct : IQuery<ProductInfoDto>
     {
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор товара
         /// </summary>
         public Guid Id { get; set; }
     }
