@@ -5,26 +5,26 @@ namespace WebFeatures.Infrastructure.Logging
 {
     internal class LoggerAdapter<T> : Application.Interfaces.Logging.ILogger<T>
     {
-        private readonly ILogger<T> _innerLogger;
+        private readonly ILogger<T> _logger;
 
-        public LoggerAdapter(ILoggerFactory loggerFactory)
+        public LoggerAdapter(ILogger<T> logger)
         {
-            _innerLogger = loggerFactory.CreateLogger<T>();
+            _logger = logger;
         }
 
         public void LogInformation(string message)
         {
-            _innerLogger.LogInformation(message);
+            _logger.LogInformation(message);
         }
 
         public void LogWarning(string message)
         {
-            _innerLogger.LogWarning(message);
+            _logger.LogWarning(message);
         }
 
         public void LogError(string message, Exception exception)
         {
-            _innerLogger.LogError(message, exception);
+            _logger.LogError(message, exception);
         }
     }
 }

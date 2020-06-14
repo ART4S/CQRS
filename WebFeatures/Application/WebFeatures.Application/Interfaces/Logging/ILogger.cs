@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Application.Interfaces.Logging
 {
-    public interface ILogger<out T>
+    public interface ILogger<T>
     {
         void LogInformation(string message);
         void LogWarning(string message);

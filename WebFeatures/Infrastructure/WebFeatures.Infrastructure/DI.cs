@@ -39,6 +39,7 @@ namespace WebFeatures.Infrastructure
         private static void AddLogging(IServiceCollection services)
         {
             services.AddScoped(typeof(ILogger<>), typeof(LoggerAdapter<>));
+            services.AddSingleton(typeof(ILoggerFactory), typeof(LoggerFactory));
         }
 
         private static void AddDataAccess(IServiceCollection services, IConfiguration configuration)

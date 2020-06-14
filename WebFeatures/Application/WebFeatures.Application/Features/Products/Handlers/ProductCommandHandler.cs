@@ -39,7 +39,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            var mainPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
+            File mainPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
 
             await _db.Files.CreateAsync(mainPicture);
 
@@ -51,7 +51,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             foreach (IFile picture in request.Pictures)
             {
-                var pictureFile = await _fileReader.ReadAsync(picture, cancellationToken);
+                File pictureFile = await _fileReader.ReadAsync(picture, cancellationToken);
 
                 await _db.Files.CreateAsync(pictureFile);
 
@@ -75,11 +75,11 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             if (request.MainPicture != null)
             {
-                var newPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
+                File newPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
 
                 if (product.MainPictureId.HasValue)
                 {
-                    var oldPicture = await _db.Files.GetAsync(product.MainPictureId.Value);
+                    File oldPicture = await _db.Files.GetAsync(product.MainPictureId.Value);
 
                     if (!string.Equals(oldPicture.CheckSum, newPicture.CheckSum, StringComparison.OrdinalIgnoreCase))
                     {

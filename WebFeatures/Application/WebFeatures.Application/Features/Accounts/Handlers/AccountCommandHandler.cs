@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Constants;
@@ -7,6 +6,7 @@ using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
