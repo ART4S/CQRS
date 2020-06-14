@@ -9,7 +9,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
     public class EntityProfileTests
     {
         [Fact]
-        public void GetMap_ShouldReturnMap_WhenEntityHasBeenRegisteredManually()
+        public void GetMap_ReturnsMap_WhenEntityHasBeenRegisteredManually()
         {
             // Arrange
             var profile = new EntityProfile();
@@ -23,7 +23,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetMap_ShouldReturnMap_WhenEntityHasNotBeenRegisteredManually()
+        public void GetMap_ReturnsMap_WhenEntityHasNotBeenRegisteredManually()
         {
             // Arrange
             var profile = new EntityProfile();

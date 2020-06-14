@@ -2,6 +2,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
@@ -14,20 +15,20 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
     [Collection("PostgreSqlDatabase")]
     public class UserRepositoryTests
     {
-        private readonly PostgreSqlDatabaseFixture _db;
+        private readonly IDbConnection _connection;
 
         public UserRepositoryTests(PostgreSqlDatabaseFixture db)
         {
-            _db = db;
+            _connection = db.Connection;
         }
 
         private UserWriteRepository CreateDefaultRepository()
         {
-            return new UserWriteRepository(_db.Connection, new EntityProfile());
+            return new UserWriteRepository(_connection, new EntityProfile());
         }
 
         [Fact]
-        public async Task GetAllAsync_ShouldReturnNonEmptyCollection()
+        public async Task GetAllAsync_ReturnsNonEmptyCollection()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -40,7 +41,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnUser_IfUserExists()
+        public async Task GetAsync_ReturnsUser_IfUserExists()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -55,7 +56,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetAsync_ShouldReturnNull_IfUserDoesntExists()
+        public async Task GetAsync_ReturnsNull_IfUserDoesntExists()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -69,7 +70,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldCreateOneUser()
+        public async Task CreateAsync_CreatesOneUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -85,7 +86,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             await repo.CreateAsync(user);
 
-            int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
+            int usersCount = await _connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
@@ -95,7 +96,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task UpdateAsync_ShouldUpdateExistingUser()
+        public async Task UpdateAsync_UpdatesExistingUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -111,11 +112,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User beforeUpdate = await _db.Connection.QuerySingleAsync<User>(sql, user);
+            User beforeUpdate = await _connection.QuerySingleAsync<User>(sql, user);
 
             await repo.UpdateAsync(user);
 
-            User afterUpdate = await _db.Connection.QuerySingleAsync<User>(sql, user);
+            User afterUpdate = await _connection.QuerySingleAsync<User>(sql, user);
 
             // Assert
             user.Id.ShouldBe(beforeUpdate.Id);
@@ -124,7 +125,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldDeleteExistingUser()
+        public async Task DeleteAsync_DeletesExistingUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -133,7 +134,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             await repo.DeleteAsync(user);
 
-            int usersCount = await _db.Connection.ExecuteScalarAsync<int>(
+            int usersCount = await _connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
@@ -142,7 +143,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task ExistsAsync_ShouldReturnTrue_IfUserExists()
+        public async Task ExistsAsync_ReturnsTrue_IfUserExists()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -156,7 +157,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task ExistsAsync_ShouldReturnFalse_IfUserDoesntExist()
+        public async Task ExistsAsync_ReturnsFalse_IfUserDoesntExist()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -170,7 +171,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetUserByEmailAsync_ShouldReturnUser_IfUserWithEmailExists()
+        public async Task GetUserByEmailAsync_ReturnsUser_IfUserWithPassedEmailExists()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();

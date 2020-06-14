@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WebFeatures.DatabaseInitializer.Core
+namespace WebFeatures.DbCreator.Core
 {
     internal static class SqlBuilder
     {

@@ -11,7 +11,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
     public class ReflectionExtensionsTests
     {
         [Fact]
-        public void GetPropertyName_ShouldReturnPropertyName_WhenPropertyIsReferenceType()
+        public void GetPropertyName_ReturnsPropertyName_WhenPropertyIsReferenceType()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
@@ -24,7 +24,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetPropertyName_ShouldReturnPropertyName_WhenPropertyIsValueType()
+        public void GetPropertyName_ReturnsPropertyName_WhenPropertyIsValueType()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
@@ -37,7 +37,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetPropertyName_ShouldReturnPropertyName_ForMultiplePropertyCall()
+        public void GetPropertyName_ReturnsPropertyName_ForMultiplePropertyCall()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
@@ -50,7 +50,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetPropertyName_ShouldThrow_WhenPassedNull()
+        public void GetPropertyName_Throw_WhenPassedNull()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = null;
@@ -63,7 +63,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetPropertyName_ShouldThrow_ForNonPropertyCall()
+        public void GetPropertyName_Throw_ForNonPropertyCall()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntField;
@@ -76,7 +76,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetFirstProperty_ShouldReturnFirstPropertyFromPropertyCallExpression()
+        public void GetFirstProperty_ReturnsFirstPropertyFromPropertyCallExpression()
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
@@ -90,7 +90,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatePropertySetterFromPropertyInfo_WhenPropertyIsReferenceType()
+        public void CreateSetter_ReturnsPropertySetterFromPropertyInfo_WhenPropertyIsReferenceType()
         {
             // Arrange
             TestEntity entity = new TestEntity();
@@ -108,7 +108,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatePropertySetterFromPropertyInfo_WhenPropertyIsValueType()
+        public void CreateSetter_ReturnsPropertySetterFromPropertyInfo_WhenPropertyIsValueType()
         {
             // Arrange
             TestEntity entity = new TestEntity();
@@ -126,7 +126,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatePropertySetterFromExpression_WhenPropertyIsReferenceType()
+        public void CreateSetter_ReturnsPropertySetterFromExpression_WhenPropertyIsReferenceType()
         {
             // Arrange
             TestEntity entity = new TestEntity();
@@ -144,7 +144,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatePropertySetterFromExpression_WhenPropertyIsValueType()
+        public void CreateSetter_ReturnsPropertySetterFromExpression_WhenPropertyIsValueType()
         {
             // Arrange
             TestEntity entity = new TestEntity();
@@ -162,7 +162,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatPropertySetterFromExpression_ForMultiplePropertyCall()
+        public void CreateSetter_ReturnsPropertySetterFromExpression_ForMultiplePropertyCall()
         {
             // Arrange
             TestEntity entity = new TestEntity() { ValueObjectProperty = new TestValueObject() };

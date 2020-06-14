@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace WebFeatures.DatabaseInitializer.Core.Extensions
+namespace WebFeatures.DbCreator.Core.Extensions
 {
     internal static class ConnectionExtensions
     {

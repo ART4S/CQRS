@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
-using WebFeatures.DatabaseInitializer.Core.Database;
-using WebFeatures.DatabaseInitializer.Core.Extensions;
+using WebFeatures.DbCreator.Core.DataAccess;
+using WebFeatures.DbCreator.Core.Extensions;
 
-namespace WebFeatures.DatabaseInitializer.Core
+namespace WebFeatures.DbCreator.Core
 {
     internal class ScriptsRunner
     {
@@ -22,17 +22,17 @@ namespace WebFeatures.DatabaseInitializer.Core
 
             connection.Open();
 
-            string defaultDb = connection.Database;
+            string defaultDbName = connection.Database;
 
-            const string appDb = "webfeatures_db";
+            const string appDbName = "webfeatures_db";
 
             _logger.LogInformation("Creating database");
 
-            connection.Execute(SqlBuilder.DropDatabase(appDb));
+            connection.Execute(SqlBuilder.DropDatabase(appDbName));
 
-            connection.Execute(SqlBuilder.CreateDatabase(appDb));
+            connection.Execute(SqlBuilder.CreateDatabase(appDbName));
 
-            connection.ChangeDatabase(appDb);
+            connection.ChangeDatabase(appDbName);
 
             using IDbTransaction transaction = connection.BeginTransaction();
 
@@ -42,9 +42,9 @@ namespace WebFeatures.DatabaseInitializer.Core
 
                 var schemaScripts = SqlBuilder.GetDbSchemaScripts();
 
-                foreach (var script in schemaScripts)
+                foreach ((string Name, string Body) script in schemaScripts)
                 {
-                    _logger.LogInformation($"Running: {script.Name}");
+                    _logger.LogInformation($"Executing '{script.Name}'");
 
                     connection.Execute(script.Body);
                 }
@@ -63,9 +63,9 @@ namespace WebFeatures.DatabaseInitializer.Core
             {
                 transaction.Rollback();
 
-                connection.ChangeDatabase(defaultDb);
+                connection.ChangeDatabase(defaultDbName);
 
-                connection.Execute(SqlBuilder.DropDatabase(appDb));
+                connection.Execute(SqlBuilder.DropDatabase(appDbName));
 
                 throw;
             }

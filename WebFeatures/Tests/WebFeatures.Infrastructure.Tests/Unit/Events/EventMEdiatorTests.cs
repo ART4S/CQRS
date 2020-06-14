@@ -11,7 +11,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
     public class EventMediatorTests
     {
         [Fact]
-        public void PublishAllAsync_ShouldNotThrow()
+        public async Task PublishAsync_DoesntThrow()
         {
             // Arrange
             var stubServiceProvider = new Mock<IServiceProvider>();
@@ -19,11 +19,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
             var stubEvent = new Mock<IEvent>();
 
             // Act
-            mediator.PublishAsync(stubEvent.Object);
+            Task actual() => mediator.PublishAsync(stubEvent.Object);
+
+            // Assert
+            await actual();
         }
 
         [Fact]
-        public void PublishAllAsync_ShouldPassSameEvent()
+        public async Task PublishAsync_PassesSameEvent()
         {
             //// Arrange
             //var serviceProviderMock = new Mock<IServiceProvider>();

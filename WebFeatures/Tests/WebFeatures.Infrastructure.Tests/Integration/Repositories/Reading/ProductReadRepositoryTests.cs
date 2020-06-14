@@ -1,6 +1,7 @@
 ﻿using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
@@ -12,20 +13,20 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
     [Collection("PostgreSqlDatabase")]
     public class ProductReadRepositoryTests
     {
-        private readonly PostgreSqlDatabaseFixture _db;
+        private readonly IDbConnection _connection;
 
         public ProductReadRepositoryTests(PostgreSqlDatabaseFixture db)
         {
-            _db = db;
+            _connection = db.Connection;
         }
 
         private ProductReadRepository CreateDefaultRepository()
         {
-            return new ProductReadRepository(_db.Connection);
+            return new ProductReadRepository(_connection);
         }
 
         [Fact]
-        public async Task GetProductAsync_ShouldReturnProduct_IfProductExists()
+        public async Task GetProductAsync_ReturnsProduct_IfProductExists()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -40,7 +41,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetProductAsync_ShouldReturnNull_IfProductDoesntExist()
+        public async Task GetProductAsync_ReturnsNull_IfProductDoesntExist()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -54,7 +55,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetListAsync_ShouldReturnNonEmptyProductsCollection()
+        public async Task GetListAsync_ReturnsNonEmptyProductsCollection()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -67,7 +68,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetCommentsAsync_ShouldReturnNonEmptyCollection_IfProductExists()
+        public async Task GetCommentsAsync_ReturnsNonEmptyCollection_IfProductExists()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -81,7 +82,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetCommentsAsync_ShouldReturnEmptyCollection_IsProductDoesntExist()
+        public async Task GetCommentsAsync_ReturnsEmptyCollection_IsProductDoesntExist()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -95,7 +96,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetReviewsAsync_ShouldReturnNonEmptyCollection_IfProductExists()
+        public async Task GetReviewsAsync_ReturnsNonEmptyCollection_IfProductExists()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -109,7 +110,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetReviewsAsync_ShouldReturnEmptyCollection_IfProductDoesntExist()
+        public async Task GetReviewsAsync_ReturnsEmptyCollection_IfProductDoesntExist()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();

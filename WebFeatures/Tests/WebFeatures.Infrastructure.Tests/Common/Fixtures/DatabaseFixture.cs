@@ -3,10 +3,9 @@ using System.Data;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
-    public abstract class DatabaseFixture<TConnection> : IDisposable
-        where TConnection : IDbConnection
+    public abstract class DatabaseFixture : IDisposable
     {
-        public TConnection Connection
+        public IDbConnection Connection
         {
             get
             {
@@ -14,16 +13,16 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
                 return _connection;
             }
         }
-        private readonly TConnection _connection;
+        private readonly IDbConnection _connection;
 
-        protected DatabaseFixture(TConnection connection)
+        protected DatabaseFixture(IDbConnection connection)
         {
             _connection = connection;
         }
 
         private void OpenConnection()
         {
-            if (_connection.State == ConnectionState.Closed)
+            if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
             }

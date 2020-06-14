@@ -1,1 +1,12 @@
-ТЕСТИРОВАНИЕ
+ТЕСТИРОВАНИЕ:
+
+-- application
+маппинги
+
+-- web
+контроллеры (functional testing via testServer)
+WebApplicationFactory
+
+-- infrstructure
+eventMediator
+requestMediator

@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
-using WebFeatures.DatabaseInitializer.Core;
-using WebFeatures.DatabaseInitializer.Core.Database;
-using WebFeatures.DatabaseInitializer.Core.Database.Logging;
+using WebFeatures.DbCreator.Core;
+using WebFeatures.DbCreator.Core.DataAccess;
+using WebFeatures.DbCreator.Core.DataAccess.Logging;
 
-namespace WebFeatures.DatabaseInitializer
+namespace WebFeatures.DbCreator
 {
     internal class CompositionRoot
     {

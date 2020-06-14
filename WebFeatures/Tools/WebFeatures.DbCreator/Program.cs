@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using WebFeatures.DatabaseInitializer.Core;
+using WebFeatures.DbCreator.Core;
 
-namespace WebFeatures.DatabaseInitializer
+namespace WebFeatures.DbCreator
 {
     class Program
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Data;
 
-namespace WebFeatures.DatabaseInitializer.Core.Database.Logging
+namespace WebFeatures.DbCreator.Core.DataAccess.Logging
 {
     internal class LoggingDbConnectionFactory : IDbConnectionFactory
     {

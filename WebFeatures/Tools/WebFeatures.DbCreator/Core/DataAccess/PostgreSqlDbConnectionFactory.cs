@@ -2,7 +2,7 @@
 using System.Data;
 using WebFeatures.Common;
 
-namespace WebFeatures.DatabaseInitializer.Core.Database
+namespace WebFeatures.DbCreator.Core.DataAccess
 {
     internal class PostgreSqlDbConnectionFactory : IDbConnectionFactory
     {

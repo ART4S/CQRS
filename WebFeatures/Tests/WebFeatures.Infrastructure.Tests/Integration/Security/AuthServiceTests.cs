@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Shouldly;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Infrastructure.Security;
@@ -12,17 +13,17 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
     [Collection("PostgreSqlDatabase")]
     public class AuthServiceTests
     {
-        private readonly PostgreSqlDatabaseFixture _db;
+        private readonly IDbConnection _connection;
 
         public AuthServiceTests(PostgreSqlDatabaseFixture db)
         {
-            _db = db;
+            _connection = db.Connection;
         }
 
         private AuthService CreateDefaultAuthService()
         {
             var stubContext = new Mock<IWriteDbContext>();
-            stubContext.Setup(x => x.Connection).Returns(() => _db.Connection);
+            stubContext.Setup(x => x.Connection).Returns(() => _connection);
 
             return new AuthService(stubContext.Object);
         }

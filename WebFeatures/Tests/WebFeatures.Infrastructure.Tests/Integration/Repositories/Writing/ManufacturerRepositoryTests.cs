@@ -2,6 +2,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
@@ -16,11 +17,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
     [Collection("PostgreSqlDatabase")]
     public class ManufacturerRepositoryTests
     {
-        private readonly PostgreSqlDatabaseFixture _db;
+        private readonly IDbConnection _connection;
 
         public ManufacturerRepositoryTests(PostgreSqlDatabaseFixture db)
         {
-            _db = db;
+            _connection = db.Connection;
         }
 
         private ManufacturerWriteRepository CreateDefaultRepository()
@@ -29,11 +30,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             profile.TryRegisterMap(typeof(ManufacturerMap));
 
-            return new ManufacturerWriteRepository(_db.Connection, profile);
+            return new ManufacturerWriteRepository(_connection, profile);
         }
 
         [Fact]
-        public async Task GetAllAsync_ShouldReturnNonEmptyCollection()
+        public async Task GetAllAsync_ReturnsNonEmptyCollection()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
@@ -46,7 +47,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnManufacturer_IfManufacturerExists()
+        public async Task GetByIdAsync_ReturnsManufacturer_IfManufacturerExists()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
@@ -66,7 +67,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnNull_IfManufacturerDoesntExist()
+        public async Task GetByIdAsync_ReturnsNull_IfManufacturerDoesntExist()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
@@ -80,7 +81,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldCreateOneManufacturer()
+        public async Task CreateAsync_CreatesOneManufacturer()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
@@ -101,7 +102,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             await repo.CreateAsync(manufacturer);
 
-            int manufacturersCount = await _db.Connection.ExecuteScalarAsync<int>(
+            int manufacturersCount = await _connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(*) FROM public.manufacturers
                 WHERE id = @Id AND streetaddress_cityid = @CityId",
                 new

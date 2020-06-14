@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{1E2CF22E-2214-489C-BD8A-81C4A1303C3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.DatabaseInitializer", "Tools\WebFeatures.DatabaseInitializer\WebFeatures.DatabaseInitializer.csproj", "{F036BE2D-8D0C-4FB9-93D9-4BF0905CE7B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.DbCreator", "Tools\WebFeatures.DbCreator\WebFeatures.DbCreator.csproj", "{F036BE2D-8D0C-4FB9-93D9-4BF0905CE7B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure.Tests", "Tests\WebFeatures.Infrastructure.Tests\WebFeatures.Infrastructure.Tests.csproj", "{F6EF8E2A-2D04-4279-A959-15916DF51475}"
 EndProject
