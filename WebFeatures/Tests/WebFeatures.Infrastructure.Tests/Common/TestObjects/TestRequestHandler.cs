@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
-using WebFeatures.Requests.Tests.Helpers;
+using WebFeatures.Infrastructure.Tests.Common.Utils;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
     internal class TestRequestHandler : IRequestHandler<TestRequest, TestRequestResult>
     {

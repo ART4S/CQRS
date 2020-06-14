@@ -8,7 +8,7 @@ using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
-using WebFeatures.Infrastructure.Tests.Helpers.Fixtures;
+using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing

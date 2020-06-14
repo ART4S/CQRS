@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
-using WebFeatures.Infrastructure.Tests.Helpers.TestObjects;
+using WebFeatures.Infrastructure.Tests.Common.TestObjects;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
@@ -56,7 +56,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             Expression<Func<TestEntity, object>> propertyCall = null;
 
             // Act
-            Action actual = () => propertyCall.GetPropertyName();
+            void actual() => propertyCall.GetPropertyName();
 
             // Assert
             Assert.Throws<ArgumentNullException>(actual);
@@ -69,7 +69,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntField;
 
             // Act
-            Action actual = () => propertyCall.GetPropertyName();
+            void actual() => propertyCall.GetPropertyName();
 
             // Assert
             Assert.Throws<InvalidOperationException>(actual);

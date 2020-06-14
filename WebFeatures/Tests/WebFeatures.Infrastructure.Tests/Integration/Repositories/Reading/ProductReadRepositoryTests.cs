@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
-using WebFeatures.Infrastructure.Tests.Helpers.Fixtures;
+using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading

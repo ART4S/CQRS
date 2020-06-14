@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Npgsql;
-using WebFeatures.Infrastructure.Tests.Helpers.Utils;
+using WebFeatures.Infrastructure.Tests.Common.Utils;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Fixtures
+namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
     public class PostgreSqlDatabaseFixture : DatabaseFixture<NpgsqlConnection>
     {

@@ -1,6 +1,6 @@
 ﻿using WebFeatures.Application.Infrastructure.Requests;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
     internal class TestRequest : IRequest<TestRequestResult>
     {

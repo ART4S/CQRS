@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace WebFeatures.Requests.Tests
+namespace WebFeatures.Infrastructure.Tests.Unit.Requests
 {
     public class RequestMediatorTests
     {

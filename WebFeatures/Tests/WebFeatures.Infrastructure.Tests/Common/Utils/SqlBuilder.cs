@@ -7,7 +7,7 @@ using WebFeatures.Domian.Entities.Permissions;
 using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Infrastructure.DataAccess.Constants;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
+namespace WebFeatures.Infrastructure.Tests.Common.Utils
 {
     // TODO: BulkInsert
     internal static class SqlBuilder

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebFeatures.Requests.Tests.Helpers
+namespace WebFeatures.Infrastructure.Tests.Common.Utils
 {
     internal class CallChecker
     {

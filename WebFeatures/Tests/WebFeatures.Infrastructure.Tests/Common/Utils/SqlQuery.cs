@@ -1,6 +1,6 @@
 ﻿using WebFeatures.Common;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
+namespace WebFeatures.Infrastructure.Tests.Common.Utils
 {
     internal class SqlQuery
     {

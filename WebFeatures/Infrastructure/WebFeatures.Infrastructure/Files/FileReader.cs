@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Files;
 using WebFeatures.Domian.Entities;
@@ -8,7 +9,7 @@ namespace WebFeatures.Infrastructure.Files
 {
     internal class FileReader : IFileReader
     {
-        public async Task<File> ReadAsync(IFile file)
+        public async Task<File> ReadAsync(IFile file, CancellationToken cancellationToken)
         {
             byte[] content;
 
@@ -16,7 +17,7 @@ namespace WebFeatures.Infrastructure.Files
             {
                 await using (var rs = file.OpenReadStream())
                 {
-                    await rs.CopyToAsync(ms);
+                    await rs.CopyToAsync(ms, cancellationToken);
                 }
 
                 content = ms.ToArray();

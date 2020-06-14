@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
     public class TestValueObject : ValueObject
     {

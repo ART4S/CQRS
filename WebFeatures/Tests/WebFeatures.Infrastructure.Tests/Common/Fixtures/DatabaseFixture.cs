@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Fixtures
+namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
     public abstract class DatabaseFixture<TConnection> : IDisposable
         where TConnection : IDbConnection

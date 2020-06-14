@@ -39,7 +39,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
         public async Task<Guid> HandleAsync(CreateProduct request, CancellationToken cancellationToken)
         {
-            var mainPicture = await _fileReader.ReadAsync(request.MainPicture);
+            var mainPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
 
             await _db.Files.CreateAsync(mainPicture);
 
@@ -51,7 +51,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             foreach (IFile picture in request.Pictures)
             {
-                var pictureFile = await _fileReader.ReadAsync(picture);
+                var pictureFile = await _fileReader.ReadAsync(picture, cancellationToken);
 
                 await _db.Files.CreateAsync(pictureFile);
 
@@ -75,7 +75,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
 
             if (request.MainPicture != null)
             {
-                var newPicture = await _fileReader.ReadAsync(request.MainPicture);
+                var newPicture = await _fileReader.ReadAsync(request.MainPicture, cancellationToken);
 
                 if (product.MainPictureId.HasValue)
                 {
@@ -100,7 +100,7 @@ namespace WebFeatures.Application.Features.Products.Handlers
             await _db.Products.UpdateAsync(product);
 
             var actualPictures = await Task.WhenAll(
-                request.Pictures.Select(x => _fileReader.ReadAsync(x)));
+                request.Pictures.Select(x => _fileReader.ReadAsync(x, cancellationToken)));
 
             var oldPictures = (await _db.Files.GetByProductIdAsync(product.Id)).ToHashSet();
 

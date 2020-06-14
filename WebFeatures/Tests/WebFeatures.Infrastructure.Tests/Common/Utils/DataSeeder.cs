@@ -2,9 +2,9 @@
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using WebFeatures.Domian.Entities.Products;
-using WebFeatures.Infrastructure.Tests.Helpers.Data;
+using WebFeatures.Infrastructure.Tests.Common.Data;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
+namespace WebFeatures.Infrastructure.Tests.Common.Utils
 {
     internal static class DataSeeder
     {

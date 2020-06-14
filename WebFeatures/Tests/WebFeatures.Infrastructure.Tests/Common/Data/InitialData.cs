@@ -6,7 +6,7 @@ using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Domian.Enums;
 using WebFeatures.Domian.ValueObjects;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Data
+namespace WebFeatures.Infrastructure.Tests.Common.Data
 {
     internal static class InitialData
     {

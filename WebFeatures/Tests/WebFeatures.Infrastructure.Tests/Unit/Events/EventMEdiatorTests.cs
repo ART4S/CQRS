@@ -6,7 +6,7 @@ using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Infrastructure.Events;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.Unit
+namespace WebFeatures.Infrastructure.Tests.Unit.Events
 {
     public class EventMediatorTests
     {

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.Utils
+namespace WebFeatures.Infrastructure.Tests.Common.Utils
 {
     internal static class ConnectionExtensions
     {

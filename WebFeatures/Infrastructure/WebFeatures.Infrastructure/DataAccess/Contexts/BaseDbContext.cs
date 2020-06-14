@@ -37,7 +37,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
             _connectionFactory = connectionFactory;
         }
 
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task SaveChangesAsync(CancellationToken cancellationToken)
         {
             if (_connection == null)
             {

@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Middlewares
 
             try
             {
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync(cancellationToken);
 
                 return response;
             }

@@ -1,6 +1,6 @@
 ﻿using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Infrastructure.Tests.Helpers.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
     internal class TestEntity : Entity
     {

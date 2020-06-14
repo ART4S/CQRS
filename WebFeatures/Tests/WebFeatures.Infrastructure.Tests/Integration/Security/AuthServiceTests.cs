@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Infrastructure.Security;
-using WebFeatures.Infrastructure.Tests.Helpers.Fixtures;
+using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Security
