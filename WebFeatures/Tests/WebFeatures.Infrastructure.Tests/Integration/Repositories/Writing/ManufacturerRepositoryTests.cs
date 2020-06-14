@@ -17,24 +17,29 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
     public class ManufacturerRepositoryTests
     {
         private readonly PostgreSqlDatabaseFixture _db;
-        private readonly ManufacturerWriteRepository _repo;
 
         public ManufacturerRepositoryTests(PostgreSqlDatabaseFixture db)
         {
             _db = db;
+        }
 
+        private ManufacturerWriteRepository CreateDefaultRepository()
+        {
             var profile = new EntityProfile();
 
             profile.TryRegisterMap(typeof(ManufacturerMap));
 
-            _repo = new ManufacturerWriteRepository(db.Connection, profile);
+            return new ManufacturerWriteRepository(_db.Connection, profile);
         }
 
         [Fact]
         public async Task GetAllAsync_ShouldReturnNonEmptyCollection()
         {
+            // Arrange
+            ManufacturerWriteRepository repo = CreateDefaultRepository();
+
             // Act
-            IEnumerable<Manufacturer> manufacturers = await _repo.GetAllAsync();
+            IEnumerable<Manufacturer> manufacturers = await repo.GetAllAsync();
 
             // Assert
             manufacturers.ShouldNotBeEmpty();
@@ -44,11 +49,13 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetByIdAsync_ShouldReturnManufacturer_IfManufacturerExists()
         {
             // Arrange
+            ManufacturerWriteRepository repo = CreateDefaultRepository();
+
             Guid manufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6");
             Guid cityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
 
             // Act
-            Manufacturer manufacturer = await _repo.GetAsync(manufacturerId);
+            Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
 
             // Assert
             manufacturer.ShouldNotBeNull();
@@ -62,10 +69,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetByIdAsync_ShouldReturnNull_IfManufacturerDoesntExist()
         {
             // Arrange
+            ManufacturerWriteRepository repo = CreateDefaultRepository();
             Guid manufacturerId = Guid.NewGuid();
 
             // Act
-            Manufacturer manufacturer = await _repo.GetAsync(manufacturerId);
+            Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
 
             // Assert
             manufacturer.ShouldBeNull();
@@ -75,6 +83,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task CreateAsync_ShouldCreateOneManufacturer()
         {
             // Arrange
+            ManufacturerWriteRepository repo = CreateDefaultRepository();
+
             var manufacturer = new Manufacturer()
             {
                 Id = new Guid("0fd1e2cd-51a0-4ba5-b830-e0b7cbe76823"),
@@ -89,7 +99,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             };
 
             // Act
-            await _repo.CreateAsync(manufacturer);
+            await repo.CreateAsync(manufacturer);
 
             int manufacturersCount = await _db.Connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(*) FROM public.manufacturers

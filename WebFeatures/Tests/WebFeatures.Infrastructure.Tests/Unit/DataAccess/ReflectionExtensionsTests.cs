@@ -20,7 +20,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             string propertyName = propertyCall.GetPropertyName();
 
             // Assert
-            propertyName.ShouldBe("StringProperty");
+            propertyName.ShouldBe(nameof(TestEntity.StringProperty));
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             string propertyName = propertyCall.GetPropertyName();
 
             // Assert
-            propertyName.ShouldBe("IntProperty");
+            propertyName.ShouldBe(nameof(TestEntity.IntProperty));
         }
 
         [Fact]
@@ -46,23 +46,33 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             string propertyName = propertyCall.GetPropertyName();
 
             // Assert
-            propertyName.ShouldBe("ValueObjectProperty_StringProperty");
+            propertyName.ShouldBe($"{nameof(TestEntity.ValueObjectProperty)}_{nameof(TestEntity.ValueObjectProperty.StringProperty)}");
         }
 
         [Fact]
         public void GetPropertyName_ShouldThrow_WhenPassedNull()
         {
+            // Arrange
             Expression<Func<TestEntity, object>> propertyCall = null;
 
-            Assert.Throws<ArgumentNullException>(() => propertyCall.GetPropertyName());
+            // Act
+            Action actual = () => propertyCall.GetPropertyName();
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(actual);
         }
 
         [Fact]
         public void GetPropertyName_ShouldThrow_ForNonPropertyCall()
         {
+            // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntField;
 
-            Assert.Throws<InvalidOperationException>(() => propertyCall.GetPropertyName());
+            // Act
+            Action actual = () => propertyCall.GetPropertyName();
+
+            // Assert
+            Assert.Throws<InvalidOperationException>(actual);
         }
 
         [Fact]
@@ -72,11 +82,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
             // Act
-            PropertyInfo property = propertyCall.GetFirstProperty();
+            PropertyInfo expected = typeof(TestEntity).GetProperty(nameof(TestEntity.ValueObjectProperty));
+            PropertyInfo actual = propertyCall.GetFirstProperty();
 
             // Assert
-            property.ShouldBe(typeof(TestEntity)
-                .GetProperty(nameof(TestEntity.ValueObjectProperty)));
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -84,15 +94,17 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
-            string test = "test";
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.StringProperty));
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
-            propertySetter(entity, test);
+
+            string expected = "test";
+
+            propertySetter(entity, expected);
 
             // Assert
-            entity.StringProperty.ShouldBe(test);
+            entity.StringProperty.ShouldBe(expected);
         }
 
         [Fact]
@@ -100,31 +112,35 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
-            int test = 1;
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.IntProperty));
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
-            propertySetter(entity, test);
+
+            int expected = 1;
+
+            propertySetter(entity, expected);
 
             // Assert
-            entity.IntProperty.ShouldBe(test);
+            entity.IntProperty.ShouldBe(expected);
         }
 
         [Fact]
-        public void CreateSetter_ShouldCreatePropertySetterFromExpressio_WhenPropertyIsReferenceType()
+        public void CreateSetter_ShouldCreatePropertySetterFromExpression_WhenPropertyIsReferenceType()
         {
             // Arrange
             TestEntity entity = new TestEntity();
-            string test = "test";
             Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-            propertySetter(entity, test);
+
+            string expected = "test";
+
+            propertySetter(entity, expected);
 
             // Assert
-            entity.StringProperty.ShouldBe(test);
+            entity.StringProperty.ShouldBe(expected);
         }
 
         [Fact]
@@ -132,15 +148,17 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
-            int test = 1;
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-            propertySetter(entity, test);
+
+            int expected = 1;
+
+            propertySetter(entity, expected);
 
             // Assert
-            entity.IntProperty.ShouldBe(test);
+            entity.IntProperty.ShouldBe(expected);
         }
 
         [Fact]
@@ -148,15 +166,17 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity() { ValueObjectProperty = new TestValueObject() };
-            string test = "test";
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-            propertySetter(entity, test);
+
+            string expected = "test";
+
+            propertySetter(entity, expected);
 
             // Assert
-            entity.ValueObjectProperty.StringProperty.ShouldBe(test);
+            entity.ValueObjectProperty.StringProperty.ShouldBe(expected);
         }
     }
 }

@@ -14,12 +14,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit
         public void PublishAllAsync_ShouldNotThrow()
         {
             // Arrange
-            var serviceProviderMock = new Mock<IServiceProvider>();
-            var mediator = new EventMediator(serviceProviderMock.Object);
-            var eventMock = new Mock<IEvent>();
+            var stubServiceProvider = new Mock<IServiceProvider>();
+            var mediator = new EventMediator(stubServiceProvider.Object);
+            var stubEvent = new Mock<IEvent>();
 
             // Act
-            mediator.PublishAsync(eventMock.Object);
+            mediator.PublishAsync(stubEvent.Object);
         }
 
         [Fact]

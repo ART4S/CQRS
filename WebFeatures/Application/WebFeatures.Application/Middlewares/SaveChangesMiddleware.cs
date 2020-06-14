@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Middlewares
 
             try
             {
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return response;
             }

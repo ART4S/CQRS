@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Persistence;
 
@@ -35,7 +37,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
             _connectionFactory = connectionFactory;
         }
 
-        public void SaveChanges()
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             if (_connection == null)
             {
@@ -56,6 +58,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
                 _transaction.Dispose();
                 _transaction = null;
             }
+
+            return Task.CompletedTask;
         }
 
         public void Dispose()
