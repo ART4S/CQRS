@@ -34,8 +34,8 @@
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Application\WebFeatures.Application\WebFeatures.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\WebFeatures.Infrastructure\WebFeatures.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebFeatures.Application\WebFeatures.Application.csproj" />
+    <ProjectReference Include="..\WebFeatures.Infrastructure\WebFeatures.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.Development.json">
