@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
-    internal class TestRequest : IRequest<TestRequestResult>
+    internal class TestRequest : IRequest<TestResult>
     {
     }
 }

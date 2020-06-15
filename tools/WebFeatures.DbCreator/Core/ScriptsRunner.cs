@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Data;
 using WebFeatures.DbCreator.Core.DataAccess;
 using WebFeatures.DbCreator.Core.Extensions;
@@ -9,30 +10,48 @@ namespace WebFeatures.DbCreator.Core
     {
         private readonly ILogger<ScriptsRunner> _logger;
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly DbCreateOptions _createOptions;
 
-        public ScriptsRunner(ILogger<ScriptsRunner> logger, IDbConnectionFactory connectionFactory)
+        public ScriptsRunner(
+            ILogger<ScriptsRunner> logger,
+            IDbConnectionFactory connectionFactory,
+            IOptions<DbCreateOptions> createOptions)
         {
             _logger = logger;
             _connectionFactory = connectionFactory;
+            _createOptions = createOptions.Value;
         }
 
         public void Run()
+        {
+            if (_createOptions.Development)
+            {
+                CreateDatabase("dev");
+            }
+
+            if (_createOptions.Testing)
+            {
+                CreateDatabase("test");
+            }
+        }
+
+        private void CreateDatabase(string environment)
         {
             using IDbConnection connection = _connectionFactory.CreateConnection();
 
             connection.Open();
 
-            string defaultDbName = connection.Database;
+            string defaultDb = connection.Database;
 
-            const string appDbName = "webfeatures_db";
+            string db = $"webfeatures_{environment}_db";
 
-            _logger.LogInformation("Creating database");
+            _logger.LogInformation($"Creating {environment} database");
 
-            connection.Execute(SqlBuilder.DropDatabase(appDbName));
+            connection.Execute(SqlBuilder.DropDatabase(db));
 
-            connection.Execute(SqlBuilder.CreateDatabase(appDbName));
+            connection.Execute(SqlBuilder.CreateDatabase(db));
 
-            connection.ChangeDatabase(appDbName);
+            connection.ChangeDatabase(db);
 
             using IDbTransaction transaction = connection.BeginTransaction();
 
@@ -51,7 +70,7 @@ namespace WebFeatures.DbCreator.Core
 
                 _logger.LogInformation("Seeding initial data");
 
-                connection.Execute(SqlBuilder.SeedInitialData());
+                connection.Execute(SqlBuilder.SeedInitialData(environment));
 
                 _logger.LogInformation("Updating materialized views");
 
@@ -63,9 +82,9 @@ namespace WebFeatures.DbCreator.Core
             {
                 transaction.Rollback();
 
-                connection.ChangeDatabase(defaultDbName);
+                connection.ChangeDatabase(defaultDb);
 
-                connection.Execute(SqlBuilder.DropDatabase(appDbName));
+                connection.Execute(SqlBuilder.DropDatabase(db));
 
                 throw;
             }

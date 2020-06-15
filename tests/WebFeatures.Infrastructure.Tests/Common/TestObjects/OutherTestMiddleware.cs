@@ -5,7 +5,7 @@ using WebFeatures.Infrastructure.Tests.Common.Utils;
 
 namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
-    internal class OutherTestMiddleware : IRequestMiddleware<TestRequest, TestRequestResult>
+    internal class OutherTestMiddleware : IRequestMiddleware<TestRequest, TestResult>
     {
         private readonly CallChecker _checker;
 
@@ -14,11 +14,11 @@ namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
             _checker = checker;
         }
 
-        public async Task<TestRequestResult> HandleAsync(TestRequest request, RequestDelegate<Task<TestRequestResult>> next, CancellationToken cancellationToken)
+        public async Task<TestResult> HandleAsync(TestRequest request, RequestDelegate<Task<TestResult>> next, CancellationToken cancellationToken)
         {
             _checker.Messages.Add("Outher started");
 
-            TestRequestResult result = await next();
+            TestResult result = await next();
 
             _checker.Messages.Add("Outher finished");
 

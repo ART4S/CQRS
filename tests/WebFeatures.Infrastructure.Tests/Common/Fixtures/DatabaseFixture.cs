@@ -2,13 +2,13 @@
 using Respawn;
 using System;
 using System.Data;
-using WebFeatures.Infrastructure.Tests.Common.Utils;
+using System.Data.Common;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
     public class DatabaseFixture : IDisposable
     {
-        public IDbConnection Connection
+        public DbConnection Connection
         {
             get
             {
@@ -16,21 +16,19 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
                 return _connection;
             }
         }
-        private readonly IDbConnection _connection;
+        private readonly DbConnection _connection;
 
         private readonly Checkpoint _checkpoint;
 
         public DatabaseFixture()
         {
             _connection = new NpgsqlConnection("server=localhost;port=5432;username=postgres;password=postgres;database=webfeatures_test_db");
-            _checkpoint = new Checkpoint();
-
-            Init();
-        }
-
-        private void Init()
-        {
-            DataSeeder.SeedTestData(Connection);
+            _checkpoint = new Checkpoint()
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = new[] { "public" },
+                WithReseed = true,
+            };
         }
 
         private void OpenConnection()
@@ -43,14 +41,12 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 
         public void Reset()
         {
-            _checkpoint.Reset(_connection.ConnectionString);
+            _checkpoint.Reset(_connection);
         }
 
         public void Dispose()
         {
-            Connection.ChangeDatabase("postgres");
-
-            Connection.Execute(SqlBuilder.CloseExistingConnections(DatabaseName));
+            _connection?.Dispose();
         }
     }
 }

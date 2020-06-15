@@ -5,17 +5,17 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Infrastructure.Security;
+using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Security
 {
-    [Collection("PostgreSqlDatabase")]
-    public class AuthServiceTests
+    public class AuthServiceTests : IntegrationTestBase
     {
         private readonly IDbConnection _connection;
 
-        public AuthServiceTests(PostgreSqlDatabaseFixture db)
+        public AuthServiceTests(DatabaseFixture db) : base(db)
         {
             _connection = db.Connection;
         }
@@ -34,7 +34,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             // Arrange
             AuthService authService = CreateDefaultAuthService();
 
-            Guid userId = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03");
+            Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
             string permission = "products_create";
 
             // Act
@@ -50,7 +50,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             // Arrange
             AuthService authService = CreateDefaultAuthService();
 
-            Guid userId = new Guid("7f46fdda-8ab7-48eb-b713-2970b5038485");
+            Guid userId = new Guid("5687c80f-d495-460a-aae5-94ea8054ee2c");
             string permission = "products_create";
 
             // Act
@@ -66,7 +66,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             // Arrange
             AuthService authService = CreateDefaultAuthService();
 
-            Guid userId = new Guid("d5d60a37-82a1-4910-af87-16049bd4ff03");
+            Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
             string permission = "products_creat";
 
             // Act
@@ -82,7 +82,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             // Arrange
             AuthService authService = CreateDefaultAuthService();
 
-            Guid userId = Guid.NewGuid();
+            Guid userId = new Guid("3cdd1fc5-4c54-4484-a2e5-95920b79734e");
             string permission = "products_create";
 
             // Act

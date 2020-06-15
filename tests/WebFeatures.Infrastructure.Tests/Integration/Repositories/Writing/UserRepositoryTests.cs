@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
+using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 {
-    [Collection("PostgreSqlDatabase")]
-    public class UserRepositoryTests
+    public class UserRepositoryTests : IntegrationTestBase
     {
         private readonly IDbConnection _connection;
 
-        public UserRepositoryTests(PostgreSqlDatabaseFixture db)
+        public UserRepositoryTests(DatabaseFixture db) : base(db)
         {
             _connection = db.Connection;
         }
@@ -45,7 +45,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            Guid userId = new Guid("067d520f-fe3c-493c-a4c9-0bce1cf57212");
+            Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
             User user = await repo.GetAsync(userId);
@@ -60,7 +60,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            Guid userId = Guid.NewGuid();
+            Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
             User user = await repo.GetAsync(userId);
@@ -103,25 +103,25 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User()
             {
-                Id = new Guid("a6945683-34e1-46b2-a911-f0c437422b53"),
-                Name = "test",
-                Email = "test",
-                PasswordHash = "test"
+                Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09"),
+                Name = "",
+                Email = "",
+                PasswordHash = ""
             };
 
             string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User beforeUpdate = await _connection.QuerySingleAsync<User>(sql, user);
+            User notUpdatedUser = await _connection.QuerySingleAsync<User>(sql, user);
 
             await repo.UpdateAsync(user);
 
-            User afterUpdate = await _connection.QuerySingleAsync<User>(sql, user);
+            User updatedUser = await _connection.QuerySingleAsync<User>(sql, user);
 
             // Assert
-            user.Id.ShouldBe(beforeUpdate.Id);
-            user.Id.ShouldBe(afterUpdate.Id);
-            beforeUpdate.Name.ShouldNotBe(afterUpdate.Name);
+            user.Id.ShouldBe(notUpdatedUser.Id);
+            user.Id.ShouldBe(updatedUser.Id);
+            notUpdatedUser.Name.ShouldNotBe(updatedUser.Name);
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            var user = new User() { Id = new Guid("0de81728-e359-4925-b94b-acd539e7ad3c") };
+            var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
             // Act
             await repo.DeleteAsync(user);
@@ -147,13 +147,13 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            Guid userId = new Guid("1dfae12a-c1a6-47aa-b73f-e44e339d16f1");
+            Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
-            bool recordExists = await repo.ExistsAsync(userId);
+            bool result = await repo.ExistsAsync(userId);
 
             // Assert
-            recordExists.ShouldBeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -161,13 +161,13 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            Guid userId = Guid.NewGuid();
+            Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
-            bool recordExists = await repo.ExistsAsync(userId);
+            bool result = await repo.ExistsAsync(userId);
 
             // Assert
-            recordExists.ShouldBeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -175,7 +175,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            string email = "test@mail.com";
+            string email = "admin@mail.com";
 
             // Act
             User user = await repo.GetByEmailAsync(email);

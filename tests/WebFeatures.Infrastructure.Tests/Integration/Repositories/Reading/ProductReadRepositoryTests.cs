@@ -5,17 +5,17 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
+using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
 {
-    [Collection("PostgreSqlDatabase")]
-    public class ProductReadRepositoryTests
+    public class ProductReadRepositoryTests : IntegrationTestBase
     {
         private readonly IDbConnection _connection;
 
-        public ProductReadRepositoryTests(PostgreSqlDatabaseFixture db)
+        public ProductReadRepositoryTests(DatabaseFixture db) : base(db)
         {
             _connection = db.Connection;
         }

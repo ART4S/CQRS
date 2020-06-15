@@ -1,5 +1,10 @@
 {
   "ConnectionStrings": {
     "PostgreSql": "host=localhost;port=5432;username=postgres;password=postgres"
+  },
+
+  "DbCreateOptions": {
+    "Development": true,
+    "Testing": true
   }
 }

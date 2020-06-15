@@ -5,7 +5,7 @@ using WebFeatures.Infrastructure.Tests.Common.Utils;
 
 namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
 {
-    internal class TestRequestHandler : IRequestHandler<TestRequest, TestRequestResult>
+    internal class TestRequestHandler : IRequestHandler<TestRequest, TestResult>
     {
         private readonly CallChecker _checker;
 
@@ -14,11 +14,11 @@ namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
             _checker = checker;
         }
 
-        public Task<TestRequestResult> HandleAsync(TestRequest request, CancellationToken cancellationToken)
+        public Task<TestResult> HandleAsync(TestRequest request, CancellationToken cancellationToken)
         {
             _checker.Messages.Add("Handler finished");
 
-            return Task.FromResult(new TestRequestResult());
+            return Task.FromResult(new TestResult());
         }
     }
 }

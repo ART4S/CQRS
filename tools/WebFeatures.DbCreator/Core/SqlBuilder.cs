@@ -35,9 +35,9 @@ namespace WebFeatures.DbCreator.Core
             }
         }
 
-        public static string SeedInitialData()
+        public static string SeedInitialData(string environment)
         {
-            return File.ReadAllText("Core/Scripts/InitialData.sql");
+            return File.ReadAllText($"Core/Scripts/initial_data_{environment}.sql");
         }
 
         public static string RefreshViews()

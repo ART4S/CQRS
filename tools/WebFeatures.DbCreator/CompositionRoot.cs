@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Reflection;
 using WebFeatures.DbCreator.Core;
 using WebFeatures.DbCreator.Core.DataAccess;
 using WebFeatures.DbCreator.Core.DataAccess.Logging;
@@ -24,10 +23,8 @@ namespace WebFeatures.DbCreator
 
         private IConfiguration BuildConfiguration()
         {
-            string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
             var builder = new ConfigurationBuilder()
-                .SetBasePath(basePath)
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("Settings.json");
 
             return builder.Build();
@@ -41,6 +38,10 @@ namespace WebFeatures.DbCreator
             RegisterDataAccess(services);
 
             services.AddSingleton<ScriptsRunner>();
+
+            services.AddOptions();
+            services.Configure<DbCreateOptions>(
+                Configuration.GetSection(nameof(DbCreateOptions)));
 
             return services.BuildServiceProvider();
         }
