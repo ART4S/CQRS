@@ -19,9 +19,15 @@ namespace WebFeatures.Infrastructure.Tests.Common.Utils
             return new SqlQuery(query);
         }
 
-        public static SqlQuery CreateDatabase(string databaseName)
+        public static SqlQuery CreateDatabaseIfNotExists(string databaseName)
         {
-            string query = $"CREATE DATABASE {databaseName}";
+            string query = 
+                @$"DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '{databaseName}') THEN
+                        PERFORM dblink_exec('dbname=' || current_database(), 'CREATE DATABASE mydb');
+                    END IF;
+                END $do$;";
 
             return new SqlQuery(query);
         }

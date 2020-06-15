@@ -15,8 +15,8 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
         {
             // Arrange
             var stubServiceProvider = new Mock<IServiceProvider>();
-            var mediator = new EventMediator(stubServiceProvider.Object);
             var stubEvent = new Mock<IEvent>();
+            var mediator = new EventMediator(stubServiceProvider.Object);
 
             // Act
             Task actual() => mediator.PublishAsync(stubEvent.Object);
