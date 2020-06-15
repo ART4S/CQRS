@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(SolutionDir)src\Scripts $(TargetDir)Core\Scripts /e /y" />
+    <Exec Command="echo D|xcopy $(SolutionDir)src\Scripts $(TargetDir)Core\Scripts /e /y" />
   </Target>
 
 </Project>
