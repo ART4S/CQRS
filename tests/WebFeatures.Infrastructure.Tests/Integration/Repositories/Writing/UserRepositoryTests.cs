@@ -2,10 +2,10 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
@@ -15,16 +15,13 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 {
     public class UserRepositoryTests : IntegrationTestBase
     {
-        private readonly IDbConnection _connection;
-
-        public UserRepositoryTests(DatabaseFixture db) : base(db)
+        public UserRepositoryTests(DatabaseFixture database) : base(database)
         {
-            _connection = db.Connection;
         }
 
         private UserWriteRepository CreateDefaultRepository()
         {
-            return new UserWriteRepository(_connection, new EntityProfile());
+            return new UserWriteRepository(Database.Connection, new DapperDbExecutor(), new EntityProfile());
         }
 
         [Fact]
@@ -41,7 +38,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetAsync_ReturnsUser_IfUserExists()
+        public async Task GetAsync_WhenUserExists_ReturnsUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -56,7 +53,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetAsync_ReturnsNull_IfUserDoesntExists()
+        public async Task GetAsync_WhenUserDoesntExists_ReturnsNull()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -77,16 +74,16 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User()
             {
-                Id = new Guid("7840a202-0ba5-40ff-a803-20f227354693"),
+                Id = new Guid("a602e1c8-db6f-49b7-ae7c-beb48fe2755a"),
                 Name = "",
-                Email = "",
-                PasswordHash = ""
+                Email = "email",
+                PasswordHash = "hash"
             };
 
             // Act
             await repo.CreateAsync(user);
 
-            int usersCount = await _connection.ExecuteScalarAsync<int>(
+            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
@@ -103,20 +100,20 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User()
             {
-                Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09"),
+                Id = new Guid("35f4b4f6-17ac-4b4e-a345-1568b9d52a65"),
                 Name = "",
-                Email = "",
-                PasswordHash = ""
+                Email = "email1",
+                PasswordHash = "hash"
             };
 
             string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User notUpdatedUser = await _connection.QuerySingleAsync<User>(sql, user);
+            User notUpdatedUser = await Database.Connection.QuerySingleAsync<User>(sql, user);
 
             await repo.UpdateAsync(user);
 
-            User updatedUser = await _connection.QuerySingleAsync<User>(sql, user);
+            User updatedUser = await Database.Connection.QuerySingleAsync<User>(sql, user);
 
             // Assert
             user.Id.ShouldBe(notUpdatedUser.Id);
@@ -125,16 +122,17 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task DeleteAsync_DeletesExistingUser()
+        public async Task DeleteAsync_RemovesExistingUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
-            var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
+
+            var user = new User() { Id = new Guid("4de84964-2a53-4cf8-8e01-1436c8a7b72d") };
 
             // Act
             await repo.DeleteAsync(user);
 
-            int usersCount = await _connection.ExecuteScalarAsync<int>(
+            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
                 "SELECT Count(*) FROM public.users WHERE id = @Id",
                 new { user.Id });
 
@@ -143,7 +141,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task ExistsAsync_ReturnsTrue_IfUserExists()
+        public async Task ExistsAsync_WhenUserExists_ReturnsTrue()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -157,7 +155,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task ExistsAsync_ReturnsFalse_IfUserDoesntExist()
+        public async Task ExistsAsync_WhenUserDoesntExist_ReturnsFalse()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -171,7 +169,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetUserByEmailAsync_ReturnsUser_IfUserWithPassedEmailExists()
+        public async Task GetUserByEmailAsync_WhenUserWithEmailExists_ReturnsUser()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
@@ -183,6 +181,20 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Assert
             user.ShouldNotBeNull();
             user.Email.ShouldBe(email);
+        }
+
+        [Fact]
+        public async Task GetUserByEmailAsync_WhenPassedInvalidEmail_ReturnsNull()
+        {
+            // Arrange
+            UserWriteRepository repo = CreateDefaultRepository();
+            string email = "invalid@mail.com";
+
+            // Act
+            User user = await repo.GetByEmailAsync(email);
+
+            // Assert
+            user.ShouldBeNull();
         }
     }
 }

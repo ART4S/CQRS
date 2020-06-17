@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,12 +10,16 @@ using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
     internal class FileWriteRepository : WriteRepository<File>, IFileWriteRepository
     {
-        public FileWriteRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
+        public FileWriteRepository(
+            IDbConnection connection,
+            IDbExecutor executor,
+            IEntityProfile profile) : base(connection, executor, profile)
         {
         }
 
@@ -35,7 +38,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 WHERE 
                     p.{productPicture.Column(x => x.ProductId)} = @productId";
 
-            return Connection.QueryAsync<File>(sql, new { productId });
+            return Executor.QueryAsync<File>(Connection, sql, new { productId });
         }
     }
 }

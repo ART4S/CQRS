@@ -1,15 +1,16 @@
 ﻿using WebFeatures.Infrastructure.Tests.Common.Fixtures;
-using WebFeatures.Infrastructure.Tests.Common.Fixtures.Collections;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Common
 {
     [Collection(DatabaseCollection.Name)]
-    public abstract class IntegrationTestBase
+    public class IntegrationTestBase
     {
-        protected IntegrationTestBase(DatabaseFixture db)
+        protected DatabaseFixture Database { get; }
+
+        protected IntegrationTestBase(DatabaseFixture database)
         {
-            db.Reset();
+            Database = database;
         }
     }
 }

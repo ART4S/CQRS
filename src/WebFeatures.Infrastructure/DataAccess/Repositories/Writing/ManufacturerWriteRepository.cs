@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -8,12 +7,16 @@ using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
     internal class ManufacturerWriteRepository : WriteRepository<Manufacturer>
     {
-        public ManufacturerWriteRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
+        public ManufacturerWriteRepository(
+            IDbConnection connection,
+            IDbExecutor executor,
+            IEntityProfile profile) : base(connection, executor, profile)
         {
         }
 
@@ -30,9 +33,10 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                     {Entity.Table.NameWithSchema()}";
 
             IEnumerable<Manufacturer> manufacturers =
-                await Connection.QueryAsync<Manufacturer, Address, Manufacturer>(
+                await Executor.QueryAsync<Manufacturer, Address, Manufacturer>(
+                    Connection,
                     sql,
-                    (manufacturer, address) =>
+                    map: (manufacturer, address) =>
                     {
                         manufacturer.StreetAddress = address;
                         return manufacturer;
@@ -57,14 +61,15 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                     {Entity.Column(x => x.Id)} = @id";
 
             Manufacturer manufacturer =
-                (await Connection.QueryAsync<Manufacturer, Address, Manufacturer>(
+                (await Executor.QueryAsync<Manufacturer, Address, Manufacturer>(
+                    Connection,
                     sql,
-                    (manufacturer, address) =>
+                    param: new { id },
+                    map: (manufacturer, address) =>
                     {
                         manufacturer.StreetAddress = address;
                         return manufacturer;
                     },
-                    param: new { id },
                     splitOn: nameof(Address.CityId)))
                 .FirstOrDefault();
 

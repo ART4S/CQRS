@@ -2,12 +2,12 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
@@ -17,11 +17,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 {
     public class ManufacturerRepositoryTests : IntegrationTestBase
     {
-        private readonly IDbConnection _connection;
-
-        public ManufacturerRepositoryTests(DatabaseFixture db) : base(db)
+        public ManufacturerRepositoryTests(DatabaseFixture database) : base(database)
         {
-            _connection = db.Connection;
         }
 
         private ManufacturerWriteRepository CreateDefaultRepository()
@@ -30,7 +27,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             profile.TryRegisterMap(typeof(ManufacturerMap));
 
-            return new ManufacturerWriteRepository(_connection, profile);
+            return new ManufacturerWriteRepository(Database.Connection, new DapperDbExecutor(), profile);
         }
 
         [Fact]
@@ -47,13 +44,13 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetByIdAsync_ReturnsManufacturer_IfManufacturerExists()
+        public async Task GetByIdAsync_WhenManufacturerExists_ReturnsManufacturer()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
 
-            Guid manufacturerId = new Guid("b645bb1d-7463-4206-8d30-f2a565f154b6");
-            Guid cityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567");
+            Guid manufacturerId = new Guid("278a79e9-5889-4953-a7c9-448c1e185600");
+            Guid cityId = new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3");
 
             // Act
             Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
@@ -67,7 +64,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task GetByIdAsync_ReturnsNull_IfManufacturerDoesntExist()
+        public async Task GetByIdAsync_WhenManufacturerDoesntExist_ReturnsNull()
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
@@ -93,7 +90,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
                 HomePageUrl = "",
                 StreetAddress = new Address()
                 {
-                    CityId = new Guid("f2c32c06-c7be-4a5e-ba96-41b0d9b9b567"),
+                    CityId = new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3"),
                     PostalCode = "",
                     StreetName = ""
                 }
@@ -102,7 +99,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             await repo.CreateAsync(manufacturer);
 
-            int manufacturersCount = await _connection.ExecuteScalarAsync<int>(
+            int manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(*) FROM public.manufacturers
                 WHERE id = @Id AND streetaddress_cityid = @CityId",
                 new

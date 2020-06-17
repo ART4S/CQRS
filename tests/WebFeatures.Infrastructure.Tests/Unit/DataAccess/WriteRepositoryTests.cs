@@ -6,16 +6,32 @@ using System.Threading.Tasks;
 using WebFeatures.Common.SystemTime;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.TestObjects;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
+namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
 {
     public class WriteRepositoryTests
     {
+        private WriteRepository<TestEntity> CreateDefaultRepository()
+        {
+            var dbExecutor = new Mock<IDbExecutor>();
+
+            var connection = new Mock<IDbConnection>();
+            var entityMap = new Mock<IEntityMap<TestEntity>>();
+            var profile = new Mock<IEntityProfile>();
+
+            profile.Setup(x => x.GetMap<TestEntity>()).Returns(() => new TestEntityMap());
+
+            var repo = new WriteRepository<TestEntity>(connection.Object, dbExecutor.Object, profile.Object);
+
+            return repo;
+        }
+
         [Fact]
-        public async Task CreateAsync_SetsCurrentDateToCreateDateProperty()
+        public async Task CreateAsync_WhenEntityHasCreateDateProperty_SetsCurrentDate()
         {
             // Arrange
             var now = DateTime.UtcNow;
@@ -25,15 +41,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             DateTimeProvider.DateTime = datetime.Object;
 
-            var connection = new Mock<IDbConnection>();
-
-            var entityMap = new Mock<IEntityMap<TestEntity>>();
-            var profile = new Mock<IEntityProfile>();
-
-            profile.Setup(x => x.GetMap<TestEntity>()).Returns(() => entityMap.Object);
-
-            var repo = new WriteRepository<TestEntity>(connection.Object, profile.Object);
-            var entity = new TestEntity();
+            WriteRepository<TestEntity> repo = CreateDefaultRepository();
+            TestEntity entity = new TestEntity();
 
             // Act
             await repo.CreateAsync(entity);
@@ -43,14 +52,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         }
 
         [Fact]
-        public async Task CreateAsync_GeneretesNewId_WhenUserPassedWithoutId()
+        public async Task CreateAsync_WhenEntityPassedWithoutId_SetsNewId()
         {
             // Arrange
-            var connection = new Mock<IDbConnection>();
-            var profile = new Mock<IEntityProfile>();
-            var repo = new WriteRepository<TestEntity>(connection.Object, profile.Object);
-
-            var entity = new TestEntity();
+            WriteRepository<TestEntity> repo = CreateDefaultRepository();
+            TestEntity entity = new TestEntity();
 
             // Act
             await repo.CreateAsync(entity);

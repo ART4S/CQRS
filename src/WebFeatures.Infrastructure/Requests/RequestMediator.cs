@@ -47,7 +47,8 @@ namespace WebFeatures.Infrastructure.Requests
     {
         public override Task<TResponse> HandleAsync(IRequest<TResponse> request, IServiceProvider services, CancellationToken cancellationToken)
         {
-            var handler = services.GetService<IRequestHandler<TRequest, TResponse>>();
+            var handler = services.GetService<IRequestHandler<TRequest, TResponse>>()
+                ?? throw new InvalidOperationException($"Handler hasn't been registered");
 
             RequestDelegate<Task<TResponse>> pipeline =
                 () => handler.HandleAsync((TRequest)request, cancellationToken);

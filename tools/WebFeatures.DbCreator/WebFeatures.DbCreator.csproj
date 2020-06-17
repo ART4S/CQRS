@@ -20,19 +20,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Core\Scripts\initial_data_dev.sql">
+    <None Update="Core\Scripts\Data\initial_data_dev.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Core\Scripts\initial_data_test.sql">
+    <None Update="Core\Scripts\Data\initial_data_test.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Core\Scripts\Schema\Functions.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Core\Scripts\Schema\Tables.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Core\Scripts\Schema\Views.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo D|xcopy $(SolutionDir)src\Scripts $(TargetDir)Core\Scripts /e /y" />
-  </Target>
 
 </Project>

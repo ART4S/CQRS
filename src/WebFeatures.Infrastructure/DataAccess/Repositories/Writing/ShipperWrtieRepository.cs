@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -8,12 +7,16 @@ using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
     internal class ShipperWrtieRepository : WriteRepository<Shipper>
     {
-        public ShipperWrtieRepository(IDbConnection connection, IEntityProfile profile) : base(connection, profile)
+        public ShipperWrtieRepository(
+            IDbConnection connection,
+            IDbExecutor executor,
+            IEntityProfile profile) : base(connection, executor, profile)
         {
         }
 
@@ -31,9 +34,10 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                     {Entity.Table.NameWithSchema()}";
 
             IEnumerable<Shipper> shipper =
-                await Connection.QueryAsync<Shipper, Address, Shipper>(
+                await Executor.QueryAsync<Shipper, Address, Shipper>(
+                    Connection,
                     sql,
-                    (shipper, address) =>
+                    map: (shipper, address) =>
                     {
                         shipper.HeadOffice = address;
                         return shipper;
@@ -59,9 +63,10 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                     {Entity.Column(x => x.Id)} = @id";
 
             Shipper shipper =
-                (await Connection.QueryAsync<Shipper, Address, Shipper>(
+                (await Executor.QueryAsync<Shipper, Address, Shipper>(
+                    Connection,
                     sql,
-                    (shipper, address) =>
+                    map: (shipper, address) =>
                     {
                         shipper.HeadOffice = address;
                         return shipper;

@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Shouldly;
 using System;
-using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.Security;
 using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
@@ -13,23 +13,20 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
 {
     public class AuthServiceTests : IntegrationTestBase
     {
-        private readonly IDbConnection _connection;
-
-        public AuthServiceTests(DatabaseFixture db) : base(db)
+        public AuthServiceTests(DatabaseFixture database) : base(database)
         {
-            _connection = db.Connection;
         }
 
         private AuthService CreateDefaultAuthService()
         {
-            var stubContext = new Mock<IWriteDbContext>();
-            stubContext.Setup(x => x.Connection).Returns(() => _connection);
+            var context = new Mock<IWriteDbContext>();
+            context.Setup(x => x.Connection).Returns(() => Database.Connection);
 
-            return new AuthService(stubContext.Object);
+            return new AuthService(context.Object, new DapperDbExecutor());
         }
 
         [Fact]
-        public async Task UserHasPermission_ReturnsTrue_WhenUserHasPermission()
+        public async Task UserHasPermission_WhenUserHasPermission_ReturnsTrue()
         {
             // Arrange
             AuthService authService = CreateDefaultAuthService();
@@ -45,7 +42,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         }
 
         [Fact]
-        public async Task UserHasPermission_ReturnsFalse_WhenUserDoesntHavePermission()
+        public async Task UserHasPermission_WhenUserDoesntHavePermission_ReturnsFalse()
         {
             // Arrange
             AuthService authService = CreateDefaultAuthService();
@@ -61,7 +58,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         }
 
         [Fact]
-        public async Task UserHasPermission_ReturnsFalse_WhenPassedInvalidPermissionName()
+        public async Task UserHasPermission_WhenInvalidPermissionName_ReturnsFalse()
         {
             // Arrange
             AuthService authService = CreateDefaultAuthService();
@@ -77,7 +74,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         }
 
         [Fact]
-        public async Task UserHasPermission_ReturnsFalse_WhenPassedNonexistentUserId()
+        public async Task UserHasPermission_WhenUserDoesntExist_ReturnsFalse()
         {
             // Arrange
             AuthService authService = CreateDefaultAuthService();

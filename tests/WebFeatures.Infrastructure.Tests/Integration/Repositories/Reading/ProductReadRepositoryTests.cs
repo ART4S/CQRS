@@ -1,9 +1,9 @@
 ﻿using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Dto;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Infrastructure.Tests.Common;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
@@ -13,24 +13,21 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
 {
     public class ProductReadRepositoryTests : IntegrationTestBase
     {
-        private readonly IDbConnection _connection;
-
-        public ProductReadRepositoryTests(DatabaseFixture db) : base(db)
+        public ProductReadRepositoryTests(DatabaseFixture database) : base(database)
         {
-            _connection = db.Connection;
         }
 
         private ProductReadRepository CreateDefaultRepository()
         {
-            return new ProductReadRepository(_connection);
+            return new ProductReadRepository(Database.Connection, new DapperDbExecutor());
         }
 
         [Fact]
-        public async Task GetProductAsync_ReturnsProduct_IfProductExists()
+        public async Task GetProductAsync_WhenProductExists_ReturnsProduct()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
-            Guid productId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076");
+            Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
             ProductInfoDto product = await repo.GetProductAsync(productId);
@@ -41,7 +38,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetProductAsync_ReturnsNull_IfProductDoesntExist()
+        public async Task GetProductAsync_WhenProductDoesntExist_ReturnsNull()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
@@ -68,11 +65,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetCommentsAsync_ReturnsNonEmptyCollection_IfProductExists()
+        public async Task GetCommentsAsync_ReturnsNonEmptyCollection()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
-            Guid productId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076");
+            Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
             IEnumerable<ProductCommentInfoDto> comments = await repo.GetCommentsAsync(productId);
@@ -82,11 +79,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetCommentsAsync_ReturnsEmptyCollection_IsProductDoesntExist()
+        public async Task GetCommentsAsync_WhenProductDoesntExist_ReturnsEmptyCollection()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
-            Guid productId = Guid.NewGuid();
+            Guid productId = new Guid("0cacb23f-da1f-44c6-80e0-5204d99e06b9");
 
             // Act
             IEnumerable<ProductCommentInfoDto> comments = await repo.GetCommentsAsync(productId);
@@ -96,11 +93,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetReviewsAsync_ReturnsNonEmptyCollection_IfProductExists()
+        public async Task GetReviewsAsync_WhenProductExists_ReturnsNonEmptyCollection()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
-            Guid productId = new Guid("4eee6f3a-3e71-4aaa-845b-d2b5529c5076");
+            Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
             IEnumerable<ProductReviewInfoDto> reviews = await repo.GetReviewsAsync(productId);
@@ -110,11 +107,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         }
 
         [Fact]
-        public async Task GetReviewsAsync_ReturnsEmptyCollection_IfProductDoesntExist()
+        public async Task GetReviewsAsync_WhenProductDoesntExist_ReturnsEmptyCollection()
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
-            Guid productId = Guid.NewGuid();
+            Guid productId = new Guid("0cacb23f-da1f-44c6-80e0-5204d99e06b9");
 
             // Act
             IEnumerable<ProductReviewInfoDto> reviews = await repo.GetReviewsAsync(productId);

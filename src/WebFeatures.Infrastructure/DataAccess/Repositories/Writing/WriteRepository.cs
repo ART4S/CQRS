@@ -11,6 +11,7 @@ using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
@@ -18,12 +19,14 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
         where TEntity : Entity
     {
         protected IDbConnection Connection { get; }
+        protected IDbExecutor Executor { get; }
         protected IEntityProfile Profile { get; }
         protected IEntityMap<TEntity> Entity { get; }
 
-        public WriteRepository(IDbConnection connection, IEntityProfile profile)
+        public WriteRepository(IDbConnection connection, IDbExecutor executor, IEntityProfile profile)
         {
             Connection = connection;
+            Executor = executor;
             Profile = profile;
             Entity = profile.GetMap<TEntity>();
         }
@@ -32,7 +35,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
         {
             string sql = $"SELECT * FROM {Entity.Table.NameWithSchema()}";
 
-            return Connection.QueryAsync<TEntity>(sql);
+            return Executor.QueryAsync<TEntity>(Connection, sql);
         }
 
         public virtual Task<TEntity> GetAsync(Guid id)
@@ -43,7 +46,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 Entity.Table.NameWithSchema(),
                 Entity.Column(x => x.Id));
 
-            return Connection.QuerySingleOrDefaultAsync<TEntity>(sql, new { id });
+            return Executor.QuerySingleOrDefaultAsync<TEntity>(Connection, sql, new { id });
         }
 
         public virtual Task CreateAsync(TEntity entity)
@@ -79,7 +82,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 insertColumns.JoinString(),
                 insertValues.JoinString());
 
-            return Connection.ExecuteAsync(sql, param);
+            return Executor.ExecuteAsync(Connection, sql, param);
         }
 
         public virtual Task UpdateAsync(TEntity entity)
@@ -104,7 +107,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 setValues.JoinString(),
                 Entity.Column(x => x.Id));
 
-            return Connection.ExecuteAsync(sql, param);
+            return Executor.ExecuteAsync(Connection, sql, param);
         }
 
         public virtual Task DeleteAsync(TEntity entity)
@@ -120,7 +123,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 Entity.Table.NameWithSchema(),
                 Entity.Column(x => x.Id));
 
-            return Connection.ExecuteAsync(sql, new { id });
+            return Executor.ExecuteAsync(Connection, sql, new { id });
         }
 
         public Task DeleteAsync(IEnumerable<TEntity> entities)
@@ -137,7 +140,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 Entity.Column(x => x.Id),
                 entities.Select(x => $"'{x.Id}'").JoinString());
 
-            return Connection.ExecuteAsync(sql);
+            return Executor.ExecuteAsync(Connection, sql);
         }
 
         public virtual async Task<bool> ExistsAsync(Guid id)
@@ -148,7 +151,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
                 Entity.Table.NameWithSchema(),
                 Entity.Column(x => x.Id));
 
-            return await Connection.ExecuteScalarAsync<int>(sql, new { id }) == 1;
+            return await Executor.ExecuteScalarAsync<int>(Connection, sql, new { id }) == 1;
         }
     }
 }

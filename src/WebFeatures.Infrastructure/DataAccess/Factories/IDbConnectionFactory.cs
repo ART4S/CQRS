@@ -1,9 +1,9 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 
 namespace WebFeatures.Persistence
 {
     internal interface IDbConnectionFactory
     {
-        IDbConnection CreateConnection();
+        DbConnection CreateConnection();
     }
 }

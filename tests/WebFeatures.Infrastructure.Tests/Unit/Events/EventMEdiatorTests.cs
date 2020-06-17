@@ -1,9 +1,11 @@
 ﻿using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Infrastructure.Events;
+using WebFeatures.Infrastructure.Tests.Common.TestObjects;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.Events
@@ -11,63 +13,28 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
     public class EventMediatorTests
     {
         [Fact]
-        public async Task PublishAsync_DoesntThrow()
+        public async Task PublishAsync_PassesSameEventToEventHandler()
         {
             // Arrange
-            var stubServiceProvider = new Mock<IServiceProvider>();
-            var stubEvent = new Mock<IEvent>();
-            var mediator = new EventMediator(stubServiceProvider.Object);
+            var eve = new TestEvent();
+
+            var handler = new Mock<IEventHandler<TestEvent>>();
+
+            handler.Setup(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()));
+
+            var serviceProvider = new Mock<IServiceProvider>();
+
+            serviceProvider.Setup(x => x.GetService(
+                    typeof(IEnumerable<IEventHandler<TestEvent>>)))
+                .Returns(new[] { handler.Object });
+
+            var mediator = new EventMediator(serviceProvider.Object);
 
             // Act
-            Task actual() => mediator.PublishAsync(stubEvent.Object);
+            await mediator.PublishAsync(eve);
 
             // Assert
-            await actual();
-        }
-
-        [Fact]
-        public async Task PublishAsync_PassesSameEvent()
-        {
-            //// Arrange
-            //var serviceProviderMock = new Mock<IServiceProvider>();
-            //serviceProviderMock.Setup(x => x.GetService(It.Is<Type>(y => y == typeof(IEn))))
-            //var storage = new EventStorage(serviceProviderMock.Object);
-            //var eventMock = new Mock<IEvent>();
-
-            //// Act
-            //storage.Add(eventMock.Object);
-        }
-    }
-
-    internal class TestEvent : IEvent
-    {
-
-    }
-
-    internal class TestEventHandler : IEventHandler<TestEvent>
-    {
-
-        private readonly CallCounter _counter;
-
-        public TestEventHandler(CallCounter counter)
-        {
-            _counter = counter;
-        }
-
-        public Task HandleAsync(TestEvent eve, CancellationToken cancellationToken)
-        {
-            _counter.Increase();
-            return Task.CompletedTask;
-        }
-    }
-
-    internal class CallCounter
-    {
-        public int CallCount { get; private set; }
-
-        public void Increase()
-        {
-            CallCount++;
+            handler.Verify();
         }
     }
 }

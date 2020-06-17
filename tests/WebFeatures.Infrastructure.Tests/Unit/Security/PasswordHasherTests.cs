@@ -7,7 +7,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
     public class PasswordHasherTests
     {
         [Fact]
-        public void ComputeHash_ShouldNotReturnNullOrEmptyHash()
+        public void ComputeHash_ShouldReturnNonEmptyHash()
         {
             // Arrange
             string password = "12345";

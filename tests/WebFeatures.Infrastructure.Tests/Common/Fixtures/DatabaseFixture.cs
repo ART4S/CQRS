@@ -1,52 +1,46 @@
 ﻿using Npgsql;
-using Respawn;
-using System;
 using System.Data;
 using System.Data.Common;
+using System.Threading.Tasks;
+using System.Transactions;
+using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
-    public class DatabaseFixture : IDisposable
+    [CollectionDefinition(Name)]
+    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
     {
-        public DbConnection Connection
-        {
-            get
-            {
-                OpenConnection();
-                return _connection;
-            }
-        }
-        private readonly DbConnection _connection;
+        public const string Name = "Database";
+    }
 
-        private readonly Checkpoint _checkpoint;
+    public class DatabaseFixture : IAsyncLifetime
+    {
+        private readonly TransactionScope _transaction;
+
+        public DbConnection Connection { get; }
 
         public DatabaseFixture()
         {
-            _connection = new NpgsqlConnection("server=localhost;port=5432;username=postgres;password=postgres;database=webfeatures_test_db");
-            _checkpoint = new Checkpoint()
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = new[] { "public" },
-                WithReseed = true,
-            };
+            _transaction = new TransactionScope(
+                TransactionScopeAsyncFlowOption.Enabled);
+
+            Connection = new NpgsqlConnection(
+                "server=localhost;port=5432;username=postgres;password=postgres;database=webfeatures_test_db");
         }
 
-        private void OpenConnection()
+        public async Task InitializeAsync()
         {
-            if (_connection.State != ConnectionState.Open)
+            if (Connection.State != ConnectionState.Open)
             {
-                _connection.Open();
+                await Connection.OpenAsync();
             }
         }
 
-        public void Reset()
+        public async Task DisposeAsync()
         {
-            _checkpoint.Reset(_connection);
-        }
+            await Connection.DisposeAsync();
 
-        public void Dispose()
-        {
-            _connection?.Dispose();
+            _transaction.Dispose();
         }
     }
 }
