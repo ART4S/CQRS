@@ -4,7 +4,6 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Common.SystemTime;
-using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
@@ -17,15 +16,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
     {
         private WriteRepository<TestEntity> CreateDefaultRepository()
         {
-            var dbExecutor = new Mock<IDbExecutor>();
-
+            var executor = new Mock<IDbExecutor>();
             var connection = new Mock<IDbConnection>();
-            var entityMap = new Mock<IEntityMap<TestEntity>>();
             var profile = new Mock<IEntityProfile>();
 
             profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
 
-            var repo = new WriteRepository<TestEntity>(connection.Object, dbExecutor.Object, profile.Object);
+            var repo = new WriteRepository<TestEntity>(connection.Object, executor.Object, profile.Object);
 
             return repo;
         }
@@ -63,6 +60,30 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
 
             // Assert
             entity.Id.ShouldNotBe(default);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WhenEmptyCollection_DoesntCallDatabase()
+        {
+            // Arrange
+            var executor = new Mock<IDbExecutor>();
+
+            executor.Setup(x => x.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>())).Throws<Exception>();
+
+            var connection = new Mock<IDbConnection>();
+            var profile = new Mock<IEntityProfile>();
+
+            profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
+
+            var repo = new WriteRepository<TestEntity>(connection.Object, executor.Object, profile.Object);
+
+            // Act
+            Task actual() => repo.DeleteAsync(new TestEntity[0]);
+
+            // Assert
+            await actual();
         }
     }
 }
