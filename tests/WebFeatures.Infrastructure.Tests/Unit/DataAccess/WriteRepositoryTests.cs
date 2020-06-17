@@ -23,7 +23,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             var entityMap = new Mock<IEntityMap<TestEntity>>();
             var profile = new Mock<IEntityProfile>();
 
-            profile.Setup(x => x.GetMap<TestEntity>()).Returns(() => new TestEntityMap());
+            profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
 
             var repo = new WriteRepository<TestEntity>(connection.Object, dbExecutor.Object, profile.Object);
 
@@ -37,7 +37,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             var now = DateTime.UtcNow;
 
             var datetime = new Mock<IDateTime>();
-            datetime.Setup(x => x.Now).Returns(() => now);
+            datetime.Setup(x => x.Now).Returns(now);
 
             DateTimeProvider.DateTime = datetime.Object;
 

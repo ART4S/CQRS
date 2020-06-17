@@ -16,7 +16,7 @@ namespace WebFeatures.Infrastructure.Security
 
         public string ComputeHash(string password)
         {
-            Guard.ThrowIfNull(password, nameof(password));
+            Guard.ThrowIfNullOrEmpty(password, nameof(password));
 
             byte[] salt = new byte[SaltSize];
             _random.GetBytes(salt);
@@ -32,8 +32,10 @@ namespace WebFeatures.Infrastructure.Security
 
         public bool Verify(string hashedPassword, string expectedPassword)
         {
-            Guard.ThrowIfNull(hashedPassword, nameof(hashedPassword));
-            Guard.ThrowIfNull(expectedPassword, nameof(expectedPassword));
+            if (string.IsNullOrWhiteSpace(hashedPassword) || string.IsNullOrWhiteSpace(expectedPassword))
+            {
+                return false;
+            }
 
             byte[] hashed = Convert.FromBase64String(hashedPassword);
 
