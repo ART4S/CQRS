@@ -98,23 +98,16 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             };
 
             // Act
-            int manufacturersCount;
+            await repo.CreateAsync(manufacturer);
 
-            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
-            {
-                await repo.CreateAsync(manufacturer);
-
-                manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                    @"SELECT COUNT(*) FROM public.manufacturers
-                    WHERE id = @Id AND streetaddress_cityid = @CityId",
-                    new
-                    {
-                        manufacturer.Id,
-                        manufacturer.StreetAddress.CityId
-                    });
-
-                await transaction.RollbackAsync();
-            }
+            int manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                @"SELECT COUNT(*) FROM public.manufacturers
+                WHERE id = @Id AND streetaddress_cityid = @CityId",
+                new
+                {
+                    manufacturer.Id,
+                    manufacturer.StreetAddress.CityId
+                });
 
             // Assert
             manufacturersCount.ShouldBe(1);

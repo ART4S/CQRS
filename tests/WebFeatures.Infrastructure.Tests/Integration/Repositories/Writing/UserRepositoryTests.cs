@@ -82,18 +82,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             };
 
             // Act
-            int usersCount;
+            await repo.CreateAsync(user);
 
-            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
-            {
-                await repo.CreateAsync(user);
-
-                usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                    "SELECT Count(*) FROM public.users WHERE id = @Id",
-                    new { user.Id });
-
-                await transaction.RollbackAsync();
-            }
+            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                "SELECT Count(*) FROM public.users WHERE id = @Id",
+                new { user.Id });
 
             // Assert
             user.Id.ShouldNotBe(default);
@@ -117,19 +110,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User beforeUpdate;
-            User afterUpdate;
+            User beforeUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
 
-            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
-            {
-                beforeUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
+            await repo.UpdateAsync(user);
 
-                await repo.UpdateAsync(user);
-
-                afterUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
-
-                await transaction.RollbackAsync();
-            }
+            User afterUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
 
             // Assert
             user.Id.ShouldBe(beforeUpdate.Id);
@@ -146,18 +131,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
             // Act
-            int usersCount;
+            await repo.DeleteAsync(user);
 
-            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
-            {
-                await repo.DeleteAsync(user);
-
-                usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                    "SELECT Count(*) FROM public.users WHERE id = @Id",
-                    new { user.Id });
-
-                await transaction.RollbackAsync();
-            }
+            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                "SELECT Count(*) FROM public.users WHERE id = @Id",
+                new { user.Id });
 
             // Assert
             usersCount.ShouldBe(0);
