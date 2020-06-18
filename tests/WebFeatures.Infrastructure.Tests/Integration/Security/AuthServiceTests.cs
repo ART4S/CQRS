@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.Security;
-using WebFeatures.Infrastructure.Tests.Common;
+using WebFeatures.Infrastructure.Tests.Common.Base;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Infrastructure.Tests.Common.Utils;
 
-namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
     internal class TestRequestHandler : IRequestHandler<TestRequest, TestResult>
     {

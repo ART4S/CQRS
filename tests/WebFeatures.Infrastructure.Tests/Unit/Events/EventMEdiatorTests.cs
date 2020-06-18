@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Infrastructure.Events;
-using WebFeatures.Infrastructure.Tests.Common.TestObjects;
+using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.Events

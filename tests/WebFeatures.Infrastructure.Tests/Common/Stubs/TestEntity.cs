@@ -1,7 +1,7 @@
 ﻿using System;
 using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Infrastructure.Tests.Common.TestObjects
+namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
     public class TestEntity : Entity, IHasCreateDate
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
-namespace WebFeatures.Infrastructure.Tests.Common
+namespace WebFeatures.Infrastructure.Tests.Common.Base
 {
     [Collection(DatabaseCollection.Name)]
     public class IntegrationTestBase : IAsyncLifetime

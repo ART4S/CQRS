@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
-using WebFeatures.Infrastructure.Tests.Common.TestObjects;
+using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess

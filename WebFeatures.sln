@@ -13,11 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.DbCreator", "to
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Infrastructure.Tests", "tests\WebFeatures.Infrastructure.Tests\WebFeatures.Infrastructure.Tests.csproj", "{F6EF8E2A-2D04-4279-A959-15916DF51475}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1292254E-A1F2-48B7-8521-819951597C7D}"
-	ProjectSection(SolutionItems) = preProject
-		TODO.txt = TODO.txt
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFeatures.Application.Tests", "tests\WebFeatures.Application.Tests\WebFeatures.Application.Tests.csproj", "{25FDFD18-FF05-4253-8D27-1C2186866AAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD852BFF-D232-4F7D-8F3E-8C7C2932C860}"

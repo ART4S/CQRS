@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Infrastructure.Requests;
-using WebFeatures.Infrastructure.Tests.Common.TestObjects;
+using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using WebFeatures.Infrastructure.Tests.Common.Utils;
 using Xunit;
 

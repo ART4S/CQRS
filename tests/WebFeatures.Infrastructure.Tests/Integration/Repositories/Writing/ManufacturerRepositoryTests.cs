@@ -2,7 +2,6 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
@@ -10,7 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
-using WebFeatures.Infrastructure.Tests.Common;
+using WebFeatures.Infrastructure.Tests.Common.Base;
 using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 

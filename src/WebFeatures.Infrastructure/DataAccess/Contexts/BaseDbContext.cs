@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Persistence;
 
@@ -14,18 +13,16 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IDbConnection Connection => _connection.Value;
         private readonly Lazy<DbConnection> _connection;
 
-        private TransactionScope _scope;
+        protected DbTransaction Transaction;
 
         public BaseDbContext(IDbConnectionFactory connectionFactory)
         {
-            _scope = new TransactionScope(
-                TransactionScopeOption.RequiresNew,
-                TransactionScopeAsyncFlowOption.Enabled);
-
             _connection = new Lazy<DbConnection>(() =>
             {
-                var connection = connectionFactory.CreateConnection();
+                DbConnection connection = connectionFactory.CreateConnection();
                 connection.Open();
+
+                Transaction = connection.BeginTransaction();
 
                 return connection;
             });
@@ -33,17 +30,37 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-            _scope.Complete();
+            if (Transaction == null) return;
+
+            try
+            {
+                await Transaction.CommitAsync();
+            }
+            catch
+            {
+                await Transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                await Transaction.DisposeAsync();
+
+                Transaction = await _connection.Value.BeginTransactionAsync();
+            }
         }
 
         public async ValueTask DisposeAsync()
         {
+            if (Transaction != null)
+            {
+                await Transaction.RollbackAsync();
+                await Transaction.DisposeAsync();
+            }
+
             if (_connection.IsValueCreated)
             {
                 await _connection.Value.DisposeAsync();
             }
-
-            _scope.Dispose();
         }
     }
 }

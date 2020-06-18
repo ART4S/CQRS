@@ -59,6 +59,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         public WriteDbContext(IServiceProvider services) : base(services.GetRequiredService<IDbConnectionFactory>())
         {
+            _services = services;
         }
 
         private TRepo CreateRepository<TRepo>()

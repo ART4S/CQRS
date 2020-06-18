@@ -1,7 +1,7 @@
 ﻿using Shouldly;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.Tests.Common.TestObjects;
+using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
