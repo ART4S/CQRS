@@ -1,21 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
+using System.Data.Common;
 
 namespace WebFeatures.DbCreator.Core.DataAccess.Logging
 {
-    internal class LoggingDbTransaction : IDbTransaction
+    internal class LoggingDbTransaction : DbTransaction
     {
-        private readonly IDbTransaction _decoratee;
+        private readonly DbTransaction _decoratee;
         private readonly ILogger _logger;
 
-        public LoggingDbTransaction(IDbTransaction decoratee, ILogger logger)
+        public LoggingDbTransaction(DbTransaction decoratee, ILogger logger)
         {
             _decoratee = decoratee;
             _logger = logger;
         }
 
-        public void Commit()
+        public override void Commit()
         {
             try
             {
@@ -24,20 +25,20 @@ namespace WebFeatures.DbCreator.Core.DataAccess.Logging
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Commit transaction error");
+
                 throw;
             }
 
             _logger.LogInformation("Transaction finished");
         }
 
-        public void Rollback()
+        public override void Rollback()
         {
             _decoratee.Rollback();
             _logger.LogInformation("Transaction rolled back");
         }
 
-        public IDbConnection Connection => _decoratee.Connection;
-        public IsolationLevel IsolationLevel => _decoratee.IsolationLevel;
-        public void Dispose() => _decoratee.Dispose();
+        public override IsolationLevel IsolationLevel => _decoratee.IsolationLevel;
+        protected override DbConnection DbConnection => _decoratee.Connection;
     }
 }

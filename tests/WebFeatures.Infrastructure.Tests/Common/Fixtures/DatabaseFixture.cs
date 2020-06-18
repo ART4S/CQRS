@@ -1,17 +1,10 @@
 ﻿using Npgsql;
-using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 {
-    [CollectionDefinition(Name)]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-        public const string Name = "Database";
-    }
-
     public class DatabaseFixture : IAsyncLifetime
     {
         public DbConnection Connection { get; }
@@ -24,10 +17,7 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 
         public async Task InitializeAsync()
         {
-            if (Connection.State != ConnectionState.Open)
-            {
-                await Connection.OpenAsync();
-            }
+            await Connection.OpenAsync();
         }
 
         public async Task DisposeAsync()

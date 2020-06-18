@@ -8,17 +8,12 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 {
     public class UserRepositoryTests : IntegrationTestBase
     {
-        public UserRepositoryTests(DatabaseFixture database) : base(database)
-        {
-        }
-
         private UserWriteRepository CreateDefaultRepository()
         {
             return new UserWriteRepository(Database.Connection, new DapperDbExecutor(), new EntityProfile());

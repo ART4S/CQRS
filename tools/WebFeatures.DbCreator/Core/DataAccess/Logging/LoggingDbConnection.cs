@@ -1,21 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
+using System.Data.Common;
 
 namespace WebFeatures.DbCreator.Core.DataAccess.Logging
 {
-    internal class LoggingDbConnection : IDbConnection
+    internal class LoggingDbConnection : DbConnection
     {
-        private readonly IDbConnection _decoratee;
+        private readonly DbConnection _decoratee;
         private readonly ILogger _logger;
 
-        public LoggingDbConnection(IDbConnection decoratee, ILogger logger)
+        public LoggingDbConnection(DbConnection decoratee, ILogger logger)
         {
             _decoratee = decoratee;
             _logger = logger;
         }
 
-        public void Open()
+        public override void Open()
         {
             try
             {
@@ -24,38 +25,45 @@ namespace WebFeatures.DbCreator.Core.DataAccess.Logging
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Oppening connection error");
+
                 throw;
             }
         }
 
-        public IDbTransaction BeginTransaction()
+        protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
-            IDbTransaction transaction = _decoratee.BeginTransaction();
+            DbTransaction transaction = _decoratee.BeginTransaction();
 
             _logger.LogInformation($"Transaction started");
 
             return new LoggingDbTransaction(transaction, _logger);
         }
 
-        public IDbCommand CreateCommand()
+        protected override DbCommand CreateDbCommand()
         {
-            IDbCommand command = _decoratee.CreateCommand();
+            DbCommand command = _decoratee.CreateCommand();
 
             return new LoggingDbCommand(command, _logger);
         }
 
-        public string ConnectionString
+        public override string ConnectionString
         {
-            get => _decoratee.ConnectionString;
-            set => _decoratee.ConnectionString = value;
+            get { return _decoratee.ConnectionString; }
+            set { _decoratee.ConnectionString = value; }
+        }
+        public override string Database => _decoratee.Database;
+        public override string DataSource => _decoratee.DataSource;
+        public override string ServerVersion => _decoratee.ServerVersion;
+        public override ConnectionState State => _decoratee.State;
+
+        public override void ChangeDatabase(string databaseName)
+        {
+            _decoratee.ChangeDatabase(databaseName);
         }
 
-        public int ConnectionTimeout => _decoratee.ConnectionTimeout;
-        public string Database => _decoratee.Database;
-        public ConnectionState State => _decoratee.State;
-        public IDbTransaction BeginTransaction(IsolationLevel il) => _decoratee.BeginTransaction(il);
-        public void ChangeDatabase(string databaseName) => _decoratee.ChangeDatabase(databaseName);
-        public void Close() => _decoratee.Close();
-        public void Dispose() => _decoratee.Dispose();
+        public override void Close()
+        {
+            _decoratee.Close();
+        }
     }
 }

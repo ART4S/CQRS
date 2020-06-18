@@ -6,17 +6,12 @@ using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.Security;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Security
 {
     public class AuthServiceTests : IntegrationTestBase
     {
-        public AuthServiceTests(DatabaseFixture database) : base(database)
-        {
-        }
-
         private AuthService CreateDefaultAuthService()
         {
             var context = new Mock<IWriteDbContext>();

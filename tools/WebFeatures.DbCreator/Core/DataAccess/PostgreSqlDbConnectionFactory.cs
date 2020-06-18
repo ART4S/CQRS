@@ -1,5 +1,5 @@
 ﻿using Npgsql;
-using System.Data;
+using System.Data.Common;
 using WebFeatures.Common;
 
 namespace WebFeatures.DbCreator.Core.DataAccess
@@ -15,7 +15,7 @@ namespace WebFeatures.DbCreator.Core.DataAccess
             _connectionString = connectionString;
         }
 
-        public IDbConnection CreateConnection()
+        public DbConnection CreateConnection()
         {
             return new NpgsqlConnection(_connectionString);
         }

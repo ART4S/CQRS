@@ -6,17 +6,12 @@ using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
 {
     public class ProductReadRepositoryTests : IntegrationTestBase
     {
-        public ProductReadRepositoryTests(DatabaseFixture database) : base(database)
-        {
-        }
-
         private ProductReadRepository CreateDefaultRepository()
         {
             return new ProductReadRepository(Database.Connection, new DapperDbExecutor());

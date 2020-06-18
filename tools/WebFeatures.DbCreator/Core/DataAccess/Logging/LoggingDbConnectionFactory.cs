@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Data;
+using System.Data.Common;
 
 namespace WebFeatures.DbCreator.Core.DataAccess.Logging
 {
@@ -14,9 +14,9 @@ namespace WebFeatures.DbCreator.Core.DataAccess.Logging
             _loggerFactory = loggerFactory;
         }
 
-        public IDbConnection CreateConnection()
+        public DbConnection CreateConnection()
         {
-            IDbConnection connection = _decoratee.CreateConnection();
+            DbConnection connection = _decoratee.CreateConnection();
             ILogger logger = _loggerFactory.CreateLogger(connection.GetType().Name);
 
             return new LoggingDbConnection(connection, logger);

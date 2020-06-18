@@ -13,7 +13,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IDbConnection Connection => _connection.Value;
         private readonly Lazy<DbConnection> _connection;
 
-        protected DbTransaction Transaction;
+        protected DbTransaction Transaction { get; private set; }
 
         public BaseDbContext(IDbConnectionFactory connectionFactory)
         {

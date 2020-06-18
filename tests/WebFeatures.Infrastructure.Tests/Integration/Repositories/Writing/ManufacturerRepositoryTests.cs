@@ -10,17 +10,12 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Fixtures;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 {
     public class ManufacturerRepositoryTests : IntegrationTestBase
     {
-        public ManufacturerRepositoryTests(DatabaseFixture database) : base(database)
-        {
-        }
-
         private ManufacturerWriteRepository CreateDefaultRepository()
         {
             var profile = new EntityProfile();

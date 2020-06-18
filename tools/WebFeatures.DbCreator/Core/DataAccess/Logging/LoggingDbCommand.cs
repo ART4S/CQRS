@@ -1,21 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
+using System.Data.Common;
 
 namespace WebFeatures.DbCreator.Core.DataAccess.Logging
 {
-    internal class LoggingDbCommand : IDbCommand
+    internal class LoggingDbCommand : DbCommand
     {
-        private readonly IDbCommand _decoratee;
+        private readonly DbCommand _decoratee;
         private readonly ILogger _logger;
 
-        public LoggingDbCommand(IDbCommand decoratee, ILogger logger)
+        public LoggingDbCommand(DbCommand decoratee, ILogger logger)
         {
             _decoratee = decoratee;
             _logger = logger;
         }
 
-        public int ExecuteNonQuery()
+        public override int ExecuteNonQuery()
         {
             _logger.LogInformation(CommandText);
 
@@ -26,54 +27,76 @@ namespace WebFeatures.DbCreator.Core.DataAccess.Logging
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Executing command error");
+
                 throw;
             }
         }
 
-        public string CommandText
+        public override string CommandText
         {
-            get => _decoratee.CommandText;
-            set => _decoratee.CommandText = value;
+            get { return _decoratee.CommandText; }
+            set { _decoratee.CommandText = value; }
+        }
+        public override int CommandTimeout
+        {
+            get { return _decoratee.CommandTimeout; }
+            set { _decoratee.CommandTimeout = value; }
+        }
+        public override CommandType CommandType
+        {
+            get { return _decoratee.CommandType; }
+            set { _decoratee.CommandType = value; }
         }
 
-        public int CommandTimeout
+        public override bool DesignTimeVisible
         {
-            get => _decoratee.CommandTimeout;
-            set => _decoratee.CommandTimeout = value;
+            get { return _decoratee.DesignTimeVisible; }
+            set { _decoratee.DesignTimeVisible = value; }
         }
 
-        public CommandType CommandType
+        public override UpdateRowSource UpdatedRowSource
         {
-            get => _decoratee.CommandType;
-            set => _decoratee.CommandType = value;
+            get { return _decoratee.UpdatedRowSource; }
+            set { _decoratee.UpdatedRowSource = value; }
         }
 
-        public IDbConnection Connection
+        protected override DbConnection DbConnection
         {
-            get => _decoratee.Connection;
-            set => _decoratee.Connection = value;
+            get { return _decoratee.Connection; }
+            set { _decoratee.Connection = value; }
         }
 
-        public IDataParameterCollection Parameters => _decoratee.Parameters;
+        protected override DbParameterCollection DbParameterCollection => _decoratee.Parameters;
 
-        public IDbTransaction Transaction
+        protected override DbTransaction DbTransaction
         {
-            get => _decoratee.Transaction;
-            set => _decoratee.Transaction = value;
+            get { return _decoratee.Transaction; }
+            set { _decoratee.Transaction = value; }
         }
 
-        public UpdateRowSource UpdatedRowSource
+        public override void Cancel()
         {
-            get => _decoratee.UpdatedRowSource;
-            set => _decoratee.UpdatedRowSource = value;
+            _decoratee.Cancel();
         }
 
-        public IDbDataParameter CreateParameter() => _decoratee.CreateParameter();
-        public IDataReader ExecuteReader() => _decoratee.ExecuteReader();
-        public IDataReader ExecuteReader(CommandBehavior behavior) => _decoratee.ExecuteReader(behavior);
-        public object ExecuteScalar() => _decoratee.ExecuteScalar();
-        public void Prepare() => _decoratee.Prepare();
-        public void Cancel() => _decoratee.Cancel();
-        public void Dispose() => _decoratee.Dispose();
+        public override object ExecuteScalar()
+        {
+            return _decoratee.ExecuteScalar();
+        }
+
+        public override void Prepare()
+        {
+            _decoratee.Prepare();
+        }
+
+        protected override DbParameter CreateDbParameter()
+        {
+            return _decoratee.CreateParameter();
+        }
+
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
+        {
+            return _decoratee.ExecuteReader(behavior);
+        }
     }
 }

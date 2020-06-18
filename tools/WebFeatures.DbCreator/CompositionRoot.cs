@@ -34,10 +34,22 @@ namespace WebFeatures.DbCreator
         {
             var services = new ServiceCollection();
 
-            RegisterLogging(services);
-            RegisterDataAccess(services);
+            services.AddSingleton(x => LoggerFactory.Create(builder =>
+            {
+                builder.ClearProviders();
+                builder.AddConsole();
+            }));
 
-            services.AddSingleton<ScriptsRunner>();
+            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+
+            string connectionString = Configuration.GetConnectionString("PostgreSql");
+
+            services.AddSingleton<IDbConnectionFactory>(x =>
+                new LoggingDbConnectionFactory(
+                    new PostgreSqlDbConnectionFactory(connectionString),
+                    x.GetService<ILoggerFactory>()));
+
+            services.AddSingleton<ScriptsExecutor>();
 
             services.AddOptions();
             services.Configure<DbCreateOptions>(

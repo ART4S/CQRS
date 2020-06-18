@@ -1,21 +1,22 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using WebFeatures.DbCreator.Core;
 
 namespace WebFeatures.DbCreator
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var root = new CompositionRoot();
-            var scripts = root.Services.GetRequiredService<ScriptsRunner>();
+            var scripts = root.Services.GetRequiredService<ScriptsExecutor>();
             var logger = root.Services.GetRequiredService<ILogger<Program>>();
 
             try
             {
-                scripts.Run();
+                await scripts.ExecuteAsync();
 
                 logger.LogInformation("Finished successfully");
 
