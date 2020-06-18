@@ -14,33 +14,36 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
 {
     public class RequestMediatorTests
     {
+        private readonly Mock<IRequestHandler<TestRequest, TestResult>> _handler;
+        private readonly Mock<IServiceProvider> _serviceProvider;
+
+        public RequestMediatorTests()
+        {
+            _handler = new Mock<IRequestHandler<TestRequest, TestResult>>();
+            _serviceProvider = new Mock<IServiceProvider>();
+        }
+
         [Fact]
-        public async Task SendAsync_WhenOneHandler_PassesSameRequest()
+        public async Task SendAsync_WhenOneHandler_CallsHandlerOnce()
         {
             // Arrange
             var request = new TestRequest();
 
-            var handler = new Mock<IRequestHandler<TestRequest, TestResult>>();
-
-            handler.Setup(x => x.HandleAsync(request, It.IsAny<CancellationToken>()));
-
-            var serviceProvider = new Mock<IServiceProvider>();
-
-            serviceProvider.Setup(x => x.GetService(
+            _serviceProvider.Setup(x => x.GetService(
                     typeof(IRequestHandler<TestRequest, TestResult>)))
-                .Returns(handler.Object);
+                .Returns(_handler.Object);
 
-            serviceProvider.Setup(x => x.GetService(
+            _serviceProvider.Setup(x => x.GetService(
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var mediator = new RequestMediator(serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             // Act
             await mediator.SendAsync(request);
 
             // Assert
-            handler.Verify();
+            _handler.Verify(x => x.HandleAsync(request, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -49,17 +52,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             // Arrange
             var request = new TestRequest();
 
-            var handler = new Mock<IRequestHandler<TestRequest, TestResult>>();
-
-            handler.Setup(x => x.HandleAsync(request, It.IsAny<CancellationToken>()));
-
-            var serviceProvider = new Mock<IServiceProvider>();
-
-            serviceProvider.Setup(x => x.GetService(
+            _serviceProvider.Setup(x => x.GetService(
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var mediator = new RequestMediator(serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             // Act
             Task actual() => mediator.SendAsync(request);
@@ -74,13 +71,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             // Arrange
             var callChecker = new CallChecker();
 
-            var serviceProvider = new Mock<IServiceProvider>();
-
-            serviceProvider.Setup(x => x.GetService(
+            _serviceProvider.Setup(x => x.GetService(
                     typeof(IRequestHandler<TestRequest, TestResult>)))
                 .Returns(new TestRequestHandler(callChecker));
 
-            serviceProvider.Setup(x => x.GetService(
+            _serviceProvider.Setup(x => x.GetService(
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[]
                 {
@@ -88,7 +83,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     new InnerTestMiddleware(callChecker)
                 });
 
-            var mediator = new RequestMediator(serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             // Act
             await mediator.SendAsync(new TestRequest());

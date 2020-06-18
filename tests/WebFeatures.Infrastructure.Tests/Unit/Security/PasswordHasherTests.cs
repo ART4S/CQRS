@@ -46,10 +46,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             PasswordHasher hasher = new PasswordHasher();
 
             // Act
-            bool isVerified = hasher.Verify(hash, password);
+            bool result = hasher.Verify(hash, password);
 
             // Assert
-            isVerified.ShouldBeTrue();
+            result.ShouldBeTrue();
         }
 
         [Theory]
@@ -63,10 +63,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             PasswordHasher hasher = new PasswordHasher();
 
             // Act
-            bool isVerified = hasher.Verify(hash, password);
+            bool result = hasher.Verify(hash, password);
 
             // Assert
-            isVerified.ShouldBeFalse();
+            result.ShouldBeFalse();
         }
     }
 }

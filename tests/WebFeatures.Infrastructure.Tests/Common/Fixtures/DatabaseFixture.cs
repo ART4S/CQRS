@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
-using System.Transactions;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
@@ -15,15 +14,10 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
 
     public class DatabaseFixture : IAsyncLifetime
     {
-        private readonly TransactionScope _transaction;
-
         public DbConnection Connection { get; }
 
         public DatabaseFixture()
         {
-            _transaction = new TransactionScope(
-                TransactionScopeAsyncFlowOption.Enabled);
-
             Connection = new NpgsqlConnection(
                 "server=localhost;port=5432;username=postgres;password=postgres;database=webfeatures_test_db");
         }
@@ -39,8 +33,6 @@ namespace WebFeatures.Infrastructure.Tests.Common.Fixtures
         public async Task DisposeAsync()
         {
             await Connection.DisposeAsync();
-
-            _transaction.Dispose();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.ValueObjects;
@@ -97,16 +98,23 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             };
 
             // Act
-            await repo.CreateAsync(manufacturer);
+            int manufacturersCount;
 
-            int manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM public.manufacturers
-                WHERE id = @Id AND streetaddress_cityid = @CityId",
-                new
-                {
-                    manufacturer.Id,
-                    manufacturer.StreetAddress.CityId
-                });
+            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
+            {
+                await repo.CreateAsync(manufacturer);
+
+                manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                    @"SELECT COUNT(*) FROM public.manufacturers
+                    WHERE id = @Id AND streetaddress_cityid = @CityId",
+                    new
+                    {
+                        manufacturer.Id,
+                        manufacturer.StreetAddress.CityId
+                    });
+
+                await transaction.RollbackAsync();
+            }
 
             // Assert
             manufacturersCount.ShouldBe(1);

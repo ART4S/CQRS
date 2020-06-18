@@ -20,6 +20,17 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 {
     public class AccountCommandHandlerTests
     {
+        private readonly Mock<IPasswordHasher> _hasher;
+        private readonly Mock<IWriteDbContext> _context;
+        private readonly Mock<ILoggerFactory> _loggerFactory;
+
+        public AccountCommandHandlerTests()
+        {
+            _hasher = new Mock<IPasswordHasher>();
+            _context = new Mock<IWriteDbContext>();
+            _loggerFactory = new Mock<ILoggerFactory>();
+        }
+
         [Fact]
         public async Task Register_ReturnsNewUserId()
         {
@@ -40,9 +51,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             Guid expectedUserId = Guid.NewGuid();
 
-            var hasher = new Mock<IPasswordHasher>();
-
-            hasher.Setup(x => x.ComputeHash(request.Password)).Returns(hash);
+            _hasher.Setup(x => x.ComputeHash(request.Password)).Returns(hash);
 
             var userRepo = new Mock<IUserWriteRepository>();
 
@@ -56,21 +65,18 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             var userRoleRepo = new Mock<IWriteRepository<UserRole>>();
 
-            var context = new Mock<IWriteDbContext>();
-
-            context.Setup(x => x.Users).Returns(userRepo.Object);
-            context.Setup(x => x.Roles).Returns(roleRepo.Object);
-            context.Setup(x => x.UserRoles).Returns(userRoleRepo.Object);
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
+            _context.Setup(x => x.Roles).Returns(roleRepo.Object);
+            _context.Setup(x => x.UserRoles).Returns(userRoleRepo.Object);
 
             var logger = new Mock<ILogger<Register>>();
 
-            var loggerFactory = new Mock<ILoggerFactory>();
-            loggerFactory.Setup(x => x.CreateLogger<Register>()).Returns(logger.Object);
+            _loggerFactory.Setup(x => x.CreateLogger<Register>()).Returns(logger.Object);
 
-            var handler = new AccountCommandHandler(context.Object, hasher.Object, loggerFactory.Object);
+            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Guid actualUserId = await handler.HandleAsync(request, CancellationToken.None);
+            Guid actualUserId = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
             actualUserId.ShouldBe(expectedUserId);
@@ -80,23 +86,16 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_WhenRoleForUserIsMissing_Throws()
         {
             // Arrange
-            var hasher = new Mock<IPasswordHasher>();
             var userRepo = new Mock<IUserWriteRepository>();
             var roleRepo = new Mock<IRoleWriteRepository>();
 
-            roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>()));
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
+            _context.Setup(x => x.Roles).Returns(roleRepo.Object);
 
-            var context = new Mock<IWriteDbContext>();
-
-            context.Setup(x => x.Users).Returns(userRepo.Object);
-            context.Setup(x => x.Roles).Returns(roleRepo.Object);
-
-            var loggerFactory = new Mock<ILoggerFactory>();
-
-            var handler = new AccountCommandHandler(context.Object, hasher.Object, loggerFactory.Object);
+            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Register(), CancellationToken.None);
+            Task actual() => handler.HandleAsync(new Register(), new CancellationToken());
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(actual);
@@ -122,23 +121,18 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             userRepo.Setup(x => x.GetByEmailAsync(request.Email)).ReturnsAsync(user);
 
-            var context = new Mock<IWriteDbContext>();
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
 
-            context.Setup(x => x.Users).Returns(userRepo.Object);
-
-            var hasher = new Mock<IPasswordHasher>();
-
-            hasher.Setup(x => x.Verify(user.PasswordHash, request.Password)).Returns(true);
+            _hasher.Setup(x => x.Verify(user.PasswordHash, request.Password)).Returns(true);
 
             var logger = new Mock<ILogger<Login>>();
-            var loggerFactory = new Mock<ILoggerFactory>();
 
-            loggerFactory.Setup(x => x.CreateLogger<Login>()).Returns(logger.Object);
+            _loggerFactory.Setup(x => x.CreateLogger<Login>()).Returns(logger.Object);
 
-            var handler = new AccountCommandHandler(context.Object, hasher.Object, loggerFactory.Object);
+            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Guid userId = await handler.HandleAsync(request, CancellationToken.None);
+            Guid userId = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
             userId.ShouldBe(user.Id);
@@ -152,17 +146,12 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             userRepo.Setup(x => x.GetByEmailAsync(It.IsAny<string>()));
 
-            var context = new Mock<IWriteDbContext>();
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
 
-            context.Setup(x => x.Users).Returns(userRepo.Object);
-
-            var hasher = new Mock<IPasswordHasher>();
-            var loggerFactory = new Mock<ILoggerFactory>();
-
-            var handler = new AccountCommandHandler(context.Object, hasher.Object, loggerFactory.Object);
+            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Login(), CancellationToken.None);
+            Task actual() => handler.HandleAsync(new Login(), new CancellationToken());
 
             // Assert
             await Assert.ThrowsAsync<ValidationException>(actual);
@@ -176,20 +165,14 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             userRepo.Setup(x => x.GetByEmailAsync(It.IsAny<string>()));
 
-            var context = new Mock<IWriteDbContext>();
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
 
-            context.Setup(x => x.Users).Returns(userRepo.Object);
+            _hasher.Setup(x => x.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
-            var hasher = new Mock<IPasswordHasher>();
-
-            hasher.Setup(x => x.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-
-            var loggerFactory = new Mock<ILoggerFactory>();
-
-            var handler = new AccountCommandHandler(context.Object, hasher.Object, loggerFactory.Object);
+            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Login(), CancellationToken.None);
+            Task actual() => handler.HandleAsync(new Login(), new CancellationToken());
 
             // Assert
             await Assert.ThrowsAsync<ValidationException>(actual);

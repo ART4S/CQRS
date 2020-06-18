@@ -41,12 +41,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+            string expected = $"{nameof(TestEntity.ValueObjectProperty)}_{nameof(TestEntity.ValueObjectProperty.StringProperty)}";
 
             // Act
-            string propertyName = propertyCall.GetPropertyName();
+            string actual = propertyCall.GetPropertyName();
 
             // Assert
-            propertyName.ShouldBe($"{nameof(TestEntity.ValueObjectProperty)}_{nameof(TestEntity.ValueObjectProperty.StringProperty)}");
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -95,11 +96,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             TestEntity entity = new TestEntity();
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.StringProperty));
+            string expected = "test";
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
-
-            string expected = "test";
 
             propertySetter(entity, expected);
 
@@ -113,11 +113,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             TestEntity entity = new TestEntity();
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.IntProperty));
+            int expected = 1;
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
-
-            int expected = 1;
 
             propertySetter(entity, expected);
 
@@ -131,11 +130,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             TestEntity entity = new TestEntity();
             Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
+            string expected = "test";
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-
-            string expected = "test";
 
             propertySetter(entity, expected);
 
@@ -149,11 +147,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             TestEntity entity = new TestEntity();
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
+            int expected = 1;
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-
-            int expected = 1;
 
             propertySetter(entity, expected);
 
@@ -167,11 +164,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             TestEntity entity = new TestEntity() { ValueObjectProperty = new TestValueObject() };
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+            string expected = "test";
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
-
-            string expected = "test";
 
             propertySetter(entity, expected);
 

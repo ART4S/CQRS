@@ -14,17 +14,22 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
 {
     public class WriteRepositoryTests
     {
+        private readonly Mock<IDbConnection> _connection;
+        private readonly Mock<IDbExecutor> _executor;
+        private readonly Mock<IEntityProfile> _profile;
+
+        public WriteRepositoryTests()
+        {
+            _connection = new Mock<IDbConnection>();
+            _executor = new Mock<IDbExecutor>();
+            _profile = new Mock<IEntityProfile>();
+        }
+
         private WriteRepository<TestEntity> CreateDefaultRepository()
         {
-            var executor = new Mock<IDbExecutor>();
-            var connection = new Mock<IDbConnection>();
-            var profile = new Mock<IEntityProfile>();
+            _profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
 
-            profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
-
-            var repo = new WriteRepository<TestEntity>(connection.Object, executor.Object, profile.Object);
-
-            return repo;
+            return new WriteRepository<TestEntity>(_connection.Object, _executor.Object, _profile.Object);
         }
 
         [Fact]
@@ -34,6 +39,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             var now = DateTime.UtcNow;
 
             var datetime = new Mock<IDateTime>();
+
             datetime.Setup(x => x.Now).Returns(now);
 
             DateTimeProvider.DateTime = datetime.Object;
@@ -63,27 +69,16 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public async Task DeleteAsync_WhenEmptyCollection_DoesntCallDatabase()
+        public async Task DeleteAsync_WhenEmptyCollection_DoesntCallExecutor()
         {
             // Arrange
-            var executor = new Mock<IDbExecutor>();
-
-            executor.Setup(x => x.ExecuteAsync(
-                It.IsAny<IDbConnection>(),
-                It.IsAny<string>())).Throws<Exception>();
-
-            var connection = new Mock<IDbConnection>();
-            var profile = new Mock<IEntityProfile>();
-
-            profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
-
-            var repo = new WriteRepository<TestEntity>(connection.Object, executor.Object, profile.Object);
+            var repo = CreateDefaultRepository();
 
             // Act
-            Task actual() => repo.DeleteAsync(new TestEntity[0]);
+            await repo.DeleteAsync(new TestEntity[0]);
 
             // Assert
-            await actual();
+            _executor.Verify(x => x.ExecuteAsync(_connection.Object, It.IsAny<string>()), Times.Never);
         }
     }
 }

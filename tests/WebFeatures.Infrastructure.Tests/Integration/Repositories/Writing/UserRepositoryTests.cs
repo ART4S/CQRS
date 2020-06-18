@@ -2,6 +2,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
@@ -81,11 +82,18 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             };
 
             // Act
-            await repo.CreateAsync(user);
+            int usersCount;
 
-            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM public.users WHERE id = @Id",
-                new { user.Id });
+            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
+            {
+                await repo.CreateAsync(user);
+
+                usersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                    "SELECT Count(*) FROM public.users WHERE id = @Id",
+                    new { user.Id });
+
+                await transaction.RollbackAsync();
+            }
 
             // Assert
             user.Id.ShouldNotBe(default);
@@ -100,7 +108,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User()
             {
-                Id = new Guid("35f4b4f6-17ac-4b4e-a345-1568b9d52a65"),
+                Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09"),
                 Name = "",
                 Email = "email1",
                 PasswordHash = "hash"
@@ -109,16 +117,24 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             string sql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User notUpdatedUser = await Database.Connection.QuerySingleAsync<User>(sql, user);
+            User beforeUpdate;
+            User afterUpdate;
 
-            await repo.UpdateAsync(user);
+            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
+            {
+                beforeUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
 
-            User updatedUser = await Database.Connection.QuerySingleAsync<User>(sql, user);
+                await repo.UpdateAsync(user);
+
+                afterUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
+
+                await transaction.RollbackAsync();
+            }
 
             // Assert
-            user.Id.ShouldBe(notUpdatedUser.Id);
-            user.Id.ShouldBe(updatedUser.Id);
-            notUpdatedUser.Name.ShouldNotBe(updatedUser.Name);
+            user.Id.ShouldBe(beforeUpdate.Id);
+            user.Id.ShouldBe(afterUpdate.Id);
+            beforeUpdate.Name.ShouldNotBe(afterUpdate.Name);
         }
 
         [Fact]
@@ -127,14 +143,21 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            var user = new User() { Id = new Guid("4de84964-2a53-4cf8-8e01-1436c8a7b72d") };
+            var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
             // Act
-            await repo.DeleteAsync(user);
+            int usersCount;
 
-            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM public.users WHERE id = @Id",
-                new { user.Id });
+            using (DbTransaction transaction = await Database.Connection.BeginTransactionAsync())
+            {
+                await repo.DeleteAsync(user);
+
+                usersCount = await Database.Connection.ExecuteScalarAsync<int>(
+                    "SELECT Count(*) FROM public.users WHERE id = @Id",
+                    new { user.Id });
+
+                await transaction.RollbackAsync();
+            }
 
             // Assert
             usersCount.ShouldBe(0);

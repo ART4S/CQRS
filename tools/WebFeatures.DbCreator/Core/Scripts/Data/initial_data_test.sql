@@ -1,10 +1,7 @@
 ﻿INSERT INTO users (id, name, email, passwordhash, pictureid)
 VALUES
 ('a91e29b7-813b-47a3-93f0-8ad34d4c8a09', 'Admin', 'admin@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
-('35f4b4f6-17ac-4b4e-a345-1568b9d52a65', 'User_1', 'user1@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
-('5687c80f-d495-460a-aae5-94ea8054ee2c', 'User_2', 'user2@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
-('78f7ede9-920a-47d4-b36a-75e7acbe936c', 'User_3', 'user3@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
-('4de84964-2a53-4cf8-8e01-1436c8a7b72d', 'User_4', 'user4@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null);
+('5687c80f-d495-460a-aae5-94ea8054ee2c', 'User', 'user@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null);
 	
 INSERT INTO roles (id, name, description)
 VALUES
