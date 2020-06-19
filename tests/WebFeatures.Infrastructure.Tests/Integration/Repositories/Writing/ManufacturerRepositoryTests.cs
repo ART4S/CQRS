@@ -45,6 +45,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             ManufacturerWriteRepository repo = CreateDefaultRepository();
 
             Guid manufacturerId = new Guid("278a79e9-5889-4953-a7c9-448c1e185600");
+
             Guid cityId = new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3");
 
             // Act
@@ -79,12 +80,23 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             Manufacturer manufacturer = ManufacturerFactory.Get();
 
+            string maufacturersCountSql =
+                @"SELECT COUNT(*) FROM public.manufacturers
+                WHERE id = @Id AND streetaddress_cityid = @CityId";
+
             // Act
+            int manufacturersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(
+                maufacturersCountSql,
+                new
+                {
+                    manufacturer.Id,
+                    manufacturer.StreetAddress.CityId
+                });
+
             await repo.CreateAsync(manufacturer);
 
-            int manufacturersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM public.manufacturers
-                WHERE id = @Id AND streetaddress_cityid = @CityId",
+            int manufacturersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(
+                maufacturersCountSql,
                 new
                 {
                     manufacturer.Id,
@@ -92,7 +104,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
                 });
 
             // Assert
-            manufacturersCount.ShouldBe(1);
+            manufacturersCountBefore.ShouldBe(0);
+            manufacturersCountAfter.ShouldBe(1);
         }
     }
 }

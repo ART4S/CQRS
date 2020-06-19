@@ -11,6 +11,8 @@ using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
+using WebFeatures.Application.Tests.Common.Factories.Entities;
+using WebFeatures.Application.Tests.Common.Factories.Requests.Accounts;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using Xunit;
@@ -35,38 +37,32 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_ReturnsNewUserId()
         {
             // Arrange
-            var request = new Register()
-            {
-                Email = "email",
-                Name = "name",
-                Password = "password"
-            };
-
-            var role = new Role()
-            {
-                Name = "name"
-            };
+            Register request = RegisterFactory.Get();
 
             string hash = "hash";
-
-            Guid expectedUserId = Guid.NewGuid();
 
             _hasher.Setup(x => x.ComputeHash(request.Password)).Returns(hash);
 
             var userRepo = new Mock<IUserWriteRepository>();
 
+            Guid expectedUserId = Guid.NewGuid();
+
             userRepo.Setup(x => x.CreateAsync(
                     It.Is<User>(x => x.Email == request.Email && x.Name == request.Name && x.PasswordHash == hash)))
                 .Callback<User>(x => x.Id = expectedUserId);
 
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
+
             var roleRepo = new Mock<IRoleWriteRepository>();
+
+            Role role = RoleFactory.Get();
 
             roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(role);
 
+            _context.Setup(x => x.Roles).Returns(roleRepo.Object);
+
             var userRoleRepo = new Mock<IWriteRepository<UserRole>>();
 
-            _context.Setup(x => x.Users).Returns(userRepo.Object);
-            _context.Setup(x => x.Roles).Returns(roleRepo.Object);
             _context.Setup(x => x.UserRoles).Returns(userRoleRepo.Object);
 
             var logger = new Mock<ILogger<Register>>();
@@ -86,11 +82,13 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_WhenRoleForUserIsMissing_Throws()
         {
             // Arrange
-            var userRepo = new Mock<IUserWriteRepository>();
             var roleRepo = new Mock<IRoleWriteRepository>();
 
-            _context.Setup(x => x.Users).Returns(userRepo.Object);
             _context.Setup(x => x.Roles).Returns(roleRepo.Object);
+
+            var userRepo = new Mock<IUserWriteRepository>();
+
+            _context.Setup(x => x.Users).Returns(userRepo.Object);
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
@@ -105,17 +103,9 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Login_ReturnsUserId()
         {
             // Arrange
-            var request = new Login()
-            {
-                Email = "email",
-                Password = "password"
-            };
+            Login request = LoginFactory.Get();
 
-            var user = new User()
-            {
-                Id = Guid.NewGuid(),
-                Email = "email"
-            };
+            User user = UserFactory.Get();
 
             var userRepo = new Mock<IUserWriteRepository>();
 
@@ -144,8 +134,6 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             // Arrange
             var userRepo = new Mock<IUserWriteRepository>();
 
-            userRepo.Setup(x => x.GetByEmailAsync(It.IsAny<string>()));
-
             _context.Setup(x => x.Users).Returns(userRepo.Object);
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
@@ -162,8 +150,6 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         {
             // Arrange
             var userRepo = new Mock<IUserWriteRepository>();
-
-            userRepo.Setup(x => x.GetByEmailAsync(It.IsAny<string>()));
 
             _context.Setup(x => x.Users).Returns(userRepo.Object);
 

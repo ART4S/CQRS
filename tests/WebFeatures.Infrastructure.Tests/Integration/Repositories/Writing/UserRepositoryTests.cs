@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Bogus;
+using Dapper;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            usersCountAfter.ShouldBeGreaterThan(usersCountBefore);
+            usersCountBefore.ShouldBe(0);
+            usersCountAfter.ShouldBe(1);
         }
 
         [Fact]
@@ -94,7 +96,6 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             User user = UserFactory.Get();
 
             user.Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
-            user.Name = "name";
 
             string selectUserSql = $"SELECT * FROM public.users WHERE id = @Id";
 
@@ -130,7 +131,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            usersCountAfter.ShouldBeLessThan(usersCountBefore);
+            usersCountBefore.ShouldBe(1);
+            usersCountAfter.ShouldBe(0);
         }
 
         [Fact]

@@ -17,9 +17,11 @@ namespace WebFeatures.Infrastructure.Tests.Common.Factories
             };
 
             var address = new Faker<Address>()
+                .StrictMode(true)
                 .RuleFor(x => x.CityId, x => x.PickRandom(cities))
                 .RuleFor(x => x.PostalCode, x => x.Random.Utf16String())
-                .RuleFor(x => x.StreetName, x => x.Random.Utf16String());
+                .RuleFor(x => x.StreetName, x => x.Random.Utf16String())
+                .Ignore(x => x.City);
 
             var manufacturer = new Faker<Manufacturer>()
                 .StrictMode(true)

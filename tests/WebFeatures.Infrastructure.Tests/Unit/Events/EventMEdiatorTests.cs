@@ -16,17 +16,17 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
         public async Task PublishAsync_PassesSameEventToEventHandler()
         {
             // Arrange
-            var eve = new TestEvent();
+            var serviceProvider = new Mock<IServiceProvider>();
 
             var handler = new Mock<IEventHandler<TestEvent>>();
-
-            var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider.Setup(x => x.GetService(
                     typeof(IEnumerable<IEventHandler<TestEvent>>)))
                 .Returns(new[] { handler.Object });
 
             var mediator = new EventMediator(serviceProvider.Object);
+
+            var eve = new TestEvent();
 
             // Act
             await mediator.PublishAsync(eve);

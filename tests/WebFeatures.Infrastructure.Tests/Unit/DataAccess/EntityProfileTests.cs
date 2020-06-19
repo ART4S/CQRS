@@ -13,6 +13,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             var profile = new EntityProfile();
+
             profile.TryRegisterMap(typeof(TestEntityMap));
 
             // Act

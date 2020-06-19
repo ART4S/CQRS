@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Bogus;
+using Shouldly;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -41,6 +42,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+
             string expected = $"{nameof(TestEntity.ValueObjectProperty)}_{nameof(TestEntity.ValueObjectProperty.StringProperty)}";
 
             // Act
@@ -82,8 +84,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
-            // Act
             PropertyInfo expected = typeof(TestEntity).GetProperty(nameof(TestEntity.ValueObjectProperty));
+
+            // Act
             PropertyInfo actual = propertyCall.GetFirstProperty();
 
             // Assert
@@ -95,8 +98,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
+
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.StringProperty));
-            string expected = "test";
+
+            string expected = new Faker().Random.Utf16String();
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
@@ -112,8 +117,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
+
             PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.IntProperty));
-            int expected = 1;
+
+            int expected = new Faker().Random.Int();
 
             // Act
             Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
@@ -129,8 +136,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
+
             Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
-            string expected = "test";
+
+            string expected = new Faker().Random.Utf16String();
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
@@ -146,8 +155,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity();
+
             Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
-            int expected = 1;
+
+            int expected = new Faker().Random.Int();
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
@@ -163,8 +174,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             TestEntity entity = new TestEntity() { ValueObjectProperty = new TestValueObject() };
+
             Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
-            string expected = "test";
+
+            string expected = new Faker().Random.Utf16String();
 
             // Act
             Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();

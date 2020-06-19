@@ -27,8 +27,6 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         public async Task SendAsync_WhenOneHandler_CallsHandlerOnce()
         {
             // Arrange
-            var request = new TestRequest();
-
             _serviceProvider.Setup(x => x.GetService(
                     typeof(IRequestHandler<TestRequest, TestResult>)))
                 .Returns(_handler.Object);
@@ -38,6 +36,8 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
             var mediator = new RequestMediator(_serviceProvider.Object);
+
+            var request = new TestRequest();
 
             // Act
             await mediator.SendAsync(request);
@@ -50,13 +50,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         public async Task SendAsync_WhenHandlerHasNotBeenRegistered_Throws()
         {
             // Arrange
-            var request = new TestRequest();
-
             _serviceProvider.Setup(x => x.GetService(
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
             var mediator = new RequestMediator(_serviceProvider.Object);
+
+            var request = new TestRequest();
 
             // Act
             Task actual() => mediator.SendAsync(request);

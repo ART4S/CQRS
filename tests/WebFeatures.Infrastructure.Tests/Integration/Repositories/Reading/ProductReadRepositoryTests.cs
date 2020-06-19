@@ -39,10 +39,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
 
-            Guid productId = Guid.NewGuid();
-
             // Act
-            ProductInfoDto product = await repo.GetProductAsync(productId);
+            ProductInfoDto product = await repo.GetProductAsync(Guid.NewGuid());
 
             // Assert
             product.ShouldBeNull();

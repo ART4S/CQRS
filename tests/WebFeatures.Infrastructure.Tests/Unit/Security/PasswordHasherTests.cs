@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Bogus;
+using Shouldly;
 using System;
 using WebFeatures.Infrastructure.Security;
 using Xunit;
@@ -11,7 +12,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
         public void ComputeHash_ReturnsNonEmptyHash()
         {
             // Arrange
-            string password = "12345";
+            string password = new Faker().Internet.Password();
 
             PasswordHasher hasher = new PasswordHasher();
 

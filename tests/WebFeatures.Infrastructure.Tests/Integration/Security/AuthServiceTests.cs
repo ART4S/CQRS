@@ -15,6 +15,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         private AuthService CreateDefaultAuthService()
         {
             var context = new Mock<IWriteDbContext>();
+
             context.Setup(x => x.Connection).Returns(() => Database.Connection);
 
             return new AuthService(context.Object, new DapperDbExecutor());

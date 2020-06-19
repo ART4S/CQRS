@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Infrastructure.Tests.Common.Factories
+namespace WebFeatures.Application.Tests.Common.Factories.Entities
 {
     internal static class UserFactory
     {

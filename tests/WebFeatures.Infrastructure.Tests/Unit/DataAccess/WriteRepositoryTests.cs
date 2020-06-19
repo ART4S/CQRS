@@ -36,9 +36,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityHasCreateDateProperty_SetsCurrentDate()
         {
             // Arrange
-            var now = DateTime.UtcNow;
-
             var datetime = new Mock<IDateTime>();
+
+            var now = DateTime.UtcNow;
 
             datetime.Setup(x => x.Now).Returns(now);
 
