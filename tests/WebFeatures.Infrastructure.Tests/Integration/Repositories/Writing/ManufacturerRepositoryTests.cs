@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.ValueObjects;
 using WebFeatures.Infrastructure.DataAccess.Mappings;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
+using WebFeatures.Infrastructure.Tests.Common.Factories;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
@@ -63,10 +63,9 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
-            Guid manufacturerId = Guid.NewGuid();
 
             // Act
-            Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
+            Manufacturer manufacturer = await repo.GetAsync(Guid.NewGuid());
 
             // Assert
             manufacturer.ShouldBeNull();
@@ -78,18 +77,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
 
-            var manufacturer = new Manufacturer()
-            {
-                Id = new Guid("0fd1e2cd-51a0-4ba5-b830-e0b7cbe76823"),
-                OrganizationName = "",
-                HomePageUrl = "",
-                StreetAddress = new Address()
-                {
-                    CityId = new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3"),
-                    PostalCode = "",
-                    StreetName = ""
-                }
-            };
+            Manufacturer manufacturer = ManufacturerFactory.Get();
 
             // Act
             await repo.CreateAsync(manufacturer);

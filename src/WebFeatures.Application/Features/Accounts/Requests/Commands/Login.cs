@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using WebFeatures.Application.Infrastructure.Requests;
 
 namespace WebFeatures.Application.Features.Accounts.Requests.Commands
@@ -17,5 +18,13 @@ namespace WebFeatures.Application.Features.Accounts.Requests.Commands
         /// Пароль
         /// </summary>
         public string Password { get; set; }
+
+        public class Validator : AbstractValidator<Login>
+        {
+            public Validator()
+            {
+                // TODO
+            }
+        }
     }
 }
