@@ -27,6 +27,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             AuthService authService = CreateDefaultAuthService();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
+
             string permission = "products_create";
 
             // Act
@@ -43,6 +44,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             AuthService authService = CreateDefaultAuthService();
 
             Guid userId = new Guid("5687c80f-d495-460a-aae5-94ea8054ee2c");
+
             string permission = "products_create";
 
             // Act
@@ -59,6 +61,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             AuthService authService = CreateDefaultAuthService();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
+
             string permission = "products_creat";
 
             // Act
@@ -75,6 +78,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             AuthService authService = CreateDefaultAuthService();
 
             Guid userId = new Guid("3cdd1fc5-4c54-4484-a2e5-95920b79734e");
+
             string permission = "products_create";
 
             // Act

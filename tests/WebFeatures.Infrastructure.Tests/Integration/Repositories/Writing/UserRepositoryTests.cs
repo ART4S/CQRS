@@ -8,6 +8,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
+using WebFeatures.Infrastructure.Tests.Common.Factories;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
@@ -37,6 +38,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
@@ -52,6 +54,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
@@ -67,24 +70,19 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            var user = new User()
-            {
-                Id = new Guid("a602e1c8-db6f-49b7-ae7c-beb48fe2755a"),
-                Name = "",
-                Email = "email",
-                PasswordHash = "hash"
-            };
+            User user = UserFactory.Get();
+
+            string usersCountSql = "SELECT Count(*) FROM public.users WHERE id = @Id";
 
             // Act
+            int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+
             await repo.CreateAsync(user);
 
-            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM public.users WHERE id = @Id",
-                new { user.Id });
+            int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            user.Id.ShouldNotBe(default);
-            usersCount.ShouldBe(1);
+            usersCountAfter.ShouldBeGreaterThan(usersCountBefore);
         }
 
         [Fact]
@@ -93,27 +91,24 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            var user = new User()
-            {
-                Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09"),
-                Name = "",
-                Email = "email1",
-                PasswordHash = "hash"
-            };
+            User user = UserFactory.Get();
 
-            string sql = $"SELECT * FROM public.users WHERE id = @Id";
+            user.Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
+            user.Name = "name";
+
+            string selectUserSql = $"SELECT * FROM public.users WHERE id = @Id";
 
             // Act
-            User beforeUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
+            User beforeUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
 
             await repo.UpdateAsync(user);
 
-            User afterUpdate = await Database.Connection.QuerySingleAsync<User>(sql, user);
+            User afterUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
 
             // Assert
-            user.Id.ShouldBe(beforeUpdate.Id);
-            user.Id.ShouldBe(afterUpdate.Id);
-            beforeUpdate.Name.ShouldNotBe(afterUpdate.Name);
+            user.Id.ShouldBe(beforeUpdateUser.Id);
+            user.Id.ShouldBe(afterUpdateUser.Id);
+            beforeUpdateUser.Name.ShouldNotBe(afterUpdateUser.Name);
         }
 
         [Fact]
@@ -124,15 +119,18 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
+            string usersCountSql = "SELECT Count(*) FROM public.users WHERE id = @Id";
+
             // Act
+
+            int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+
             await repo.DeleteAsync(user);
 
-            int usersCount = await Database.Connection.ExecuteScalarAsync<int>(
-                "SELECT Count(*) FROM public.users WHERE id = @Id",
-                new { user.Id });
+            int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            usersCount.ShouldBe(0);
+            usersCountAfter.ShouldBeLessThan(usersCountBefore);
         }
 
         [Fact]
@@ -140,6 +138,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
@@ -154,6 +153,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
@@ -168,6 +168,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             string email = "admin@mail.com";
 
             // Act
@@ -183,6 +184,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
+
             string email = "invalid@mail.com";
 
             // Act

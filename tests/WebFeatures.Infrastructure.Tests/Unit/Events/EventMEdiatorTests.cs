@@ -20,8 +20,6 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
 
             var handler = new Mock<IEventHandler<TestEvent>>();
 
-            handler.Setup(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()));
-
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider.Setup(x => x.GetService(
@@ -34,7 +32,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
             await mediator.PublishAsync(eve);
 
             // Assert
-            handler.Verify();
+            handler.Verify(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()));
         }
     }
 }

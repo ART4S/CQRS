@@ -22,6 +22,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
@@ -37,6 +38,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = Guid.NewGuid();
 
             // Act
@@ -64,6 +66,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
@@ -78,6 +81,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = new Guid("0cacb23f-da1f-44c6-80e0-5204d99e06b9");
 
             // Act
@@ -92,6 +96,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
 
             // Act
@@ -106,6 +111,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
         {
             // Arrange
             ProductReadRepository repo = CreateDefaultRepository();
+
             Guid productId = new Guid("0cacb23f-da1f-44c6-80e0-5204d99e06b9");
 
             // Act

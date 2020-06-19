@@ -45,6 +45,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             DateTimeProvider.DateTime = datetime.Object;
 
             WriteRepository<TestEntity> repo = CreateDefaultRepository();
+
             TestEntity entity = new TestEntity();
 
             // Act
@@ -59,6 +60,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         {
             // Arrange
             WriteRepository<TestEntity> repo = CreateDefaultRepository();
+
             TestEntity entity = new TestEntity();
 
             // Act
@@ -72,7 +74,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task DeleteAsync_WhenEmptyCollection_DoesntCallExecutor()
         {
             // Arrange
-            var repo = CreateDefaultRepository();
+            WriteRepository<TestEntity> repo = CreateDefaultRepository();
 
             // Act
             await repo.DeleteAsync(new TestEntity[0]);

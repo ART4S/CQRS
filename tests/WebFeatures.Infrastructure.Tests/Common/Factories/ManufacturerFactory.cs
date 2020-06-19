@@ -28,7 +28,7 @@ namespace WebFeatures.Infrastructure.Tests.Common.Factories
                 .RuleFor(x => x.OrganizationName, x => x.Random.Utf16String())
                 .RuleFor(x => x.StreetAddress, x => address);
 
-            return manufacturer.Generate();
+            return manufacturer;
         }
     }
 }
