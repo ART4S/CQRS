@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using WebFeatures.Common;
+using WebFeatures.Common.Extensions;
 
 namespace WebFeatures.Infrastructure.DataAccess.Extensions
 {
@@ -15,7 +16,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Extensions
 
             IEnumerable<string> propertyNames = ExtractProperties(propertyCall).Select(x => x.Name);
 
-            return string.Join("_", propertyNames);
+            return propertyNames.JoinString("_");
         }
 
         public static PropertyInfo GetFirstProperty<T>(this Expression<Func<T, object>> propertyCall)
@@ -87,7 +88,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Extensions
 
             while (current is MemberExpression memberExpr)
             {
-                var property = memberExpr.Member as PropertyInfo;
+                PropertyInfo property = memberExpr.Member as PropertyInfo;
 
                 if (property == null)
                 {

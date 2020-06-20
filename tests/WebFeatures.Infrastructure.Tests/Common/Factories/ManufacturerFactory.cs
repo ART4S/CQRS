@@ -19,15 +19,15 @@ namespace WebFeatures.Infrastructure.Tests.Common.Factories
             var address = new Faker<Address>()
                 .StrictMode(true)
                 .RuleFor(x => x.CityId, x => x.PickRandom(cities))
-                .RuleFor(x => x.PostalCode, x => x.Random.Utf16String())
-                .RuleFor(x => x.StreetName, x => x.Random.Utf16String())
+                .RuleFor(x => x.PostalCode, x => x.Address.ZipCode())
+                .RuleFor(x => x.StreetName, x => x.Address.StreetName())
                 .Ignore(x => x.City);
 
             var manufacturer = new Faker<Manufacturer>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, x => x.Random.Guid())
-                .RuleFor(x => x.HomePageUrl, x => x.Random.Utf16String().OrNull(x))
-                .RuleFor(x => x.OrganizationName, x => x.Random.Utf16String())
+                .RuleFor(x => x.HomePageUrl, x => x.Internet.Url().OrNull(x))
+                .RuleFor(x => x.OrganizationName, x => x.Company.CompanyName())
                 .RuleFor(x => x.StreetAddress, x => address);
 
             return manufacturer;

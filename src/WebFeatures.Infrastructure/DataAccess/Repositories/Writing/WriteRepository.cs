@@ -5,8 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Common;
 using WebFeatures.Common.Extensions;
-using WebFeatures.Common.SystemTime;
 using WebFeatures.Domian.Common;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
@@ -58,7 +58,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 
             if (entity is IHasCreateDate cd)
             {
-                cd.CreateDate = DateTimeProvider.DateTime.Now;
+                cd.CreateDate = SystemTime.Now;
             }
 
             var insertColumns = new List<string>();

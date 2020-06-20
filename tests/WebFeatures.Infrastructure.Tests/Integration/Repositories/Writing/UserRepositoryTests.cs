@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using Dapper;
-using Shouldly;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             IEnumerable<User> users = await repo.GetAllAsync();
 
             // Assert
-            users.ShouldNotBeEmpty();
+            users.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -46,8 +46,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             User user = await repo.GetAsync(userId);
 
             // Assert
-            user.ShouldNotBeNull();
-            user.Id.ShouldBe(userId);
+            user.Should().NotBeNull();
+            user.Id.Should().Be(userId);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             User user = await repo.GetAsync(userId);
 
             // Assert
-            user.ShouldBeNull();
+            user.Should().BeNull();
         }
 
         [Fact]
@@ -83,8 +83,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            usersCountBefore.ShouldBe(0);
-            usersCountAfter.ShouldBe(1);
+            usersCountBefore.Should().Be(0);
+            usersCountAfter.Should().Be(1);
         }
 
         [Fact]
@@ -107,9 +107,9 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             User afterUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
 
             // Assert
-            user.Id.ShouldBe(beforeUpdateUser.Id);
-            user.Id.ShouldBe(afterUpdateUser.Id);
-            beforeUpdateUser.Name.ShouldNotBe(afterUpdateUser.Name);
+            user.Id.Should().Be(beforeUpdateUser.Id);
+            user.Id.Should().Be(afterUpdateUser.Id);
+            beforeUpdateUser.Name.Should().NotBe(afterUpdateUser.Name);
         }
 
         [Fact]
@@ -131,8 +131,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
             // Assert
-            usersCountBefore.ShouldBe(1);
-            usersCountAfter.ShouldBe(0);
+            usersCountBefore.Should().Be(1);
+            usersCountAfter.Should().Be(0);
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             bool result = await repo.ExistsAsync(userId);
 
             // Assert
-            result.ShouldBeTrue();
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             bool result = await repo.ExistsAsync(userId);
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -177,23 +177,23 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             User user = await repo.GetByEmailAsync(email);
 
             // Assert
-            user.ShouldNotBeNull();
-            user.Email.ShouldBe(email);
+            user.Should().NotBeNull();
+            user.Email.Should().Be(email);
         }
 
         [Fact]
-        public async Task GetUserByEmailAsync_WhenPassedInvalidEmail_ReturnsNull()
+        public async Task GetUserByEmailAsync_WhenPassedNonexistentEmail_ReturnsNull()
         {
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            string email = "invalid@mail.com";
+            string email = new Faker().Internet.Email();
 
             // Act
             User user = await repo.GetByEmailAsync(email);
 
             // Assert
-            user.ShouldBeNull();
+            user.Should().BeNull();
         }
     }
 }

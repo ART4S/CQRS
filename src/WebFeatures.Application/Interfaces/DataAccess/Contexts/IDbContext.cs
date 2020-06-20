@@ -1,12 +1,9 @@
-﻿using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data.Common;
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Contexts
 {
     public interface IDbContext
     {
-        IDbConnection Connection { get; }
-        Task SaveChangesAsync(CancellationToken cancellationToken);
+        DbConnection Connection { get; }
     }
 }

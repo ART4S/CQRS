@@ -23,7 +23,9 @@ namespace WebFeatures.Application.Middlewares
             var sw = new Stopwatch();
 
             sw.Start();
+
             TResponse response = await next();
+
             sw.Stop();
 
             if (sw.ElapsedMilliseconds > 500)

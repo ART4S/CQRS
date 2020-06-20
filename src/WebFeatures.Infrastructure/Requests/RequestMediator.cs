@@ -58,6 +58,7 @@ namespace WebFeatures.Infrastructure.Requests
             foreach (var middleware in middlewares)
             {
                 RequestDelegate<Task<TResponse>> next = pipeline; // for closure
+
                 pipeline = () => middleware.HandleAsync((TRequest)request, next, cancellationToken);
             }
 

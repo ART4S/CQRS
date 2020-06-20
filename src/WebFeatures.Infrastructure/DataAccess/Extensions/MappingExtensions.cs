@@ -11,18 +11,10 @@ namespace WebFeatures.Infrastructure.DataAccess.Extensions
             return $"{table.Schema}.{table.Name}";
         }
 
-        public static string Column<TEntity>(this IEntityMap<TEntity> entity,
-            Expression<Func<TEntity, object>> propertyCall)
+        public static string Column<TEntity>(this IEntityMap<TEntity> entity, Expression<Func<TEntity, object>> propertyCall)
             where TEntity : class
         {
             return entity.GetProperty(propertyCall).ColumnName;
-        }
-
-        public static string Property<TEntity>(this IEntityMap<TEntity> entity,
-            Expression<Func<TEntity, object>> propertyCall)
-            where TEntity : class
-        {
-            return entity.GetProperty(propertyCall).Property.Name;
         }
     }
 }

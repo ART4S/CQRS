@@ -42,6 +42,7 @@ namespace WebFeatures.Application
         private static void AddMappings(IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(x => x.AddProfile<MappingsProfile>());
+
             mapperConfig.AssertConfigurationIsValid();
 
             services.AddSingleton(x => mapperConfig.CreateMapper());

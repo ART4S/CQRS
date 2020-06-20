@@ -1,4 +1,4 @@
-﻿using Shouldly;
+﻿using FluentAssertions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.Tests.Common.Stubs;
@@ -20,7 +20,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
 
             // Assert
-            map.ShouldNotBeNull();
+            map.Should().NotBeNull();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
 
             // Assert
-            map.ShouldNotBeNull();
+            map.Should().NotBeNull();
         }
     }
 }

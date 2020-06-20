@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Infrastructure.Results;
-using WebFeatures.Common.SystemTime;
+using WebFeatures.Common;
 using WebFeatures.WebApi.Controllers.Base;
 
 namespace WebFeatures.WebApi.Controllers
@@ -62,7 +62,7 @@ namespace WebFeatures.WebApi.Controllers
             var authProperties = new AuthenticationProperties()
             {
                 IsPersistent = true,
-                ExpiresUtc = DateTimeProvider.DateTime.Now.AddMinutes(20)
+                ExpiresUtc = SystemTime.Now.AddMinutes(20)
             };
 
             return HttpContext.SignInAsync(principal, authProperties);

@@ -6,7 +6,8 @@ using WebFeatures.Infrastructure.DataAccess.Extensions;
 
 namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
 {
-    internal interface IPropertyMap<TEntity> where TEntity : class
+    internal interface IPropertyMap<TEntity>
+        where TEntity : class
     {
         string ColumnName { get; }
         string PropertyAlias { get; }
@@ -15,7 +16,8 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
         void SetValue(TEntity entity, object value);
     }
 
-    internal partial class PropertyMap<TEntity> : IPropertyMap<TEntity> where TEntity : class
+    internal partial class PropertyMap<TEntity> : IPropertyMap<TEntity>
+        where TEntity : class
     {
         public string ColumnName { get; private set; }
         public string PropertyAlias { get; }

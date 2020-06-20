@@ -1,5 +1,5 @@
+using FluentAssertions;
 using Moq;
-using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -59,10 +59,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             var request = new TestRequest();
 
             // Act
-            Task actual() => mediator.SendAsync(request);
+            Func<Task> actual = () => mediator.SendAsync(request);
 
             // Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(actual);
+            await actual.Should().ThrowAsync<InvalidOperationException>();
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             await mediator.SendAsync(new TestRequest());
 
             // Assert
-            callChecker.Messages.ShouldBe(new[]
+            callChecker.Messages.Should().Equal(new[]
             {
                 "Outher started",
                 "Inner started",

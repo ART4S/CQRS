@@ -1,4 +1,6 @@
-﻿using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
@@ -22,5 +24,7 @@ namespace WebFeatures.Application.Interfaces.DataAccess.Contexts
         IWriteRepository<Shipper> Shippers { get; }
         IWriteRepository<City> Cities { get; }
         IWriteRepository<Country> Countries { get; }
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

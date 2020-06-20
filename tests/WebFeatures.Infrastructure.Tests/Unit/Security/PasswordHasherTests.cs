@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Shouldly;
+using FluentAssertions;
 using System;
 using WebFeatures.Infrastructure.Security;
 using Xunit;
@@ -20,7 +20,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             string hash = hasher.ComputeHash(password);
 
             // Assert
-            hash.ShouldNotBeNullOrEmpty();
+            hash.Should().NotBeNullOrEmpty();
         }
 
         [Theory]
@@ -33,10 +33,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             PasswordHasher hasher = new PasswordHasher();
 
             // Act
-            void actual() => hasher.ComputeHash(password);
+            Action actual = () => hasher.ComputeHash(password);
 
             // Assert
-            Assert.Throws<ArgumentException>(actual);
+            actual.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             bool result = hasher.Verify(hash, password);
 
             // Assert
-            result.ShouldBeTrue();
+            result.Should().BeTrue();
         }
 
         [Theory]
@@ -69,7 +69,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             bool result = hasher.Verify(hash, password);
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
     }
 }

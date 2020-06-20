@@ -1,6 +1,6 @@
 ﻿using Bogus;
+using FluentAssertions;
 using Moq;
-using Shouldly;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
             bool result = await handler.HandleAsync(new UserHasPermission(), new CancellationToken());
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
             bool result = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
-            result.ShouldBeTrue();
+            result.Should().BeTrue();
         }
     }
 }

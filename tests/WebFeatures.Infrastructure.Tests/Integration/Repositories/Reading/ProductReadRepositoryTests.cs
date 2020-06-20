@@ -1,4 +1,4 @@
-﻿using Shouldly;
+﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,8 +29,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             ProductInfoDto product = await repo.GetProductAsync(productId);
 
             // Assert
-            product.ShouldNotBeNull();
-            product.Id.ShouldBe(productId);
+            product.Should().NotBeNull();
+            product.Id.Should().Be(productId);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             ProductInfoDto product = await repo.GetProductAsync(Guid.NewGuid());
 
             // Assert
-            product.ShouldBeNull();
+            product.Should().BeNull();
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             IEnumerable<ProductListDto> list = await repo.GetListAsync();
 
             // Assert
-            list.ShouldNotBeEmpty();
+            list.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             IEnumerable<ProductCommentInfoDto> comments = await repo.GetCommentsAsync(productId);
 
             // Assert
-            comments.ShouldNotBeEmpty();
+            comments.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             IEnumerable<ProductCommentInfoDto> comments = await repo.GetCommentsAsync(productId);
 
             // Assert
-            comments.ShouldBeEmpty();
+            comments.Should().BeEmpty();
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             IEnumerable<ProductReviewInfoDto> reviews = await repo.GetReviewsAsync(productId);
 
             // Assert
-            reviews.ShouldNotBeEmpty();
+            reviews.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Reading
             IEnumerable<ProductReviewInfoDto> reviews = await repo.GetReviewsAsync(productId);
 
             // Assert
-            reviews.ShouldBeEmpty();
+            reviews.Should().BeEmpty();
         }
     }
 }

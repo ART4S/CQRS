@@ -1,9 +1,9 @@
-﻿using Moq;
-using Shouldly;
+﻿using FluentAssertions;
+using Moq;
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using WebFeatures.Common.SystemTime;
+using WebFeatures.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
@@ -36,13 +36,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityHasCreateDateProperty_SetsCurrentDate()
         {
             // Arrange
-            var datetime = new Mock<IDateTime>();
+            var datetime = new Mock<SystemTime.ISystemTime>();
 
             var now = DateTime.UtcNow;
 
             datetime.Setup(x => x.Now).Returns(now);
 
-            DateTimeProvider.DateTime = datetime.Object;
+            SystemTime.DateTime = datetime.Object;
 
             WriteRepository<TestEntity> repo = CreateDefaultRepository();
 
@@ -52,7 +52,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             await repo.CreateAsync(entity);
 
             // Assert
-            entity.CreateDate.ShouldBe(now);
+            entity.CreateDate.Should().Be(now);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             await repo.CreateAsync(entity);
 
             // Assert
-            entity.Id.ShouldNotBe(default);
+            entity.Id.Should().NotBeEmpty();
         }
 
         [Fact]

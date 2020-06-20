@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Files;
-using WebFeatures.Domian.Entities;
+using File = WebFeatures.Domian.Entities.File;
 
 namespace WebFeatures.Infrastructure.Files
 {
@@ -13,9 +14,9 @@ namespace WebFeatures.Infrastructure.Files
         {
             byte[] content;
 
-            await using (var ms = new System.IO.MemoryStream())
+            await using (MemoryStream ms = new MemoryStream())
             {
-                await using (var rs = file.OpenReadStream())
+                await using (Stream rs = file.OpenReadStream())
                 {
                     await rs.CopyToAsync(ms, cancellationToken);
                 }
@@ -36,7 +37,7 @@ namespace WebFeatures.Infrastructure.Files
 
         private string CalculateCheckSum(byte[] content)
         {
-            using var hasher = SHA256.Create();
+            using SHA256 hasher = SHA256.Create();
 
             byte[] hash = hasher.ComputeHash(content);
 

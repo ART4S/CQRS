@@ -11,8 +11,8 @@ namespace WebFeatures.Application.Tests.Common.Factories.Entities
             var role = new Faker<Role>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, x => x.Random.Guid())
-                .RuleFor(x => x.Name, x => x.Random.Utf16String())
-                .RuleFor(x => x.Description, x => x.Random.Utf16String().OrNull(x));
+                .RuleFor(x => x.Name, x => x.Lorem.Word())
+                .RuleFor(x => x.Description, x => x.Lorem.Sentence().OrNull(x));
 
             return role;
         }

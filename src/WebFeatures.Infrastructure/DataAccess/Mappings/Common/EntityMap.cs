@@ -66,7 +66,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Common
             return new PropertyMap<TEntity>.Builder(property);
         }
 
-        private string GetConventionalTableName()
+        private static string GetConventionalTableName()
         {
             string entityName = typeof(TEntity).Name;
 

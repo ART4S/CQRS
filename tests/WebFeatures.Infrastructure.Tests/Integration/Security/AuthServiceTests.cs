@@ -1,5 +1,5 @@
-﻿using Moq;
-using Shouldly;
+﻿using FluentAssertions;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -35,7 +35,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             bool result = await authService.UserHasPermissionAsync(userId, permission);
 
             // Assert
-            result.ShouldBeTrue();
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             bool result = await authService.UserHasPermissionAsync(userId, permission);
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             bool result = await authService.UserHasPermissionAsync(userId, permission);
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
             bool result = await authService.UserHasPermissionAsync(userId, permission);
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
     }
 }

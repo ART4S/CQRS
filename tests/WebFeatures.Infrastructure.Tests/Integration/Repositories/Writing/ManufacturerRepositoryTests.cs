@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Shouldly;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             IEnumerable<Manufacturer> manufacturers = await repo.GetAllAsync();
 
             // Assert
-            manufacturers.ShouldNotBeEmpty();
+            manufacturers.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -52,11 +52,11 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
 
             // Assert
-            manufacturer.ShouldNotBeNull();
-            manufacturer.Id.ShouldBe(manufacturerId);
-            manufacturer.StreetAddress.ShouldNotBeNull();
-            manufacturer.StreetAddress.CityId.ShouldBe(cityId);
-            manufacturer.StreetAddress.StreetName.ShouldNotBeNull();
+            manufacturer.Should().NotBeNull();
+            manufacturer.Id.Should().Be(manufacturerId);
+            manufacturer.StreetAddress.Should().NotBeNull();
+            manufacturer.StreetAddress.CityId.Should().Be(cityId);
+            manufacturer.StreetAddress.StreetName.Should().NotBeNull();
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             Manufacturer manufacturer = await repo.GetAsync(Guid.NewGuid());
 
             // Assert
-            manufacturer.ShouldBeNull();
+            manufacturer.Should().BeNull();
         }
 
         [Fact]
@@ -104,8 +104,8 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
                 });
 
             // Assert
-            manufacturersCountBefore.ShouldBe(0);
-            manufacturersCountAfter.ShouldBe(1);
+            manufacturersCountBefore.Should().Be(0);
+            manufacturersCountAfter.Should().Be(1);
         }
     }
 }

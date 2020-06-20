@@ -19,6 +19,7 @@ namespace WebFeatures.Infrastructure.Security
             Guard.ThrowIfNullOrEmpty(password, nameof(password));
 
             byte[] salt = new byte[SaltSize];
+
             _random.GetBytes(salt);
 
             byte[] subkey = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, IterationsCount, SubkeySize);
@@ -45,9 +46,11 @@ namespace WebFeatures.Infrastructure.Security
             }
 
             byte[] salt = new byte[SaltSize];
+
             Array.Copy(hashed, 0, salt, 0, salt.Length);
 
             byte[] subkey = new byte[SubkeySize];
+
             Array.Copy(hashed, salt.Length, subkey, 0, subkey.Length);
 
             byte[] expectedSubkey = KeyDerivation.Pbkdf2(expectedPassword, salt, KeyDerivationPrf.HMACSHA256, IterationsCount, SubkeySize);

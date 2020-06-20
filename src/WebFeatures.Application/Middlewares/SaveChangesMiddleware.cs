@@ -35,6 +35,7 @@ namespace WebFeatures.Application.Middlewares
             catch (Exception ex)
             {
                 _logger.LogError($"Error while saving data", ex);
+
                 throw;
             }
         }

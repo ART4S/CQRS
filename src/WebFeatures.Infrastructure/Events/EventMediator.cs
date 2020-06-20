@@ -46,10 +46,11 @@ namespace WebFeatures.Infrastructure.Events
     {
         public override Task PublishAsync(IEvent eve, IServiceProvider services, CancellationToken cancellationToken)
         {
-            var tasks = services.GetServices<IEventHandler<T>>()
-                .Select(x => x.HandleAsync((T)eve, cancellationToken));
+            Task[] handlingTasks = services.GetServices<IEventHandler<T>>()
+                .Select(x => x.HandleAsync((T)eve, cancellationToken))
+                .ToArray();
 
-            return Task.WhenAll(tasks);
+            return Task.WhenAll(handlingTasks);
         }
     }
 }

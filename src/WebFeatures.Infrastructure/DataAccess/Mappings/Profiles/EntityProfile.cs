@@ -23,7 +23,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Mappings.Profiles
                 return false;
             }
 
-            var mapInterface = map.GetInterfaces()
+            Type mapInterface = map.GetInterfaces()
                 .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntityMap<>));
 
             if (mapInterface == null)

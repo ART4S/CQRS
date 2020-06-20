@@ -1,5 +1,5 @@
-﻿using Moq;
-using Shouldly;
+﻿using FluentAssertions;
+using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,7 +75,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             Guid actualUserId = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
-            actualUserId.ShouldBe(expectedUserId);
+            actualUserId.Should().Be(expectedUserId);
         }
 
         [Fact]
@@ -93,10 +93,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Register(), new CancellationToken());
+            Func<Task> actual = () => handler.HandleAsync(new Register(), new CancellationToken());
 
             // Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(actual);
+            await actual.Should().ThrowAsync<InvalidOperationException>();
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             Guid userId = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
-            userId.ShouldBe(user.Id);
+            userId.Should().Be(user.Id);
         }
 
         [Fact]
@@ -139,10 +139,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Login(), new CancellationToken());
+            Func<Task<Guid>> actual = () => handler.HandleAsync(new Login(), new CancellationToken());
 
             // Assert
-            await Assert.ThrowsAsync<ValidationException>(actual);
+            await actual.Should().ThrowAsync<ValidationException>();
         }
 
         [Fact]
@@ -158,10 +158,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
-            Task actual() => handler.HandleAsync(new Login(), new CancellationToken());
+            Func<Task<Guid>> actual = () => handler.HandleAsync(new Login(), new CancellationToken());
 
             // Assert
-            await Assert.ThrowsAsync<ValidationException>(actual);
+            await actual.Should().ThrowAsync<ValidationException>();
         }
     }
 }
