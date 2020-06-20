@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Permissions.Requests.Queries;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.WebApi.Exceptions;
 
 namespace WebFeatures.WebApi.Attributes

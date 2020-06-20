@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Infrastructure.Requests;
 using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using WebFeatures.Infrastructure.Tests.Common.Utils;
@@ -35,12 +35,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var mediator = new RequestMediator(_serviceProvider.Object);
+            var sut = new RequestMediator(_serviceProvider.Object);
 
             var request = new TestRequest();
 
             // Act
-            await mediator.SendAsync(request);
+            await sut.SendAsync(request);
 
             // Assert
             _handler.Verify(x => x.HandleAsync(request, It.IsAny<CancellationToken>()), Times.Once);
@@ -54,12 +54,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var mediator = new RequestMediator(_serviceProvider.Object);
+            var sut = new RequestMediator(_serviceProvider.Object);
 
             var request = new TestRequest();
 
             // Act
-            Func<Task> actual = () => mediator.SendAsync(request);
+            Func<Task> actual = () => sut.SendAsync(request);
 
             // Assert
             await actual.Should().ThrowAsync<InvalidOperationException>();
@@ -83,10 +83,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     new InnerTestMiddleware(callChecker)
                 });
 
-            var mediator = new RequestMediator(_serviceProvider.Object);
+            var sut = new RequestMediator(_serviceProvider.Object);
 
             // Act
-            await mediator.SendAsync(new TestRequest());
+            await sut.SendAsync(new TestRequest());
 
             // Assert
             callChecker.Messages.Should().Equal(new[]

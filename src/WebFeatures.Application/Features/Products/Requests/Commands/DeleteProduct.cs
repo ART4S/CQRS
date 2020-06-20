@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using System;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands
 {

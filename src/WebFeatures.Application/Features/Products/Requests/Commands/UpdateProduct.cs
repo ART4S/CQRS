@@ -4,10 +4,10 @@ using System;
 using System.Linq;
 using WebFeatures.Application.Constants;
 using WebFeatures.Application.Infrastructure.Mappings;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Files;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Domian.Entities.Products;
 
 namespace WebFeatures.Application.Features.Products.Requests.Commands

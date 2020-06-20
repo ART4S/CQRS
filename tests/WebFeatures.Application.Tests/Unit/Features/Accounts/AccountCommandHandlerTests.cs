@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+﻿using Bogus;
+using FluentAssertions;
 using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Accounts.Handlers;
 using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -11,12 +11,13 @@ using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
-using WebFeatures.Application.Tests.Common.Factories.Entities;
-using WebFeatures.Application.Tests.Common.Factories.Requests.Accounts;
+using WebFeatures.Application.Tests.Common.Factories;
+using WebFeatures.Application.Tests.Common.Factories.Features;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using Xunit;
 using ILoggerFactory = WebFeatures.Application.Interfaces.Logging.ILoggerFactory;
+using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 {
@@ -37,15 +38,15 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_ReturnsNewUserId()
         {
             // Arrange
-            Register request = RegisterFactory.Get();
+            Register request = AccountsFactory.Register();
 
-            string hash = "hash";
+            string hash = new Faker().Random.Utf16String();
 
             _hasher.Setup(x => x.ComputeHash(request.Password)).Returns(hash);
 
             var userRepo = new Mock<IUserWriteRepository>();
 
-            Guid expectedUserId = Guid.NewGuid();
+            Guid expectedUserId = new Faker().Random.Guid();
 
             userRepo.Setup(x => x.CreateAsync(
                     It.Is<User>(x => x.Email == request.Email && x.Name == request.Name && x.PasswordHash == hash)))
@@ -55,7 +56,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             var roleRepo = new Mock<IRoleWriteRepository>();
 
-            Role role = RoleFactory.Get();
+            Role role = EntitiesFactory.Roles.Get();
 
             roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(role);
 
@@ -103,9 +104,9 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Login_ReturnsUserId()
         {
             // Arrange
-            Login request = LoginFactory.Get();
+            Login request = AccountsFactory.Login();
 
-            User user = UserFactory.Get();
+            User user = EntitiesFactory.Users.Get();
 
             var userRepo = new Mock<IUserWriteRepository>();
 

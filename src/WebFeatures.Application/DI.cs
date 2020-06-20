@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Reflection;
 using WebFeatures.Application.Infrastructure.Mappings;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Common.Extensions;
 
@@ -30,8 +31,9 @@ namespace WebFeatures.Application
 
             // Endpoints
             services.RegisterTypesFromAssembly(Assembly.GetExecutingAssembly())
-                .WithInterface(typeof(IRequestHandler<,>))
-                .SetLifetime(ServiceLifetime.Scoped);
+                .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)))
+                .As(x => x.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)))
+                .WithLifetime(ServiceLifetime.Scoped);
         }
 
         private static void AddValidators(IServiceCollection services)

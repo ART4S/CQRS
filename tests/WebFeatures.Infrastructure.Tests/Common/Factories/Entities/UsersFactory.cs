@@ -1,9 +1,9 @@
 ﻿using Bogus;
 using WebFeatures.Domian.Entities;
 
-namespace WebFeatures.Infrastructure.Tests.Common.Factories
+namespace WebFeatures.Infrastructure.Tests.Common.Factories.Entities
 {
-    internal static class UserFactory
+    public static class UsersFactory
     {
         public static User Get()
         {

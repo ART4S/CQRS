@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Products.Dto;
 using WebFeatures.Application.Features.Products.Requests.Queries;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Application.Features.Products.Handlers
 {

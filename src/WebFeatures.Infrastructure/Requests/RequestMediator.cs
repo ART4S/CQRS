@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Infrastructure.Requests
 {

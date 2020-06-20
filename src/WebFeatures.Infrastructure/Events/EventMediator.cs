@@ -4,13 +4,13 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Events;
+using WebFeatures.Application.Interfaces.Events;
 
 namespace WebFeatures.Infrastructure.Events
 {
     internal class EventMediator : IEventMediator
     {
-        private static ConcurrentDictionary<Type, Publisher> PublishersCache
+        private static readonly ConcurrentDictionary<Type, Publisher> PublishersCache
             = new ConcurrentDictionary<Type, Publisher>();
 
         private readonly IServiceProvider _services;

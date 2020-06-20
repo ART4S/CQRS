@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebFeatures.Application.Infrastructure.Requests
+namespace WebFeatures.Application.Interfaces.Requests
 {
     public interface IRequestMediator
     {

@@ -14,10 +14,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             // Arrange
             string password = new Faker().Internet.Password();
 
-            PasswordHasher hasher = new PasswordHasher();
+            PasswordHasher sut = new PasswordHasher();
 
             // Act
-            string hash = hasher.ComputeHash(password);
+            string hash = sut.ComputeHash(password);
 
             // Assert
             hash.Should().NotBeNullOrEmpty();
@@ -30,10 +30,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
         public void ComputeHash_WhenInvalidPassword_Throws(string password)
         {
             // Arrange
-            PasswordHasher hasher = new PasswordHasher();
+            PasswordHasher sut = new PasswordHasher();
 
             // Act
-            Action actual = () => hasher.ComputeHash(password);
+            Action actual = () => sut.ComputeHash(password);
 
             // Assert
             actual.Should().Throw<ArgumentException>();
@@ -46,10 +46,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
             string hash = "3iH0cm1W/0u/KK9xg8ntK5KmP0q/TtXhmy6eX6WRDVB/qIMwlsSzoJtWO6ShyKn/";
             string password = "12345";
 
-            PasswordHasher hasher = new PasswordHasher();
+            PasswordHasher sut = new PasswordHasher();
 
             // Act
-            bool result = hasher.Verify(hash, password);
+            bool result = sut.Verify(hash, password);
 
             // Assert
             result.Should().BeTrue();
@@ -63,10 +63,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
         public void Verify_WhenInvalidHashOrPassword_ReturnsFalse(string hash, string password)
         {
             // Arrange
-            PasswordHasher hasher = new PasswordHasher();
+            PasswordHasher sut = new PasswordHasher();
 
             // Act
-            bool result = hasher.Verify(hash, password);
+            bool result = sut.Verify(hash, password);
 
             // Assert
             result.Should().BeFalse();

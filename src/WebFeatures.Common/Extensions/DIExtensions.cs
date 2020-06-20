@@ -16,12 +16,16 @@ namespace WebFeatures.Common.Extensions
 
     public interface ITypesRegistrationBuilder
     {
-        ILifeCycleBuilder WithInterface(Type interfaceType);
+        ITypesRegistrationBuilder Where(Func<Type, bool> typeSelector);
+
+        ILifeCycleBuilder As(Func<Type, Type> implementationTypeSelector);
+
+        ILifeCycleBuilder As(Func<Type, IEnumerable<Type>> implementationTypesSelector);
     }
 
     public interface ILifeCycleBuilder
     {
-        void SetLifetime(ServiceLifetime lifetime);
+        void WithLifetime(ServiceLifetime lifetime);
     }
 
     internal class TypesRegistrationBuilder : ITypesRegistrationBuilder
@@ -35,75 +39,48 @@ namespace WebFeatures.Common.Extensions
             _types = types;
         }
 
-        public ILifeCycleBuilder WithInterface(Type interfaceType)
+        public ILifeCycleBuilder As(Func<Type, Type> implementationTypeSelector)
         {
-            if (!interfaceType.IsInterface)
-            {
-                throw new ArgumentException($"{interfaceType} should be an interface type");
-            }
-
-            var serviceDescriptions = GetInterfaceServices(interfaceType);
-
-            return new LifeCycleBuilder(_services, serviceDescriptions);
+            return new LifeCycleBuilder(_services, _types, x => new[] { implementationTypeSelector(x) });
         }
 
-        private IEnumerable<ServiceDescription> GetInterfaceServices(Type interfaceType)
+        public ILifeCycleBuilder As(Func<Type, IEnumerable<Type>> implementationTypesSelector)
         {
-            foreach (Type type in _types)
-            {
-                IEnumerable<Type> serviceTypes;
+            return new LifeCycleBuilder(_services, _types, implementationTypesSelector);
+        }
 
-                if (interfaceType.IsGenericType)
-                {
-                    serviceTypes = type.GetInterfaces()
-                        .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == interfaceType);
-                }
-                else
-                {
-                    serviceTypes = type.GetInterfaces()
-                        .Where(x => x == interfaceType);
-                }
+        public ITypesRegistrationBuilder Where(Func<Type, bool> typeSelector)
+        {
+            _types = _types.Where(typeSelector);
 
-                foreach (Type serviceType in serviceTypes)
-                {
-                    yield return new ServiceDescription(serviceType, type);
-                }
-            }
+            return this;
         }
     }
 
     internal class LifeCycleBuilder : ILifeCycleBuilder
     {
         private readonly IServiceCollection _services;
-        private IEnumerable<ServiceDescription> _serviceDescriptions;
+        private readonly IEnumerable<Type> _serviceTypes;
+        private readonly Func<Type, IEnumerable<Type>> _implementationTypesSelector;
 
-        public LifeCycleBuilder(IServiceCollection services, IEnumerable<ServiceDescription> serviceDescriptions)
+        public LifeCycleBuilder(IServiceCollection services, IEnumerable<Type> serviceTypes, Func<Type, IEnumerable<Type>> implementationTypesSelector)
         {
             _services = services;
-            _serviceDescriptions = serviceDescriptions;
+            _serviceTypes = serviceTypes;
+            _implementationTypesSelector = implementationTypesSelector;
         }
 
-        public void SetLifetime(ServiceLifetime lifetime)
+        public void WithLifetime(ServiceLifetime lifetime)
         {
-            foreach (var d in _serviceDescriptions)
+            foreach (Type serviceType in _serviceTypes)
             {
-                _services.Add(new ServiceDescriptor(
-                    d.ServiceType,
-                    d.ImplementationType,
-                    lifetime));
+                IEnumerable<Type> implementationTypes = _implementationTypesSelector(serviceType);
+
+                foreach (Type implementationType in implementationTypes)
+                {
+                    _services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
+                }
             }
-        }
-    }
-
-    internal class ServiceDescription
-    {
-        public Type ServiceType { get; }
-        public Type ImplementationType { get; }
-
-        public ServiceDescription(Type serviceType, Type implementationType)
-        {
-            ServiceType = serviceType;
-            ImplementationType = implementationType;
         }
     }
 }

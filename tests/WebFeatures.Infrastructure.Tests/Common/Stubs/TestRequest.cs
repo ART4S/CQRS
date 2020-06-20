@@ -1,4 +1,4 @@
-﻿using WebFeatures.Application.Infrastructure.Requests;
+﻿using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {

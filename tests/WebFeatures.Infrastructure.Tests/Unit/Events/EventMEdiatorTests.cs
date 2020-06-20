@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Events;
+using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using Xunit;

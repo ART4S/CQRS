@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Events;
 using WebFeatures.Application.Features.Products.Requests.Commands;
-using WebFeatures.Application.Infrastructure.Events;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Files;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Products;
 

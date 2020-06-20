@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebFeatures.Application.Infrastructure.Events
+namespace WebFeatures.Application.Interfaces.Events
 {
     public interface IEventHandler<in TEvent> where TEvent : IEvent
     {

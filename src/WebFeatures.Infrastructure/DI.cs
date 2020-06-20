@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Reflection;
-using WebFeatures.Application.Infrastructure.Events;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Files;
 using WebFeatures.Application.Interfaces.Logging;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Common.Extensions;
@@ -71,8 +72,9 @@ namespace WebFeatures.Infrastructure
             services.AddScoped<IEventMediator, EventMediator>();
 
             services.RegisterTypesFromAssembly(Assembly.GetExecutingAssembly())
-                .WithInterface(typeof(IEventHandler<>))
-                .SetLifetime(ServiceLifetime.Scoped);
+                .Where(x => x.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>)))
+                .As(x => x.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>)))
+                .WithLifetime(ServiceLifetime.Scoped);
         }
 
         private static void AddRequests(IServiceCollection services)

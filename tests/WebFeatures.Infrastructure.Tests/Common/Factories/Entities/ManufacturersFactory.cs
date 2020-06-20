@@ -2,18 +2,18 @@
 using Bogus.Extensions;
 using System;
 using WebFeatures.Domian.Entities;
-using Address = WebFeatures.Domian.ValueObjects.Address;
+using WebFeatures.Domian.ValueObjects;
 
-namespace WebFeatures.Infrastructure.Tests.Common.Factories
+namespace WebFeatures.Infrastructure.Tests.Common.Factories.Entities
 {
-    internal static class ManufacturerFactory
+    internal static class ManufacturersFactory
     {
         public static Manufacturer Get()
         {
             var cities = new[]
             {
-                new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3"),
-                new Guid("b9f5c008-24da-49e2-bc83-b7356920881b")
+                    new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3"),
+                    new Guid("b9f5c008-24da-49e2-bc83-b7356920881b")
             };
 
             var address = new Faker<Address>()

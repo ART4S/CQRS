@@ -1,4 +1,4 @@
-﻿using WebFeatures.Application.Infrastructure.Events;
+﻿using WebFeatures.Application.Interfaces.Events;
 
 namespace WebFeatures.Application.Features.Products.Events
 {

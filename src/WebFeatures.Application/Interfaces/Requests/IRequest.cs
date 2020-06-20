@@ -1,4 +1,4 @@
-﻿namespace WebFeatures.Application.Infrastructure.Requests
+﻿namespace WebFeatures.Application.Interfaces.Requests
 {
     public interface IRequest<TResponse> { }
 

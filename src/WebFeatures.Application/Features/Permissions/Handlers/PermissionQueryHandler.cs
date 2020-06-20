@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Permissions.Requests.Queries;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 

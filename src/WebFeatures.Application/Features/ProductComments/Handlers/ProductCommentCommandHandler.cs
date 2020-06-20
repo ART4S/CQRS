@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductComments.Events;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
-using WebFeatures.Application.Infrastructure.Events;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Events;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Domian.Entities.Products;
 

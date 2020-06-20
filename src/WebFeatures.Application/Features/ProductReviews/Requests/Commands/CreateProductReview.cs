@@ -2,8 +2,8 @@
 using FluentValidation;
 using System;
 using WebFeatures.Application.Infrastructure.Mappings;
-using WebFeatures.Application.Infrastructure.Requests;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Domian.Entities.Products;
 using WebFeatures.Domian.Enums;
 

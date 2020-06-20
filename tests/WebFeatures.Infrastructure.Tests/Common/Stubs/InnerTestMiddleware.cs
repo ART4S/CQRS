@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Infrastructure.Tests.Common.Utils;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs

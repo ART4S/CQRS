@@ -1,6 +1,6 @@
 ﻿using System;
 using WebFeatures.Application.Features.Products.Dto;
-using WebFeatures.Application.Infrastructure.Requests;
+using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Application.Features.Products.Requests.Queries
 {

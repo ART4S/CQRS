@@ -9,7 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Factories;
+using WebFeatures.Infrastructure.Tests.Common.Factories.Entities;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
@@ -78,7 +78,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             ManufacturerWriteRepository repo = CreateDefaultRepository();
 
-            Manufacturer manufacturer = ManufacturerFactory.Get();
+            Manufacturer manufacturer = ManufacturersFactory.Get();
 
             string maufacturersCountSql =
                 @"SELECT COUNT(*) FROM public.manufacturers

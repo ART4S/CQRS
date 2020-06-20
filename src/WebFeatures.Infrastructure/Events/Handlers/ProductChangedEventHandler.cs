@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.Events;
-using WebFeatures.Application.Infrastructure.Events;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
+using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Infrastructure.DataAccess.Constants;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;

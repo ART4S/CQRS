@@ -40,7 +40,7 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                        var body = JsonConvert.SerializeObject(validation.Error);
+                        string body = JsonConvert.SerializeObject(validation.Error);
 
                         await context.Response.WriteAsync(body);
 
