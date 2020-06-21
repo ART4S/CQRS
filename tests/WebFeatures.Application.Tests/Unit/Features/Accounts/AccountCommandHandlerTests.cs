@@ -35,7 +35,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         }
 
         [Fact]
-        public async Task Register_ReturnsNewUserId()
+        public async Task Register_ShouldCreateUser()
         {
             // Arrange
             Register request = new RegisterStub();

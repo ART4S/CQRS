@@ -39,7 +39,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
         }
 
         [Fact]
-        public async Task UserHasPermission_WhenUserIsAuthenticated_ReturnsReturnsTrue()
+        public async Task UserHasPermission_WhenUserIsAuthenticated_ReturnsTrue()
         {
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(true);

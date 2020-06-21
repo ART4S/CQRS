@@ -5,7 +5,6 @@ using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.ProductComments.Events;
 using WebFeatures.Application.Features.ProductComments.Handlers;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -35,7 +34,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments
         }
 
         [Fact]
-        public async Task CreateProductComment_ReturnsCommentId()
+        public async Task CreateProductComment_ShouldCreateComment()
         {
             // Arrange
             CreateProductComment request = new CreateProductCommentStub();
@@ -62,10 +61,6 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments
             comment.Id.Should().Be(commentId);
 
             commentsRepo.Verify(x => x.CreateAsync(comment), Times.Once);
-
-            _events.Verify(x => x.PublishAsync(
-                It.Is<ProductCommentCreated>(c => c.Id == comment.Id),
-                It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

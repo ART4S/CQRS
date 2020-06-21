@@ -4,7 +4,6 @@ using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Products.Events;
 using WebFeatures.Application.Features.Products.Handlers;
 using WebFeatures.Application.Features.Products.Requests.Commands;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -36,7 +35,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products
         }
 
         [Fact]
-        public async Task CreateProduct_ReturnsProductId()
+        public async Task CreateProduct_ShouldCreateProduct()
         {
             // Arrange
             var fileRepo = new Mock<IFileWriteRepository>();
@@ -51,7 +50,9 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products
 
             File mainPictureFile = new FileStub();
 
-            _fileReader.Setup(x => x.ReadAsync(mainPicture, It.IsAny<CancellationToken>())).ReturnsAsync(mainPictureFile);
+            _fileReader.Setup(x => x.ReadAsync(
+                mainPicture,
+                It.IsAny<CancellationToken>())).ReturnsAsync(mainPictureFile);
 
             Product product = new ProductStub();
 
@@ -72,14 +73,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products
 
             fileRepo.Verify(x => x.CreateAsync(mainPictureFile), Times.Once);
             productRepo.Verify(x => x.CreateAsync(product), Times.Once);
-
-            _events.Verify(x => x.PublishAsync(
-                It.Is<ProductCreated>(y => y.Id == product.Id),
-                It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task CreateProduct_CreatesPictures()
+        public async Task CreateProduct_ShouldCreatePictures()
         {
             // Arrange
             var fileRepo = new Mock<IFileWriteRepository>();

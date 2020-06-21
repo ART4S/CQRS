@@ -14,10 +14,7 @@ namespace WebFeatures.Common
 
         public static void ThrowIfNull<T>(T element, string paramName) where T : class
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException($"{paramName} cannot be null");
-            }
+            _ = element ?? throw new ArgumentNullException($"{paramName} cannot be null");
         }
     }
 }

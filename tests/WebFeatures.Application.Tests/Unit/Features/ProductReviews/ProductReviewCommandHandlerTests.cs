@@ -4,7 +4,6 @@ using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.ProductReviews.Events;
 using WebFeatures.Application.Features.ProductReviews.Handlers;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -34,7 +33,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductReviews
         }
 
         [Fact]
-        public async Task CreateProductReview_ReturnsReviewId()
+        public async Task CreateProductReview_ShouldCreateReview()
         {
             // Arrange
             CreateProductReview request = new CreateProductReviewStub();
@@ -56,10 +55,6 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductReviews
             review.Id.Should().Be(reviewId);
 
             reviewRepo.Verify(x => x.CreateAsync(review), Times.Once);
-
-            _events.Verify(x => x.PublishAsync(
-                It.Is<ProductReviewCreated>(x => x.Id == review.Id),
-                It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }
