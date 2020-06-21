@@ -11,8 +11,8 @@ using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
-using WebFeatures.Application.Tests.Common.Factories;
-using WebFeatures.Application.Tests.Common.Factories.Features;
+using WebFeatures.Application.Tests.Common.Stubs.Entities;
+using WebFeatures.Application.Tests.Common.Stubs.Features.Accounts;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using Xunit;
@@ -38,7 +38,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_ReturnsNewUserId()
         {
             // Arrange
-            Register request = AccountsFactory.Register();
+            Register request = new RegisterStub();
 
             string hash = new Faker().Random.Utf16String();
 
@@ -56,7 +56,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             var roleRepo = new Mock<IRoleWriteRepository>();
 
-            Role role = EntitiesFactory.Roles.Get();
+            Role role = new RoleStub();
 
             roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(role);
 
@@ -104,9 +104,9 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Login_ReturnsUserId()
         {
             // Arrange
-            Login request = AccountsFactory.Login();
+            Login request = new LoginStub();
 
-            User user = EntitiesFactory.Users.Get();
+            User user = new UserStub();
 
             var userRepo = new Mock<IUserWriteRepository>();
 

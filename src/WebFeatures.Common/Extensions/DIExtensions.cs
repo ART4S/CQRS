@@ -31,7 +31,7 @@ namespace WebFeatures.Common.Extensions
     internal class TypesRegistrationBuilder : ITypesRegistrationBuilder
     {
         private readonly IServiceCollection _services;
-        private IEnumerable<Type> _types;
+        private readonly IEnumerable<Type> _types;
 
         public TypesRegistrationBuilder(IServiceCollection services, IEnumerable<Type> types)
         {
@@ -51,9 +51,7 @@ namespace WebFeatures.Common.Extensions
 
         public ITypesRegistrationBuilder Where(Func<Type, bool> typeSelector)
         {
-            _types = _types.Where(typeSelector);
-
-            return this;
+            return new TypesRegistrationBuilder(_services, _types.Where(typeSelector));
         }
     }
 

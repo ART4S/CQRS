@@ -34,6 +34,7 @@ namespace WebFeatures.Application.Features.ProductReviews.Handlers
         public async Task<Guid> HandleAsync(CreateProductReview request, CancellationToken cancellationToken)
         {
             ProductReview review = _mapper.Map<ProductReview>(request);
+
             review.AuthorId = _currentUser.UserId;
 
             await _db.ProductReviews.CreateAsync(review);

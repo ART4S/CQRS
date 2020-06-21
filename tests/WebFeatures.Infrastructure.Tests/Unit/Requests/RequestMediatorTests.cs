@@ -35,12 +35,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var sut = new RequestMediator(_serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             var request = new TestRequest();
 
             // Act
-            await sut.SendAsync(request);
+            await mediator.SendAsync(request);
 
             // Assert
             _handler.Verify(x => x.HandleAsync(request, It.IsAny<CancellationToken>()), Times.Once);
@@ -54,12 +54,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
                 .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
 
-            var sut = new RequestMediator(_serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             var request = new TestRequest();
 
             // Act
-            Func<Task> actual = () => sut.SendAsync(request);
+            Func<Task> actual = () => mediator.SendAsync(request);
 
             // Assert
             await actual.Should().ThrowAsync<InvalidOperationException>();
@@ -83,10 +83,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
                     new InnerTestMiddleware(callChecker)
                 });
 
-            var sut = new RequestMediator(_serviceProvider.Object);
+            var mediator = new RequestMediator(_serviceProvider.Object);
 
             // Act
-            await sut.SendAsync(new TestRequest());
+            await mediator.SendAsync(new TestRequest());
 
             // Assert
             callChecker.Messages.Should().Equal(new[]

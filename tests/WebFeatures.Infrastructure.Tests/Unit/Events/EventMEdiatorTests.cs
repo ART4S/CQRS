@@ -32,7 +32,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
             await mediator.PublishAsync(eve);
 
             // Assert
-            handler.Verify(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()));
+            handler.Verify(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

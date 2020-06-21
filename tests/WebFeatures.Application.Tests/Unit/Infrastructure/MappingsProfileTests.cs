@@ -14,10 +14,7 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
     {
         private MapperConfiguration CreateConfiguration()
         {
-            return new MapperConfiguration(options =>
-            {
-                options.AddProfile<MappingsProfile>();
-            });
+            return new MapperConfiguration(x => x.AddProfile<MappingsProfile>());
         }
 
         [Fact]

@@ -68,7 +68,11 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
             public Validator(IWriteDbContext db)
             {
                 RuleFor(x => x.Name).NotEmpty();
-                RuleFor(x => x.Price).Must(price => price == null || price.Value >= 0);
+
+                RuleFor(x => x.Price)
+                    .Must(x => x >= 0)
+                    .When(x => x.Price.HasValue);
+
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.ManufacturerId).MustAsync((x, t) => db.Manufacturers.ExistsAsync(x));
 

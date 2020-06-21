@@ -34,6 +34,7 @@ namespace WebFeatures.Application.Features.ProductComments.Handlers
         public async Task<Guid> HandleAsync(CreateProductComment request, CancellationToken cancellationToken)
         {
             ProductComment comment = _mapper.Map<ProductComment>(request);
+
             comment.AuthorId = _currentUser.UserId;
 
             await _db.ProductComments.CreateAsync(comment);

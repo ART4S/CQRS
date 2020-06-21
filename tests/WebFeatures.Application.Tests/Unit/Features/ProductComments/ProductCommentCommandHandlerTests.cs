@@ -12,8 +12,8 @@ using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Services;
-using WebFeatures.Application.Tests.Common.Factories;
-using WebFeatures.Application.Tests.Common.Factories.Features;
+using WebFeatures.Application.Tests.Common.Stubs.Entities;
+using WebFeatures.Application.Tests.Common.Stubs.Features.ProductComments;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;
 
@@ -38,9 +38,9 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments
         public async Task CreateProductComment_ReturnsCommentId()
         {
             // Arrange
-            CreateProductComment request = ProductCommentsFactory.CreateProductComment();
+            CreateProductComment request = new CreateProductCommentStub();
 
-            ProductComment comment = EntitiesFactory.ProductCommens.Get();
+            ProductComment comment = new ProductCommentStub();
 
             _mapper.Setup(x => x.Map<ProductComment>(request)).Returns(comment);
 

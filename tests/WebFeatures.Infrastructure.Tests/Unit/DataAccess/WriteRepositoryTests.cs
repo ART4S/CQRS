@@ -36,13 +36,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityHasCreateDateProperty_SetsCurrentDate()
         {
             // Arrange
-            var datetime = new Mock<SystemTime.ISystemTime>();
+            var sysTime = new Mock<SystemTime.ISystemTime>();
 
             var now = DateTime.UtcNow;
 
-            datetime.Setup(x => x.Now).Returns(now);
+            sysTime.Setup(x => x.Now).Returns(now);
 
-            SystemTime.DateTime = datetime.Object;
+            SystemTime.Instance = sysTime.Object;
 
             WriteRepository<TestEntity> repo = CreateDefaultRepository();
 

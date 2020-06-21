@@ -9,7 +9,7 @@ using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Base;
-using WebFeatures.Infrastructure.Tests.Common.Factories.Entities;
+using WebFeatures.Infrastructure.Tests.Common.Stubs.Entities;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
@@ -71,7 +71,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            User user = UsersFactory.Get();
+            User user = new UserStub();
 
             string usersCountSql = "SELECT Count(*) FROM public.users WHERE id = @Id";
 
@@ -93,7 +93,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Arrange
             UserWriteRepository repo = CreateDefaultRepository();
 
-            User user = UsersFactory.Get();
+            User user = new UserStub();
 
             user.Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 

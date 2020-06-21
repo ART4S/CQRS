@@ -4,14 +4,14 @@ namespace WebFeatures.Common
 {
     public static class SystemTime
     {
-        internal static ISystemTime DateTime
+        internal static ISystemTime Instance
         {
-            get => _dateTime ??= new DefaultSystemTime();
-            set => _dateTime = value;
+            get => _instance ??= new DefaultSystemTime();
+            set => _instance = value;
         }
-        private static ISystemTime _dateTime;
+        private static ISystemTime _instance;
 
-        public static DateTime Now => DateTime.Now;
+        public static DateTime Now => Instance.Now;
 
         internal interface ISystemTime
         {
