@@ -59,7 +59,8 @@ namespace WebFeatures.WebApi.Middlewares
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         context.Response.ContentType = MediaTypeNames.Text.Plain;
 
-                        var logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlerMiddleware>>();
+                        var logger = context.RequestServices.GetService<ILogger<ExceptionHandlerMiddleware>>();
+
                         logger.LogError(exception.Message, exception);
 
                         await context.Response.WriteAsync("Something went wrong");

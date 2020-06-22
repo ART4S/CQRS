@@ -29,24 +29,21 @@ namespace WebFeatures.WebApi
             services.AddInfrastructureServices(Configuration);
 
             services.AddControllers(options =>
-                {
-                    options.ModelBinderProviders.Insert(0, new FileModelBinderProvider());
-                })
-                .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
+            {
+                options.ModelBinderProviders.Insert(0, new FileModelBinderProvider());
+            })
+            .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
-                });
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
+            });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
             services.AddMvc();
-            services.AddAntiforgery(options =>
-                {
-                    options.HeaderName = "X-CSRF-TOKEN";
-                });
+            services.AddAntiforgery(x => x.HeaderName = "X-CSRF-TOKEN");
 
             // For Frontend (React.JS)
             //services.AddMemoryCache();

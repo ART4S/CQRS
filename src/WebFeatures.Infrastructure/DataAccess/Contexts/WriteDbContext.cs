@@ -69,10 +69,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         private TRepo CreateRepository<TRepo>()
         {
-            if (Transaction == null)
-            {
-                Transaction = Connection.BeginTransaction();
-            }
+            //Transaction ??= Connection.BeginTransaction();
 
             return ActivatorUtilities.CreateInstance<TRepo>(_services, Connection);
         }
@@ -88,6 +85,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
             catch
             {
                 await Transaction.RollbackAsync();
+
                 throw;
             }
             finally

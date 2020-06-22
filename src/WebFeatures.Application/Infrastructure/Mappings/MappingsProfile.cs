@@ -20,7 +20,8 @@ namespace WebFeatures.Application.Infrastructure.Mappings
 
             foreach (Type type in mapTypes)
             {
-                var instance = (IHasMappings)Activator.CreateInstance(type);
+                IHasMappings instance = (IHasMappings)Activator.CreateInstance(type);
+
                 instance.ApplyMappings(this);
             }
         }

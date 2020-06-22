@@ -33,11 +33,13 @@ namespace WebFeatures.Application.Features.Accounts.Handlers
 
         public async Task<Guid> HandleAsync(Register request, CancellationToken cancellationToken)
         {
+            string hash = _passwordHasher.ComputeHash(request.Password);
+
             var user = new User()
             {
                 Name = request.Name,
                 Email = request.Email,
-                PasswordHash = _passwordHasher.ComputeHash(request.Password)
+                PasswordHash = hash
             };
 
             await _db.Users.CreateAsync(user);

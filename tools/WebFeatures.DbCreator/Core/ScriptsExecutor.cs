@@ -26,12 +26,12 @@ namespace WebFeatures.DbCreator.Core
         {
             if (_createOptions.Development)
             {
-                await CreateDatabaseAsync("dev");
+                await CreateDatabaseAsync(environment: "dev");
             }
 
             if (_createOptions.Testing)
             {
-                await CreateDatabaseAsync("test");
+                await CreateDatabaseAsync(environment: "test");
             }
         }
 

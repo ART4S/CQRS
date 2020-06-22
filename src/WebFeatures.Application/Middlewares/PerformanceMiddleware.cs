@@ -28,7 +28,9 @@ namespace WebFeatures.Application.Middlewares
 
             sw.Stop();
 
-            if (sw.ElapsedMilliseconds > 500)
+            const int maxAcceptableTime = 500;
+
+            if (sw.ElapsedMilliseconds > maxAcceptableTime)
             {
                 _logger.LogWarning($"Long running request: {typeof(TRequest).Name} = {sw.ElapsedMilliseconds} ms");
             }

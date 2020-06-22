@@ -18,8 +18,6 @@ namespace WebFeatures.Common.Extensions
     {
         ITypesRegistrationBuilder Where(Func<Type, bool> typeSelector);
 
-        ILifeCycleBuilder As(Func<Type, Type> implementationTypeSelector);
-
         ILifeCycleBuilder As(Func<Type, IEnumerable<Type>> implementationTypesSelector);
     }
 
@@ -31,50 +29,45 @@ namespace WebFeatures.Common.Extensions
     internal class TypesRegistrationBuilder : ITypesRegistrationBuilder
     {
         private readonly IServiceCollection _services;
-        private readonly IEnumerable<Type> _types;
+        private readonly IEnumerable<Type> _implementationTypes;
 
-        public TypesRegistrationBuilder(IServiceCollection services, IEnumerable<Type> types)
+        public TypesRegistrationBuilder(IServiceCollection services, IEnumerable<Type> implementationTypes)
         {
             _services = services;
-            _types = types;
+            _implementationTypes = implementationTypes;
         }
 
-        public ILifeCycleBuilder As(Func<Type, Type> implementationTypeSelector)
+        public ILifeCycleBuilder As(Func<Type, IEnumerable<Type>> serviceTypesSelector)
         {
-            return new LifeCycleBuilder(_services, _types, x => new[] { implementationTypeSelector(x) });
+            return new LifeCycleBuilder(_services, _implementationTypes, serviceTypesSelector);
         }
 
-        public ILifeCycleBuilder As(Func<Type, IEnumerable<Type>> implementationTypesSelector)
+        public ITypesRegistrationBuilder Where(Func<Type, bool> predicate)
         {
-            return new LifeCycleBuilder(_services, _types, implementationTypesSelector);
-        }
-
-        public ITypesRegistrationBuilder Where(Func<Type, bool> typeSelector)
-        {
-            return new TypesRegistrationBuilder(_services, _types.Where(typeSelector));
+            return new TypesRegistrationBuilder(_services, _implementationTypes.Where(predicate));
         }
     }
 
     internal class LifeCycleBuilder : ILifeCycleBuilder
     {
         private readonly IServiceCollection _services;
-        private readonly IEnumerable<Type> _serviceTypes;
-        private readonly Func<Type, IEnumerable<Type>> _implementationTypesSelector;
+        private readonly IEnumerable<Type> _implementationTypes;
+        private readonly Func<Type, IEnumerable<Type>> _serviceTypesSelector;
 
-        public LifeCycleBuilder(IServiceCollection services, IEnumerable<Type> serviceTypes, Func<Type, IEnumerable<Type>> implementationTypesSelector)
+        public LifeCycleBuilder(IServiceCollection services, IEnumerable<Type> implementationTypes, Func<Type, IEnumerable<Type>> serviceTypesSelector)
         {
             _services = services;
-            _serviceTypes = serviceTypes;
-            _implementationTypesSelector = implementationTypesSelector;
+            _implementationTypes = implementationTypes;
+            _serviceTypesSelector = serviceTypesSelector;
         }
 
         public void WithLifetime(ServiceLifetime lifetime)
         {
-            foreach (Type serviceType in _serviceTypes)
+            foreach (Type implementationType in _implementationTypes)
             {
-                IEnumerable<Type> implementationTypes = _implementationTypesSelector(serviceType);
+                IEnumerable<Type> serviceTypes = _serviceTypesSelector(implementationType);
 
-                foreach (Type implementationType in implementationTypes)
+                foreach (Type serviceType in serviceTypes)
                 {
                     _services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
                 }

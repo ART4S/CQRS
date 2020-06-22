@@ -12,19 +12,19 @@ namespace WebFeatures.Infrastructure.Logging
             _logger = logger;
         }
 
-        public void LogInformation(string message)
+        public void LogInformation(string message, params object[] args)
         {
-            _logger.LogInformation(message);
+            _logger.LogInformation(message, args);
         }
 
-        public void LogWarning(string message)
+        public void LogWarning(string message, params object[] args)
         {
-            _logger.LogWarning(message);
+            _logger.LogWarning(message, args);
         }
 
-        public void LogError(string message, Exception exception)
+        public void LogError(string message, Exception exception, params object[] args)
         {
-            _logger.LogError(message, exception);
+            _logger.LogError(message, exception, args);
         }
     }
 }

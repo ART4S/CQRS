@@ -14,6 +14,7 @@ using WebFeatures.Common.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Contexts;
 using WebFeatures.Infrastructure.DataAccess.Factories;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
+using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.Events;
 using WebFeatures.Infrastructure.Files;
 using WebFeatures.Infrastructure.Logging;
@@ -48,6 +49,9 @@ namespace WebFeatures.Infrastructure
             string connectionString = configuration.GetConnectionString("PostgreSql");
 
             services.AddSingleton<IDbConnectionFactory>(x => new PostgreSqlDbConnectionFactory(connectionString));
+
+            services.AddSingleton<IDbExecutor, DapperDbExecutor>();
+
             services.AddSingleton<IEntityProfile>(x =>
             {
                 var profile = new EntityProfile();
@@ -56,6 +60,7 @@ namespace WebFeatures.Infrastructure
 
                 return profile;
             });
+
             services.AddScoped<IWriteDbContext, WriteDbContext>();
 
             services.AddScoped<IReadDbContext, ReadDbContext>();

@@ -16,6 +16,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
             _connection = new Lazy<DbConnection>(() =>
             {
                 DbConnection connection = connectionFactory.CreateConnection();
+
                 connection.Open();
 
                 return connection;
