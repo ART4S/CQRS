@@ -12,7 +12,7 @@ using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
-using WebFeatures.Application.Tests.Common.Stubs.Features.ProductComments;
+using WebFeatures.Application.Tests.Common.Stubs.Requests.ProductComments;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;
 
@@ -57,8 +57,8 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments
             Guid commentId = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
-            comment.AuthorId.Should().Be(userId);
             comment.Id.Should().Be(commentId);
+            comment.AuthorId.Should().Be(userId);
 
             commentsRepo.Verify(x => x.CreateAsync(comment), Times.Once);
         }

@@ -12,7 +12,7 @@ using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
-using WebFeatures.Application.Tests.Common.Stubs.Features.Accounts;
+using WebFeatures.Application.Tests.Common.Stubs.Requests.Accounts;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Permissions;
 using Xunit;
@@ -35,12 +35,12 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         }
 
         [Fact]
-        public async Task Register_ShouldCreateUser()
+        public async Task Register_CreatesNewUser()
         {
             // Arrange
             Register request = new RegisterStub();
 
-            string hash = new Faker().Random.Utf16String();
+            string hash = new Randomizer().Utf16String();
 
             _hasher.Setup(x => x.ComputeHash(request.Password)).Returns(hash);
 
@@ -101,7 +101,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         }
 
         [Fact]
-        public async Task Login_ReturnsUserId()
+        public async Task Login_ReturnsExistingUserId()
         {
             // Arrange
             Login request = new LoginStub();

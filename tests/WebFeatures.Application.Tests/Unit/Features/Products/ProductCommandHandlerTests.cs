@@ -12,7 +12,7 @@ using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Files;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
-using WebFeatures.Application.Tests.Common.Stubs.Features.Products;
+using WebFeatures.Application.Tests.Common.Stubs.Requests.Products;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;

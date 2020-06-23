@@ -2,7 +2,7 @@
 using Bogus.Extensions;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
 
-namespace WebFeatures.Application.Tests.Common.Stubs.Features.ProductComments
+namespace WebFeatures.Application.Tests.Common.Stubs.Requests.ProductComments
 {
     internal class CreateProductCommentStub : Faker<CreateProductComment>
     {

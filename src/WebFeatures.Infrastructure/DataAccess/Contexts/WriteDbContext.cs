@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
@@ -58,8 +57,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
         public IFileWriteRepository Files => _files ??= CreateRepository<FileWriteRepository>();
         private IFileWriteRepository _files;
 
-        protected DbTransaction Transaction { get; private set; }
-
         private readonly IServiceProvider _services;
 
         public WriteDbContext(IServiceProvider services) : base(services.GetRequiredService<IDbConnectionFactory>())
@@ -69,31 +66,12 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         private TRepo CreateRepository<TRepo>()
         {
-            //Transaction ??= Connection.BeginTransaction();
-
             return ActivatorUtilities.CreateInstance<TRepo>(_services, Connection);
         }
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-            if (Transaction == null) return;
-
-            try
-            {
-                await Transaction.CommitAsync();
-            }
-            catch
-            {
-                await Transaction.RollbackAsync();
-
-                throw;
-            }
-            finally
-            {
-                await Transaction.DisposeAsync();
-
-                Transaction = await Connection.BeginTransactionAsync();
-            }
+            // TODO:
         }
     }
 }

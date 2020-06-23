@@ -27,7 +27,7 @@ namespace WebFeatures.Application
             services.AddScoped(typeof(IRequestMiddleware<,>), typeof(ValidationMiddleware<,>));
 
             // Command pipeline
-            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(SaveChangesMiddleware<,>));
+            services.AddScoped(typeof(IRequestMiddleware<,>), typeof(TransactionMiddleware<,>));
 
             // Endpoints
             services.RegisterTypesFromAssembly(Assembly.GetExecutingAssembly())

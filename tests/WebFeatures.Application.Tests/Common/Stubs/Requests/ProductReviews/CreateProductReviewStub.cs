@@ -2,7 +2,7 @@
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
 using WebFeatures.Domian.Enums;
 
-namespace WebFeatures.Application.Tests.Common.Stubs.Features.ProductReviews
+namespace WebFeatures.Application.Tests.Common.Stubs.Requests.ProductReviews
 {
     internal class CreateProductReviewStub : Faker<CreateProductReview>
     {

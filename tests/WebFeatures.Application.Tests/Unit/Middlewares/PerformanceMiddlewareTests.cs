@@ -5,66 +5,68 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Middlewares;
-using WebFeatures.Application.Tests.Common.Stubs;
+using WebFeatures.Application.Tests.Common.Stubs.Requests;
 using Xunit;
+using TestResult = WebFeatures.Application.Tests.Common.Stubs.Requests.TestResult;
 
 namespace WebFeatures.Application.Tests.Unit.Middlewares
 {
     public class PerformanceMiddlewareTests
     {
-        private readonly Mock<ILogger<BoolRequest>> _logger;
-
-        public PerformanceMiddlewareTests()
-        {
-            _logger = new Mock<ILogger<BoolRequest>>();
-        }
-
         [Fact]
-        public async Task HandleAsync_ShouldCallNextDelegate()
+        public async Task HandleAsync_ShouldReturnNextDelegateResult()
         {
             // Arrange
-            var middleware = new PerformanceMiddleware<BoolRequest, bool>(_logger.Object);
+            var logger = Mock.Of<ILogger<TestRequest>>();
+
+            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger);
+
+            var expected = new TestResult();
 
             // Act
-            bool result = await middleware.HandleAsync(new BoolRequest(), async () => true, new CancellationToken());
+            TestResult actual = await middleware.HandleAsync(new TestRequest(), async () => expected, new CancellationToken());
 
             // Assert
-            result.Should().BeTrue();
+            actual.Should().BeSameAs(expected);
         }
 
         [Fact]
         public async Task HandleAsync_WhenRequestTimeIsLessThanMaxAcceptableTime_ShouldNotCallLogger()
         {
             // Arrange
-            var middleware = new PerformanceMiddleware<BoolRequest, bool>(_logger.Object);
+            var logger = new Mock<ILogger<TestRequest>>();
+
+            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger.Object);
 
             // Act
-            await middleware.HandleAsync(new BoolRequest(), async () => true, new CancellationToken());
+            await middleware.HandleAsync(new TestRequest(), async () => new TestResult(), new CancellationToken());
 
             // Assert
-            _logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Never);
+            logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
-        public async Task HandleAsync_WhenRequestTimeIsGreatherThanMaxAcceptableTime_ShouldCallLogger()
+        public async Task HandleAsync_WhenRequestTimeIsGreatherThanMaxAcceptableTime_ShouldLogWarning()
         {
             // Arrange
-            var middleware = new PerformanceMiddleware<BoolRequest, bool>(_logger.Object);
+            var logger = new Mock<ILogger<TestRequest>>();
+
+            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger.Object);
 
             const int maxAcceptableTime = 500;
 
-            RequestDelegate<Task<bool>> next = async () =>
+            RequestDelegate<Task<TestResult>> next = async () =>
             {
                 await Task.Delay(maxAcceptableTime);
 
-                return true;
+                return new TestResult();
             };
 
             // Act
-            await middleware.HandleAsync(new BoolRequest(), next, new CancellationToken());
+            await middleware.HandleAsync(new TestRequest(), next, new CancellationToken());
 
             // Assert
-            _logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Once);
+            logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Once);
         }
     }
 }

@@ -6,18 +6,28 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Middlewares;
-using WebFeatures.Application.Tests.Common.Stubs;
+using WebFeatures.Application.Tests.Common.Stubs.Requests;
 using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Middlewares
 {
     public class LoggingMiddlewareTests
     {
-        private readonly Mock<ILogger<BoolRequest>> _logger;
-
-        public LoggingMiddlewareTests()
+        [Fact]
+        public async Task HandleAsync_ShouldReturnNextDelegateResult()
         {
-            _logger = new Mock<ILogger<BoolRequest>>();
+            // Arrange
+            var logger = Mock.Of<ILogger<TestRequest>>();
+
+            var middleware = new LoggingMiddleware<TestRequest, TestResult>(logger);
+
+            var expected = new TestResult();
+
+            // Act
+            TestResult actual = await middleware.HandleAsync(new TestRequest(), async () => expected, new CancellationToken());
+
+            // Assert
+            actual.Should().BeSameAs(expected);
         }
 
         [Fact]
@@ -26,24 +36,24 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var messages = new List<string>();
 
-            var logger = new Mock<ILogger<BoolRequest>>();
+            var logger = new Mock<ILogger<TestRequest>>();
 
-            _logger.Setup(x => x.LogInformation(
+            logger.Setup(x => x.LogInformation(
                     It.IsAny<string>(),
                     It.IsAny<object[]>()))
                 .Callback(() => messages.Add("logger"));
 
-            RequestDelegate<Task<bool>> next = async () =>
+            RequestDelegate<Task<TestResult>> next = async () =>
             {
                 messages.Add("next");
 
-                return true;
+                return new TestResult();
             };
 
-            var middleware = new LoggingMiddleware<BoolRequest, bool>(_logger.Object);
+            var middleware = new LoggingMiddleware<TestRequest, TestResult>(logger.Object);
 
             // Act
-            await middleware.HandleAsync(new BoolRequest(), next, new CancellationToken());
+            await middleware.HandleAsync(new TestRequest(), next, new CancellationToken());
 
             // Assert
             messages.Should().Equal(new[] { "logger", "next", "logger" });

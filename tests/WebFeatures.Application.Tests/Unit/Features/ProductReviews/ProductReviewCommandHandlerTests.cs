@@ -11,7 +11,7 @@ using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
-using WebFeatures.Application.Tests.Common.Stubs.Features.ProductReviews;
+using WebFeatures.Application.Tests.Common.Stubs.Requests.ProductReviews;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;
 

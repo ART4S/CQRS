@@ -5,7 +5,7 @@ using System;
 using WebFeatures.Application.Features.Products.Requests.Commands;
 using WebFeatures.Application.Interfaces.Files;
 
-namespace WebFeatures.Application.Tests.Common.Stubs.Features.Products
+namespace WebFeatures.Application.Tests.Common.Stubs.Requests.Products
 {
     internal class CreateProductStub : Faker<CreateProduct>
     {
