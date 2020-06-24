@@ -1,5 +1,4 @@
-﻿using Bogus;
-using Bogus.DataSets;
+﻿using Bogus.DataSets;
 using FluentAssertions;
 using FluentValidation.Results;
 using System.Linq;
@@ -14,19 +13,13 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
         public void WhenDifferentPropertyNames_ShouldSetErrorForEachUniqueName()
         {
             // Arrange
-            var faker = new Faker();
-
             string[] properties =
             {
                 "prop_1",
                 "prop_2"
             };
 
-            ValidationFailure[] failures =
-            {
-                new ValidationFailure(properties[0], faker.Lorem.Sentence()),
-                new ValidationFailure(properties[1], faker.Lorem.Sentence()),
-            };
+            ValidationFailure[] failures = properties.Select(x => new ValidationFailure(x, new Lorem().Sentence())).ToArray();
 
             // Act
             var validation = new ValidationError(failures);

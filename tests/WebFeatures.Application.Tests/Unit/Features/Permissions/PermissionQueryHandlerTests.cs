@@ -29,7 +29,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(false);
 
-            PermissionQueryHandler handler = new PermissionQueryHandler(_authService.Object, _currentUser.Object);
+            var handler = new PermissionQueryHandler(_authService.Object, _currentUser.Object);
 
             // Act
             bool result = await handler.HandleAsync(new UserHasPermission(), new CancellationToken());
@@ -44,11 +44,11 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(true);
 
-            Guid userId = new Faker().Random.Guid();
+            Guid userId = new Randomizer().Guid();
 
             _currentUser.Setup(x => x.UserId).Returns(userId);
 
-            var request = new UserHasPermission() { Permission = new Faker().Random.Utf16String() };
+            var request = new UserHasPermission() { Permission = new Randomizer().Utf16String() };
 
             _authService.Setup(x => x.UserHasPermissionAsync(userId, request.Permission)).ReturnsAsync(true);
 

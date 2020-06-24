@@ -1,14 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebFeatures.Application.Features.Accounts.Requests.Commands;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Requests;
+using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Application.Tests.Common.Extensions;
+using WebFeatures.Application.Tests.Common.Stubs.Services;
 using WebFeatures.Infrastructure;
 using Xunit;
 
@@ -16,7 +19,7 @@ namespace WebFeatures.Application.Tests.Common.Base
 {
     public class IntegrationTestBase : IAsyncLifetime
     {
-        private static readonly IServiceScopeFactory ScopeFactory;
+        private static readonly IServiceProvider ServiceProvider;
 
         protected IWriteDbContext DbContext { get; }
 
@@ -41,17 +44,19 @@ namespace WebFeatures.Application.Tests.Common.Base
 
             services.AddInfrastructureServices(configuration);
 
-            // disable transaction from request's pipeline cause we are using it here over each test
+            services.AddScoped<ICurrentUserService, CustomCurrentUserService>();
+
+            // remove transaction from request's pipeline cause we are using it here
             var transaction = services.First(x => x.ImplementationType == typeof(TransactionMiddleware<,>));
 
             services.Remove(transaction);
 
-            ScopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         public IntegrationTestBase()
         {
-            _scope = ScopeFactory.CreateScope();
+            _scope = ServiceProvider.CreateScope();
 
             DbContext = _scope.ServiceProvider.GetService<IWriteDbContext>();
             Mediator = _scope.ServiceProvider.GetService<IRequestMediator>();
@@ -68,6 +73,27 @@ namespace WebFeatures.Application.Tests.Common.Base
             await _transaction.DisposeAsync();
 
             await _scope.DisposeAsync();
+        }
+
+        protected async Task AuthenticateAdminAsync()
+        {
+            await AuthenticateAsync("admin@mail.com", "12345");
+        }
+
+        protected async Task AuthenticateAsync(string email, string password)
+        {
+            var request = new Login()
+            {
+                Email = email,
+                Password = password
+            };
+
+            Guid userId = await Mediator.SendAsync(request);
+
+            var currentUser = (CustomCurrentUserService)_scope.ServiceProvider.GetService<ICurrentUserService>();
+
+            currentUser.UserId = userId;
+            currentUser.IsAuthenticated = true;
         }
     }
 }

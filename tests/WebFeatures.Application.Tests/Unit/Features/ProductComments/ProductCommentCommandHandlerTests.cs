@@ -43,7 +43,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments
 
             _mapper.Setup(x => x.Map<ProductComment>(request)).Returns(comment);
 
-            Guid userId = new Faker().Random.Guid();
+            Guid userId = new Randomizer().Guid();
 
             _currentUser.Setup(x => x.UserId).Returns(userId);
 

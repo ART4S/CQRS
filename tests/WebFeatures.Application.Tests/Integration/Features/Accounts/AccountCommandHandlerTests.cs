@@ -40,15 +40,17 @@ namespace WebFeatures.Application.Tests.Integration.Features.Accounts
                 Password = "12345"
             };
 
-            Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
+            Guid expectedId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
             Guid actualId = await Mediator.SendAsync(request);
 
-            User user = await DbContext.Users.GetAsync(userId);
+            User user = await DbContext.Users.GetAsync(expectedId);
 
             // Assert
+            actualId.Should().Be(expectedId);
             actualId.Should().Be(user.Id);
+
             user.Email.Should().Be(request.Email);
         }
 

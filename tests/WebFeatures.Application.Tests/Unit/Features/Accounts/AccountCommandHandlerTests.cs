@@ -56,19 +56,13 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             var roleRepo = new Mock<IRoleWriteRepository>();
 
-            Role role = new RoleStub();
-
-            roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(role);
+            roleRepo.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new RoleStub());
 
             _context.Setup(x => x.Roles).Returns(roleRepo.Object);
 
-            var userRoleRepo = new Mock<IWriteRepository<UserRole>>();
+            _context.Setup(x => x.UserRoles).Returns(Mock.Of<IWriteRepository<UserRole>>());
 
-            _context.Setup(x => x.UserRoles).Returns(userRoleRepo.Object);
-
-            var logger = new Mock<ILogger<Register>>();
-
-            _loggerFactory.Setup(x => x.CreateLogger<Register>()).Returns(logger.Object);
+            _loggerFactory.Setup(x => x.CreateLogger<Register>()).Returns(Mock.Of<ILogger<Register>>());
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
@@ -83,13 +77,8 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Register_WhenRoleForUserIsMissing_Throws()
         {
             // Arrange
-            var roleRepo = new Mock<IRoleWriteRepository>();
-
-            _context.Setup(x => x.Roles).Returns(roleRepo.Object);
-
-            var userRepo = new Mock<IUserWriteRepository>();
-
-            _context.Setup(x => x.Users).Returns(userRepo.Object);
+            _context.Setup(x => x.Roles).Returns(Mock.Of<IRoleWriteRepository>());
+            _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
@@ -116,9 +105,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             _hasher.Setup(x => x.Verify(user.PasswordHash, request.Password)).Returns(true);
 
-            var logger = new Mock<ILogger<Login>>();
-
-            _loggerFactory.Setup(x => x.CreateLogger<Login>()).Returns(logger.Object);
+            _loggerFactory.Setup(x => x.CreateLogger<Login>()).Returns(Mock.Of<ILogger<Login>>());
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
@@ -133,9 +120,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Login_WhenUserDoesntExist_Throws()
         {
             // Arrange
-            var userRepo = new Mock<IUserWriteRepository>();
-
-            _context.Setup(x => x.Users).Returns(userRepo.Object);
+            _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
             var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
@@ -150,9 +135,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
         public async Task Login_WhenInvalidPassword_Throws()
         {
             // Arrange
-            var userRepo = new Mock<IUserWriteRepository>();
-
-            _context.Setup(x => x.Users).Returns(userRepo.Object);
+            _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
             _hasher.Setup(x => x.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 

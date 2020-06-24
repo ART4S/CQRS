@@ -16,7 +16,11 @@ VALUES
 INSERT INTO rolepermissions (id, roleid, name)
 VALUES
 ('3c0e64a7-baf1-4071-bdfb-9ae655e1387e', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_create'),
-('800c5e48-d56a-4529-b1c6-ae8c6296cc21', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_update');
+('800c5e48-d56a-4529-b1c6-ae8c6296cc21', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_update'),
+('973f17b1-f702-468f-a9a2-dc4558dae003', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'products_delete'),
+('500cf60b-8370-4e36-a750-c171d762373d', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'productcomments_create'),
+('91eb35c1-46e3-4b6f-95fe-c9adf49c6f5f', '9bb11f1e-8b55-44e3-9137-2853ae9ebafd', 'productreviews_create'),
+('d15d3f83-6e05-4235-b995-bd784886de27', '8f4032ba-2bb8-4fa7-8ad8-393df9107590', 'productcomments_create');
 
 INSERT INTO countries (id, name, continent)
 VALUES
