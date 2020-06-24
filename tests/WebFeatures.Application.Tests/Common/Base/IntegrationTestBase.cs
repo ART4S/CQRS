@@ -75,12 +75,12 @@ namespace WebFeatures.Application.Tests.Common.Base
             await _scope.DisposeAsync();
         }
 
-        protected async Task AuthenticateAdminAsync()
+        protected async Task<Guid> AuthenticateAdminAsync()
         {
-            await AuthenticateAsync("admin@mail.com", "12345");
+            return await AuthenticateAsync("admin@mail.com", "12345");
         }
 
-        protected async Task AuthenticateAsync(string email, string password)
+        protected async Task<Guid> AuthenticateAsync(string email, string password)
         {
             var request = new Login()
             {
@@ -94,6 +94,8 @@ namespace WebFeatures.Application.Tests.Common.Base
 
             currentUser.UserId = userId;
             currentUser.IsAuthenticated = true;
+
+            return userId;
         }
     }
 }

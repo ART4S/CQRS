@@ -4,20 +4,20 @@ using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Permissions.Handlers;
+using WebFeatures.Application.Features.Authorization.Handlers;
 using WebFeatures.Application.Features.Permissions.Requests.Queries;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 using Xunit;
 
-namespace WebFeatures.Application.Tests.Unit.Features.Permissions
+namespace WebFeatures.Application.Tests.Unit.Features.Authorization
 {
-    public class PermissionQueryHandlerTests
+    public class AuthorizationQueryHandlerTests
     {
         private readonly Mock<IAuthService> _authService;
         private readonly Mock<ICurrentUserService> _currentUser;
 
-        public PermissionQueryHandlerTests()
+        public AuthorizationQueryHandlerTests()
         {
             _authService = new Mock<IAuthService>();
             _currentUser = new Mock<ICurrentUserService>();
@@ -29,13 +29,13 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(false);
 
-            var handler = new PermissionQueryHandler(_authService.Object, _currentUser.Object);
+            var handler = new AuthorizationQueryHandler(_authService.Object, _currentUser.Object);
 
             // Act
-            bool result = await handler.HandleAsync(new UserHasPermission(), new CancellationToken());
+            bool isAuthorized = await handler.HandleAsync(new UserHasPermission(), new CancellationToken());
 
             // Assert
-            result.Should().BeFalse();
+            isAuthorized.Should().BeFalse();
         }
 
         [Fact]
@@ -52,13 +52,13 @@ namespace WebFeatures.Application.Tests.Unit.Features.Permissions
 
             _authService.Setup(x => x.UserHasPermissionAsync(userId, request.Permission)).ReturnsAsync(true);
 
-            PermissionQueryHandler handler = new PermissionQueryHandler(_authService.Object, _currentUser.Object);
+            var handler = new AuthorizationQueryHandler(_authService.Object, _currentUser.Object);
 
             // Act
-            bool result = await handler.HandleAsync(request, new CancellationToken());
+            bool isAuthorized = await handler.HandleAsync(request, new CancellationToken());
 
             // Assert
-            result.Should().BeTrue();
+            isAuthorized.Should().BeTrue();
         }
     }
 }

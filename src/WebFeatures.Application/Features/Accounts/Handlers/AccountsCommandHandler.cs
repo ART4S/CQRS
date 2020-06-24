@@ -13,7 +13,7 @@ using WebFeatures.Domian.Entities.Permissions;
 
 namespace WebFeatures.Application.Features.Accounts.Handlers
 {
-    internal class AccountCommandHandler :
+    internal class AccountsCommandHandler :
         IRequestHandler<Register, Guid>,
         IRequestHandler<Login, Guid>
     {
@@ -21,7 +21,7 @@ namespace WebFeatures.Application.Features.Accounts.Handlers
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILoggerFactory _loggerFactory;
 
-        public AccountCommandHandler(
+        public AccountsCommandHandler(
             IWriteDbContext db,
             IPasswordHasher passwordHasher,
             ILoggerFactory loggerFactory)

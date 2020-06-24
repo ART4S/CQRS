@@ -64,7 +64,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             _loggerFactory.Setup(x => x.CreateLogger<Register>()).Returns(Mock.Of<ILogger<Register>>());
 
-            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
+            var handler = new AccountsCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
             Guid actualUserId = await handler.HandleAsync(request, new CancellationToken());
@@ -80,7 +80,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             _context.Setup(x => x.Roles).Returns(Mock.Of<IRoleWriteRepository>());
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
-            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
+            var handler = new AccountsCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
             Func<Task> actual = () => handler.HandleAsync(new Register(), new CancellationToken());
@@ -107,7 +107,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             _loggerFactory.Setup(x => x.CreateLogger<Login>()).Returns(Mock.Of<ILogger<Login>>());
 
-            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
+            var handler = new AccountsCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
             Guid userId = await handler.HandleAsync(request, new CancellationToken());
@@ -122,7 +122,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
             // Arrange
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
-            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
+            var handler = new AccountsCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
             Func<Task<Guid>> actual = () => handler.HandleAsync(new Login(), new CancellationToken());
@@ -139,7 +139,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts
 
             _hasher.Setup(x => x.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
-            var handler = new AccountCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
+            var handler = new AccountsCommandHandler(_context.Object, _hasher.Object, _loggerFactory.Object);
 
             // Act
             Func<Task<Guid>> actual = () => handler.HandleAsync(new Login(), new CancellationToken());

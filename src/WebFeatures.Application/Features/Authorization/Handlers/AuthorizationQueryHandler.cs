@@ -5,14 +5,14 @@ using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Interfaces.Services;
 
-namespace WebFeatures.Application.Features.Permissions.Handlers
+namespace WebFeatures.Application.Features.Authorization.Handlers
 {
-    internal class PermissionQueryHandler : IRequestHandler<UserHasPermission, bool>
+    internal class AuthorizationQueryHandler : IRequestHandler<UserHasPermission, bool>
     {
         private readonly IAuthService _authService;
         private readonly ICurrentUserService _currentUser;
 
-        public PermissionQueryHandler(IAuthService authService, ICurrentUserService currentUser)
+        public AuthorizationQueryHandler(IAuthService authService, ICurrentUserService currentUser)
         {
             _authService = authService;
             _currentUser = currentUser;

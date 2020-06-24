@@ -20,7 +20,7 @@ namespace WebFeatures.Common
 
         private class DefaultSystemTime : ISystemTime
         {
-            public DateTime Now => DateTime.Now;
+            public DateTime Now => DateTime.UtcNow;
         }
     }
 }

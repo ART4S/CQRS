@@ -6,13 +6,13 @@ using WebFeatures.Application.Features.Permissions.Requests.Queries;
 using WebFeatures.Application.Tests.Common.Base;
 using Xunit;
 
-namespace WebFeatures.Application.Tests.Integration.Features.Permissions
+namespace WebFeatures.Application.Tests.Integration.Features.Authorization
 {
-    public class PermissionQueryHandlerTests : IntegrationTestBase
+    public class AuthorizationQueryHandlerTests : IntegrationTestBase
     {
         [Theory]
-        [MemberData(nameof(AdminPermissions))]
-        [MemberData(nameof(UserPermissions))]
+        [MemberData(nameof(PermissionTestData.Admin), MemberType = typeof(PermissionTestData))]
+        [MemberData(nameof(PermissionTestData.User), MemberType = typeof(PermissionTestData))]
         public async Task UserHasPermission_ReturnsTrue((string Email, string Password) user, string permission)
         {
             // Arrange
@@ -21,13 +21,44 @@ namespace WebFeatures.Application.Tests.Integration.Features.Permissions
             // Act
             await AuthenticateAsync(user.Email, user.Password);
 
-            bool result = await Mediator.SendAsync(request);
+            bool isAuthorized = await Mediator.SendAsync(request);
 
             // Assert
-            result.Should().BeTrue();
+            isAuthorized.Should().BeTrue();
         }
 
-        public static IEnumerable<object[]> AdminPermissions
+        [Fact]
+        public async Task UserHasPermission_WhenUserIsNotAuthenticated_ReturnsFalse()
+        {
+            // Arrange
+            var request = new UserHasPermission() { Permission = PermissionConstants.Products.Create };
+
+            // Act
+            bool isAuthorized = await Mediator.SendAsync(request);
+
+            // Assert
+            isAuthorized.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task UserHasPermission_WhenUserDoesntHavePermission_ReturnsFalse()
+        {
+            // Arrange
+            var request = new UserHasPermission() { Permission = PermissionConstants.Products.Create };
+
+            // Act
+            await AuthenticateAsync("user@mail.com", "12345");
+
+            bool isAuthorized = await Mediator.SendAsync(request);
+
+            // Assert
+            isAuthorized.Should().BeFalse();
+        }
+    }
+
+    internal class PermissionTestData
+    {
+        public static IEnumerable<object[]> Admin
         {
             get
             {
@@ -46,7 +77,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Permissions
             }
         }
 
-        public static IEnumerable<object[]> UserPermissions
+        public static IEnumerable<object[]> User
         {
             get
             {
@@ -55,34 +86,6 @@ namespace WebFeatures.Application.Tests.Integration.Features.Permissions
                 // ProductComments
                 yield return new object[] { user, PermissionConstants.ProductComments.Create };
             }
-        }
-
-        [Fact]
-        public async Task UserHasPermission_WhenUserIsNotAuthenticated_ReturnsFalse()
-        {
-            // Arrange
-            var request = new UserHasPermission() { Permission = PermissionConstants.Products.Create };
-
-            // Act
-            bool result = await Mediator.SendAsync(request);
-
-            // Assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public async Task UserHasPermission_WhenUserDoesntHavePermission_ReturnsFalse()
-        {
-            // Arrange
-            var request = new UserHasPermission() { Permission = PermissionConstants.Products.Create };
-
-            // Act
-            await AuthenticateAsync("user@mail.com", "12345");
-
-            bool result = await Mediator.SendAsync(request);
-
-            // Assert
-            result.Should().BeFalse();
         }
     }
 }
