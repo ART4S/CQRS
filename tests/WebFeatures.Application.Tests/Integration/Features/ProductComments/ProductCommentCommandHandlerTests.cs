@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+﻿using Bogus;
+using FluentAssertions;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
 using WebFeatures.Application.Tests.Common.Base;
-using WebFeatures.Application.Tests.Common.Stubs.Requests.ProductComments;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;
 using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
@@ -16,10 +16,12 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductComments
         public async Task CreateProductComment_CreatesComment()
         {
             // Arrange
-            CreateProductComment request = new CreateProductCommentStub();
-
-            request.ProductId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
-            request.ParentCommentId = new Guid("c9502ede-2136-4202-8fe4-5e3d0006b0dc");
+            var request = new CreateProductComment()
+            {
+                ProductId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e"),
+                ParentCommentId = new Guid("c9502ede-2136-4202-8fe4-5e3d0006b0dc"),
+                Body = new Faker().Lorem.Text()
+            };
 
             // Act
             Guid adminId = await AuthenticateAdminAsync();
@@ -38,7 +40,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductComments
         }
 
         [Fact]
-        public async Task CreateProductComment_WhenInvalidData_Throws()
+        public async Task CreateProductComment_WhenInvalidComment_Throws()
         {
             // Arrange
             var request = new CreateProductComment();

@@ -7,7 +7,7 @@ using WebFeatures.Application.Interfaces.Requests;
 namespace WebFeatures.Application.Middlewares
 {
     /// <summary>
-    /// Logs request
+    /// Logs request data
     /// </summary>
     internal class LoggingMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
     {

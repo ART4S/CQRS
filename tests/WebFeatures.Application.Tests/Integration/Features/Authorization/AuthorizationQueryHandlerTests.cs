@@ -69,7 +69,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Authorization
                 yield return new object[] { admin, PermissionConstants.Products.Update };
                 yield return new object[] { admin, PermissionConstants.Products.Delete };
 
-                // ProductRviews
+                // ProductReviews
                 yield return new object[] { admin, PermissionConstants.ProductReviews.Create };
 
                 // ProductComments

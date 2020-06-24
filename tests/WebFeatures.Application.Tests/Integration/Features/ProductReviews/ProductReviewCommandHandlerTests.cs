@@ -1,11 +1,12 @@
-﻿using FluentAssertions;
+﻿using Bogus;
+using FluentAssertions;
 using System;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductComments.Requests.Commands;
 using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
 using WebFeatures.Application.Tests.Common.Base;
-using WebFeatures.Application.Tests.Common.Stubs.Requests.ProductReviews;
 using WebFeatures.Domian.Entities.Products;
+using WebFeatures.Domian.Enums;
 using Xunit;
 using ValidationException = WebFeatures.Application.Exceptions.ValidationException;
 
@@ -17,9 +18,15 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductReviews
         public async Task CreateProductReview_CreatesReview()
         {
             // Arrange
-            CreateProductReview request = new CreateProductReviewStub();
+            var faker = new Faker();
 
-            request.ProductId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e");
+            var request = new CreateProductReview()
+            {
+                ProductId = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e"),
+                Title = faker.Lorem.Sentence(),
+                Comment = faker.Lorem.Sentences(),
+                Rating = faker.PickRandom<ProductRating>()
+            };
 
             // Act
             Guid adminId = await AuthenticateAdminAsync();
@@ -39,7 +46,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductReviews
         }
 
         [Fact]
-        public async Task CreateProductReview_WhenInvalidData_Throws()
+        public async Task CreateProductReview_WhenInvalidReview_Throws()
         {
             // Arrange
             var request = new CreateProductComment();
