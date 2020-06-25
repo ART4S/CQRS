@@ -90,6 +90,7 @@ namespace WebFeatures.Application.Features.Products.Requests.Commands
                     .WithMessage(ValidationConstants.Products.PictureFormatError);
 
                 RuleFor(x => x.Pictures)
+                    .Cascade(CascadeMode.StopOnFirstFailure)
                     .NotNull()
                     .Must(x => x.All(y => ValidationConstants.Products.AllowedPictureFormats.Contains(
                         System.IO.Path.GetExtension(y.Name))))

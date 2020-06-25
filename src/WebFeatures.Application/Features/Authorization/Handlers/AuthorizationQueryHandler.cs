@@ -20,7 +20,10 @@ namespace WebFeatures.Application.Features.Authorization.Handlers
 
         public async Task<bool> HandleAsync(UserHasPermission request, CancellationToken cancellationToken)
         {
-            if (!_currentUser.IsAuthenticated) return false;
+            if (!_currentUser.IsAuthenticated)
+            {
+                return false;
+            }
 
             return await _authService.UserHasPermissionAsync(_currentUser.UserId, request.Permission);
         }
