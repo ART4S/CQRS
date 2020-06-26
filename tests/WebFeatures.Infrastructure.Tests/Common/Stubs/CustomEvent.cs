@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
-    public class TestEvent : IEvent
+    public class CustomEvent : IEvent
     {
     }
 }

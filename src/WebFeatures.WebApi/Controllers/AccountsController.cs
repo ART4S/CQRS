@@ -28,11 +28,13 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task Register([FromBody, Required] Register request)
+        public async Task<IActionResult> Register([FromBody, Required] Register request)
         {
             Guid userId = await Mediator.SendAsync(request);
 
             await SignInUser(userId);
+
+            return Ok();
         }
 
         /// <summary>
@@ -43,11 +45,13 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task Login([FromBody, Required] Login request)
+        public async Task<IActionResult> Login([FromBody, Required] Login request)
         {
             Guid userId = await Mediator.SendAsync(request);
 
             await SignInUser(userId);
+
+            return Ok();
         }
 
         private Task SignInUser(Guid userId)
@@ -75,9 +79,11 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public Task Logout()
+        public async Task<IActionResult> Logout()
         {
-            return HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Ok();
         }
     }
 }

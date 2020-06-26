@@ -5,20 +5,20 @@ using WebFeatures.Infrastructure.Tests.Common.Utils;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
-    internal class InnerTestMiddleware : IRequestMiddleware<TestRequest, TestResult>
+    internal class InnerMiddleware : IRequestMiddleware<CustomRequest, CustomResult>
     {
         private readonly CallChecker _checker;
 
-        public InnerTestMiddleware(CallChecker checker)
+        public InnerMiddleware(CallChecker checker)
         {
             _checker = checker;
         }
 
-        public async Task<TestResult> HandleAsync(TestRequest request, RequestDelegate<Task<TestResult>> next, CancellationToken cancellationToken)
+        public async Task<CustomResult> HandleAsync(CustomRequest request, RequestDelegate<Task<CustomResult>> next, CancellationToken cancellationToken)
         {
             _checker.Messages.Add("Inner started");
 
-            TestResult result = await next();
+            CustomResult result = await next();
 
             _checker.Messages.Add("Inner finished");
 

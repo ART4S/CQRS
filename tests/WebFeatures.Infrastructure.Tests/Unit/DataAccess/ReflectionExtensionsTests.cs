@@ -15,9 +15,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetPropertyName_WhenPropertyIsReferenceType_ReturnsPropertyName()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.StringProperty;
 
-            string expected = nameof(TestEntity.StringProperty);
+            string expected = nameof(CustomEntity.StringProperty);
 
             // Act
             string actual = propertyCall.GetPropertyName();
@@ -30,9 +30,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetPropertyName_WhenPropertyIsValueType_ReturnsPropertyName()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.IntProperty;
 
-            string expected = nameof(TestEntity.IntProperty);
+            string expected = nameof(CustomEntity.IntProperty);
 
             // Act
             string actual = propertyCall.GetPropertyName();
@@ -45,9 +45,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetPropertyName_WhenMultiplePropertyCall_ReturnsPropertyName()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
-            string expected = $"{nameof(TestEntity.ValueObjectProperty)}_{nameof(TestEntity.ValueObjectProperty.StringProperty)}";
+            string expected = $"{nameof(CustomEntity.ValueObjectProperty)}_{nameof(CustomEntity.ValueObjectProperty.StringProperty)}";
 
             // Act
             string actual = propertyCall.GetPropertyName();
@@ -60,7 +60,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetPropertyName_WhenPropertyCallIsNull_Throws()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = null;
+            Expression<Func<CustomEntity, object>> propertyCall = null;
 
             // Act
             Action actual = () => propertyCall.GetPropertyName();
@@ -73,7 +73,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetPropertyName_WhenFieldCall_Throws()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = x => x.IntField;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.IntField;
 
             // Act
             Action actual = () => propertyCall.GetPropertyName();
@@ -86,9 +86,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetFirstProperty_WhenPropertyCallExpression_ReturnsFirstProperty()
         {
             // Arrange
-            Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
-            PropertyInfo expected = typeof(TestEntity).GetProperty(nameof(TestEntity.ValueObjectProperty));
+            PropertyInfo expected = typeof(CustomEntity).GetProperty(nameof(CustomEntity.ValueObjectProperty));
 
             // Act
             PropertyInfo actual = propertyCall.GetFirstProperty();
@@ -101,14 +101,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void CreateSetter_WhenPropertyInfoPropertyIsReferenceType_ReturnsPropertySetter()
         {
             // Arrange
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
-            PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.StringProperty));
+            PropertyInfo property = typeof(CustomEntity).GetProperty(nameof(CustomEntity.StringProperty));
 
             string expected = new Faker().Random.Utf16String();
 
             // Act
-            Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
+            Action<CustomEntity, object> propertySetter = property.CreateSetter<CustomEntity>();
 
             propertySetter(entity, expected);
 
@@ -120,14 +120,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void CreateSetter_WhenPropertyInfoPropertyIsValueType_ReturnsPropertySetter()
         {
             // Arrange
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
-            PropertyInfo property = typeof(TestEntity).GetProperty(nameof(TestEntity.IntProperty));
+            PropertyInfo property = typeof(CustomEntity).GetProperty(nameof(CustomEntity.IntProperty));
 
             int expected = new Faker().Random.Int();
 
             // Act
-            Action<TestEntity, object> propertySetter = property.CreateSetter<TestEntity>();
+            Action<CustomEntity, object> propertySetter = property.CreateSetter<CustomEntity>();
 
             propertySetter(entity, expected);
 
@@ -139,14 +139,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void CreateSetter_WhenPropertyCallPropertyIsReferenceType_ReturnsPropertySetter()
         {
             // Arrange
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
-            Expression<Func<TestEntity, object>> propertyCall = x => x.StringProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.StringProperty;
 
             string expected = new Faker().Random.Utf16String();
 
             // Act
-            Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
+            Action<CustomEntity, object> propertySetter = propertyCall.CreateSetter();
 
             propertySetter(entity, expected);
 
@@ -158,14 +158,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void CreateSetter_WhenPropertyCallPropertyIsValueType_ReturnsPropertySetter()
         {
             // Arrange
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
-            Expression<Func<TestEntity, object>> propertyCall = x => x.IntProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.IntProperty;
 
             int expected = new Faker().Random.Int();
 
             // Act
-            Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
+            Action<CustomEntity, object> propertySetter = propertyCall.CreateSetter();
 
             propertySetter(entity, expected);
 
@@ -177,14 +177,14 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void CreateSetter_WhenMultiplePropertyCall_ReturnsPropertySetter()
         {
             // Arrange
-            TestEntity entity = new TestEntity() { ValueObjectProperty = new TestValueObject() };
+            CustomEntity entity = new CustomEntity() { ValueObjectProperty = new CustomValueObject() };
 
-            Expression<Func<TestEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
+            Expression<Func<CustomEntity, object>> propertyCall = x => x.ValueObjectProperty.StringProperty;
 
             string expected = new Faker().Random.Utf16String();
 
             // Act
-            Action<TestEntity, object> propertySetter = propertyCall.CreateSetter();
+            Action<CustomEntity, object> propertySetter = propertyCall.CreateSetter();
 
             propertySetter(entity, expected);
 

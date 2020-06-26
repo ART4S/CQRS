@@ -32,11 +32,20 @@ namespace WebFeatures.WebApi
             {
                 options.ModelBinderProviders.Insert(0, new FileModelBinderProvider());
             })
-            .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
-
-            services.AddSwaggerGen(c =>
+            .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null)
+            .ConfigureApiBehaviorOptions(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
+                // отключает роутинг на основе конценций (только аттрибуты)
+
+                options.SuppressInferBindingSourcesForParameters = false; // на комплексные типы вешает атрибут [FromBody] (IFormFile и CancellationToken - исключение)
+                options.SuppressConsumesConstraintForFormFileParameters = false; // на IFormFile вешает атрибут [FromForm]
+                options.SuppressModelStateInvalidFilter = false; // Автоматический статус 400 при неуспешной валидации
+                options.SuppressMapClientErrors = false; // ProblemDetails при статусе 400
+            });
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "WebFeatures", Version = "v1" });
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

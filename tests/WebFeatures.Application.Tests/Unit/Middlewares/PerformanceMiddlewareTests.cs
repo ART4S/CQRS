@@ -17,14 +17,14 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         public async Task HandleAsync_ShouldReturnNextDelegateResult()
         {
             // Arrange
-            var logger = Mock.Of<ILogger<TestRequest>>();
+            var logger = Mock.Of<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger);
+            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger);
 
             var expected = new TestResult();
 
             // Act
-            TestResult actual = await middleware.HandleAsync(new TestRequest(), async () => expected, new CancellationToken());
+            TestResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
 
             // Assert
             actual.Should().BeSameAs(expected);
@@ -34,12 +34,12 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         public async Task HandleAsync_WhenRequestTimeIsLessThanMaxAcceptableTime_ShouldNotCallLogger()
         {
             // Arrange
-            var logger = new Mock<ILogger<TestRequest>>();
+            var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger.Object);
+            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger.Object);
 
             // Act
-            await middleware.HandleAsync(new TestRequest(), async () => new TestResult(), new CancellationToken());
+            await middleware.HandleAsync(new CustomRequest(), async () => new TestResult(), new CancellationToken());
 
             // Assert
             logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Never);
@@ -49,9 +49,9 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         public async Task HandleAsync_WhenRequestTimeIsGreatherThanMaxAcceptableTime_ShouldLogWarning()
         {
             // Arrange
-            var logger = new Mock<ILogger<TestRequest>>();
+            var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<TestRequest, TestResult>(logger.Object);
+            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger.Object);
 
             const int maxAcceptableTime = 500;
 
@@ -63,7 +63,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             };
 
             // Act
-            await middleware.HandleAsync(new TestRequest(), next, new CancellationToken());
+            await middleware.HandleAsync(new CustomRequest(), next, new CancellationToken());
 
             // Assert
             logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Once);

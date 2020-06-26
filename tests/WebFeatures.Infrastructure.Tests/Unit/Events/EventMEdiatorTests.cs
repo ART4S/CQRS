@@ -18,15 +18,15 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
             // Arrange
             var serviceProvider = new Mock<IServiceProvider>();
 
-            var handler = new Mock<IEventHandler<TestEvent>>();
+            var handler = new Mock<IEventHandler<CustomEvent>>();
 
             serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IEventHandler<TestEvent>>)))
+                    typeof(IEnumerable<IEventHandler<CustomEvent>>)))
                 .Returns(new[] { handler.Object });
 
             var mediator = new EventMediator(serviceProvider.Object);
 
-            var eve = new TestEvent();
+            var eve = new CustomEvent();
 
             // Act
             await mediator.PublishAsync(eve);

@@ -6,7 +6,7 @@ namespace WebFeatures.Application.Tests.Common.Stubs.Requests
     {
     }
 
-    public class TestRequest : IRequest<TestResult>
+    public class CustomRequest : IRequest<TestResult>
     {
     }
 }

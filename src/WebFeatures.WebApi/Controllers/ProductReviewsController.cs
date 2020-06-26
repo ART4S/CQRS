@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using WebFeatures.Application.Constants;
@@ -19,17 +20,20 @@ namespace WebFeatures.WebApi.Controllers
         /// <summary>
         /// Создать обзор
         /// </summary>
-        /// <response code="200">Успех</response>
+        /// <returns>Идентификатор созданного обзора</returns>
+        /// <response code="201">Успех</response>
         /// <response code="400" cref="ValidationError">Ошибка валидации</response>
         /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
         [AuthorizePermission(PermissionConstants.ProductReviews.Create)]
         [ValidateAntiForgeryToken]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public Task Create([FromForm, Required] CreateProductReview request)
-            => Mediator.SendAsync(request);
+        public async Task<IActionResult> Create([FromForm, Required] CreateProductReview request)
+        {
+            return Created(await Mediator.SendAsync(request));
+        }
     }
 }

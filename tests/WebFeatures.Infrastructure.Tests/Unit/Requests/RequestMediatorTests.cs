@@ -14,12 +14,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
 {
     public class RequestMediatorTests
     {
-        private readonly Mock<IRequestHandler<TestRequest, TestResult>> _handler;
+        private readonly Mock<IRequestHandler<CustomRequest, CustomResult>> _handler;
         private readonly Mock<IServiceProvider> _serviceProvider;
 
         public RequestMediatorTests()
         {
-            _handler = new Mock<IRequestHandler<TestRequest, TestResult>>();
+            _handler = new Mock<IRequestHandler<CustomRequest, CustomResult>>();
             _serviceProvider = new Mock<IServiceProvider>();
         }
 
@@ -28,16 +28,16 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IRequestHandler<TestRequest, TestResult>)))
+                    typeof(IRequestHandler<CustomRequest, CustomResult>)))
                 .Returns(_handler.Object);
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
-                .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[0]);
 
             var mediator = new RequestMediator(_serviceProvider.Object);
 
-            var request = new TestRequest();
+            var request = new CustomRequest();
 
             // Act
             await mediator.SendAsync(request);
@@ -51,12 +51,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
-                .Returns(new IRequestMiddleware<TestRequest, TestResult>[0]);
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[0]);
 
             var mediator = new RequestMediator(_serviceProvider.Object);
 
-            var request = new TestRequest();
+            var request = new CustomRequest();
 
             // Act
             Func<Task> actual = () => mediator.SendAsync(request);
@@ -72,21 +72,21 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             var callChecker = new CallChecker();
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IRequestHandler<TestRequest, TestResult>)))
-                .Returns(new TestRequestHandler(callChecker));
+                    typeof(IRequestHandler<CustomRequest, CustomResult>)))
+                .Returns(new CustomRequestHandler(callChecker));
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<TestRequest, TestResult>>)))
-                .Returns(new IRequestMiddleware<TestRequest, TestResult>[]
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[]
                 {
-                    new OutherTestMiddleware(callChecker),
-                    new InnerTestMiddleware(callChecker)
+                    new OutherMiddleware(callChecker),
+                    new InnerMiddleware(callChecker)
                 });
 
             var mediator = new RequestMediator(_serviceProvider.Object);
 
             // Act
-            await mediator.SendAsync(new TestRequest());
+            await mediator.SendAsync(new CustomRequest());
 
             // Assert
             callChecker.Messages.Should().Equal(new[]

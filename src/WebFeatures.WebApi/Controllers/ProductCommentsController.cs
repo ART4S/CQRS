@@ -21,17 +21,19 @@ namespace WebFeatures.WebApi.Controllers
         /// Создать комментарий
         /// </summary>
         /// <returns>Идентификатор созданного комментария</returns>
-        /// <response code="200" cref="Guid">Успех</response>
+        /// <response code="201" cref="Guid">Успех</response>
         /// <response code="400" cref="ValidationError">Ошибка валидации</response>
         /// <response code="403">Доступ запрещен</response>
         [HttpPost]
         [Authorize]
         [AuthorizePermission(PermissionConstants.ProductComments.Create)]
         [ValidateAntiForgeryToken]
-        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public Task<Guid> Create([FromForm, Required] CreateProductComment request)
-            => Mediator.SendAsync(request);
+        public async Task<IActionResult> Create([FromForm, Required] CreateProductComment request)
+        {
+            return Created(await Mediator.SendAsync(request));
+        }
     }
 }

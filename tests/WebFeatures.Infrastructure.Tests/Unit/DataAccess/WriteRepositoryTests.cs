@@ -25,11 +25,11 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             _profile = new Mock<IEntityProfile>();
         }
 
-        private WriteRepository<TestEntity> CreateDefaultRepository()
+        private WriteRepository<CustomEntity> CreateDefaultRepository()
         {
-            _profile.Setup(x => x.GetMap<TestEntity>()).Returns(new TestEntityMap());
+            _profile.Setup(x => x.GetMap<CustomEntity>()).Returns(new CustomEntityMap());
 
-            return new WriteRepository<TestEntity>(_connection.Object, _executor.Object, _profile.Object);
+            return new WriteRepository<CustomEntity>(_connection.Object, _executor.Object, _profile.Object);
         }
 
         [Fact]
@@ -44,9 +44,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
 
             SystemTime.Instance = sysTime.Object;
 
-            WriteRepository<TestEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
 
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
             // Act
             await repo.CreateAsync(entity);
@@ -59,9 +59,9 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityPassedWithoutId_SetsNewId()
         {
             // Arrange
-            WriteRepository<TestEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
 
-            TestEntity entity = new TestEntity();
+            CustomEntity entity = new CustomEntity();
 
             // Act
             await repo.CreateAsync(entity);
@@ -74,10 +74,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task DeleteAsync_WhenEmptyCollection_DoesntCallExecutor()
         {
             // Arrange
-            WriteRepository<TestEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
 
             // Act
-            await repo.DeleteAsync(new TestEntity[0]);
+            await repo.DeleteAsync(new CustomEntity[0]);
 
             // Assert
             _executor.Verify(x => x.ExecuteAsync(_connection.Object, It.IsAny<string>()), Times.Never);

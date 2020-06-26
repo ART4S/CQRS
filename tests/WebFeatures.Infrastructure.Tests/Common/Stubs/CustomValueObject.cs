@@ -3,7 +3,7 @@ using WebFeatures.Domian.Common;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
-    public class TestValueObject : ValueObject
+    public class CustomValueObject : ValueObject
     {
         public int IntProperty { get; set; }
         public string StringProperty { get; set; }

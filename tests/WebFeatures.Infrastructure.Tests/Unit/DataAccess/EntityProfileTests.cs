@@ -14,10 +14,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             // Arrange
             var profile = new EntityProfile();
 
-            profile.TryRegisterMap(typeof(TestEntityMap));
+            profile.TryRegisterMap(typeof(CustomEntityMap));
 
             // Act
-            IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
+            IEntityMap<CustomEntity> map = profile.GetMap<CustomEntity>();
 
             // Assert
             map.Should().NotBeNull();
@@ -30,7 +30,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             var profile = new EntityProfile();
 
             // Act
-            IEntityMap<TestEntity> map = profile.GetMap<TestEntity>();
+            IEntityMap<CustomEntity> map = profile.GetMap<CustomEntity>();
 
             // Assert
             map.Should().NotBeNull();

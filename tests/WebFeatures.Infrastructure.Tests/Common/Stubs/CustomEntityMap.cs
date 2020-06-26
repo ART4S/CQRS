@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
-    internal class TestEntityMap : EntityMap<TestEntity>
+    internal class CustomEntityMap : EntityMap<CustomEntity>
     {
     }
 }
