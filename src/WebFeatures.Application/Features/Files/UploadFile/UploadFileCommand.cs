@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Features.Files.UploadFile
     public class UploadFileCommand : ICommand<Guid>
     {
         /// <summary>
-        /// Содержимое
+        /// Файл
         /// </summary>
         public IFile File { get; set; }
     }

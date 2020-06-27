@@ -3,6 +3,9 @@ using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Application.Features.Accounts.Login
 {
+    /// <summary>
+    /// Войти в систему
+    /// </summary>
     public class LoginCommand : ICommand<Guid>
     {
         /// <summary>

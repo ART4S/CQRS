@@ -7,7 +7,7 @@ using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Middlewares;
 using WebFeatures.Application.Tests.Common.Stubs.Requests;
 using Xunit;
-using TestResult = WebFeatures.Application.Tests.Common.Stubs.Requests.TestResult;
+using CustomResult = WebFeatures.Application.Tests.Common.Stubs.Requests.CustomResult;
 
 namespace WebFeatures.Application.Tests.Unit.Middlewares
 {
@@ -19,12 +19,12 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger);
+            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger);
 
-            var expected = new TestResult();
+            var expected = new CustomResult();
 
             // Act
-            TestResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
+            CustomResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
 
             // Assert
             actual.Should().BeSameAs(expected);
@@ -36,10 +36,10 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger.Object);
+            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
 
             // Act
-            await middleware.HandleAsync(new CustomRequest(), async () => new TestResult(), new CancellationToken());
+            await middleware.HandleAsync(new CustomRequest(), async () => new CustomResult(), new CancellationToken());
 
             // Assert
             logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Never);
@@ -51,15 +51,15 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, TestResult>(logger.Object);
+            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
 
             const int maxAcceptableTime = 500;
 
-            RequestDelegate<Task<TestResult>> next = async () =>
+            RequestDelegate<Task<CustomResult>> next = async () =>
             {
                 await Task.Delay(maxAcceptableTime);
 
-                return new TestResult();
+                return new CustomResult();
             };
 
             // Act

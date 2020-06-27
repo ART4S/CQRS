@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -35,12 +36,12 @@ namespace WebFeatures.WebApi
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null)
             .ConfigureApiBehaviorOptions(options =>
             {
-                // отключает роутинг на основе конценций (только аттрибуты)
+                // Disables routing by convention (only by attributes)
 
-                options.SuppressInferBindingSourcesForParameters = false; // на комплексные типы вешает атрибут [FromBody] (IFormFile и CancellationToken - исключение)
-                options.SuppressConsumesConstraintForFormFileParameters = false; // на IFormFile вешает атрибут [FromForm]
-                options.SuppressModelStateInvalidFilter = false; // Автоматический статус 400 при неуспешной валидации
-                options.SuppressMapClientErrors = false; // ProblemDetails при статусе 400
+                options.SuppressInferBindingSourcesForParameters = false; // Uses attribute [FromBody] for complex types (IFormFile and CancellationToken - exception)
+                options.SuppressConsumesConstraintForFormFileParameters = false; // Uses [FromForm] for IFormFile and IFormFileCollection
+                options.SuppressModelStateInvalidFilter = true; // Automatic status 400 for unsuccessful validation
+                options.SuppressMapClientErrors = true; // ProblemDetails with status 400
             });
 
             services.AddSwaggerGen(options =>
@@ -77,6 +78,11 @@ namespace WebFeatures.WebApi
             });
 
             app.UseSerilogRequestLogging();
+
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict
+            });
 
             app.UseRouting();
 

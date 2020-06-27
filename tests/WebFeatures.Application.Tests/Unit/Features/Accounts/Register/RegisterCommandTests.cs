@@ -18,13 +18,13 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
 {
-    public class RegisterCommandHandlerTests
+    public class RegisterCommandTests
     {
         private readonly Mock<IPasswordHasher> _hasher;
         private readonly Mock<IWriteDbContext> _context;
         private readonly Mock<ILogger<RegisterCommand>> _logger;
 
-        public RegisterCommandHandlerTests()
+        public RegisterCommandTests()
         {
             _hasher = new Mock<IPasswordHasher>();
             _context = new Mock<IWriteDbContext>();

@@ -17,14 +17,14 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.ProductComments.CreateProductComment
 {
-    public class CreateProductCommentCommandHandlerTests
+    public class CreateProductCommentCommandTests
     {
         private readonly Mock<IWriteDbContext> _db;
         private readonly Mock<ICurrentUserService> _currentUser;
         private readonly Mock<IEventMediator> _events;
         private readonly Mock<IMapper> _mapper;
 
-        public CreateProductCommentCommandHandlerTests()
+        public CreateProductCommentCommandTests()
         {
             _db = new Mock<IWriteDbContext>();
             _currentUser = new Mock<ICurrentUserService>();

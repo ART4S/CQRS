@@ -18,14 +18,14 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Products.CreateProduct
 {
-    public class CreateProductCommandHandlerTests
+    public class CreateProductCommandTests
     {
         private readonly Mock<IWriteDbContext> _db;
         private readonly Mock<IEventMediator> _events;
         private readonly Mock<IFileReader> _fileReader;
         private readonly Mock<IMapper> _mapper;
 
-        public CreateProductCommandHandlerTests()
+        public CreateProductCommandTests()
         {
             _db = new Mock<IWriteDbContext>();
             _events = new Mock<IEventMediator>();

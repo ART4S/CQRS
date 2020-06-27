@@ -16,14 +16,14 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.ProductReviews.CreateProductReview
 {
-    public class CreateProductReviewCommandHandlerTests
+    public class CreateProductReviewCommandTests
     {
         private readonly Mock<IWriteDbContext> _db;
         private readonly Mock<ICurrentUserService> _currentUser;
         private readonly Mock<IEventMediator> _events;
         private readonly Mock<IMapper> _mapper;
 
-        public CreateProductReviewCommandHandlerTests()
+        public CreateProductReviewCommandTests()
         {
             _db = new Mock<IWriteDbContext>();
             _currentUser = new Mock<ICurrentUserService>();

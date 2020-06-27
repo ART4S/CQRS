@@ -11,12 +11,12 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Authorization.UserHasPermission
 {
-    public class UserHasPermissionQueryHandlerTests
+    public class UserHasPermissionQueryTests
     {
         private readonly Mock<IAuthService> _authService;
         private readonly Mock<ICurrentUserService> _currentUser;
 
-        public UserHasPermissionQueryHandlerTests()
+        public UserHasPermissionQueryTests()
         {
             _authService = new Mock<IAuthService>();
             _currentUser = new Mock<ICurrentUserService>();

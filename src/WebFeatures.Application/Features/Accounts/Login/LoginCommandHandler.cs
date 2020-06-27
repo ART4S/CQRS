@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Features.Accounts.Login
 
         public async Task<Guid> HandleAsync(LoginCommand request, CancellationToken cancellationToken)
         {
-            const string errorMessage = "Неверный логин или пароль";
+            const string errorMessage = "Wrong login or password";
 
             User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException(errorMessage);
 

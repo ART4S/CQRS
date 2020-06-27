@@ -7,6 +7,9 @@ namespace WebFeatures.Application.Features.Authorization.UserHasPermission
     /// </summary>
     public class UserHasPermissionQuery : IQuery<bool>
     {
+        /// <summary>
+        /// Наименование разрешения
+        /// </summary>
         public string Permission { get; set; }
     }
 }

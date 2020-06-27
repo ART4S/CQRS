@@ -2,11 +2,11 @@
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests
 {
-    public class TestResult
+    public class CustomResult
     {
     }
 
-    public class CustomRequest : IRequest<TestResult>
+    public class CustomRequest : IRequest<CustomResult>
     {
     }
 }

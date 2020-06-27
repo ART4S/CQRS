@@ -19,12 +19,12 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
 
-            var middleware = new LoggingMiddleware<CustomRequest, TestResult>(logger);
+            var middleware = new LoggingMiddleware<CustomRequest, CustomResult>(logger);
 
-            var expected = new TestResult();
+            var expected = new CustomResult();
 
             // Act
-            TestResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
+            CustomResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
 
             // Assert
             actual.Should().BeSameAs(expected);
@@ -43,14 +43,14 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
                     It.IsAny<object[]>()))
                 .Callback(() => messages.Add("logger"));
 
-            RequestDelegate<Task<TestResult>> next = async () =>
+            RequestDelegate<Task<CustomResult>> next = async () =>
             {
                 messages.Add("next");
 
-                return new TestResult();
+                return new CustomResult();
             };
 
-            var middleware = new LoggingMiddleware<CustomRequest, TestResult>(logger.Object);
+            var middleware = new LoggingMiddleware<CustomRequest, CustomResult>(logger.Object);
 
             // Act
             await middleware.HandleAsync(new CustomRequest(), next, new CancellationToken());

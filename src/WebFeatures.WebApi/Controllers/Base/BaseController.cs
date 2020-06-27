@@ -6,6 +6,7 @@ using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.WebApi.Controllers.Base
 {
+    [ApiController]
     [Route("api/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     public abstract class BaseController : ControllerBase

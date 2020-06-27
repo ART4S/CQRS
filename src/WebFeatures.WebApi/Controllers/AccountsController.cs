@@ -55,22 +55,27 @@ namespace WebFeatures.WebApi.Controllers
             return Ok();
         }
 
-        private Task SignInUser(Guid userId)
+        private async Task SignInUser(Guid userId)
         {
-            var claims = new List<Claim>
+            Claim[] claims =
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
             var authProperties = new AuthenticationProperties()
             {
                 IsPersistent = true,
                 ExpiresUtc = SystemTime.Now.AddMinutes(20)
             };
 
-            return HttpContext.SignInAsync(principal, authProperties);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity),
+                authProperties);
         }
 
         /// <summary>

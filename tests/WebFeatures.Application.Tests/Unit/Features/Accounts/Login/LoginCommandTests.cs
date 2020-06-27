@@ -16,13 +16,13 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
 {
-    public class LoginCommandHandlerTests
+    public class LoginCommandTests
     {
         private readonly Mock<IPasswordHasher> _hasher;
         private readonly Mock<IWriteDbContext> _context;
         private readonly Mock<ILogger<LoginCommand>> _logger;
 
-        public LoginCommandHandlerTests()
+        public LoginCommandTests()
         {
             _hasher = new Mock<IPasswordHasher>();
             _context = new Mock<IWriteDbContext>();
