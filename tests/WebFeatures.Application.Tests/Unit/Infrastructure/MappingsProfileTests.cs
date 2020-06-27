@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using System;
-using WebFeatures.Application.Features.ProductComments.Requests.Commands;
-using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
-using WebFeatures.Application.Features.Products.Requests.Commands;
+using System.Collections;
+using System.Collections.Generic;
+using WebFeatures.Application.Features.ProductComments.CreateProductComment;
+using WebFeatures.Application.Features.ProductReviews.CreateProductReview;
+using WebFeatures.Application.Features.Products.CreateProduct;
+using WebFeatures.Application.Features.Products.UpdateProduct;
 using WebFeatures.Application.Infrastructure.Mappings;
 using WebFeatures.Domian.Entities.Products;
 using Xunit;
@@ -31,10 +34,7 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
         }
 
         [Theory]
-        [InlineData(typeof(CreateProductComment), typeof(ProductComment))]
-        [InlineData(typeof(CreateProductReview), typeof(ProductReview))]
-        [InlineData(typeof(CreateProduct), typeof(Product))]
-        [InlineData(typeof(UpdateProduct), typeof(Product))]
+        [ClassData(typeof(MappingData))]
         public void ShouldSupportMapping(Type source, Type destination)
         {
             // Arrange
@@ -49,6 +49,22 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
 
             // Assert
             actual.Should().NotThrow();
+        }
+    }
+
+    public class MappingData : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return new[] { typeof(CreateProductCommentCommand), typeof(ProductComment) };
+            yield return new[] { typeof(CreateProductReviewCommand), typeof(ProductReview) };
+            yield return new[] { typeof(CreateProductCommand), typeof(Product) };
+            yield return new[] { typeof(UpdateProductCommand), typeof(Product) };
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

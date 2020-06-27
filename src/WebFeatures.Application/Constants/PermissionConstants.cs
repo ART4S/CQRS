@@ -18,5 +18,10 @@
         {
             public const string Create = "productcomments_create";
         }
+
+        public static class Files
+        {
+            public const string Upload = "files_upload";
+        }
     }
 }

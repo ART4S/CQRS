@@ -45,7 +45,7 @@ namespace WebFeatures.DbCreator.Core
 
             string db = $"webfeatures_{environment}_db";
 
-            _logger.LogInformation($"Creating {environment} database");
+            _logger.LogInformation($"Creating {db} database");
 
             await ExecuteScriptAsync(connection, SqlBuilder.DropDatabase(db));
 

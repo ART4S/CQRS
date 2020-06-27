@@ -1,9 +1,9 @@
 ﻿using Bogus;
-using WebFeatures.Application.Features.Accounts.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Login;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests.Accounts
 {
-    internal class LoginStub : Faker<Login>
+    internal class LoginStub : Faker<LoginCommand>
     {
         public LoginStub()
         {

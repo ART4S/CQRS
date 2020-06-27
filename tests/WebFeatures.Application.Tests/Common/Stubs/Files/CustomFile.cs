@@ -7,26 +7,34 @@ namespace WebFeatures.Application.Tests.Common.Stubs.Files
 {
     internal class CustomFile : IFile
     {
+        public string Name { get; private set; }
+
+        public string ContentType { get; }
+
+        public byte[] Content { get; }
+
+        public Stream OpenReadStream() => new MemoryStream(Content);
+
         private static readonly string[] ContentTypes =
         {
             MediaTypeNames.Image.Jpeg,
             MediaTypeNames.Application.Json
         };
 
-        public CustomFile(params string[] extensions)
+        public CustomFile()
         {
             var faker = new Faker();
 
-            Name = faker.System.FileName(faker.PickRandom(extensions));
+            Name = faker.System.CommonFileName();
             ContentType = faker.PickRandom(ContentTypes);
+            Content = faker.Random.Bytes(16);
         }
 
-        public string Name { get; }
-        public string ContentType { get; }
-
-        public Stream OpenReadStream()
+        public CustomFile WithExtension(string extension)
         {
-            return new MemoryStream();
+            Name = Path.GetFileNameWithoutExtension(Name) + "." + extension;
+
+            return this;
         }
     }
 }

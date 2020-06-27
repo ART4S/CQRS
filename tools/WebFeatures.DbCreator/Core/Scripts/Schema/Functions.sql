@@ -114,6 +114,29 @@ BEGIN
 			public.userroles ur ON ur.roleid = r.id 
 		WHERE 
 			ur.userid = user_id AND p.name = permission);
+
+END; $$ LANGUAGE 'plpgsql';
+
+CREATE FUNCTION get_file(file_id UUID)
+RETURNS TABLE
+(
+	name VARCHAR,
+	contenttype VARCHAR,
+	checksum VARCHAR,
+	content BYTEA
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT 
+		f.name,
+		f.contenttype,
+		f.checksum,
+		f.content
+	FROM
+		public.files f
+	WHERE 
+		f.id = file_id;
+
 END; $$ LANGUAGE 'plpgsql';
 
 END $functions$;

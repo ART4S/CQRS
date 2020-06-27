@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Products.Dto;
+using WebFeatures.Application.Features.Products.GetProduct;
+using WebFeatures.Application.Features.Products.GetProductComments;
+using WebFeatures.Application.Features.Products.GetProductList;
+using WebFeatures.Application.Features.Products.GetProductReviews;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Infrastructure.Tests.Common.Base;

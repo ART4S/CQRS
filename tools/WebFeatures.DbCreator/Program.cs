@@ -10,9 +10,9 @@ namespace WebFeatures.DbCreator
     {
         static async Task Main(string[] args)
         {
-            var root = new CompositionRoot();
-            var scripts = root.Services.GetRequiredService<ScriptsExecutor>();
-            var logger = root.Services.GetRequiredService<ILogger<Program>>();
+            var app = new Application();
+            var scripts = app.Services.GetRequiredService<ScriptsExecutor>();
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
             try
             {

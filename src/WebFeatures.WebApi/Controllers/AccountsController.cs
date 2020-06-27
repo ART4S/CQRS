@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Accounts.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Login;
+using WebFeatures.Application.Features.Accounts.Register;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.Common;
 using WebFeatures.WebApi.Controllers.Base;
@@ -28,7 +29,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody, Required] Register request)
+        public async Task<IActionResult> Register([FromBody, Required] RegisterCommand request)
         {
             Guid userId = await Mediator.SendAsync(request);
 
@@ -45,7 +46,7 @@ namespace WebFeatures.WebApi.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody, Required] Login request)
+        public async Task<IActionResult> Login([FromBody, Required] LoginCommand request)
         {
             Guid userId = await Mediator.SendAsync(request);
 

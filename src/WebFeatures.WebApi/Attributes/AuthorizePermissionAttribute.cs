@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Permissions.Requests.Queries;
+using WebFeatures.Application.Features.Authorization.UserHasPermission;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.WebApi.Exceptions;
 
@@ -22,7 +22,7 @@ namespace WebFeatures.WebApi.Attributes
         {
             IRequestMediator mediator = context.HttpContext.RequestServices.GetRequiredService<IRequestMediator>();
 
-            bool userHasPermission = await mediator.SendAsync(new UserHasPermission() { Permission = _permission });
+            bool userHasPermission = await mediator.SendAsync(new UserHasPermissionQuery() { Permission = _permission });
 
             if (!userHasPermission)
             {

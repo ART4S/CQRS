@@ -1,10 +1,10 @@
 ﻿using Bogus;
-using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
+using WebFeatures.Application.Features.ProductReviews.CreateProductReview;
 using WebFeatures.Domian.Enums;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests.ProductReviews
 {
-    internal class CreateProductReviewStub : Faker<CreateProductReview>
+    internal class CreateProductReviewStub : Faker<CreateProductReviewCommand>
     {
         public CreateProductReviewStub()
         {

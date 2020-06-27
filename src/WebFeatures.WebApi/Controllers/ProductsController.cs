@@ -6,9 +6,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using WebFeatures.Application.Constants;
-using WebFeatures.Application.Features.Products.Dto;
-using WebFeatures.Application.Features.Products.Requests.Commands;
-using WebFeatures.Application.Features.Products.Requests.Queries;
+using WebFeatures.Application.Features.Products.CreateProduct;
+using WebFeatures.Application.Features.Products.DeleteProduct;
+using WebFeatures.Application.Features.Products.GetProduct;
+using WebFeatures.Application.Features.Products.GetProductComments;
+using WebFeatures.Application.Features.Products.GetProductList;
+using WebFeatures.Application.Features.Products.GetProductReviews;
+using WebFeatures.Application.Features.Products.UpdateProduct;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
@@ -32,7 +36,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(Guid id)
         {
-            return Ok(await Mediator.SendAsync(new GetProduct() { Id = id }));
+            return Ok(await Mediator.SendAsync(new GetProductQuery() { Id = id }));
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(IEnumerable<ProductListDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetList()
         {
-            return Ok(await Mediator.SendAsync(new GetProductList()));
+            return Ok(await Mediator.SendAsync(new GetProductListQuery()));
         }
 
         /// <summary>
@@ -57,7 +61,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(IEnumerable<ProductReviewInfoDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetReviews(Guid id)
         {
-            return Ok(await Mediator.SendAsync(new GetProductReviews() { Id = id }));
+            return Ok(await Mediator.SendAsync(new GetProductReviewsQuery() { Id = id }));
         }
 
         /// <summary>
@@ -70,7 +74,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(IEnumerable<ProductCommentInfoDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetComments(Guid id)
         {
-            return Ok(await Mediator.SendAsync(new GetProductComments() { Id = id }));
+            return Ok(await Mediator.SendAsync(new GetProductCommentsQuery() { Id = id }));
         }
 
         /// <summary>
@@ -87,7 +91,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create([FromForm, Required] CreateProduct request)
+        public async Task<IActionResult> Create([FromForm, Required] CreateProductCommand request)
         {
             return Created(await Mediator.SendAsync(request));
         }
@@ -105,7 +109,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Update(Guid id, [FromForm, Required] UpdateProduct request)
+        public async Task<IActionResult> Update(Guid id, [FromForm, Required] UpdateProductCommand request)
         {
             await Mediator.SendAsync(request);
 
@@ -127,7 +131,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await Mediator.SendAsync(new DeleteProduct() { Id = id });
+            await Mediator.SendAsync(new DeleteProductCommand() { Id = id });
 
             return NoContent();
         }

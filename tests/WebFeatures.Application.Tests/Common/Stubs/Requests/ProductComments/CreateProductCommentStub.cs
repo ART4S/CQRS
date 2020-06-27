@@ -1,10 +1,10 @@
 ﻿using Bogus;
 using Bogus.Extensions;
-using WebFeatures.Application.Features.ProductComments.Requests.Commands;
+using WebFeatures.Application.Features.ProductComments.CreateProductComment;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests.ProductComments
 {
-    internal class CreateProductCommentStub : Faker<CreateProductComment>
+    internal class CreateProductCommentStub : Faker<CreateProductCommentCommand>
     {
         public CreateProductCommentStub()
         {

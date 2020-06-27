@@ -2,6 +2,7 @@
 using System;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Reading;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Reading;
 using WebFeatures.Persistence;
 
@@ -11,6 +12,9 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
     {
         public IProductReadRepository Products => _products ??= CreateRepository<ProductReadRepository>();
         private IProductReadRepository _products;
+
+        public IFileReadRepository Files => _files ??= CreateRepository<FileReadRepository>();
+        private IFileReadRepository _files;
 
         private readonly IServiceProvider _services;
 

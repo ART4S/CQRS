@@ -1,4 +1,8 @@
-﻿INSERT INTO users (id, name, email, passwordhash, pictureid)
+﻿INSERT INTO files (id, name, contenttype, checksum, content)
+VALUES
+('0d837b9d-36da-49df-9618-ebf740c86990', 'picture.jpg', 'igmage/jpg', '12345', 'content'::bytea);
+
+INSERT INTO users (id, name, email, passwordhash, pictureid)
 VALUES
 ('a91e29b7-813b-47a3-93f0-8ad34d4c8a09', 'Admin', 'admin@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null),
 ('5687c80f-d495-460a-aae5-94ea8054ee2c', 'User', 'user@mail.com', 'FSohFrTszQ3CQ/LEpdcZgmMZ0QOZAx6YO+oNT3qO/SN/3Ij/ypJZrj9npuZttjVI', null);

@@ -2,12 +2,12 @@
 using Bogus.Extensions;
 using Moq;
 using System;
-using WebFeatures.Application.Features.Products.Requests.Commands;
+using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Interfaces.Files;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests.Products
 {
-    internal class CreateProductStub : Faker<CreateProduct>
+    internal class CreateProductStub : Faker<CreateProductCommand>
     {
         public CreateProductStub()
         {

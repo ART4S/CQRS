@@ -5,7 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using WebFeatures.Application.Constants;
-using WebFeatures.Application.Features.ProductReviews.Requests.Commands;
+using WebFeatures.Application.Features.ProductReviews.CreateProductReview;
 using WebFeatures.Application.Infrastructure.Results;
 using WebFeatures.WebApi.Attributes;
 using WebFeatures.WebApi.Controllers.Base;
@@ -31,7 +31,7 @@ namespace WebFeatures.WebApi.Controllers
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create([FromForm, Required] CreateProductReview request)
+        public async Task<IActionResult> Create([FromForm, Required] CreateProductReviewCommand request)
         {
             return Created(await Mediator.SendAsync(request));
         }

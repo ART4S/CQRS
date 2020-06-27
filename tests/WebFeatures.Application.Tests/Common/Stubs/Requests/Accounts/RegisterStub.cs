@@ -1,9 +1,9 @@
 ﻿using Bogus;
-using WebFeatures.Application.Features.Accounts.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Register;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Requests.Accounts
 {
-    internal class RegisterStub : Faker<Register>
+    internal class RegisterStub : Faker<RegisterCommand>
     {
         public RegisterStub()
         {

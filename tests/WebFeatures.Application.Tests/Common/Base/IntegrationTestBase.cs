@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WebFeatures.Application.Features.Accounts.Requests.Commands;
+using WebFeatures.Application.Features.Accounts.Login;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Services;
@@ -82,7 +82,7 @@ namespace WebFeatures.Application.Tests.Common.Base
 
         protected async Task<Guid> AuthenticateAsync(string email, string password)
         {
-            var request = new Login()
+            var request = new LoginCommand()
             {
                 Email = email,
                 Password = password
