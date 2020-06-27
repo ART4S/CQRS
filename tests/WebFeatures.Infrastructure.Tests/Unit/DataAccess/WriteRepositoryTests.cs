@@ -44,12 +44,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
 
             SystemTime.Instance = sysTime.Object;
 
-            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> sut = CreateDefaultRepository();
 
             CustomEntity entity = new CustomEntity();
 
             // Act
-            await repo.CreateAsync(entity);
+            await sut.CreateAsync(entity);
 
             // Assert
             entity.CreateDate.Should().Be(now);
@@ -59,12 +59,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityPassedWithoutId_SetsNewId()
         {
             // Arrange
-            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> sut = CreateDefaultRepository();
 
             CustomEntity entity = new CustomEntity();
 
             // Act
-            await repo.CreateAsync(entity);
+            await sut.CreateAsync(entity);
 
             // Assert
             entity.Id.Should().NotBeEmpty();
@@ -74,10 +74,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task DeleteAsync_WhenEmptyCollection_DoesntCallExecutor()
         {
             // Arrange
-            WriteRepository<CustomEntity> repo = CreateDefaultRepository();
+            WriteRepository<CustomEntity> sut = CreateDefaultRepository();
 
             // Act
-            await repo.DeleteAsync(new CustomEntity[0]);
+            await sut.DeleteAsync(new CustomEntity[0]);
 
             // Assert
             _executor.Verify(x => x.ExecuteAsync(_connection.Object, It.IsAny<string>()), Times.Never);

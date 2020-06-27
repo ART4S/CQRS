@@ -19,12 +19,12 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger);
+            var sut = new PerformanceMiddleware<CustomRequest, CustomResult>(logger);
 
             var expected = new CustomResult();
 
             // Act
-            CustomResult actual = await middleware.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
+            CustomResult actual = await sut.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
 
             // Assert
             actual.Should().BeSameAs(expected);
@@ -36,10 +36,10 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
+            var sut = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
 
             // Act
-            await middleware.HandleAsync(new CustomRequest(), async () => new CustomResult(), new CancellationToken());
+            await sut.HandleAsync(new CustomRequest(), async () => new CustomResult(), new CancellationToken());
 
             // Assert
             logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Never);
@@ -51,7 +51,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();
 
-            var middleware = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
+            var sut = new PerformanceMiddleware<CustomRequest, CustomResult>(logger.Object);
 
             const int maxAcceptableTime = 500;
 
@@ -63,7 +63,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             };
 
             // Act
-            await middleware.HandleAsync(new CustomRequest(), next, new CancellationToken());
+            await sut.HandleAsync(new CustomRequest(), next, new CancellationToken());
 
             // Assert
             logger.Verify(x => x.LogWarning(It.IsAny<string>()), Times.Once);

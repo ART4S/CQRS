@@ -19,6 +19,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Files.DownloadFile
             FileDownloadDto file = await Mediator.SendAsync(request);
 
             // Assert
+            file.Should().NotBeNull();
             file.Content.Should().NotBeEmpty();
         }
     }

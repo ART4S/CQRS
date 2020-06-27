@@ -45,10 +45,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
 
             _hasher.Setup(x => x.Verify(user.PasswordHash, request.Password)).Returns(true);
 
-            var handler = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
+            var sut = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Guid userId = await handler.HandleAsync(request, new CancellationToken());
+            Guid userId = await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             userId.Should().Be(user.Id);
@@ -60,10 +60,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
             // Arrange
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
-            var handler = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
+            var sut = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Func<Task<Guid>> actual = () => handler.HandleAsync(new LoginCommand(), new CancellationToken());
+            Func<Task<Guid>> actual = () => sut.HandleAsync(new LoginCommand(), new CancellationToken());
 
             // Assert
             await actual.Should().ThrowAsync<ValidationException>();
@@ -77,10 +77,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
 
             _hasher.Setup(x => x.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
-            var handler = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
+            var sut = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Func<Task<Guid>> actual = () => handler.HandleAsync(new LoginCommand(), new CancellationToken());
+            Func<Task<Guid>> actual = () => sut.HandleAsync(new LoginCommand(), new CancellationToken());
 
             // Assert
             await actual.Should().ThrowAsync<ValidationException>();

@@ -45,10 +45,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductReviews.CreateProdu
 
             _db.Setup(x => x.ProductReviews).Returns(reviewRepo.Object);
 
-            var handler = new CreateProductReviewCommandHandler(_db.Object, _events.Object, _currentUser.Object, _mapper.Object);
+            var sut = new CreateProductReviewCommandHandler(_db.Object, _events.Object, _currentUser.Object, _mapper.Object);
 
             // Act
-            Guid reviewId = await handler.HandleAsync(request, new CancellationToken());
+            Guid reviewId = await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             review.Id.Should().Be(reviewId);

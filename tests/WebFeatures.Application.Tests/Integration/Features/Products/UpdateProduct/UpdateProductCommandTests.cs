@@ -36,6 +36,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.UpdateProd
             Product product = await DbContext.Products.GetAsync(request.Id);
 
             // Assert
+            product.Should().NotBeNull();
             product.Id.Should().Be(request.Id);
             product.Name.Should().Be(request.Name);
             product.MainPictureId.Should().BeNull();

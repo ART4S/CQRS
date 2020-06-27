@@ -37,6 +37,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.CreateProd
             Product product = await DbContext.Products.GetAsync(productId);
 
             // Assert
+            product.Should().NotBeNull();
             product.Id.Should().Be(productId);
             product.Name.Should().Be(request.Name);
             product.Price.Should().BeNull();

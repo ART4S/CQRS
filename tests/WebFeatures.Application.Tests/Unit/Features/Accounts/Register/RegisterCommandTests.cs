@@ -59,10 +59,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
 
             _context.Setup(x => x.UserRoles).Returns(Mock.Of<IWriteRepository<UserRole>>());
 
-            var handler = new RegisterCommandHandler(_context.Object, _hasher.Object, _logger.Object);
+            var sut = new RegisterCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Guid actualUserId = await handler.HandleAsync(request, new CancellationToken());
+            Guid actualUserId = await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             actualUserId.Should().Be(expectedUserId);
@@ -75,10 +75,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
             _context.Setup(x => x.Roles).Returns(Mock.Of<IRoleWriteRepository>());
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
 
-            var handler = new RegisterCommandHandler(_context.Object, _hasher.Object, _logger.Object);
+            var sut = new RegisterCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Func<Task> actual = () => handler.HandleAsync(new RegisterCommand(), new CancellationToken());
+            Func<Task> actual = () => sut.HandleAsync(new RegisterCommand(), new CancellationToken());
 
             // Assert
             await actual.Should().ThrowAsync<InvalidOperationException>();

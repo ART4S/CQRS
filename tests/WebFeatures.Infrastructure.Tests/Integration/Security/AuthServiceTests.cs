@@ -25,14 +25,14 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         public async Task UserHasPermission_WhenUserHasPermission_ReturnsTrue()
         {
             // Arrange
-            AuthService authService = CreateDefaultAuthService();
+            AuthService sut = CreateDefaultAuthService();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             string permission = "products_create";
 
             // Act
-            bool result = await authService.UserHasPermissionAsync(userId, permission);
+            bool result = await sut.UserHasPermissionAsync(userId, permission);
 
             // Assert
             result.Should().BeTrue();
@@ -42,14 +42,14 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         public async Task UserHasPermission_WhenUserDoesntHavePermission_ReturnsFalse()
         {
             // Arrange
-            AuthService authService = CreateDefaultAuthService();
+            AuthService sut = CreateDefaultAuthService();
 
             Guid userId = new Guid("5687c80f-d495-460a-aae5-94ea8054ee2c");
 
             string permission = "products_create";
 
             // Act
-            bool result = await authService.UserHasPermissionAsync(userId, permission);
+            bool result = await sut.UserHasPermissionAsync(userId, permission);
 
             // Assert
             result.Should().BeFalse();
@@ -59,14 +59,14 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         public async Task UserHasPermission_WhenInvalidPermissionName_ReturnsFalse()
         {
             // Arrange
-            AuthService authService = CreateDefaultAuthService();
+            AuthService sut = CreateDefaultAuthService();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             string permission = "products_creat";
 
             // Act
-            bool result = await authService.UserHasPermissionAsync(userId, permission);
+            bool result = await sut.UserHasPermissionAsync(userId, permission);
 
             // Assert
             result.Should().BeFalse();
@@ -76,14 +76,14 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Security
         public async Task UserHasPermission_WhenUserDoesntExist_ReturnsFalse()
         {
             // Arrange
-            AuthService authService = CreateDefaultAuthService();
+            AuthService sut = CreateDefaultAuthService();
 
             Guid userId = new Guid("3cdd1fc5-4c54-4484-a2e5-95920b79734e");
 
             string permission = "products_create";
 
             // Act
-            bool result = await authService.UserHasPermissionAsync(userId, permission);
+            bool result = await sut.UserHasPermissionAsync(userId, permission);
 
             // Assert
             result.Should().BeFalse();

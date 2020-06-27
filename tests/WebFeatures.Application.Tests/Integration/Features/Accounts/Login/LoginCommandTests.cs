@@ -20,18 +20,14 @@ namespace WebFeatures.Application.Tests.Integration.Features.Accounts.Login
                 Email = "admin@mail.com",
                 Password = "12345"
             };
-
-            Guid expectedId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
-
             // Act
-            Guid actualId = await Mediator.SendAsync(request);
+            Guid userId = await Mediator.SendAsync(request);
 
-            User user = await DbContext.Users.GetAsync(expectedId);
+            User user = await DbContext.Users.GetByEmailAsync(request.Email);
 
             // Assert
-            actualId.Should().Be(expectedId);
-            actualId.Should().Be(user.Id);
-
+            user.Should().NotBeNull();
+            user.Id.Should().Be(userId);
             user.Email.Should().Be(request.Email);
         }
 

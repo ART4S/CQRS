@@ -29,10 +29,10 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetAllAsync_ReturnsNonEmptyCollection()
         {
             // Arrange
-            ManufacturerWriteRepository repo = CreateDefaultRepository();
+            ManufacturerWriteRepository sut = CreateDefaultRepository();
 
             // Act
-            IEnumerable<Manufacturer> manufacturers = await repo.GetAllAsync();
+            IEnumerable<Manufacturer> manufacturers = await sut.GetAllAsync();
 
             // Assert
             manufacturers.Should().NotBeEmpty();
@@ -42,14 +42,14 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetByIdAsync_WhenManufacturerExists_ReturnsManufacturer()
         {
             // Arrange
-            ManufacturerWriteRepository repo = CreateDefaultRepository();
+            ManufacturerWriteRepository sut = CreateDefaultRepository();
 
             Guid manufacturerId = new Guid("278a79e9-5889-4953-a7c9-448c1e185600");
 
             Guid cityId = new Guid("b27a7a05-d61f-4559-9b04-5fd282a694d3");
 
             // Act
-            Manufacturer manufacturer = await repo.GetAsync(manufacturerId);
+            Manufacturer manufacturer = await sut.GetAsync(manufacturerId);
 
             // Assert
             manufacturer.Should().NotBeNull();
@@ -63,10 +63,10 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetByIdAsync_WhenManufacturerDoesntExist_ReturnsNull()
         {
             // Arrange
-            ManufacturerWriteRepository repo = CreateDefaultRepository();
+            ManufacturerWriteRepository sut = CreateDefaultRepository();
 
             // Act
-            Manufacturer manufacturer = await repo.GetAsync(Guid.NewGuid());
+            Manufacturer manufacturer = await sut.GetAsync(Guid.NewGuid());
 
             // Assert
             manufacturer.Should().BeNull();
@@ -76,32 +76,24 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task CreateAsync_CreatesOneManufacturer()
         {
             // Arrange
-            ManufacturerWriteRepository repo = CreateDefaultRepository();
+            ManufacturerWriteRepository sut = CreateDefaultRepository();
 
             Manufacturer manufacturer = new ManufacturerStub();
 
-            string maufacturersCountSql =
-                @"SELECT COUNT(*) FROM public.manufacturers
-                WHERE id = @Id AND streetaddress_cityid = @CityId";
+            Task<int> GetManufacturersCount() => Database.Connection.ExecuteScalarAsync<int>(
+                sql: @"SELECT COUNT(*) FROM public.manufacturers WHERE id = @Id AND streetaddress_cityid = @CityId",
+                param: new
+                {
+                    manufacturer.Id,
+                    manufacturer.StreetAddress.CityId
+                });
 
             // Act
-            int manufacturersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(
-                maufacturersCountSql,
-                new
-                {
-                    manufacturer.Id,
-                    manufacturer.StreetAddress.CityId
-                });
+            int manufacturersCountBefore = await GetManufacturersCount();
 
-            await repo.CreateAsync(manufacturer);
+            await sut.CreateAsync(manufacturer);
 
-            int manufacturersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(
-                maufacturersCountSql,
-                new
-                {
-                    manufacturer.Id,
-                    manufacturer.StreetAddress.CityId
-                });
+            int manufacturersCountAfter = await GetManufacturersCount();
 
             // Assert
             manufacturersCountBefore.Should().Be(0);

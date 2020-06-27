@@ -12,12 +12,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetMap_WhenEntityHasBeenRegisteredManually_ReturnsMap()
         {
             // Arrange
-            var profile = new EntityProfile();
+            var sut = new EntityProfile();
 
-            profile.TryRegisterMap(typeof(CustomEntityMap));
+            sut.TryRegisterMap(typeof(CustomEntityMap));
 
             // Act
-            IEntityMap<CustomEntity> map = profile.GetMap<CustomEntity>();
+            IEntityMap<CustomEntity> map = sut.GetMap<CustomEntity>();
 
             // Assert
             map.Should().NotBeNull();
@@ -27,10 +27,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public void GetMap_WhenEntityHasNotBeenRegisteredManually_ReturnsMap()
         {
             // Arrange
-            var profile = new EntityProfile();
+            var sut = new EntityProfile();
 
             // Act
-            IEntityMap<CustomEntity> map = profile.GetMap<CustomEntity>();
+            IEntityMap<CustomEntity> map = sut.GetMap<CustomEntity>();
 
             // Assert
             map.Should().NotBeNull();

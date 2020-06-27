@@ -24,10 +24,10 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
         public void ShouldHaveValidConfiguration()
         {
             // Arrange
-            MapperConfiguration configuration = CreateConfiguration();
+            MapperConfiguration sut = CreateConfiguration();
 
             // Act
-            Action actual = () => configuration.AssertConfigurationIsValid();
+            Action actual = () => sut.AssertConfigurationIsValid();
 
             // Assert
             actual.Should().NotThrow();
@@ -40,12 +40,12 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
             // Arrange
             MapperConfiguration configuration = CreateConfiguration();
 
-            IMapper mapper = configuration.CreateMapper();
+            IMapper sut = configuration.CreateMapper();
 
             object instance = Activator.CreateInstance(source);
 
             // Act
-            Action actual = () => mapper.Map(instance, source, destination);
+            Action actual = () => sut.Map(instance, source, destination);
 
             // Assert
             actual.Should().NotThrow();

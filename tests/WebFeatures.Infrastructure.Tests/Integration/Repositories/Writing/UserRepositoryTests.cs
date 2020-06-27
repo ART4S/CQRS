@@ -25,10 +25,10 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetAllAsync_ReturnsNonEmptyCollection()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             // Act
-            IEnumerable<User> users = await repo.GetAllAsync();
+            IEnumerable<User> users = await sut.GetAllAsync();
 
             // Assert
             users.Should().NotBeEmpty();
@@ -38,12 +38,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetAsync_WhenUserExists_ReturnsUser()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
-            User user = await repo.GetAsync(userId);
+            User user = await sut.GetAsync(userId);
 
             // Assert
             user.Should().NotBeNull();
@@ -54,12 +54,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetAsync_WhenUserDoesntExists_ReturnsNull()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
-            User user = await repo.GetAsync(userId);
+            User user = await sut.GetAsync(userId);
 
             // Assert
             user.Should().BeNull();
@@ -69,7 +69,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task CreateAsync_CreatesOneUser()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             User user = new UserStub();
 
@@ -78,7 +78,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
-            await repo.CreateAsync(user);
+            await sut.CreateAsync(user);
 
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
@@ -91,7 +91,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task UpdateAsync_UpdatesExistingUser()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             User user = new UserStub();
 
@@ -102,7 +102,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
             // Act
             User beforeUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
 
-            await repo.UpdateAsync(user);
+            await sut.UpdateAsync(user);
 
             User afterUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
 
@@ -116,7 +116,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task DeleteAsync_RemovesExistingUser()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
@@ -126,7 +126,7 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
-            await repo.DeleteAsync(user);
+            await sut.DeleteAsync(user);
 
             int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
 
@@ -139,12 +139,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task ExistsAsync_WhenUserExists_ReturnsTrue()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             Guid userId = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
             // Act
-            bool result = await repo.ExistsAsync(userId);
+            bool result = await sut.ExistsAsync(userId);
 
             // Assert
             result.Should().BeTrue();
@@ -154,12 +154,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task ExistsAsync_WhenUserDoesntExist_ReturnsFalse()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             Guid userId = new Guid("b3184c02-8126-4d3b-b039-5a957163a721");
 
             // Act
-            bool result = await repo.ExistsAsync(userId);
+            bool result = await sut.ExistsAsync(userId);
 
             // Assert
             result.Should().BeFalse();
@@ -169,12 +169,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetUserByEmailAsync_WhenUserWithEmailExists_ReturnsUser()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             string email = "admin@mail.com";
 
             // Act
-            User user = await repo.GetByEmailAsync(email);
+            User user = await sut.GetByEmailAsync(email);
 
             // Assert
             user.Should().NotBeNull();
@@ -185,12 +185,12 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
         public async Task GetUserByEmailAsync_WhenPassedNonexistentEmail_ReturnsNull()
         {
             // Arrange
-            UserWriteRepository repo = CreateDefaultRepository();
+            UserWriteRepository sut = CreateDefaultRepository();
 
             string email = new Faker().Internet.Email();
 
             // Act
-            User user = await repo.GetByEmailAsync(email);
+            User user = await sut.GetByEmailAsync(email);
 
             // Assert
             user.Should().BeNull();

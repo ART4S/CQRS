@@ -31,6 +31,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductComments.Cre
             ProductComment comment = await DbContext.ProductComments.GetAsync(commentId);
 
             // Assert
+            comment.Should().NotBeNull();
             comment.Id.Should().Be(commentId);
             comment.CreateDate.Should().BeCloseTo(DateTime.UtcNow, 1000);
             comment.Body.Should().Be(request.Body);

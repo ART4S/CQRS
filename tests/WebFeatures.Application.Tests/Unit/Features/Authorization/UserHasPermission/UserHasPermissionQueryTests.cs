@@ -28,10 +28,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Authorization.UserHasPermi
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(false);
 
-            var handler = new UserHasPermissionQueryHandler(_authService.Object, _currentUser.Object);
+            var sut = new UserHasPermissionQueryHandler(_authService.Object, _currentUser.Object);
 
             // Act
-            bool isAuthorized = await handler.HandleAsync(new UserHasPermissionQuery(), new CancellationToken());
+            bool isAuthorized = await sut.HandleAsync(new UserHasPermissionQuery(), new CancellationToken());
 
             // Assert
             isAuthorized.Should().BeFalse();
@@ -51,10 +51,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Authorization.UserHasPermi
 
             _authService.Setup(x => x.UserHasPermissionAsync(userId, request.Permission)).ReturnsAsync(true);
 
-            var handler = new UserHasPermissionQueryHandler(_authService.Object, _currentUser.Object);
+            var sut = new UserHasPermissionQueryHandler(_authService.Object, _currentUser.Object);
 
             // Act
-            bool isAuthorized = await handler.HandleAsync(request, new CancellationToken());
+            bool isAuthorized = await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             isAuthorized.Should().BeTrue();

@@ -19,9 +19,11 @@ namespace WebFeatures.Application.Tests.Integration.Features.Accounts.Register
 
             // Act
             Guid userId = await Mediator.SendAsync(request);
+
             User user = await DbContext.Users.GetAsync(userId);
 
             // Assert
+            user.Should().NotBeNull();
             user.Id.Should().Be(userId);
             user.Name.Should().Be(request.Name);
             user.Email.Should().Be(request.Email);

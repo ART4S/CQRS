@@ -50,10 +50,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments.CreateProd
 
             _db.Setup(x => x.ProductComments).Returns(commentsRepo.Object);
 
-            var handler = new CreateProductCommentCommandHandler(_db.Object, _currentUser.Object, _events.Object, _mapper.Object);
+            var sut = new CreateProductCommentCommandHandler(_db.Object, _currentUser.Object, _events.Object, _mapper.Object);
 
             // Act
-            Guid commentId = await handler.HandleAsync(request, new CancellationToken());
+            Guid commentId = await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             comment.Id.Should().Be(commentId);

@@ -24,12 +24,12 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Events
                     typeof(IEnumerable<IEventHandler<CustomEvent>>)))
                 .Returns(new[] { handler.Object });
 
-            var mediator = new EventMediator(serviceProvider.Object);
+            var sut = new EventMediator(serviceProvider.Object);
 
             var eve = new CustomEvent();
 
             // Act
-            await mediator.PublishAsync(eve);
+            await sut.PublishAsync(eve);
 
             // Assert
             handler.Verify(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()), Times.Once);

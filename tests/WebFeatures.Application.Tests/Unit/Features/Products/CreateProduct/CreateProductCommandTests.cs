@@ -110,10 +110,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products.CreateProduct
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(pictureFile);
 
-            var handler = new CreateProductCommandHandler(_db.Object, _events.Object, _fileReader.Object, _mapper.Object);
+            var sut = new CreateProductCommandHandler(_db.Object, _events.Object, _fileReader.Object, _mapper.Object);
 
             // Act
-            await handler.HandleAsync(request, new CancellationToken());
+            await sut.HandleAsync(request, new CancellationToken());
 
             // Assert
             fileRepo.Verify(x => x.CreateAsync(pictureFile), Times.Once);

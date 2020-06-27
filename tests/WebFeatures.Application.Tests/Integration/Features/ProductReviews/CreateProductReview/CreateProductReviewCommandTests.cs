@@ -36,6 +36,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductReviews.Crea
             ProductReview review = await DbContext.ProductReviews.GetAsync(reviewId);
 
             // Assert
+            review.Should().NotBeNull();
             review.Id.Should().Be(reviewId);
             review.Title.Should().Be(request.Title);
             review.Comment.Should().Be(request.Comment);
