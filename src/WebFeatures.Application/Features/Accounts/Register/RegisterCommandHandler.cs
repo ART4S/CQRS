@@ -7,7 +7,7 @@ using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 
 namespace WebFeatures.Application.Features.Accounts.Register
 {

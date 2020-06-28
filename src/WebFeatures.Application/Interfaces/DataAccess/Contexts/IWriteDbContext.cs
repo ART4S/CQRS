@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 using WebFeatures.Domian.Entities.Products;
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Contexts

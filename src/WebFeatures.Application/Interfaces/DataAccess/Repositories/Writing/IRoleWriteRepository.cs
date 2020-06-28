@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 
 namespace WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing
 {

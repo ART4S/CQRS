@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
 using WebFeatures.Infrastructure.DataAccess.QueryExecutors;

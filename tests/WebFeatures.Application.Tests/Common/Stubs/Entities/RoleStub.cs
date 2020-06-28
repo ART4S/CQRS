@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions;
 using System;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Entities
 {

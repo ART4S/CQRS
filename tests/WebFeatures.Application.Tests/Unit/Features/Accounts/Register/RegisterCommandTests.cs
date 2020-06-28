@@ -13,7 +13,7 @@ using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
 using WebFeatures.Application.Tests.Common.Stubs.Requests.Accounts;
 using WebFeatures.Domian.Entities;
-using WebFeatures.Domian.Entities.Permissions;
+using WebFeatures.Domian.Entities.Accounts;
 using Xunit;
 
 namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register

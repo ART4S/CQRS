@@ -1,7 +1,7 @@
 ﻿using System;
 using WebFeatures.Domian.Common;
 
-namespace WebFeatures.Domian.Entities.Permissions
+namespace WebFeatures.Domian.Entities.Accounts
 {
     public class RolePermission : Entity
     {
