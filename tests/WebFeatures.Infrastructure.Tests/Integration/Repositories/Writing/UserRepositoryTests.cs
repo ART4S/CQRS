@@ -73,14 +73,16 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             User user = new UserStub();
 
-            string usersCountSql = "SELECT Count(*) FROM public.users WHERE id = @Id";
+            Task<int> GetUsersCount() => Database.Connection.ExecuteScalarAsync<int>(
+                sql: "SELECT Count(*) FROM public.users WHERE id = @Id",
+                param: new { user.Id });
 
             // Act
-            int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+            int usersCountBefore = await GetUsersCount();
 
             await sut.CreateAsync(user);
 
-            int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+            int usersCountAfter = await GetUsersCount();
 
             // Assert
             usersCountBefore.Should().Be(0);
@@ -97,14 +99,16 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             user.Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09");
 
-            string selectUserSql = $"SELECT * FROM public.users WHERE id = @Id";
+            Task<User> GetUser() => Database.Connection.QuerySingleAsync<User>(
+                sql: $"SELECT * FROM public.users WHERE id = @Id",
+                param: user);
 
             // Act
-            User beforeUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
+            User beforeUpdateUser = await GetUser();
 
             await sut.UpdateAsync(user);
 
-            User afterUpdateUser = await Database.Connection.QuerySingleAsync<User>(selectUserSql, user);
+            User afterUpdateUser = await GetUser();
 
             // Assert
             user.Id.Should().Be(beforeUpdateUser.Id);
@@ -120,15 +124,17 @@ namespace WebFeatures.Infrastructure.Tests.Integration.Repositories.Writing
 
             var user = new User() { Id = new Guid("a91e29b7-813b-47a3-93f0-8ad34d4c8a09") };
 
-            string usersCountSql = "SELECT Count(*) FROM public.users WHERE id = @Id";
+            Task<int> GetUsersCount() => Database.Connection.ExecuteScalarAsync<int>(
+                sql: "SELECT Count(*) FROM public.users WHERE id = @Id",
+                param: new { user.Id });
 
             // Act
 
-            int usersCountBefore = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+            int usersCountBefore = await GetUsersCount();
 
             await sut.DeleteAsync(user);
 
-            int usersCountAfter = await Database.Connection.ExecuteScalarAsync<int>(usersCountSql, new { user.Id });
+            int usersCountAfter = await GetUsersCount();
 
             // Assert
             usersCountBefore.Should().Be(1);
