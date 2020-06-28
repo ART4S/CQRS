@@ -1,0 +1,7 @@
+﻿CREATE TABLE brands
+(
+	id UUID NOT NULL,
+	name VARCHAR NOT NULL,
+	
+	CONSTRAINT pk_brands PRIMARY KEY (id)
+);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace WebFeatures.DbCreator.Core
@@ -27,7 +28,53 @@ namespace WebFeatures.DbCreator.Core
 
         public static IEnumerable<(string Name, string Body)> GetDbSchemaScripts()
         {
-            var files = Directory.GetFiles("Core/Scripts/Schema", "*.sql");
+            return GetTableScripts().Concat(GetFunctionScripts()).Concat(GetViewScripts());
+        }
+
+        private static IEnumerable<(string Name, string Body)> GetTableScripts()
+        {
+            string[] tables =
+            {
+                "files",
+                "users",
+                "roles",
+                "userroles",
+                "rolepermissions",
+                "countries",
+                "cities",
+                "manufacturers",
+                "categories",
+                "brands",
+                "products",
+                "productcomments",
+                "productreviews",
+                "productpictures",
+                "shippers"
+            };
+
+            var scripts = GetScripts($"Core\\Scripts\\Schema\\Tables").ToDictionary(x => Path.GetFileNameWithoutExtension(x.Name), x => x);
+
+            foreach (string table in tables)
+            {
+                var script = scripts[table];
+
+                yield return script;
+            }
+        }
+
+        private static IEnumerable<(string Name, string Body)> GetFunctionScripts()
+        {
+            return GetScripts($"Core\\Scripts\\Schema\\Functions");
+        }
+
+        private static IEnumerable<(string Name, string Body)> GetViewScripts()
+        {
+            return GetScripts($"Core\\Scripts\\Schema\\Views");
+        }
+
+        private static IEnumerable<(string Name, string Body)> GetScripts(string path)
+        {
+            var files = Directory.GetFiles(path, "*.sql", SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
@@ -51,7 +98,7 @@ namespace WebFeatures.DbCreator.Core
 
             foreach (string view in views)
             {
-                sb.AppendLine($"REFRESH MATERIALIZED VIEW {view};");
+                sb.Append($"REFRESH MATERIALIZED VIEW {view};").AppendLine();
             }
 
             return sb.ToString();
