@@ -54,12 +54,6 @@ namespace WebFeatures.WebApi
 
             services.AddMvc();
             services.AddAntiforgery(x => x.HeaderName = "X-CSRF-TOKEN");
-
-            // For Frontend (React.JS)
-            //services.AddMemoryCache();
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddReact();
-            //services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8JsEngine.EngineName).AddV8();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -95,8 +89,6 @@ namespace WebFeatures.WebApi
             {
                 endpoints.MapControllers();
             });
-
-            //app.UseReact(config => { });
         }
     }
 }

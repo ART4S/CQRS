@@ -26,8 +26,8 @@ namespace WebFeatures.WebApi.Extensions
                     token.RequestToken,
                     new CookieOptions()
                     {
-                        HttpOnly = false,
-                        IsEssential = true
+                        IsEssential = true,
+                        HttpOnly = false
                     });
 
                 return next(context);

@@ -2,11 +2,11 @@
 
 namespace WebFeatures.Infrastructure.Logging
 {
-    internal class LoggerFactory : Application.Interfaces.Logging.ILoggerFactory
+    internal class LoggerFactoryAdapter : Application.Interfaces.Logging.ILoggerFactory
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public LoggerFactory(ILoggerFactory loggerFactory)
+        public LoggerFactoryAdapter(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
         }
