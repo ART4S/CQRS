@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Features.Products.CreateProduct;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Files;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
@@ -34,7 +33,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products.CreateProduct
         }
 
         [Fact]
-        public async Task HandleAsync_ShouldCreateProduct()
+        public async Task ShouldCreateProduct()
         {
             // Arrange
             var fileRepo = new Mock<IFileWriteRepository>();
@@ -75,7 +74,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Products.CreateProduct
         }
 
         [Fact]
-        public async Task HandleAsync_ShouldCreatePictures()
+        public async Task ShouldCreatePictures()
         {
             // Arrange
             var fileRepo = new Mock<IFileWriteRepository>();

@@ -30,7 +30,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
         }
 
         [Fact]
-        public async Task HandleAsync_ReturnsExistingUserId()
+        public async Task ShouldReturnUserId()
         {
             // Arrange
             LoginCommand request = new LoginStub();
@@ -55,7 +55,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
         }
 
         [Fact]
-        public async Task HandleAsync_WhenUserDoesntExist_Throws()
+        public void ShouldThrow_WhenUserDoesntExist()
         {
             // Arrange
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
@@ -66,11 +66,11 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
             Func<Task<Guid>> actual = () => sut.HandleAsync(new LoginCommand(), new CancellationToken());
 
             // Assert
-            await actual.Should().ThrowAsync<ValidationException>();
+            actual.Should().Throw<ValidationException>();
         }
 
         [Fact]
-        public async Task HandleAsync_WhenInvalidPassword_Throws()
+        public void ShouldThrow_WhenInvalidPassword()
         {
             // Arrange
             _context.Setup(x => x.Users).Returns(Mock.Of<IUserWriteRepository>());
@@ -80,10 +80,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Login
             var sut = new LoginCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Func<Task<Guid>> actual = () => sut.HandleAsync(new LoginCommand(), new CancellationToken());
+            Func<Task<Guid>> act = () => sut.HandleAsync(new LoginCommand(), new CancellationToken());
 
             // Assert
-            await actual.Should().ThrowAsync<ValidationException>();
+            act.Should().Throw<ValidationException>();
         }
     }
 }

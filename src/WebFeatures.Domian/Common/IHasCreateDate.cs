@@ -2,8 +2,8 @@
 
 namespace WebFeatures.Domian.Common
 {
-    public interface IHasCreateDate
-    {
-        DateTime CreateDate { get; set; }
-    }
+	public interface IHasCreateDate
+	{
+		DateTime CreateDate { get; set; }
+	}
 }

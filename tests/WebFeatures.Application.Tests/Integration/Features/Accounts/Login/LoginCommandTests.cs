@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using WebFeatures.Application.Exceptions;
 using WebFeatures.Application.Features.Accounts.Login;
 using WebFeatures.Application.Tests.Common.Base;
@@ -9,45 +9,46 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Integration.Features.Accounts.Login
 {
-    public class LoginCommandTests : IntegrationTestBase
-    {
-        [Fact]
-        public async Task HandleAsync_ReturnsExistingUserId()
-        {
-            // Arrange
-            var request = new LoginCommand
-            {
-                Email = "admin@mail.com",
-                Password = "12345"
-            };
-            // Act
-            Guid userId = await Mediator.SendAsync(request);
+	public class LoginCommandTests : IntegrationTestBase
+	{
+		[Fact]
+		public async Task ShouldReturnUserId()
+		{
+			// Arrange
+			var request = new LoginCommand
+			{
+				Email = "admin@mail.com",
+				Password = "12345"
+			};
 
-            User user = await DbContext.Users.GetByEmailAsync(request.Email);
+			// Act
+			Guid userId = await Mediator.SendAsync(request);
 
-            // Assert
-            user.Should().NotBeNull();
-            user.Id.Should().Be(userId);
-            user.Email.Should().Be(request.Email);
-        }
+			User user = await DbContext.Users.GetByEmailAsync(request.Email);
 
-        [Theory]
-        [InlineData("user@mail.com", "1234")]
-        [InlineData("user_1@mail.com", "12345")]
-        public async Task HandleAsync_WhenInvalidCredentials_Throws(string email, string password)
-        {
-            // Arrange
-            var request = new LoginCommand()
-            {
-                Email = email,
-                Password = password
-            };
+			// Assert
+			user.Should().NotBeNull();
+			user.Id.Should().Be(userId);
+			user.Email.Should().Be(request.Email);
+		}
+		
+		[Theory]
+		[InlineData("user@mail.com", "1234")]
+		[InlineData("user_1@mail.com", "12345")]
+		public void ShouldThrow_WhenInvalidCredentials(string email, string password)
+		{
+			// Arrange
+			var request = new LoginCommand
+			{
+				Email = email,
+				Password = password
+			};
 
-            // Act
-            Func<Task<Guid>> actual = () => Mediator.SendAsync(request);
+			// Act
+			Func<Task<Guid>> act = () => Mediator.SendAsync(request);
 
-            // Assert
-            await actual.Should().ThrowAsync<ValidationException>();
-        }
-    }
+			// Assert
+			act.Should().Throw<ValidationException>();
+		}
+	}
 }

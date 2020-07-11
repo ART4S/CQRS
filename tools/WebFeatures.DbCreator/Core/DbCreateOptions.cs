@@ -1,8 +1,8 @@
-﻿namespace WebFeatures.DbCreator
+﻿namespace WebFeatures.DbCreator.Core
 {
-    internal class DbCreateOptions
-    {
-        public bool Development { get; set; }
-        public bool Testing { get; set; }
-    }
+	internal class DbCreateOptions
+	{
+		public bool Development { get; set; }
+		public bool Testing { get; set; }
+	}
 }

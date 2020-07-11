@@ -1,40 +1,41 @@
-﻿using Bogus;
-using System.IO;
+﻿using System.IO;
 using System.Net.Mime;
+using Bogus;
 using WebFeatures.Application.Interfaces.Files;
 
 namespace WebFeatures.Application.Tests.Common.Stubs.Files
 {
-    internal class CustomFile : IFile
-    {
-        public string Name { get; private set; }
+	internal class CustomFile : IFile
+	{
+		private static readonly string[] ContentTypes =
+		{
+			MediaTypeNames.Image.Jpeg,
+			MediaTypeNames.Application.Json
+		};
 
-        public string ContentType { get; }
+		public CustomFile()
+		{
+			Faker faker = new Faker();
 
-        public byte[] Content { get; }
+			Name = faker.System.CommonFileName();
+			ContentType = faker.PickRandom(ContentTypes);
+			Content = faker.Random.Bytes(16);
+		}
 
-        public Stream OpenReadStream() => new MemoryStream(Content);
+		public byte[] Content { get; }
+		public string Name { get; private set; }
+		public string ContentType { get; }
 
-        private static readonly string[] ContentTypes =
-        {
-            MediaTypeNames.Image.Jpeg,
-            MediaTypeNames.Application.Json
-        };
+		public Stream OpenReadStream()
+		{
+			return new MemoryStream(Content);
+		}
 
-        public CustomFile()
-        {
-            var faker = new Faker();
+		public CustomFile WithExtension(string extension)
+		{
+			Name = Path.GetFileNameWithoutExtension(Name) + "." + extension;
 
-            Name = faker.System.CommonFileName();
-            ContentType = faker.PickRandom(ContentTypes);
-            Content = faker.Random.Bytes(16);
-        }
-
-        public CustomFile WithExtension(string extension)
-        {
-            Name = Path.GetFileNameWithoutExtension(Name) + "." + extension;
-
-            return this;
-        }
-    }
+			return this;
+		}
+	}
 }

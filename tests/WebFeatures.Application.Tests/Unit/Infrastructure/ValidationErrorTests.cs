@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
     public class ValidationErrorTests
     {
         [Fact]
-        public void WhenDifferentPropertyNames_ShouldSetErrorForEachUniqueName()
+        public void ShouldSetErrorForEachUniqueName_WhenDifferentPropertyNames()
         {
             // Arrange
             string[] properties =
@@ -31,7 +31,7 @@ namespace WebFeatures.Application.Tests.Unit.Infrastructure
         }
 
         [Fact]
-        public void WhenOnePropertyName_ShouldSetOneError()
+        public void ShouldSetOneError_WhenOnePropertyName()
         {
             // Arrange
             var lorem = new Lorem();

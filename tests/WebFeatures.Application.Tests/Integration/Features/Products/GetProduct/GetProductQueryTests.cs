@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.GetProduct
     public class GetProductQueryTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_ReturnsExistingProduct()
+        public async Task ShouldReturnProduct()
         {
             // Arrange
             var request = new GetProductQuery() { Id = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e") };
@@ -25,16 +25,16 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.GetProduct
         }
 
         [Fact]
-        public async Task HandleAsync_WhenProductDoesntExist_Throws()
+        public void ShouldThrow_WhenProductDoesntExist()
         {
             // Arrange
             var request = new GetProductQuery();
 
             // Act
-            Func<Task<ProductInfoDto>> actual = () => Mediator.SendAsync(request);
+            Func<Task<ProductInfoDto>> act = () => Mediator.SendAsync(request);
 
             // Assert
-            (await actual.Should().ThrowAsync<ValidationException>()).And.Message.Should().NotBeNullOrEmpty();
+            act.Should().Throw<ValidationException>().And.Message.Should().NotBeNullOrEmpty();
         }
     }
 }

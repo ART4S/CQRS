@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.DeleteProd
     public class DeleteProductCommandTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_DeletesExistingProduct()
+        public async Task ShouldDeleteProduct()
         {
             // Arrange
             var request = new DeleteProductCommand() { Id = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e") };

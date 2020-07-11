@@ -24,7 +24,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         }
 
         [Fact]
-        public async Task SendAsync_WhenOneHandler_CallsHandlerOnce()
+        public async Task ShouldCallHandler()
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
@@ -47,7 +47,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         }
 
         [Fact]
-        public async Task SendAsync_WhenHandlerHasNotBeenRegistered_Throws()
+        public async Task ShouldThrow_WhenHandlerIsMissing()
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
@@ -64,7 +64,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         }
 
         [Fact]
-        public async Task SendAsync_CallsMiddlewaresAccordingRegistrationOrder()
+        public async Task ShouldCallMiddlewaresAccordingRegistrationOrder()
         {
             // Arrange
             var callChecker = new CallChecker();

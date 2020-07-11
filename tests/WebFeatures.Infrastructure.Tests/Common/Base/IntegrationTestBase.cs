@@ -5,26 +5,26 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Common.Base
 {
-    public class IntegrationTestBase : IAsyncLifetime
-    {
-        protected DatabaseFixture Database { get; private set; }
-        protected DbTransaction Transaction { get; private set; }
+	public class IntegrationTestBase : IAsyncLifetime
+	{
+		protected DatabaseFixture Database { get; private set; }
+		protected DbTransaction Transaction { get; private set; }
 
-        public async Task InitializeAsync()
-        {
-            Database = new DatabaseFixture();
+		public async Task InitializeAsync()
+		{
+			Database = new DatabaseFixture();
 
-            await Database.InitializeAsync();
+			await Database.InitializeAsync();
 
-            Transaction = await Database.Connection.BeginTransactionAsync();
-        }
+			Transaction = await Database.Connection.BeginTransactionAsync();
+		}
 
-        public async Task DisposeAsync()
-        {
-            await Transaction.RollbackAsync();
-            await Transaction.DisposeAsync();
+		public async Task DisposeAsync()
+		{
+			await Transaction.RollbackAsync();
+			await Transaction.DisposeAsync();
 
-            await Database.DisposeAsync();
-        }
-    }
+			await Database.DisposeAsync();
+		}
+	}
 }

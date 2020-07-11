@@ -4,7 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using SqlMapper = Dapper.SqlMapper;
 
-namespace WebFeatures.Infrastructure.DataAccess.QueryExecutors
+namespace WebFeatures.Infrastructure.DataAccess.Executors
 {
     internal class DapperDbExecutor : IDbExecutor
     {

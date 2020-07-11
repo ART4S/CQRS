@@ -2,8 +2,8 @@
 
 namespace WebFeatures.Domian.Entities
 {
-    public class Category : Entity
-    {
-        public string Name { get; set; }
-    }
+	public class Category : Entity
+	{
+		public string Name { get; set; }
+	}
 }

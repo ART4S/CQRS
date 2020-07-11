@@ -11,7 +11,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.GetProduct
     public class GetProductCommentsQueryTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_ReturnsNotEmptyProductCommentsCollection()
+        public async Task ShouldReturnNonEmptyCommentsCollection()
         {
             // Arrange
             var request = new GetProductCommentsQuery() { Id = new Guid("f321a9fa-fc44-47e9-9739-bb4d57724f3e") };

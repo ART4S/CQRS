@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace WebFeatures.Infrastructure.DataAccess.QueryExecutors
+namespace WebFeatures.Infrastructure.DataAccess.Executors
 {
     internal interface IDbExecutor
     {

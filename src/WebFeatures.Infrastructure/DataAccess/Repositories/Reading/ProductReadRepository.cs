@@ -6,9 +6,9 @@ using WebFeatures.Application.Features.Products.GetProduct;
 using WebFeatures.Application.Features.Products.GetProductComments;
 using WebFeatures.Application.Features.Products.GetProductList;
 using WebFeatures.Application.Features.Products.GetProductReviews;
-using WebFeatures.Application.Interfaces.DataAccess.Reading.Repositories;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Reading;
 using WebFeatures.Infrastructure.DataAccess.Constants;
-using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
+using WebFeatures.Infrastructure.DataAccess.Executors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
 {

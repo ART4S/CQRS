@@ -6,18 +6,20 @@ using WebFeatures.Application.Interfaces.Requests;
 
 namespace WebFeatures.Application.Features.Products.GetProductComments
 {
-    internal class GetProductCommentsQueryHandler : IRequestHandler<GetProductCommentsQuery, IEnumerable<ProductCommentInfoDto>>
-    {
-        private readonly IReadDbContext _db;
+	internal class GetProductCommentsQueryHandler : IRequestHandler<GetProductCommentsQuery, IEnumerable<ProductCommentInfoDto>>
+	{
+		private readonly IReadDbContext _db;
 
-        public GetProductCommentsQueryHandler(IReadDbContext db)
-        {
-            _db = db;
-        }
+		public GetProductCommentsQueryHandler(IReadDbContext db)
+		{
+			_db = db;
+		}
 
-        public Task<IEnumerable<ProductCommentInfoDto>> HandleAsync(GetProductCommentsQuery request, CancellationToken cancellationToken)
-        {
-            return _db.Products.GetCommentsAsync(request.Id);
-        }
-    }
+		public Task<IEnumerable<ProductCommentInfoDto>> HandleAsync(
+			GetProductCommentsQuery request,
+			CancellationToken cancellationToken)
+		{
+			return _db.Products.GetCommentsAsync(request.Id);
+		}
+	}
 }

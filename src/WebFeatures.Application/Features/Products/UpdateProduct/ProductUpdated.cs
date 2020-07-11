@@ -1,15 +1,15 @@
 ﻿using System;
 using WebFeatures.Application.Interfaces.Events;
 
-namespace WebFeatures.Application.Features.Products.Events
+namespace WebFeatures.Application.Features.Products.UpdateProduct
 {
-    public class ProductUpdated : IEvent
-    {
-        public Guid Id { get; }
+	public class ProductUpdated : IEvent
+	{
+		public ProductUpdated(Guid id)
+		{
+			Id = id;
+		}
 
-        public ProductUpdated(Guid id)
-        {
-            Id = id;
-        }
-    }
+		public Guid Id { get; }
+	}
 }

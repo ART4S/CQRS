@@ -9,7 +9,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
     public class EntityProfileTests
     {
         [Fact]
-        public void GetMap_WhenEntityHasBeenRegisteredManually_ReturnsMap()
+        public void ShouldReturnExistingMap()
         {
             // Arrange
             var sut = new EntityProfile();
@@ -24,7 +24,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public void GetMap_WhenEntityHasNotBeenRegisteredManually_ReturnsMap()
+        public void ShouldReturnCreatedMap()
         {
             // Arrange
             var sut = new EntityProfile();

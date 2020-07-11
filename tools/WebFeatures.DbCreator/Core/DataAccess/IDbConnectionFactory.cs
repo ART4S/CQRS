@@ -2,8 +2,8 @@
 
 namespace WebFeatures.DbCreator.Core.DataAccess
 {
-    internal interface IDbConnectionFactory
-    {
-        DbConnection CreateConnection();
-    }
+	internal interface IDbConnectionFactory
+	{
+		DbConnection CreateConnection();
+	}
 }

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductReviews.CreateProductReview;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
@@ -32,7 +32,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductReviews.CreateProdu
         }
 
         [Fact]
-        public async Task HandleAsync_ShouldCreateReview()
+        public async Task ShouldCreateReview()
         {
             // Arrange
             CreateProductReviewCommand request = new CreateProductReviewStub();

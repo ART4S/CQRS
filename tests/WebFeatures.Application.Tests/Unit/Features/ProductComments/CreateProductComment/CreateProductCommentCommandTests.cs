@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.ProductComments.CreateProductComment;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Application.Interfaces.Events;
 using WebFeatures.Application.Interfaces.Services;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
@@ -33,7 +33,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.ProductComments.CreateProd
         }
 
         [Fact]
-        public async Task HandleAsync_ShouldCreateComment()
+        public async Task ShouldCreateComment()
         {
             // Arrange
             CreateProductCommentCommand request = new CreateProductCommentStub();

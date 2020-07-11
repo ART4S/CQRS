@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Products.GetProduct
     public class GetProductListQueryTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_ReturnsNotEmptyProductsCollection()
+        public async Task ShouldReturnNotEmptyProductsCollection()
         {
             // Arrange
             var request = new GetProductListQuery();

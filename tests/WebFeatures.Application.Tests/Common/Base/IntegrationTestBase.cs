@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using WebFeatures.Application.Features.Accounts.Login;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.Requests;
@@ -17,85 +17,85 @@ using Xunit;
 
 namespace WebFeatures.Application.Tests.Common.Base
 {
-    public class IntegrationTestBase : IAsyncLifetime
-    {
-        private static readonly IServiceProvider ServiceProvider;
+	public class IntegrationTestBase : IAsyncLifetime
+	{
+		private static readonly IServiceProvider ServiceProvider;
 
-        protected IWriteDbContext DbContext { get; }
+		private readonly IServiceScope _scope;
 
-        protected IRequestMediator Mediator { get; }
+		private DbTransaction _transaction;
 
-        private readonly IServiceScope _scope;
+		static IntegrationTestBase()
+		{
+			IConfigurationRoot configuration = new ConfigurationBuilder()
+			   .SetBasePath(Directory.GetCurrentDirectory())
+			   .AddJsonFile("appsettings.json")
+			   .Build();
 
-        private DbTransaction _transaction;
+			ServiceCollection services = new ServiceCollection();
 
-        static IntegrationTestBase()
-        {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+			services.AddLogging();
 
-            var services = new ServiceCollection();
+			services.AddApplicationServices();
 
-            services.AddLogging();
+			services.AddInfrastructureServices(configuration);
 
-            services.AddApplicationServices();
+			services.AddScoped<ICurrentUserService, CustomCurrentUserService>();
 
-            services.AddInfrastructureServices(configuration);
+			// remove transaction from request's pipeline cause we are using it here
+			ServiceDescriptor transaction = services.First(x => x.ImplementationType == typeof(TransactionMiddleware<,>));
 
-            services.AddScoped<ICurrentUserService, CustomCurrentUserService>();
+			services.Remove(transaction);
 
-            // remove transaction from request's pipeline cause we are using it here
-            var transaction = services.First(x => x.ImplementationType == typeof(TransactionMiddleware<,>));
+			ServiceProvider = services.BuildServiceProvider();
+		}
 
-            services.Remove(transaction);
+		protected IntegrationTestBase()
+		{
+			_scope = ServiceProvider.CreateScope();
 
-            ServiceProvider = services.BuildServiceProvider();
-        }
+			DbContext = _scope.ServiceProvider.GetService<IWriteDbContext>();
+			Mediator = _scope.ServiceProvider.GetService<IRequestMediator>();
+		}
 
-        public IntegrationTestBase()
-        {
-            _scope = ServiceProvider.CreateScope();
+		protected IWriteDbContext DbContext { get; }
 
-            DbContext = _scope.ServiceProvider.GetService<IWriteDbContext>();
-            Mediator = _scope.ServiceProvider.GetService<IRequestMediator>();
-        }
+		protected IRequestMediator Mediator { get; }
 
-        public async Task InitializeAsync()
-        {
-            _transaction = await DbContext.Connection.BeginTransactionAsync();
-        }
+		public async Task InitializeAsync()
+		{
+			_transaction = await DbContext.Connection.BeginTransactionAsync();
+		}
 
-        public async Task DisposeAsync()
-        {
-            await _transaction.RollbackAsync();
-            await _transaction.DisposeAsync();
+		public async Task DisposeAsync()
+		{
+			await _transaction.RollbackAsync();
+			await _transaction.DisposeAsync();
 
-            await _scope.DisposeAsync();
-        }
+			await _scope.DisposeAsync();
+		}
 
-        protected async Task<Guid> AuthenticateAdminAsync()
-        {
-            return await AuthenticateAsync("admin@mail.com", "12345");
-        }
+		protected async Task<Guid> AuthenticateAdminAsync()
+		{
+			return await AuthenticateAsync("admin@mail.com", "12345");
+		}
 
-        protected async Task<Guid> AuthenticateAsync(string email, string password)
-        {
-            var request = new LoginCommand()
-            {
-                Email = email,
-                Password = password
-            };
+		protected async Task<Guid> AuthenticateAsync(string email, string password)
+		{
+			var request = new LoginCommand
+			{
+				Email = email,
+				Password = password
+			};
 
-            Guid userId = await Mediator.SendAsync(request);
+			Guid userId = await Mediator.SendAsync(request);
 
-            var currentUser = (CustomCurrentUserService)_scope.ServiceProvider.GetService<ICurrentUserService>();
+			var currentUser = (CustomCurrentUserService) _scope.ServiceProvider.GetService<ICurrentUserService>();
 
-            currentUser.UserId = userId;
-            currentUser.IsAuthenticated = true;
+			currentUser.UserId = userId;
+			currentUser.IsAuthenticated = true;
 
-            return userId;
-        }
-    }
+			return userId;
+		}
+	}
 }

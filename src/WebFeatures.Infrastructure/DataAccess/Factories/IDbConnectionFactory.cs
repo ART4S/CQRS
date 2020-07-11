@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace WebFeatures.Persistence
+namespace WebFeatures.Infrastructure.DataAccess.Factories
 {
     internal interface IDbConnectionFactory
     {

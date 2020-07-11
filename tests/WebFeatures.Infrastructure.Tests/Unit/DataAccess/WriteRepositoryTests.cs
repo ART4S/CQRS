@@ -4,8 +4,8 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Common;
+using WebFeatures.Infrastructure.DataAccess.Executors;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
 using WebFeatures.Infrastructure.Tests.Common.Stubs;
 using Xunit;
@@ -36,13 +36,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         public async Task CreateAsync_WhenEntityHasCreateDateProperty_SetsCurrentDate()
         {
             // Arrange
-            var sysTime = new Mock<SystemTime.ISystemTime>();
+            var systemTime = new Mock<SystemTime.ISystemTime>();
 
             var now = DateTime.UtcNow;
 
-            sysTime.Setup(x => x.Now).Returns(now);
+            systemTime.Setup(x => x.Now).Returns(now);
 
-            SystemTime.Instance = sysTime.Object;
+            SystemTime.Instance = systemTime.Object;
 
             WriteRepository<CustomEntity> sut = CreateDefaultRepository();
 
@@ -56,7 +56,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
         }
 
         [Fact]
-        public async Task CreateAsync_WhenEntityPassedWithoutId_SetsNewId()
+        public async Task CreateAsync_WhenEntityPassedWithoutId_CreatesNewId()
         {
             // Arrange
             WriteRepository<CustomEntity> sut = CreateDefaultRepository();

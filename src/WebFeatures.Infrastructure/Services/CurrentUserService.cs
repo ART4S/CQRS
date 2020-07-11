@@ -1,25 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using WebFeatures.Application.Interfaces.Services;
 
 namespace WebFeatures.Infrastructure.Services
 {
-    internal class CurrentUserService : ICurrentUserService
-    {
-        public Guid UserId { get; }
-        public bool IsAuthenticated { get; }
+	internal class CurrentUserService : ICurrentUserService
+	{
+		public CurrentUserService(IHttpContextAccessor contextAccessor)
+		{
+			HttpContext context = contextAccessor.HttpContext;
 
-        public CurrentUserService(IHttpContextAccessor contexAccessor)
-        {
-            HttpContext context = contexAccessor.HttpContext;
+			if (context?.User?.Identity == null || !context.User.Identity.IsAuthenticated) return;
 
-            if (context?.User?.Identity != null && context.User.Identity.IsAuthenticated)
-            {
-                UserId = Guid.Parse(context.User.FindFirstValue(ClaimTypes.NameIdentifier));
+			UserId = Guid.Parse(context.User.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
-                IsAuthenticated = true;
-            }
-        }
-    }
+			IsAuthenticated = true;
+		}
+
+		public Guid UserId { get; }
+		public bool IsAuthenticated { get; }
+	}
 }

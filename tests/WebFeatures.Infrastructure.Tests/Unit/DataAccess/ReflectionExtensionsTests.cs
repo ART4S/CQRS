@@ -63,10 +63,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             Expression<Func<CustomEntity, object>> propertyCall = null;
 
             // Act
-            Action actual = () => propertyCall.GetPropertyName();
+            Action act = () => propertyCall.GetPropertyName();
 
             // Assert
-            actual.Should().Throw<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -76,10 +76,10 @@ namespace WebFeatures.Infrastructure.Tests.Unit.DataAccess
             Expression<Func<CustomEntity, object>> propertyCall = x => x.IntField;
 
             // Act
-            Action actual = () => propertyCall.GetPropertyName();
+            Action act = () => propertyCall.GetPropertyName();
 
             // Assert
-            actual.Should().Throw<InvalidOperationException>();
+            act.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]

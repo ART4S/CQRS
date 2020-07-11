@@ -13,7 +13,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductComments.Cre
     public class CreateProductCommentCommandTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_CreatesComment()
+        public async Task ShouldCreateComment()
         {
             // Arrange
             var request = new CreateProductCommentCommand()
@@ -41,16 +41,16 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductComments.Cre
         }
 
         [Fact]
-        public async Task HandleAsync_WhenInvalidComment_Throws()
+        public void ShouldThrow_WhenInvalidComment()
         {
             // Arrange
             var request = new CreateProductCommentCommand();
 
             // Act
-            Func<Task<Guid>> actual = () => Mediator.SendAsync(request);
+            Func<Task<Guid>> act = () => Mediator.SendAsync(request);
 
             // Assert
-            (await actual.Should().ThrowAsync<ValidationException>()).And.Error.Should().NotBeNull();
+            act.Should().Throw<ValidationException>().And.Error.Should().NotBeNull();
         }
     }
 }

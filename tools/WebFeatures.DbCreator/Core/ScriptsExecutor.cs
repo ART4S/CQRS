@@ -1,102 +1,97 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using WebFeatures.DbCreator.Core.DataAccess;
 
 namespace WebFeatures.DbCreator.Core
 {
-    internal class ScriptsExecutor
-    {
-        private readonly ILogger<ScriptsExecutor> _logger;
-        private readonly IDbConnectionFactory _connectionFactory;
-        private readonly DbCreateOptions _createOptions;
+	internal class ScriptsExecutor
+	{
+		private readonly IDbConnectionFactory _connectionFactory;
+		private readonly DbCreateOptions _createOptions;
+		private readonly ILogger<ScriptsExecutor> _logger;
 
-        public ScriptsExecutor(
-            ILogger<ScriptsExecutor> logger,
-            IDbConnectionFactory connectionFactory,
-            IOptions<DbCreateOptions> createOptions)
-        {
-            _logger = logger;
-            _connectionFactory = connectionFactory;
-            _createOptions = createOptions.Value;
-        }
+		public ScriptsExecutor(
+			ILogger<ScriptsExecutor> logger,
+			IDbConnectionFactory connectionFactory,
+			IOptions<DbCreateOptions> createOptions)
+		{
+			_logger = logger;
+			_connectionFactory = connectionFactory;
+			_createOptions = createOptions.Value;
+		}
 
-        public async Task ExecuteAsync()
-        {
-            if (_createOptions.Development)
-            {
-                await CreateDatabaseAsync(environment: "dev");
-            }
+		public async Task ExecuteAsync()
+		{
+			if (_createOptions.Development) await CreateDatabaseAsync("dev");
 
-            if (_createOptions.Testing)
-            {
-                await CreateDatabaseAsync(environment: "test");
-            }
-        }
+			if (_createOptions.Testing) await CreateDatabaseAsync("test");
+		}
 
-        private async Task CreateDatabaseAsync(string environment)
-        {
-            await using DbConnection connection = _connectionFactory.CreateConnection();
+		private async Task CreateDatabaseAsync(string environment)
+		{
+			await using DbConnection connection = _connectionFactory.CreateConnection();
 
-            await connection.OpenAsync();
+			await connection.OpenAsync();
 
-            string defaultDb = connection.Database;
+			string defaultDb = connection.Database;
 
-            string db = $"webfeatures_{environment}_db";
+			string db = $"webfeatures_{environment}_db";
 
-            _logger.LogInformation($"Creating {db} database");
+			_logger.LogInformation($"Creating {db} database");
 
-            await ExecuteScriptAsync(connection, SqlBuilder.DropDatabase(db));
+			await ExecuteScriptAsync(connection, SqlBuilder.DropDatabase(db));
 
-            await ExecuteScriptAsync(connection, SqlBuilder.CreateDatabase(db));
+			await ExecuteScriptAsync(connection, SqlBuilder.CreateDatabase(db));
 
-            await connection.ChangeDatabaseAsync(db);
+			await connection.ChangeDatabaseAsync(db);
 
-            await using DbTransaction transaction = await connection.BeginTransactionAsync();
+			await using DbTransaction transaction = await connection.BeginTransactionAsync();
 
-            try
-            {
-                _logger.LogInformation("Creating schema");
+			try
+			{
+				_logger.LogInformation("Creating schema");
 
-                var schemaScripts = SqlBuilder.GetDbSchemaScripts();
+				IEnumerable<(string Name, string Body)> schemaScripts = SqlBuilder.GetDbSchemaScripts();
 
-                foreach ((string Name, string Body) script in schemaScripts)
-                {
-                    _logger.LogInformation($"Executing '{script.Name}'");
+				foreach ((string Name, string Body) script in schemaScripts)
+				{
+					_logger.LogInformation($"Executing '{script.Name}'");
 
-                    await ExecuteScriptAsync(connection, script.Body);
-                }
+					await ExecuteScriptAsync(connection, script.Body);
+				}
 
-                _logger.LogInformation("Seeding initial data");
+				_logger.LogInformation("Seeding initial data");
 
-                await ExecuteScriptAsync(connection, SqlBuilder.SeedInitialData(environment));
+				await ExecuteScriptAsync(connection, SqlBuilder.SeedInitialData(environment));
 
-                _logger.LogInformation("Updating materialized views");
+				_logger.LogInformation("Updating materialized views");
 
-                await ExecuteScriptAsync(connection, SqlBuilder.RefreshViews());
+				await ExecuteScriptAsync(connection, SqlBuilder.RefreshViews());
 
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
+				await transaction.CommitAsync();
+			}
+			catch
+			{
+				await transaction.RollbackAsync();
 
-                await connection.ChangeDatabaseAsync(defaultDb);
+				await connection.ChangeDatabaseAsync(defaultDb);
 
-                await ExecuteScriptAsync(connection, SqlBuilder.DropDatabase(db));
+				await ExecuteScriptAsync(connection, SqlBuilder.DropDatabase(db));
 
-                throw;
-            }
-        }
+				throw;
+			}
+		}
 
-        private async Task ExecuteScriptAsync(DbConnection connection, string script)
-        {
-            await using DbCommand command = connection.CreateCommand();
+		private async Task ExecuteScriptAsync(DbConnection connection, string script)
+		{
+			await using DbCommand command = connection.CreateCommand();
 
-            command.CommandText = script;
+			command.CommandText = script;
 
-            await command.ExecuteNonQueryAsync();
-        }
-    }
+			await command.ExecuteNonQueryAsync();
+		}
+	}
 }

@@ -19,12 +19,12 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
 
-            var sut = new LoggingMiddleware<CustomRequest, CustomResult>(logger);
+            var sut = new LoggingMiddleware<CustomRequest, CustomResponse>(logger);
 
-            var expected = new CustomResult();
+            var expected = new CustomResponse();
 
             // Act
-            CustomResult actual = await sut.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
+            CustomResponse actual = await sut.HandleAsync(new CustomRequest(), async () => expected, new CancellationToken());
 
             // Assert
             actual.Should().BeSameAs(expected);
@@ -43,14 +43,14 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
                     It.IsAny<object[]>()))
                 .Callback(() => messages.Add("logger"));
 
-            RequestDelegate<Task<CustomResult>> next = async () =>
+            RequestDelegate<Task<CustomResponse>> next = async () =>
             {
                 messages.Add("next");
 
-                return new CustomResult();
+                return new CustomResponse();
             };
 
-            var sut = new LoggingMiddleware<CustomRequest, CustomResult>(logger.Object);
+            var sut = new LoggingMiddleware<CustomRequest, CustomResponse>(logger.Object);
 
             // Act
             await sut.HandleAsync(new CustomRequest(), next, new CancellationToken());

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Features.Accounts.Register;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Application.Interfaces.Logging;
 using WebFeatures.Application.Interfaces.Security;
 using WebFeatures.Application.Tests.Common.Stubs.Entities;
@@ -32,7 +31,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
         }
 
         [Fact]
-        public async Task HandleAsync_CreatesNewUser()
+        public async Task ShouldCreateUser()
         {
             // Arrange
             RegisterCommand request = new RegisterStub();
@@ -69,7 +68,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
         }
 
         [Fact]
-        public async Task HandleAsync_WhenRoleForUserIsMissing_Throws()
+        public void ShouldThrow_WhenRoleForUserIsMissing()
         {
             // Arrange
             _context.Setup(x => x.Roles).Returns(Mock.Of<IRoleWriteRepository>());
@@ -78,10 +77,10 @@ namespace WebFeatures.Application.Tests.Unit.Features.Accounts.Register
             var sut = new RegisterCommandHandler(_context.Object, _hasher.Object, _logger.Object);
 
             // Act
-            Func<Task> actual = () => sut.HandleAsync(new RegisterCommand(), new CancellationToken());
+            Func<Task> act = () => sut.HandleAsync(new RegisterCommand(), new CancellationToken());
 
             // Assert
-            await actual.Should().ThrowAsync<InvalidOperationException>();
+            act.Should().Throw<InvalidOperationException>();
         }
     }
 }

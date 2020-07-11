@@ -3,7 +3,7 @@ using System.Data;
 using System.Threading.Tasks;
 using WebFeatures.Application.Features.Files.DownloadFile;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Reading;
-using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
+using WebFeatures.Infrastructure.DataAccess.Executors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
 {
@@ -15,7 +15,7 @@ namespace WebFeatures.Infrastructure.DataAccess.Repositories.Reading
 
         public async Task<FileDownloadDto> GetAsync(Guid id)
         {
-            var file = await Executor.QuerySingleOrDefaultAsync<FileDownloadDto>(
+            FileDownloadDto file = await Executor.QuerySingleOrDefaultAsync<FileDownloadDto>(
                 connection: Connection,
                 sql: "get_file",
                 param: new { file_id = id },

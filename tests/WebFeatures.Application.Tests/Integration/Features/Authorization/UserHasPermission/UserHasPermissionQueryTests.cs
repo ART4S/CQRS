@@ -13,7 +13,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Authorization.UserH
         [Theory]
         [MemberData(nameof(PermissionTestData.Admin), MemberType = typeof(PermissionTestData))]
         [MemberData(nameof(PermissionTestData.User), MemberType = typeof(PermissionTestData))]
-        public async Task HandleAsync_ReturnsTrue((string Email, string Password) user, string permission)
+        public async Task ShouldReturnTrue_WhenUserIsAuthenticated((string Email, string Password) user, string permission)
         {
             // Arrange
             var request = new UserHasPermissionQuery() { Permission = permission };
@@ -28,7 +28,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Authorization.UserH
         }
 
         [Fact]
-        public async Task HandleAsync_WhenUserIsNotAuthenticated_ReturnsFalse()
+        public async Task ShouldReturnFalse_WhenUserIsNotAuthenticated()
         {
             // Arrange
             var request = new UserHasPermissionQuery() { Permission = PermissionConstants.Products.Create };
@@ -41,7 +41,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Authorization.UserH
         }
 
         [Fact]
-        public async Task HandleAsync_WhenUserDoesntHavePermission_ReturnsFalse()
+        public async Task ShouldReturnFalse_WhenUserDoesntHavePermission()
         {
             // Arrange
             var request = new UserHasPermissionQuery() { Permission = PermissionConstants.Products.Create };

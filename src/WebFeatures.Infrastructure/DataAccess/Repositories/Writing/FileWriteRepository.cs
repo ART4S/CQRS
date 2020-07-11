@@ -7,10 +7,10 @@ using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Common.Extensions;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Products;
+using WebFeatures.Infrastructure.DataAccess.Executors;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {

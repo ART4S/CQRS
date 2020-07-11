@@ -1,15 +1,15 @@
 ﻿using System;
 using WebFeatures.Application.Interfaces.Events;
 
-namespace WebFeatures.Application.Features.Products.Events
+namespace WebFeatures.Application.Features.Products.CreateProduct
 {
-    public class ProductCreated : IEvent
-    {
-        public Guid Id { get; }
+	public class ProductCreated : IEvent
+	{
+		public ProductCreated(Guid id)
+		{
+			Id = id;
+		}
 
-        public ProductCreated(Guid id)
-        {
-            Id = id;
-        }
-    }
+		public Guid Id { get; }
+	}
 }

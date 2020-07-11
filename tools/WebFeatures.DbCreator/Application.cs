@@ -1,61 +1,65 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
 using WebFeatures.DbCreator.Core;
 using WebFeatures.DbCreator.Core.DataAccess;
 using WebFeatures.DbCreator.Core.DataAccess.Logging;
 
 namespace WebFeatures.DbCreator
 {
-    internal class Application
-    {
-        public IConfiguration Configuration { get; }
+	internal class Application
+	{
+		public Application()
+		{
+			Init();
+		}
 
-        public IServiceProvider Services { get; }
+		private void Init()
+		{
+			IConfiguration configuration = BuildConfiguration();
+			
+			Services = BuildServices(configuration);
+		}
+		
+		public IServiceProvider Services { get; private set; }
 
-        public Application()
-        {
-            Configuration = BuildConfiguration();
-            Services = BuildServices();
-        }
+		private static IConfiguration BuildConfiguration()
+		{
+			IConfigurationBuilder builder = new ConfigurationBuilder()
+			   .SetBasePath(Directory.GetCurrentDirectory())
+			   .AddJsonFile("Settings.json");
 
-        private IConfiguration BuildConfiguration()
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("Settings.json");
+			return builder.Build();
+		}
 
-            return builder.Build();
-        }
+		private IServiceProvider BuildServices(IConfiguration configuration)
+		{
+			ServiceCollection services = new ServiceCollection();
 
-        private IServiceProvider BuildServices()
-        {
-            var services = new ServiceCollection();
+			services.AddSingleton(x => LoggerFactory.Create(builder =>
+			{
+				builder.ClearProviders();
+				builder.AddConsole();
+			}));
 
-            services.AddSingleton(x => LoggerFactory.Create(builder =>
-            {
-                builder.ClearProviders();
-                builder.AddConsole();
-            }));
+			services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
-            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+			string connectionString = configuration.GetConnectionString("PostgreSql");
 
-            string connectionString = Configuration.GetConnectionString("PostgreSql");
+			services.AddSingleton<IDbConnectionFactory>(x =>
+				new LoggingDbConnectionFactory(
+					new PostgreSqlDbConnectionFactory(connectionString),
+					x.GetService<ILoggerFactory>()));
 
-            services.AddSingleton<IDbConnectionFactory>(x =>
-                new LoggingDbConnectionFactory(
-                    new PostgreSqlDbConnectionFactory(connectionString),
-                    x.GetService<ILoggerFactory>()));
+			services.AddSingleton<ScriptsExecutor>();
 
-            services.AddSingleton<ScriptsExecutor>();
+			services.AddOptions();
+			services.Configure<DbCreateOptions>(
+				configuration.GetSection(nameof(DbCreateOptions)));
 
-            services.AddOptions();
-            services.Configure<DbCreateOptions>(
-                Configuration.GetSection(nameof(DbCreateOptions)));
-
-            return services.BuildServiceProvider();
-        }
-    }
+			return services.BuildServiceProvider();
+		}
+	}
 }

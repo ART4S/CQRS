@@ -11,46 +11,47 @@ using WebFeatures.Domian.Entities.Accounts;
 
 namespace WebFeatures.Application.Features.Accounts.Register
 {
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Guid>
-    {
-        private readonly IWriteDbContext _db;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ILogger<RegisterCommand> _logger;
+	internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Guid>
+	{
+		private readonly IWriteDbContext _db;
+		private readonly ILogger<RegisterCommand> _logger;
+		private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterCommandHandler(
-            IWriteDbContext db,
-            IPasswordHasher passwordHasher,
-            ILogger<RegisterCommand> logger)
-        {
-            _db = db;
-            _passwordHasher = passwordHasher;
-            _logger = logger;
-        }
+		public RegisterCommandHandler(
+			IWriteDbContext db,
+			IPasswordHasher passwordHasher,
+			ILogger<RegisterCommand> logger)
+		{
+			_db = db;
+			_passwordHasher = passwordHasher;
+			_logger = logger;
+		}
 
-        public async Task<Guid> HandleAsync(RegisterCommand request, CancellationToken cancellationToken)
-        {
-            string hash = _passwordHasher.ComputeHash(request.Password);
+		public async Task<Guid> HandleAsync(RegisterCommand request, CancellationToken cancellationToken)
+		{
+			string hash = _passwordHasher.ComputeHash(request.Password);
 
-            var user = new User()
-            {
-                Name = request.Name,
-                Email = request.Email,
-                PasswordHash = hash
-            };
+			User user = new User
+			{
+				Name = request.Name,
+				Email = request.Email,
+				PasswordHash = hash
+			};
 
-            await _db.Users.CreateAsync(user);
+			await _db.Users.CreateAsync(user);
 
-            Role role = await _db.Roles.GetByNameAsync(AuthorizationConstants.Roles.Users) ?? throw new InvalidOperationException("Cannot find role for new user");
+			Role role = await _db.Roles.GetByNameAsync(AuthorizationConstants.Roles.Users)
+			         ?? throw new InvalidOperationException("Cannot find role for new user");
 
-            await _db.UserRoles.CreateAsync(new UserRole()
-            {
-                UserId = user.Id,
-                RoleId = role.Id
-            });
+			await _db.UserRoles.CreateAsync(new UserRole
+			{
+				UserId = user.Id,
+				RoleId = role.Id
+			});
 
-            _logger.LogInformation($"User {user.Name} registered with id: {user.Id}");
+			_logger.LogInformation($"User {user.Name} registered with id: {user.Id}");
 
-            return user.Id;
-        }
-    }
+			return user.Id;
+		}
+	}
 }

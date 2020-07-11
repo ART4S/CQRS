@@ -12,7 +12,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Files.UploadFile
     public class UploadFileCommandTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_CreatesFile()
+        public async Task ShouldCreateFile()
         {
             // Arrange
             var fileStub = new CustomFile();

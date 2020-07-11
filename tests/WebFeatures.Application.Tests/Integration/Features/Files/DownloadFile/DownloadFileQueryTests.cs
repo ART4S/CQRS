@@ -10,7 +10,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.Files.DownloadFile
     public class DownloadFileQueryTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_ReturnsFile()
+        public async Task ShouldReturnFile()
         {
             // Arrange
             var request = new DownloadFileQuery() { Id = new Guid("0d837b9d-36da-49df-9618-ebf740c86990") };

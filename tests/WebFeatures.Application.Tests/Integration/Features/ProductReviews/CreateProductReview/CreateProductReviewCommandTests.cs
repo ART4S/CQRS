@@ -15,7 +15,7 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductReviews.Crea
     public class CreateProductReviewCommandTests : IntegrationTestBase
     {
         [Fact]
-        public async Task HandleAsync_CreatesReview()
+        public async Task ShouldCreateReview()
         {
             // Arrange
             var faker = new Faker();
@@ -47,16 +47,16 @@ namespace WebFeatures.Application.Tests.Integration.Features.ProductReviews.Crea
         }
 
         [Fact]
-        public async Task HandleAsync_WhenInvalidReview_Throws()
+        public void ShouldThrow_WhenInvalidReview()
         {
             // Arrange
             var request = new CreateProductCommentCommand();
 
             // Act
-            Func<Task<Guid>> actual = () => Mediator.SendAsync(request);
+            Func<Task<Guid>> act = () => Mediator.SendAsync(request);
 
             // Assert
-            (await actual.Should().ThrowAsync<ValidationException>()).And.Error.Should().NotBeNull();
+            act.Should().Throw<ValidationException>().And.Error.Should().NotBeNull();
         }
     }
 }

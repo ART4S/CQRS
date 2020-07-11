@@ -23,7 +23,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Authorization.UserHasPermi
         }
 
         [Fact]
-        public async Task HandleAsync_WhenUserIsNotAuthenticated_ReturnsFalse()
+        public async Task ShouldReturnFalse_WhenUserIsNotAuthenticated()
         {
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(false);
@@ -38,7 +38,7 @@ namespace WebFeatures.Application.Tests.Unit.Features.Authorization.UserHasPermi
         }
 
         [Fact]
-        public async Task HandleAsync_WhenUserIsAuthenticated_ReturnsTrue()
+        public async Task ShouldReturnTrue_WhenUserIsAuthenticated()
         {
             // Arrange
             _currentUser.Setup(x => x.IsAuthenticated).Returns(true);

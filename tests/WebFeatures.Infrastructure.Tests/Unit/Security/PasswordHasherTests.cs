@@ -9,7 +9,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
     public class PasswordHasherTests
     {
         [Fact]
-        public void ComputeHash_ReturnsNonEmptyHash()
+        public void ShouldComputeHash()
         {
             // Arrange
             string password = new Faker().Internet.Password();
@@ -27,24 +27,24 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void ComputeHash_WhenInvalidPassword_Throws(string password)
+        public void ShouldThrow_WhenInvalidPassword(string password)
         {
             // Arrange
             var sut = new PasswordHasher();
 
             // Act
-            Action actual = () => sut.ComputeHash(password);
+            Action act = () => sut.ComputeHash(password);
 
             // Assert
-            actual.Should().Throw<ArgumentException>();
+            act.Should().Throw<ArgumentException>();
         }
 
         [Fact]
-        public void Verify_WhenValidHashAndPassword_ReturnsTrue()
+        public void ShouldVerify_WhenValidHashAndPassword()
         {
             // Arrange
-            string hash = "3iH0cm1W/0u/KK9xg8ntK5KmP0q/TtXhmy6eX6WRDVB/qIMwlsSzoJtWO6ShyKn/";
-            string password = "12345";
+            const string hash = "3iH0cm1W/0u/KK9xg8ntK5KmP0q/TtXhmy6eX6WRDVB/qIMwlsSzoJtWO6ShyKn/";
+            const string password = "12345";
 
             var sut = new PasswordHasher();
 
@@ -60,7 +60,7 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Security
         [InlineData(" ", "0")]
         [InlineData("0", "")]
         [InlineData("1234", "3iH0cm1W/0u/KK9xg8ntK5KmP0q/TtXhmy6eX6WRDVB/qIMwlsSzoJtWO6ShyKn/")]
-        public void Verify_WhenInvalidHashOrPassword_ReturnsFalse(string hash, string password)
+        public void ShouldNotVerify_WhenInvalidHashOrPassword(string hash, string password)
         {
             // Arrange
             var sut = new PasswordHasher();

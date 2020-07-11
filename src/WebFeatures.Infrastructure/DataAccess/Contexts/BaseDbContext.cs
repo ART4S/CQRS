@@ -2,33 +2,31 @@
 using System.Data.Common;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
-using WebFeatures.Persistence;
+using WebFeatures.Infrastructure.DataAccess.Factories;
 
 namespace WebFeatures.Infrastructure.DataAccess.Contexts
 {
-    internal class BaseDbContext : IDbContext, IAsyncDisposable
-    {
-        public DbConnection Connection => _connection.Value;
-        private readonly Lazy<DbConnection> _connection;
+	internal abstract class BaseDbContext : IDbContext, IAsyncDisposable
+	{
+		private readonly Lazy<DbConnection> _connection;
 
-        public BaseDbContext(IDbConnectionFactory connectionFactory)
-        {
-            _connection = new Lazy<DbConnection>(() =>
-            {
-                DbConnection connection = connectionFactory.CreateConnection();
+		protected BaseDbContext(IDbConnectionFactory connectionFactory)
+		{
+			_connection = new Lazy<DbConnection>(() =>
+			{
+				DbConnection connection = connectionFactory.CreateConnection();
 
-                connection.Open();
+				connection.Open();
 
-                return connection;
-            });
-        }
+				return connection;
+			});
+		}
 
-        public async ValueTask DisposeAsync()
-        {
-            if (_connection.IsValueCreated)
-            {
-                await _connection.Value.DisposeAsync();
-            }
-        }
-    }
+		public async ValueTask DisposeAsync()
+		{
+			if (_connection.IsValueCreated) await _connection.Value.DisposeAsync();
+		}
+
+		public DbConnection Connection => _connection.Value;
+	}
 }

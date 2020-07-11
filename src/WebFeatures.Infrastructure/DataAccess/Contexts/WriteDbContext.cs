@@ -4,17 +4,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.DataAccess.Contexts;
 using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
 using WebFeatures.Domian.Entities;
 using WebFeatures.Domian.Entities.Accounts;
 using WebFeatures.Domian.Entities.Products;
+using WebFeatures.Infrastructure.DataAccess.Factories;
 using WebFeatures.Infrastructure.DataAccess.Repositories.Writing;
-using WebFeatures.Persistence;
 
 namespace WebFeatures.Infrastructure.DataAccess.Contexts
 {
     internal class WriteDbContext : BaseDbContext, IWriteDbContext
     {
+        private readonly IServiceProvider _services;
+
+        public WriteDbContext(IServiceProvider services) : base(services.GetRequiredService<IDbConnectionFactory>())
+        {
+            _services = services;
+        }
+        
         public IUserWriteRepository Users => _users ??= CreateRepository<UserWriteRepository>();
         private IUserWriteRepository _users;
 
@@ -56,13 +62,6 @@ namespace WebFeatures.Infrastructure.DataAccess.Contexts
 
         public IFileWriteRepository Files => _files ??= CreateRepository<FileWriteRepository>();
         private IFileWriteRepository _files;
-
-        private readonly IServiceProvider _services;
-
-        public WriteDbContext(IServiceProvider services) : base(services.GetRequiredService<IDbConnectionFactory>())
-        {
-            _services = services;
-        }
 
         private TRepo CreateRepository<TRepo>()
         {

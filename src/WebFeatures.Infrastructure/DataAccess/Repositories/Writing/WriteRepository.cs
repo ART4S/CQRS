@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using WebFeatures.Application.Interfaces.DataAccess.Writing.Repositories;
+using WebFeatures.Application.Interfaces.DataAccess.Repositories.Writing;
 using WebFeatures.Common;
 using WebFeatures.Common.Extensions;
 using WebFeatures.Domian.Common;
+using WebFeatures.Infrastructure.DataAccess.Executors;
 using WebFeatures.Infrastructure.DataAccess.Extensions;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Common;
 using WebFeatures.Infrastructure.DataAccess.Mappings.Profiles;
-using WebFeatures.Infrastructure.DataAccess.QueryExecutors;
 
 namespace WebFeatures.Infrastructure.DataAccess.Repositories.Writing
 {
