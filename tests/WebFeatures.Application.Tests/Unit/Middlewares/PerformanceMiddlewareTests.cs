@@ -13,7 +13,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
     public class PerformanceMiddlewareTests
     {
         [Fact]
-        public async Task HandleAsync_ShouldReturnNextDelegateResult()
+        public async Task ShouldReturnNextDelegateResult()
         {
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
@@ -30,7 +30,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         }
 
         [Fact]
-        public async Task HandleAsync_WhenRequestTimeIsLessThanMaxAcceptableTime_ShouldNotCallLogger()
+        public async Task ShouldNotCallLogger_WhenRequestTimeIsLessThanMaxAcceptableTime()
         {
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();
@@ -45,7 +45,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         }
 
         [Fact]
-        public async Task HandleAsync_WhenRequestTimeIsGreatherThanMaxAcceptableTime_ShouldLogWarning()
+        public async Task ShouldLogWarning_WhenRequestTimeIsGreatherThanMaxAcceptableTime()
         {
             // Arrange
             var logger = new Mock<ILogger<CustomRequest>>();

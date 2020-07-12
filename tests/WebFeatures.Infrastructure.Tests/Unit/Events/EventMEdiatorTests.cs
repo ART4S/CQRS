@@ -10,29 +10,31 @@ using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.Events
 {
-	public class EventMediatorTests
-	{
-		[Fact]
-		public async Task ShouldPassSameEventToEventHandler()
-		{
-			// Arrange
-			var serviceProvider = new Mock<IServiceProvider>();
+    public class EventMediatorTests
+    {
+        [Fact]
+        public async Task ShouldCallEventHandler()
+        {
+            // Arrange
+            var serviceProvider = new Mock<IServiceProvider>();
 
-			var handler = new Mock<IEventHandler<CustomEvent>>();
+            var handler = new Mock<IEventHandler<CustomEvent>>();
 
-			serviceProvider.Setup(x => x.GetService(
-					typeof(IEnumerable<IEventHandler<CustomEvent>>)))
-			   .Returns(new[] {handler.Object});
+            serviceProvider.Setup(x => x.GetService(
+                    typeof(IEnumerable<IEventHandler<CustomEvent>>)))
+               .Returns(new[] { handler.Object });
 
-			EventMediator sut = new EventMediator(serviceProvider.Object);
+            var sut = new EventMediator(serviceProvider.Object);
 
-			CustomEvent eve = new CustomEvent();
+            var eve = new CustomEvent();
 
-			// Act
-			await sut.PublishAsync(eve);
+            var token = new CancellationToken();
 
-			// Assert
-			handler.Verify(x => x.HandleAsync(eve, It.IsAny<CancellationToken>()), Times.Once);
-		}
-	}
+            // Act
+            await sut.PublishAsync(eve, token);
+
+            // Assert
+            handler.Verify(x => x.HandleAsync(eve, token), Times.Once);
+        }
+    }
 }

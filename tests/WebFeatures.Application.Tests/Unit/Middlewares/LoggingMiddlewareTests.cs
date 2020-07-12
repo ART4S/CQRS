@@ -14,7 +14,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
     public class LoggingMiddlewareTests
     {
         [Fact]
-        public async Task HandleAsync_ShouldReturnNextDelegateResult()
+        public async Task ShouldReturnNextDelegateResult()
         {
             // Arrange
             var logger = Mock.Of<ILogger<CustomRequest>>();
@@ -31,7 +31,7 @@ namespace WebFeatures.Application.Tests.Unit.Middlewares
         }
 
         [Fact]
-        public async Task HandleAsync_ShouldCallLoggerBeforeAndAfterNextDelegate()
+        public async Task ShouldCallLoggerBeforeAndAfterNextDelegate()
         {
             // Arrange
             var messages = new List<string>();

@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 using WebFeatures.Application.Interfaces.Requests;
 using WebFeatures.Infrastructure.Requests;
 using WebFeatures.Infrastructure.Tests.Common.Stubs;
-using WebFeatures.Infrastructure.Tests.Common.Utils;
 using Xunit;
 
 namespace WebFeatures.Infrastructure.Tests.Unit.Requests
 {
     public class RequestMediatorTests
     {
-        private readonly Mock<IRequestHandler<CustomRequest, CustomResult>> _handler;
+        private readonly Mock<IRequestHandler<CustomRequest, CustomResponse>> _handler;
         private readonly Mock<IServiceProvider> _serviceProvider;
 
         public RequestMediatorTests()
         {
-            _handler = new Mock<IRequestHandler<CustomRequest, CustomResult>>();
+            _handler = new Mock<IRequestHandler<CustomRequest, CustomResponse>>();
             _serviceProvider = new Mock<IServiceProvider>();
         }
 
@@ -28,57 +27,88 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IRequestHandler<CustomRequest, CustomResult>)))
+                    typeof(IRequestHandler<CustomRequest, CustomResponse>)))
                 .Returns(_handler.Object);
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
-                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[0]);
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResponse>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResponse>[0]);
 
             var sut = new RequestMediator(_serviceProvider.Object);
 
             var request = new CustomRequest();
 
+            var token = new CancellationToken();
+
             // Act
-            await sut.SendAsync(request);
+            await sut.SendAsync(request, token);
 
             // Assert
-            _handler.Verify(x => x.HandleAsync(request, It.IsAny<CancellationToken>()), Times.Once);
+            _handler.Verify(x => x.HandleAsync(request, token), Times.Once);
         }
 
         [Fact]
-        public async Task ShouldThrow_WhenHandlerIsMissing()
+        public void ShouldThrow_WhenHandlerIsMissing()
         {
             // Arrange
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
-                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[0]);
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResponse>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResponse>[0]);
 
             var sut = new RequestMediator(_serviceProvider.Object);
 
             // Act
-            Func<Task> actual = () => sut.SendAsync(new CustomRequest());
+            Func<Task> act = () => sut.SendAsync(new CustomRequest());
 
             // Assert
-            await actual.Should().ThrowAsync<InvalidOperationException>();
+            act.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
         public async Task ShouldCallMiddlewaresAccordingRegistrationOrder()
         {
             // Arrange
-            var callChecker = new CallChecker();
+            var messages = new List<string>();
+
+            var handler = new DelegateRequestHandler<CustomRequest, CustomResponse>(async (request, token) =>
+            {
+                messages.Add("handler");
+
+                return new CustomResponse();
+            });
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IRequestHandler<CustomRequest, CustomResult>)))
-                .Returns(new CustomRequestHandler(callChecker));
+                    typeof(IRequestHandler<CustomRequest, CustomResponse>)))
+                .Returns(handler);
+
+            var outher = new DelegateMiddleware<CustomRequest, CustomResponse>(async (request, next, token) =>
+            {
+                messages.Add("outher started");
+
+                CustomResponse response = await next();
+
+                messages.Add("outher finished");
+
+                return response;
+            });
+
+            var inner = new DelegateMiddleware<CustomRequest, CustomResponse>(async (request, next, token) =>
+            {
+                messages.Add("inner started");
+
+                CustomResponse response = await next();
+
+                messages.Add("inner finished");
+
+                return response;
+            });
 
             _serviceProvider.Setup(x => x.GetService(
-                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResult>>)))
-                .Returns(new IRequestMiddleware<CustomRequest, CustomResult>[]
+                    typeof(IEnumerable<IRequestMiddleware<CustomRequest, CustomResponse>>)))
+                .Returns(new IRequestMiddleware<CustomRequest, CustomResponse>[]
                 {
-                    new OutherMiddleware(callChecker),
-                    new InnerMiddleware(callChecker)
+                    outher,
+                    inner,
                 });
 
             var sut = new RequestMediator(_serviceProvider.Object);
@@ -87,13 +117,13 @@ namespace WebFeatures.Infrastructure.Tests.Unit.Requests
             await sut.SendAsync(new CustomRequest());
 
             // Assert
-            callChecker.Messages.Should().Equal(new[]
+            messages.Should().Equal(new[]
             {
-                "Outher started",
-                "Inner started",
-                "Handler finished",
-                "Inner finished",
-                "Outher finished"
+                "outher started",
+                "inner started",
+                "handler",
+                "inner finished",
+                "outher finished"
             });
         }
     }

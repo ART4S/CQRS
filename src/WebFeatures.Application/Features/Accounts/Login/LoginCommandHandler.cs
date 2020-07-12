@@ -10,34 +10,32 @@ using WebFeatures.Domian.Entities;
 
 namespace WebFeatures.Application.Features.Accounts.Login
 {
-	internal class LoginCommandHandler : IRequestHandler<LoginCommand, Guid>
-	{
-		private readonly IWriteDbContext _db;
-		private readonly ILogger<LoginCommand> _logger;
-		private readonly IPasswordHasher _passwordHasher;
+    internal class LoginCommandHandler : IRequestHandler<LoginCommand, Guid>
+    {
+        private readonly IWriteDbContext _db;
+        private readonly ILogger<LoginCommand> _logger;
+        private readonly IPasswordHasher _passwordHasher;
 
-		public LoginCommandHandler(
-			IWriteDbContext db,
-			IPasswordHasher passwordHasher,
-			ILogger<LoginCommand> logger)
-		{
-			_db = db;
-			_passwordHasher = passwordHasher;
-			_logger = logger;
-		}
+        public LoginCommandHandler(
+            IWriteDbContext db,
+            IPasswordHasher passwordHasher,
+            ILogger<LoginCommand> logger)
+        {
+            _db = db;
+            _passwordHasher = passwordHasher;
+            _logger = logger;
+        }
 
-		public async Task<Guid> HandleAsync(LoginCommand request, CancellationToken cancellationToken)
-		{
-			const string errorMessage = "Wrong login or password";
+        public async Task<Guid> HandleAsync(LoginCommand request, CancellationToken cancellationToken)
+        {
+            User user = await _db.Users.GetByEmailAsync(request.Email);
 
-			User user = await _db.Users.GetByEmailAsync(request.Email) ?? throw new ValidationException(errorMessage);
+            if (user == null || !_passwordHasher.Verify(user.PasswordHash, request.Password))
+                throw new ValidationException("Wrong login or password");
 
-			if (!_passwordHasher.Verify(user.PasswordHash, request.Password))
-				throw new ValidationException(errorMessage);
+            _logger.LogInformation($"{user.Email} signed in");
 
-			_logger.LogInformation($"{user.Email} signed in");
-
-			return user.Id;
-		}
-	}
+            return user.Id;
+        }
+    }
 }

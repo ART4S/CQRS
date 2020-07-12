@@ -2,7 +2,7 @@
 
 namespace WebFeatures.Infrastructure.Tests.Common.Stubs
 {
-    public class CustomRequest : IRequest<CustomResult>
+    public class CustomRequest : IRequest<CustomResponse>
     {
     }
 }
